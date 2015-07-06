@@ -121,21 +121,4 @@ class User extends Model
         $this->set('data.token.validation', $data);
         return $data;
     }
-
-    /*
-	 *
-	 * modifica permissao de user
-	 *
-	 * @param $id int
-	 * @param $type int
-	 *
-	 * return void
-	 *
-	 */
-    public function updateLevel($id, $type)
-    {
-//        $sql = "UPDATE SET type=:type WHERE user_id=$id";
-        $data = $this->db->update($this->table, array('type' => $type), "user_id=" . $id);
-        $this->set('meta.update', $data);
-    }
 }
