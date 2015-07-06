@@ -1,0 +1,13 @@
+{
+    "require": {
+        "monolog/monolog": "1.0.*",
+        "slim/slim": "dev-master",
+		"swiftmailer/swiftmailer": "6.0.*@dev",
+        "simplepie/simplepie": "dev-master"
+    },
+    "autoload": {
+        "psr-0": {
+        	"Maltz\\": "src/"
+    	}
+    }
+}

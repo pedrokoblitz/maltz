@@ -1,0 +1,739 @@
+<?php
+
+namespace Maltz\Store\Ctrl;
+
+class Loja extends Controller {
+
+    /**
+     * [cadastro description]
+     * @return [type]
+     */
+    public function cadastro() {
+        $this->view->setTemplates('site/cadastro.form.tpl.php','layouts/site.layout.tpl.php');
+        if (isset($_SESSION['mensagem'])) {
+            $dados = array('mensagem' => $_SESSION['mensagem']);
+            unset($_SESSION['mensagem']);
+            $this->view->setDados($dados);
+        }
+        return $this->view->render();
+    }
+
+    /**
+     *
+     *
+     *
+     * @param
+     *
+     * return
+     */
+    public function formContato() {
+        if (isset($_SESSION['mensagem'])) {
+            $dados = array('mensagem' => $_SESSION['mensagem']);
+            set('dados', $dados);
+            unset($_SESSION['mensagem']);
+        }
+        $this->view->setTemplates('site/contato.form.tpl.php','layouts/site.layout.tpl.php');
+        return $this->view->render();
+    }
+
+    /**
+     *
+     *
+     *
+     * @param
+     *
+     * return
+     */
+    public function enviarContato() {
+        if (!$_POST['email']) {
+            $_SESSION['mensagem'] = 'Preencha um email válido.';
+            $this->app->redirect('index.php/contato');
+        }
+
+        if ($_POST['assunto'] === '' || $_POST['nome'] === '' || $_POST['mensagem'] === '') {
+            $_SESSION['mensagem'] = 'Preencha todos os campos.';
+            $this->app->redirect('index.php/contato');
+        }
+
+        // $_POST
+        Carteiro::enviar(
+                $assunto = $_POST['assunto'], $body = $_POST['mensagem'] . "\n\n" . $_POST['nome'] . "\n\n" . $_POST['email'], $destino = array('atendimento@' . option('dominio') => 'Atendimento')
+        );
+
+        $_SESSION['mensagem'] = 'Sua mensagem foi enviada.';
+        $this->app->redirect('index.php/');
+    }
+
+    /**
+     *
+     *
+     *
+     * @param
+     *
+     * return
+     */
+    public function entrar() {
+
+        if (!Porteiro::logado()) {
+            if (isset($_SESSION['mensagem'])) {
+                $dados = array('mensagem' => $_SESSION['mensagem']);
+                set('dados', $dados);
+                unset($_SESSION['mensagem']);
+            }
+            $this->view->setTemplates('site/login.form.tpl.php','layouts/site.layout.tpl.php');
+        } else {
+            $_SESSION['mensagem'] = 'Bem vindo!';
+            $this->ap   p->redirect('index.php/');
+        }
+    }
+
+    /**
+     *
+     *
+     *
+     * @param
+     *
+     * return
+     */
+    public function login() {
+
+        Porteiro::entrar($_POST['username'], $_POST['senha'], 'cliente');
+    }
+
+    /**
+     *
+     *
+     *
+     * @param
+     *
+     * return
+     */
+    public function logout() {
+
+        Porteiro::sair();
+        $this->app->redirect('index.php/');
+    }
+
+    /*
+     *
+     *
+     *
+     * @param
+     *
+     * return
+     */
+
+    public function capa() {
+
+        $capa = new Capa(option('modelo'));
+
+        $capa->setDestaques(5);
+        $capa->setEspeciais(3);
+        $capa->setNovos(3);
+        $capa->setConteudo();
+
+        if (isset($_SESSION['mensagem'])) {
+            $capa->setDado('mensagem', $_SESSION['mensagem']);
+            unset($_SESSION['mensagem']);
+        }
+
+
+        $this->view->setView('site/capa.tpl.php');
+        $this->view->setLayout('layouts/site.layout.tpl.php');
+        return $this->view->render($capa->getDados());
+    }
+
+    /**
+     *
+     *
+     *
+     * @param
+     *
+     * return
+     */
+    public function mostrarPagina() {
+
+        $id = params('id');
+        $produto = new Pagina(option('modelo'));
+        $produto->mostrar($id);
+        $this->view->setLayout('layouts/site.layout.tpl.php');
+        $this->view->setView('site/page.tpl.php');
+
+        if (isset($_SESSION['mensagem'])) {
+            $produto->setDado('mensagem', $_SESSION['mensagem']);
+            unset($_SESSION['mensagem']);
+        }
+
+        return $this->view->render($produto->getDados(true));
+    }
+
+    /**
+     *
+     *
+     *
+     * @param
+     *
+     * return
+     */
+    public function buscaDinamica($string) {
+
+        $produto = new Produto(option('modelo'));
+
+        $produto->busca($string);
+
+        if (isset($_SESSION['mensagem'])) {
+            $dados['mensagem'] = $_SESSION['mensagem'];
+            unset($_SESSION['mensagem']);
+        }
+
+        $this->view->setView('site/busca.tpl.php');
+        return $this->view->render(true);
+    }
+
+    /**
+     *
+     *
+     *
+     * @param
+     *
+     * return
+     */
+    public function consulta() {
+
+        $string = $_GET['string'];
+
+        $produto = new Produto(option('modelo'));
+        $produto->busca($string);
+        $produto->setDado('busca', $string);
+
+        $produto->setLayout('layouts/site.layout.tpl.php');
+        $produto->setView('site/busca.lista.tpl.php');
+
+        if (isset($_SESSION['mensagem'])) {
+            $produto->setDado('mensagem', $_SESSION['mensagem']);
+            unset($_SESSION['mensagem']);
+        }
+        return $produto->render(true);
+    }
+
+    /**
+     *
+     *
+     *
+     * @param
+     *
+     * return
+     */
+    public function listarProdutosCategoria() {
+        $pg = params('pg');
+        $cat = params('cat');
+        $pp = option('porpage');
+        $produto = new Produto(option('modelo'));
+
+        $produto->listarCategoria($pp, $pg, $cat);
+
+        if (isset($_SESSION['mensagem'])) {
+            $produto->setDado('mensagem', $_SESSION['mensagem']);
+            unset($_SESSION['mensagem']);
+        }
+
+        $produto->setLayout('layouts/site.layout.tpl.php');
+        $produto->setView('site/produtos.tpl.php');
+        return $produto->render(true);
+    }
+
+    /**
+     *
+     *
+     *
+     * @param
+     *
+     * return
+     */
+    public function listarProdutos() {
+        $pg = params('pg');
+        $pp = option('porpage');
+        $produto = new Produto(option('modelo'));
+        $produto->listarComFotos($pp, $pg);
+        $produto->setLayout('layouts/site.layout.tpl.php');
+        $produto->setView('site/produtos.tpl.php');
+
+        if (isset($_SESSION['mensagem'])) {
+            $produto->setDado('mensagem', $_SESSION['mensagem']);
+            unset($_SESSION['mensagem']);
+        }
+
+        return $produto->render(true);
+    }
+
+    /**
+     *
+     *
+     *
+     * @param
+     *
+     * return
+     */
+    public function mostrarProduto() {
+
+        $id = params('id');
+
+        $produto = new Produto(option('modelo'));
+        $produto->mostrar($id);
+        $produto->setLayout('layouts/site.layout.tpl.php');
+        $produto->setView('site/produto.tpl.php');
+
+        if (isset($_SESSION['mensagem'])) {
+            $produto->setDado('mensagem', $_SESSION['mensagem']);
+            unset($_SESSION['mensagem']);
+        }
+
+        return $produto->render(true);
+    }
+
+    /**
+     *
+     *
+     *
+     * @param
+     *
+     * return
+     */
+    public function cadastrar() {
+        $_SESSION['mensagem'] = '';
+
+        $post = $_POST;
+        if (
+                !empty($post['cpf']) &&
+                !empty($post['cnpj'])
+        ) {
+            $_SESSION['mensagem'] = 'Preencha apenas CPF ou CNPJ.';
+            $this->app->redirect('index.php/cadastro');
+        }
+
+        $c = new Cliente(option('modelo'));
+        /* CERTIFICAR-SE DE QUE O EMAIL É ÚNICO
+         */
+        $c->buscar('email', $post['email']);
+        $dados = $c->getDados();
+        if ($dados) {
+            $_SESSION['mensagem'] = 'Você já está cadastrado';
+            $this->app->redirect('index.php/cadastro');
+        }
+
+        /* validar username aqui */
+        if (!preg_match('/^[A-Za-z0-9_]+$/', $post['username'])) {
+
+            $_SESSION['mensagem'] = 'O username pode conter apenas caracteres alfanuméricos e underline.';
+            $this->app->redirect('index.php/cadastro');
+        }
+
+        /* CERTIFICAR-SE DE QUE O USERNAME É ÚNICO */
+        $c->buscar('username', $post['username']);
+        $dados = $c->getDados();
+
+        if ($dados) {
+
+            $_SESSION['mensagem'] = 'O nome de usuário "' . $post['username'] . '" não estã disponĩvel. Tente novamente.';
+            $this->app->redirect('index.php/cadastro');
+        }
+
+
+        if (
+                !empty($post['confirma']) &&
+                !empty($post['senha']) &&
+                !empty($post['nome']) &&
+                !empty($post['username']) &&
+                !empty($post['email'])
+        ) {
+
+            /* CERTIFICAR-SE DE QUE CPF ou CNPJ SAO VALIDOS */
+            if (Val::validar_cpf($post['cpf']) || Val::validar_cnpj($post['cnpj'])) {
+
+                $confirma = $post['confirma'];
+                $senha = $post['senha'];
+                $post['token'] = md5(time());
+                unset($post['confirma']);
+
+                if ($senha === $confirma) {
+
+                    $post['senha'] = md5($senha);
+                    $post['activity'] = 0;
+
+                    $cliente = new Cliente(option('modelo'));
+                    $cliente->inserir($post);
+                    $id = $cliente->getDados();
+
+                    $body = "Seu email foi cadastrado em nossa loja\n";
+                    $body .= "Clique no link abaixo para confirmar: \n";
+                    $body .= 'http://supplymedrio.com.br/index.php/api/validar/' . $id . '/' . $post['token'] . "\n";
+                    Carteiro::enviar('Confirmação de Cadastro', $body, array($post['email'] => $post['nome']));
+
+                    $_SESSION['mensagem'] = 'Você recebeu um email de confirmação.';
+
+                    Carteiro::enviar(
+                            'Novo usuário cadastrado', 
+                            'O usuário ' . $post['nome'] . ' acabou de se cadastrar', 
+                            $destino = array('atendimento@' . option('dominio') => 'Atendimento'),
+                            $remetente = array($post['email'] => $post['nome'])
+                    );
+
+                    $this->app->redirect('index.php');
+                }
+
+                $_SESSION['mensagem'] = 'As senhas não são iguais.';
+                $this->app->redirect('index.php/cadastro');
+            }
+
+            $_SESSION['mensagem'] = 'CPF ou CNPJ inválidos';
+            $this->app->redirect('index.php/cadastro');
+        }
+
+        $msg = "As seguintes informações precisam ser preenchidas:<br/>\n";
+        $msg .= "<strong>nome, username, email, senha e confirmação</strong>.";
+        $_SESSION["mensagem"] = $msg;
+
+        $this->app->redirect('index.php/cadastro');
+    }
+
+    /*
+     *
+     *
+     *
+     * @param
+     *
+     * return
+     */
+
+    public function validarUsuario() {
+        $id = params('id');
+        $token = params('token');
+
+        $cliente = new Cliente(option('modelo'));
+        $cliente->mostrar($id);
+        $dados = $cliente->getDados();
+
+        if (isset($dados['senha']))
+            unset($dados['senha']);
+
+        if ((int) $dados['token'] == (int) $token) {
+
+            $cliente->modificar(array('activity' => 1, 'token' => ''), $id);
+
+            $_SESSION['autenticado'] = true;
+            $_SESSION['cliente'] = $dados;
+            $_SESSION['mensagem'] = 'Usuário validado com sucesso.';
+            $this->app->redirect('index.php');
+        } elseif (empty($dados['token'])) {
+
+            $_SESSION['mensagem'] = 'Sua chave já foi validada';
+            $this->app->redirect('index.php');
+        } else {
+
+            $_SESSION['mensagem'] = 'Sua chave é invalida. Cadastre-se novamente.';
+            $this->app->redirect('index.php');
+        }
+    }
+
+    /*
+     *
+     *
+     *
+     * @param
+     *
+     * return
+     */
+
+    public function adicionarProduto() {
+        if (!isset($_SESSION['cliente']))
+            $this->app->redirect('index.php/entrar');
+
+        $carrinho = new Carrinho(option('modelo'));
+        $carrinho->adicionarProduto($_POST['produto_id'], $_POST['quantidade']);
+
+        $_SESSION['mensagem'] = 'Item adicionado.';
+        $this->app->redirect('index.php/carrinho');
+    }
+
+    /*
+     *
+     *
+     *
+     * @param
+     *
+     * return
+     */
+
+    public function removerProduto() {
+        if (!isset($_SESSION['cliente'])) {
+            $this->app->redirect('index.php/entrar');
+        }
+
+        $id = params('id');
+        $carrinho = new Carrinho(option('modelo'));
+        $carrinho->removerProduto($id);
+
+        $_SESSION['mensagem'] = 'Item removido.';
+        $this->app->redirect('index.php/carrinho');
+    }
+
+    /*
+     *
+     * 	
+     *
+     * @param
+     *
+     * return
+     */
+
+    public function verCarrinho() {
+        if (!isset($_SESSION['cliente'])) {
+            $this->app->redirect('index.php/entrar');
+        }
+
+        if (isset($_SESSION['carrinho'])) {
+            $carrinho = new Carrinho(option('modelo'));
+            $produto = new Produto(option('modelo'));
+
+            $produtos = array();
+            $total = 0;
+            foreach ($_SESSION['carrinho'] as $prod) {
+                $produto->mostrar($prod['produto_id']);
+                $dadosProduto = $produto->getDados();
+                $produtos[] = array($dadosProduto[0], $prod['quantidade']);
+                $total += $dadosProduto[0]['preco'] * $prod['quantidade'];
+            }
+            $dados = array('carrinho' => $produtos, 'total' => $total);
+        } else {
+            $_SESSION['mensagem'] = 'Seu carrinho está vazio';
+        }
+
+        if (isset($_SESSION['mensagem'])) {
+            $dados['mensagem'] = $_SESSION['mensagem'];
+            unset($_SESSION['mensagem']);
+        }
+
+        set('dados', $dados);
+        $this->view->setTemplates('site/carrinho.tpl.php','layouts/site.layout.tpl.php');
+    }
+
+    /*
+     *
+     *
+     *
+     * @param
+     *
+     * return
+     */
+
+    public function efetuarPedido() {
+        if (!isset($_SESSION['cliente'])) {
+            $this->app->redirect('index.php/entrar');
+        }
+
+        if (isset($_SESSION['cliente']['cpf']) || isset($_SESSION['cliente']['cnpj'])) {
+            if (
+                    isset($_SESSION['cliente']['endereco']) &&
+                    isset($_SESSION['cliente']['complemento']) &&
+                    isset($_SESSION['cliente']['cidade']) &&
+                    isset($_SESSION['cliente']['estado']) &&
+                    isset($_SESSION['cliente']['cep'])
+            ) {
+
+                $carrinho = new Carrinho(option('modelo'));
+                $carrinho->efetuarPedido($_POST['cod_servico']);
+
+                $body = 'O cliente ' . $_SESSION['cliente']['username'] . " efetuou um pedido.\n\n\n";
+
+                $produto = new Produto(option('modelo'));
+                foreach ($_SESSION['carrinho'] as $item) {
+                    $produto->mostrar($item['produto_id']);
+                    $produtos = $produto->getDados();
+                    $body .= "\n";
+
+                    foreach ($produtos as $p) {
+                        foreach ($p as $key => $value) {
+                            if (in_array($key, array('title', 'categoria', 'peso', 'preco'))) {
+                                $body .= $key . " : " . $value . "\n";
+                            }
+                        }
+                        $body .= "\n QUANTIDADE: " . $item['quantidade'] . "\n";
+                    }
+                    $body .= "\n";
+                }
+
+
+                Carteiro::enviar('pedido efetuado', $body);
+
+                self::limparCarrinho();
+
+                $msg = 'Pedido efetuado';
+                $_SESSION['mensagem'] = $msg;
+
+                $this->app->redirect('index.php/pedidos/1');
+            } else {
+
+                $msg = "Termine de preencher seu perfil.";
+                $_SESSION['mensagem'] = $msg;
+
+                $this->app->redirect('index.php/perfil/editar');
+            }
+        }
+    }
+
+    /*
+     *
+     *
+     *
+     * @param
+     *
+     * return
+     */
+
+    public function verPerfil() {
+
+        if (!isset($_SESSION['cliente'])) {
+            $this->app->redirect('index.php/entrar');
+        }
+
+        $id = $_SESSION['cliente']['cliente_id'];
+        $cliente = new Cliente(option('modelo'));
+        $cliente->mostrar($id);
+        $cliente->setLayout('layouts/site.layout.tpl.php');
+        $cliente->setView('site/perfil.tpl.php');
+
+        if (isset($_SESSION['mensagem'])) {
+            $cliente->setDado('mensagem', $_SESSION['mensagem']);
+            unset($_SESSION['mensagem']);
+        }
+
+        return $cliente->render(true);
+    }
+
+    /**
+     *
+     *
+     *
+     * @param
+     *
+     * return
+     */
+    public function perfilForm() {
+        if (!isset($_SESSION['cliente'])) {
+            $this->app->redirect('index.php/entrar');
+        }
+
+        $id = $_SESSION['cliente']['cliente_id'];
+        $cliente = new Cliente(option('modelo'));
+        $cliente->mostrar($id);
+
+        if (isset($_SESSION['mensagem'])) {
+            $cliente->setDado('mensagem', $_SESSION['mensagem']);
+            unset($_SESSION['mensagem']);
+        }
+
+        $cliente->setLayout('layouts/site.layout.tpl.php');
+        $cliente->setView('site/perfil.form.tpl.php');
+        return $cliente->render(true);
+    }
+
+    /**
+     *
+     *
+     *
+     * @param
+     *
+     * return
+     */
+    public function editarPerfil() {
+        if (!isset($_SESSION['cliente'])) {
+            $this->app->redirect('index.php/entrar');
+        }
+
+        $id = $_SESSION['cliente']['cliente_id'];
+        $perfil = new Cliente(option('modelo'));
+        $perfil->modificar($_POST, $id);
+
+        $body = 'O cliente ' . $_SESSION['cliente']['username'] . 'editou seu perfil.';
+        Carteiro::enviar('perfil editado', $body);
+
+        $_SESSION["mensagem"] = 'Seu perfil foi editado.';
+        $this->app->redirect('index.php/perfil');
+    }
+
+    /**
+     *
+     *
+     *
+     * @param
+     *
+     * return
+     */
+    public function verPedidos() {
+        if (!isset($_SESSION['cliente'])) {
+            $this->app->redirect('index.php/entrar');
+        }
+
+        $pg = params('pg');
+        $pp = option('porpage');
+
+        $pedido = new Pedido(option('modelo'));
+
+        if (isset($_SESSION['mensagem'])) {
+            $pedido->setDado('mensagem', $_SESSION['mensagem']);
+            unset($_SESSION['mensagem']);
+        }
+
+        $registros = $pedido->contar();
+        $pagecao = Paginacao::paginar($registros, $pp, $pg);
+
+        $uid = $_SESSION['cliente']['cliente_id'];
+        $sql = "SELECT * FROM pedidos WHERE cliente_id = " . $uid . " ORDER BY criado DESC";
+        $dados = $pedido->getDb()->run($sql);
+        $pedido->setDados($dados);
+        $pedido->setDado('pgs', $pagecao->num_pages);
+        $pedido->setLayout('layouts/site.layout.tpl.php');
+        $pedido->setView('site/pedidos.tpl.php');
+
+        return $pedido->render(true);
+    }
+
+    /**
+     *
+     * @param
+     *
+     * return
+     */
+    public function detalhePedido() {
+        if (!isset($_SESSION['cliente'])) {
+            $this->app->redirect('index.php/entrar');
+        }
+
+        $id = params('id');
+
+        $pedido = new Pedido(option('modelo'));
+
+        if (isset($_SESSION['mensagem'])) {
+            $pedido->setDado('mensagem', $_SESSION['mensagem']);
+            unset($_SESSION['mensagem']);
+        }
+
+        $pedido->setLayout('layouts/site.layout.tpl.php');
+        $pedido->setView('site/pedido.tpl.php');
+
+        $pedido->detalhePedido($id);
+        return $pedido->render(true);
+    }
+
+    /**
+     *
+     * 
+     */
+    public function limparCarrinho() {
+        unset($_SESSION['carrinho']);
+    }
+
+}
+
+/* fin */
+?>

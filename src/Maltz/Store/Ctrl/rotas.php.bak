@@ -1,0 +1,131 @@
+<?php
+
+// Servico CRUD
+// mostrar detalhe Pedido
+dispatch('admin/pedidos/mostrar/:id', array('Servico', 'detalhePedido'));
+
+
+
+// cep!
+dispatch('api/cep/:cep', array('Servico', 'api_cep'));
+
+//calcula valor do frete
+dispatch_post('api/frete', array('Servico', 'api_frete'));
+
+// limpar imagens
+dispatch('api/fotos/limpar', array('Servico', 'limparImagens'));
+
+//buscaDinamica
+dispatch('api/busca/:string', array('Loja', 'buscaDinamica'));
+
+
+
+
+// form de login
+dispatch('entrar', array('Loja', 'entrar'));
+
+// fazer login
+dispatch_post('login', array('Loja', 'login'));
+
+// sair
+dispatch('logout', array('Loja', 'logout'));
+
+
+//capa
+dispatch('/', array('Loja', 'capa'));
+
+
+//busca
+dispatch('consulta/', array('Loja', 'consulta'));
+
+
+//
+dispatch('page/:id', array('Loja', 'mostrarPagina'));
+
+//		
+dispatch('produtos/:pg', array('Loja', 'listarProdutos'));
+
+//		
+dispatch('produtos/categoria/:cat/:pg', array('Loja', 'listarProdutosCategoria'));
+
+//
+dispatch('produto/:id', array('Loja', 'mostrarProduto'));
+
+//
+dispatch('carrinho', array('Loja', 'verCarrinho'));
+
+//
+dispatch_post('carrinho/adicionar', array('Loja', 'adicionarProduto'));
+
+//
+dispatch('carrinho/remover/:id', array('Loja', 'removerProduto'));
+
+/**
+ * 
+ */
+dispatch_post('carrinho/pedir', array('Loja', 'efetuarPedido'));
+
+
+
+
+
+
+/**
+ * 
+ */
+dispatch('cadastro', array('Loja', 'cadastro'));
+
+/**
+ * 
+ */
+dispatch_post('api/cadastrar', array('Loja', 'cadastrar'));
+
+/**
+ * 
+ */
+dispatch('api/validar/:id/:token', array('Loja', 'validarUsuario'));
+
+
+
+
+/**
+ * 
+ */
+dispatch('pedidos/:pg', array('Loja', 'verPedidos'));
+
+/**
+ * 
+ */
+dispatch('pedido/:id', array('Loja', 'detalhePedido'));
+
+/**
+ * 
+ */
+dispatch('perfil/editar', array('Loja', 'perfilForm'));
+
+/**
+ * 
+ */
+dispatch_post('perfil/salvar', array('Loja', 'editarPerfil'));
+
+/**
+ * 
+ */
+dispatch('perfil', array('Loja', 'verPerfil'));
+
+
+/**
+ * 
+ */
+dispatch('contato', array('Loja', 'formContato'));
+
+/**
+ * 
+ */
+dispatch_post('contato/enviar', array('Loja', 'enviarContato'));
+
+/**
+ * 
+ */
+dispatch('boleto/:pedido_id', array('Boleto', 'gerar'));
+?>
