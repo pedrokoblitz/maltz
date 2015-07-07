@@ -1,12 +1,6 @@
-/*
- * controlador pai
- * todos os controladores herdam esses métodos
- */ 
 $.Controller('Ctrl',
 {
-	/*
-	 * configuracoes padrao do controlador
- 	 */ 
+	/**/ 
 	defaults : {
 		componenteId : "",
 		ativarUrl : "",
@@ -25,9 +19,7 @@ $.Controller('Ctrl',
 	}
 },
 {
-	/*
-	 * traduz as strings
-	 */ 
+	/**/ 
 	traduzir : function() {
 		$('.en-us').hide();
 
@@ -45,9 +37,7 @@ $.Controller('Ctrl',
 		$('#traduzir').show();
 	},
 
-	/*
-	 * get request - retorna sempre bool
-	 */ 
+	/**/ 
 	boolReq : function(url) {
 		var resposta = $.ajax({type: "GET", url: url, async: false});
 		if (resposta.statusText == 'OK') {
@@ -57,9 +47,7 @@ $.Controller('Ctrl',
 		}
 	},
 
-	/*
-	 * post request - retorna sempre bool
-	 */ 
+	/**/ 
 	boolPostReq : function(url,dados) {
 		var resposta = $.ajax({type: "POST", data: dados, url: url, async: false});
 		if (resposta.statusText == 'OK') {
@@ -70,16 +58,7 @@ $.Controller('Ctrl',
 		}
 	},
 
-	/*
-	 * mostra a mensagem dentro do elemento designado
-	 */ 
-	msg : function(texto) {
-		$(this.options.elMsg).text(texto);
-	},
-
-	/*
-	 * salva registro no modelo
-	 */ 
+	/**/ 
 	salvar : function(form) {
 		var dados = $(form).serialize();
 		var resposta = this.boolPostReq(this.options.salvarUrl,dados);
@@ -88,24 +67,26 @@ $.Controller('Ctrl',
 		}
 	},
 
-	/*
-	 * ativa registro no modelo
-	 */ 
+
+	/**/ 
+	msg : function(texto) {
+		$(this.options.elMsg).text(texto);
+	},
+
+	/**/ 
 	ativar : function(el,url,id) {
 		var dados = this.boolReq(url);
 		if (dados == true) {
-
 			$(el).removeClass('btn-warning').addClass('btn-success');
 			var html = '<div id="'+id+'" class="desativar btn btn-success">ativo</div>';
 			var novo = $(html);
 			$(el).replaceWith(novo);
 			this.msg(this.options.apelido+' ativado');
+
 		}
 	},
 
-	/*
-	 * desativa registro no modelo
-	 */ 
+	/**/ 
 	desativar : function(el,url,id) {
 		var dados = this.boolReq(url);
 
@@ -119,9 +100,7 @@ $.Controller('Ctrl',
 		}
 	},
 
-	/*
-	 * apaga registro no modelo
-	 */ 
+	/**/ 
 	apagar : function(url) {
 		var dados = this.boolReq(url);
 
@@ -131,24 +110,24 @@ $.Controller('Ctrl',
 		}
 	},
 
-	/*
-	 * eventos da interface
-	 */ 
-
+	/**/ 
 	'#salvar click' : function(el) {
 		this.salvar('form');
 	},
 
+	/**/ 
 	'.ativar click' : function(el) {
 		var id = $(el).attr('id').split('-')[1];
 		this.ativar(el,this.options.ativarUrl+'/'+id,'desativar-'+id);
 	},
 
+	/**/ 
 	'.desativar click' : function(el) {
 		var id = $(el).attr('id').split('-')[1];
 		this.desativar(el,this.options.desativarUrl+'/'+id,'ativar-'+id);
 	},
 
+	/**/ 
 	'.apagar click' : function(el) {
 		var id = $(el).attr('id').split('-')[1];
 		this.apagar(this.options.apagarUrl+'/'+id);

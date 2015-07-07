@@ -1,17 +1,12 @@
-/*
- * controlador lista arquivos
- */ 
 Ctrl('arquivosLista',
 {
-	/*
-	 * configuracoes padrao do controlador
- 	 */ 
+	/**/
 	defaults : {
 		
 	}
 },
 {
-	/* construtor */ 
+	/* date init */ 
 	init : function(rawEl, rawOptions){
 		this.traduzir();
 

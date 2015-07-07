@@ -11,6 +11,10 @@ h1 {
 	line-height:72px;
 }
 
+.logo {
+ height:60px !important;
+}
+
 p.lead {
 	font-size:36px;
 	line-height:36px;

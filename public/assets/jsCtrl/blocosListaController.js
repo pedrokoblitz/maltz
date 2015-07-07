@@ -1,17 +1,12 @@
-/*
- * controlador lista blocos
- */ 
 Ctrl('blocosLista',
 {
-	/*
-	 * configuracoes padrao do controlador
- 	 */ 
+	/**/
 	defaults : {
 	
 	}
 },
 {
-	/* construtor */ 
+	/* date init */ 
 	init : function(rawEl, rawOptions){
 		this.traduzir();
 	},

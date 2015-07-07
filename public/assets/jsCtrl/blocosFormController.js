@@ -1,17 +1,12 @@
-/*
- * controlador form blocos
- */ 
 Ctrl('blocosForm',
 {
-	/*
-	 * configuracoes padrao do controlador
- 	 */ 
+	/**/
 	defaults : {
 		
 	}
 },
 {
-	/* construtor */
+	/* date init */
 	init : function(rawEl, rawOptions){ 
 
 		this.traduzir();
