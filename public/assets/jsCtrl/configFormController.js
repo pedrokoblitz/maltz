@@ -1,17 +1,12 @@
-/*
- * controlador form config
- */ 
 Ctrl('configForm',
 {
-	/*
-	 * configuracoes padrao do controlador
- 	 */ 
+	/**/
 	defaults : {
 		
 	}
 },
 {
-	/* construtor */ 
+	/* date init */ 
 	init : function(rawEl, rawOptions){ 
 
 	},

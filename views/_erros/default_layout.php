@@ -34,7 +34,7 @@
 <br/>
 <br/>
 <div class="row">
-<?php //var_dump($_SESSION['user']); ?>
+<?php //var_dump($_SESSION['usuario']); ?>
 		<!--CHAMA OS TEMPLATES INTERNOS-->
 <div class="span4">
 <?php 

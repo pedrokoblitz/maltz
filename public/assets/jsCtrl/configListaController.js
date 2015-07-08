@@ -1,17 +1,12 @@
-/*
- * controlador lista config
- */ 
 Ctrl('configLista',
 {
-	/*
-	 * configuracoes padrao do controlador
- 	 */ 
+	/**/
 	defaults : {
 
 	}
 },
 {
-	/* construtor */ 
+	/* date init */ 
 	init : function(rawEl, rawOptions){
 	},
 
