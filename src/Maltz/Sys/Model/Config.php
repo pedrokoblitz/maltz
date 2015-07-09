@@ -43,20 +43,23 @@ class Config extends Model
         parent::__construct($db, 'config', 'config', 'config_id');
     }
 
-    public function list() {
+    public function list($offset, $limit) {
         $sql = "";
         $result = $this->db->run($sql);
+        return $result;
     }
 
-    public function show() {
+    public function show($id) {
         $sql = "";
         $result = $this->db->run($sql);
+        return $result;
     }
 
     public function setValue($key, $value)
     {
         $sql = "UPDATE config SET value=\"$value\" WHERE key=\"$key\";";
         $resultado = $this->db->run($sql);
+        return $result;
     }
 
     public function getValue($key)

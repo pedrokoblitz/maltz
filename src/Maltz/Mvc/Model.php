@@ -36,7 +36,6 @@ abstract class Model
     protected $table;
     protected $fk;
     protected $identifier;
-    protected $data = array();
 
     /*
 	 *
@@ -55,11 +54,6 @@ abstract class Model
         $this->table = $table;
         $this->fk = $fk;
         $this->identifier = $id;
-
-        $this->set('info.identifier', $id);
-        $this->set('info.slug', $slug);
-        $this->set('info.table', $table);
-        $this->set('info.fk', $fk);
     }
 
     // forca as classe filhas a implementarem esses mÃ©todos
@@ -93,19 +87,6 @@ abstract class Model
         }
 
         return $ret;
-    }
-
-    /*
-	 *
-	 * objeto DB
-	 *
-	 *
-	 *
-	 * return objeto DB
-	 */
-    protected function getDb()
-    {
-        return $this->db;
     }
 
     /*
@@ -165,11 +146,6 @@ abstract class Model
         }
 
         $resultado = $this->db->insert($this->table, $data);
-        $this->data['meta.insert'] = $resultado;
-        
-        if (!$resultado) {
-            return false;
-        }
         return $resultado;
     }
 
@@ -229,7 +205,6 @@ abstract class Model
     {
         $contagem = $this->db->count($this->table);
         $num = $contagem[0]["COUNT(id)"];
-        $this->data['meta.count'] = $num;
         return $num;
     }
 
@@ -245,7 +220,6 @@ abstract class Model
     public function exists($campo, $value)
     {
         $exists = $this->db->exists($this->table, $campo, $value);
-        $this->data['meta.exists'] = $exists;
         return $exists;
     }
 
@@ -262,52 +236,7 @@ abstract class Model
     public function search($campo, $value)
     {
         $this->db;
-        $data = $this->db->search($this->table, $campo, $value);
-        if (!$data) {
-            return false;
-        }
-        $this->data['data.search'] = $data;
-        return true;
-    }
-
-    /*
-	 *
-	 *
-	 *
-	 * @param
-	 *
-	 * return array
-	 */
-    public function get($key)
-    {
-        return $this->data[$key];
-    }
-
-    /*
-	 *
-	 * pega o data.content a ser enviado para o template
-	 *
-	 * @param
-	 *
-	 * return array
-	 */
-    public function all()
-    {
-        return $this->data;
-    }
-
-    /*
-	 *
-	 * guarda data em key especifica
-	 * utilizado para passar data para o template que nao sao relactivitys ao data.content
-	 * ex.: numero de pages para a classe Pagination
-	 *
-	 * @param array
-	 *
-	 * return void
-	 */
-    public function set($key, $value)
-    {
-        $this->data[$key] = $value;
+        $result = $this->db->search($this->table, $campo, $value);
+        return $result;
     }
 }

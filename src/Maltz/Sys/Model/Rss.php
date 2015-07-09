@@ -80,22 +80,6 @@ class Rss extends Model
             $filteredItems = array_slice($filteredItems, 0, $n);
         }
 
-        $this->set('data.tumblr.feed', $filteredItems);
-    }
-
-    /*
-	 *
-	 * corta feed para x items
-	 *
-	 * @param $n int
-	 *
-	 * return array
-	 */
-
-    public function chunk($n = 5)
-    {
-        $tudo = $this->get('data.tumblr.feed');
-        $separados = array_chunk($tudo, $n);
-        $this->set('data.tumblr.feed', $separados);
+        return $filteredItems;
     }
 }

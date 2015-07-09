@@ -43,14 +43,36 @@ class Area extends Model
         parent::__construct($db, 'area', 'areas', 'area_id');
     }
 
+    /*
+     *
+     */
+    public function list($offset, $limit) {
+        $sql = "";
+        $result = $this->db->run($sql);
+        return $result;
+    }
+
+    /*
+     *
+     */
+    public function show($id) {
+        $sql = "";
+        $result = $this->db->run($sql);
+        return $result;
+    }
+
     public function addBlock($block_id)
     {
-        
+        $sql = "";
+        $result = $this->db->run($sql);
+        return $result;
     }
 
     public function removeBlock($block_id)
     {
-        
+        $sql = "";
+        $result = $this->db->run($sql);
+        return $result;
     }
 
     /*
@@ -64,11 +86,7 @@ class Area extends Model
      */
     public function getBlocks($area_id)
     {
-        $blocks = $this->db->run('SELECT * FROM blocks WHERE area_id=:area_id', array('area_id' => $area_id));
-        if (!empty($block)) {
-            $this->set('data.list', $blocks);
-            return true;
-        }
-        return false;
+        $result = $this->db->run('SELECT * FROM blocks WHERE area_id=:area_id', array('area_id' => $area_id));
+        return $result;
     }
 }

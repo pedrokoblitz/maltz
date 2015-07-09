@@ -21,7 +21,6 @@ class Newsletter {
             $this->postman->($email, $name);
         }
     }
-
 }
 
 ?>

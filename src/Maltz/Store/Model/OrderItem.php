@@ -32,8 +32,7 @@ class OrderItemOrder extends Model {
         $pagination = Pagination::pager($registros, $perpage, $page);
         $sql = "SELECT * FROM customers WHERE id IN (SELECT customer_id FROM orders LIMIT " . $pagination->offset . "," . $pagination->limit . ")";
         $data = $this->db->run($sql);
-        $this->set($data);
-        $this->set('pgs', $pagination->num_pages);
+        return $data;
     }
 }
 

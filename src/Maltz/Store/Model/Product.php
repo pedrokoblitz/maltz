@@ -41,7 +41,7 @@ class Product extends Model
     {
         
         $data = $this->db->insert($this->table, $this->estrutura);
-        $this->setData($data);
+        return $data;
     }
 
     /*
@@ -104,8 +104,7 @@ class Product extends Model
         }
         
         $pgs = $pagination->num_pages;
-        $this->setData($products);
-        $this->setDado('pgs', $pgs);
+        return $products;
     }
 
     /*
@@ -128,7 +127,7 @@ class Product extends Model
         $sql = "SELECT * FROM photos WHERE product_id = :id";
         $bind = array('id' => $id);
         $data = $this->db->run($sql, $bind);
-        $this->setDado('photos', $data);
+        return $data;
     }
 
     /*
@@ -148,7 +147,7 @@ class Product extends Model
         $model = $this->db;
 
         $data = $model->run("DELETE FROM photos WHERE product_id = :id", array(':id', $id));
-        return true;
+        return $data;
     }
 
     /*
@@ -176,6 +175,6 @@ class Product extends Model
             $resultados[] = $data;
         }
         
-        $this->setData($resultados);
+        return $resultados;
     }
 }

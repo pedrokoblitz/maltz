@@ -41,12 +41,12 @@ class User extends Model
         parent::__construct($db, 'user', 'users', 'user_id');
     }
 
-    public function list() {
+    public function list($offset, $limit) {
         $sql = "";
         $result = $this->db->run($sql);
     }
 
-    public function show() {
+    public function show($id) {
         $sql = "";
         $result = $this->db->run($sql);
     }
@@ -66,8 +66,8 @@ class User extends Model
         } elseif (isset($post['password']) && $post['password'] != '') {
             $post['password'] = md5($post['password']);
         }
-        $data = $this->db->insert($this->table, $post);
-        $this->set('meta.insert', $data);
+        $result = $this->db->insert($this->table, $post);
+        return $result;
     }
 
     /*
@@ -89,25 +89,22 @@ class User extends Model
             $post['password'] = md5($post['password']);
         }
         
-        $data = $this->db->update($this->table, $post, "user_id=" . $id);
-        $this->set('meta.update', $data);
+        $result = $this->db->update($this->table, $post, "user_id=" . $id);
+        return $result;
     }
 
     public function signUp($post)
     {
         $post['password'] = md5($post['password']);
         $id = $this->db->insert($this->table, $post);
-        $this->set('meta.insert', $id);
-        $data = $token->generate($id, 'activation');
-        $this->set('data.token', $data);
-        return $data;
+        $result = $token->generate($id, 'activation');
+        return $result;
     }
 
     public function remember($user_id)
     {
         $token = new Token($this->db);
         $data = $token->generate($user_id, 'remember');
-        $this->set('data.token.remember', $data);
         return $data;
     }
 
@@ -115,7 +112,6 @@ class User extends Model
     {
         $token = new Token($this->db);
         $data = $token->generate($user_id, 'forgot');
-        $this->set('data.token.forgot', $data);
         return $data;
     }
 
@@ -123,7 +119,6 @@ class User extends Model
     {
         $token = new Token($this->db);
         $data = $token->validate($user_token, $type);
-        $this->set('data.token.validation', $data);
         return $data;
     }
 }

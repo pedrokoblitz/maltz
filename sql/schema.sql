@@ -251,6 +251,22 @@ CREATE TABLE `areas` (
 ) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Table structure for table `blocks`
+--
+
+DROP TABLE IF EXISTS `blocks`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `blocks` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `area_id` int(10) unsigned NOT NULL,
+  `activity` tinyint(1) unsigned DEFAULT NULL,
+  `created` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Table structure for table `contents`

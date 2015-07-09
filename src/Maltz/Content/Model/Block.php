@@ -46,14 +46,19 @@ class Block extends Model
     /*
      *
      */
-    public function list() {
-
+    public function list($offset, $limit) 
+    {
+        $sql = "";
+        $result = $this->db->run($sql);
+        return $result;
     }
 
     /*
      *
      */
-    public function show() {
-    	
+    public function show($id) {
+        $sql = "";
+        $result = $this->db->run($sql);
+        return $result;
     }
 }

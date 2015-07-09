@@ -32,7 +32,7 @@ class Store extends Model {
             $product['photos'] = $photos;
             $data[] = $product;
         }
-        $this->content['destaques'] = $data;
+        return $data;
     }
 
     /**
@@ -49,7 +49,7 @@ class Store extends Model {
             $product['photos'] = $photos;
             $data[] = $product;
         }
-        $this->content['especiais'] = $data;
+        return $data;
     }
 
     /**
@@ -66,16 +66,8 @@ class Store extends Model {
             $product['photos'] = $photos;
             $data[] = $product;
         }
-        $this->content['novidades'] = $data;
+        return $data;
     }
-
-    /**
-     * [setContent description]
-     */
-    public function setContent() {
-        $this->setData($this->content);
-    }
-
 }
 
 ?>

@@ -29,7 +29,7 @@ class Order extends Model {
 
     public function insert($post) {
         $data = $this->db->insert($this->table, $post);
-        $this->setData($data);
+        return $data;
     }
 
     /*
@@ -53,7 +53,7 @@ class Order extends Model {
         $customer = $this->db->run($sql, array('customer_id' => $order[0]['customer_id']));
 
         $data = array('customer' => $customer[0], 'order' => $order[0]);
-        $this->setData($data);
+        return $data;
     }
 
     public function getProducts($order_id) {
@@ -65,7 +65,7 @@ class Order extends Model {
         $sql = "SELECT * FROM products WHERE product_id IN ($list)";
         $products = $this->db->run($sql);
 
-        $this->setDado('products', $products);
+        return $products;
     }
 
 }

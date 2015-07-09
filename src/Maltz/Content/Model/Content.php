@@ -43,70 +43,84 @@ class Content extends Model
     public function insert() {
         $sql = "";
         $result = $this->db->run($sql);
+        return $result;
     }
 
     public function update() {
         $sql = "";
         $result = $this->db->run($sql);
+        return $result;
     }
 
-    public function show() {
+    public function show($id) {
         $sql = "";
         $result = $this->db->run($sql);
+        return $result;
     }
 
-    public function list() {
+    public function list($offset, $limit) {
         $sql = "";
         $result = $this->db->run($sql);
+        return $result;
     }
 
     public function delete() {
         $sql = "";
         $result = $this->db->run($sql);
+        return $result;
     }
 
     public function addResources() {
         $sql = "";
         $result = $this->db->run($sql);
+        return $result;
     }
 
     public function removeResources() {
         $sql = "";
         $result = $this->db->run($sql);
+        return $result;
     }
 
     public function getResources() {
         $sql = "";
         $result = $this->db->run($sql);
+        return $result;
     }
 
     public function addCollections() {
         $sql = "";
         $result = $this->db->run($sql);
+        return $result;
     }
 
     public function removeCollections() {
         $sql = "";
         $result = $this->db->run($sql);
+        return $result;
     }
 
     public function getCollections() {
         $sql = "";
         $result = $this->db->run($sql);
+        return $result;
     }
 
     public function addTerms() {
         $sql = "";
         $result = $this->db->run($sql);
+        return $result;
     }
 
     public function removeTerms() {
         $sql = "";
         $result = $this->db->run($sql);
+        return $result;
     }
 
     public function getTerms() {
         $sql = "";
         $result = $this->db->run($sql);
+        return $result;
     }
 }

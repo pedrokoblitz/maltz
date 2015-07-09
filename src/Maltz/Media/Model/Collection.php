@@ -47,28 +47,33 @@ class Collection extends Model
         parent::__construct($db, 'collection', 'collections', 'collection_id');
     }
 
-    public function list() {
+    public function list($offset, $limit) {
         $sql = "";
         $result = $this->db->run($sql);
+        return $result;
     }
 
-    public function show() {
+    public function show($id) {
         $sql = "";
         $result = $this->db->run($sql);
+        return $result;
     }
 
     public function addResource() {
         $sql = "";
         $result = $this->db->run($sql);
+        return $result;
     }
 
     public function removeResource() {
         $sql = "";
         $result = $this->db->run($sql);
+        return $result;
     }
 
     public function getResources() {
         $sql = "";
         $result = $this->db->run($sql);
+        return $result;
     }
 }
