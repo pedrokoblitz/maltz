@@ -31,32 +31,6 @@ class Sys extends Controller
         $this->user = new User($app->db);
 
         /*
-		 * modifica permissao do user
-		 *
-		 * return string json / void
-		 */
-        $app->get('/api/level/:id/:level', function ($id, $level) use ($app) {
-
-            if (!$app->porteiro->loggedIn()) {
-                $app->redirect($app->urlFor('admin_login'));
-            }
-
-            $model = new User($app->db);
-            $model->updatePermission($id, $level);
-            $app->view->renderJSON($model->all());
-            $app->stop();
-
-            $app->activity->write(
-                $app->db,
-                $app->session->get('user.username'),
-                $app->session->get('user.id'),
-                'modificou a permissão',
-                'users',
-                $id
-            );
-        })->name('api_level')->conditions(array('id' => '\d+', 'level' => '\d+'));
-
-        /*
 		 * form de login
 		 *
 		 * return string / void

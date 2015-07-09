@@ -38,11 +38,11 @@ class Api extends Controller
         $app->model = function () use ($app) {
             switch ($app->config('model')) {
 
-                case 'file':
-                    return new File($app->db);
+                case 'resource':
+                    return new Resource($app->db);
 
-                case 'album':
-                    return new Album($app->db);
+                case 'collection':
+                    return new Collection($app->db);
 
                 case 'content':
                     return new Content($app->db);
@@ -58,6 +58,9 @@ class Api extends Controller
 
                 case 'config':
                     return new Config($app->db);
+
+                case 'area':
+                    return new Area($app->db);
 
                 case 'block':
                     return new Block($app->db);

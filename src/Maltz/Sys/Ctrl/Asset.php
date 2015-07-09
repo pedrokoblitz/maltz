@@ -32,7 +32,7 @@ class Asset extends Controller
                         break;
                 }
 
-                $body = file_get_contents('./public/assets/' . $extension . '/' . $name . '.' . $extension);
+                $body = file_get_contents('/public/assets/' . $extension . '/' . $name . '.' . $extension);
                 $app->response->headers->set('Content-Type', $type);
                 $app->response->setBody($body);
             }
@@ -41,7 +41,7 @@ class Asset extends Controller
 
         $app->get('/media/:name/:extension', function ($name, $extension) use ($app) {
 
-            $body = file_get_contents('./public/media/' . $name . '.' . $extension);
+            $body = file_get_contents('/public/media/' . $name . '.' . $extension);
             $mimes = $app->config('mimetypes.image');
             if (isset($mimes[$extension])) {
                 $app->response->headers->set('Content-Type', $mimes[$extension]);
@@ -52,7 +52,7 @@ class Asset extends Controller
 
         $app->get('/download/:name/:extension', function ($name, $extension) use ($app) {
 
-            $body = file_get_contents('./public/media/' . $name . '.' . $extension);
+            $body = file_get_contents('/public/media/' . $name . '.' . $extension);
             $mimes = $app->config('mimetypes.download');
             if (isset($mimes[$extension])) {
                 $app->response->headers->set('Content-Type', $mimes[$extension]);
