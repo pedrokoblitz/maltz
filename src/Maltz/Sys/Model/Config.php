@@ -43,13 +43,16 @@ class Config extends Model
         parent::__construct($db, 'config', 'config', 'config_id');
     }
 
-    /*
-     * descobre quais categorias estao sendo utilizadas
-     *
-     * return array
-     *
-     *
-     */
+    public function list() {
+        $sql = "";
+        $result = $this->db->run($sql);
+    }
+
+    public function show() {
+        $sql = "";
+        $result = $this->db->run($sql);
+    }
+
     public function setValue($key, $value)
     {
         $sql = "UPDATE config SET value=\"$value\" WHERE key=\"$key\";";
@@ -81,26 +84,5 @@ class Config extends Model
             return $res;
         }
         return false;
-    }
-
-
-
-    /*
-	 * descobre quais categorias estao sendo utilizadas
-	 *
-	 * return array
-	 *
-	 *
-	 */
-    public function types()
-    {
-        $sql = "SELECT DISTINCT type FROM contents;";
-        $resultado = $this->db->run($sql);
-        $types = array();
-        foreach ($resultado as $r) {
-            $types[] = $r['type'];
-        }
-        $this->set('data.list', $types);
-        return $types;
     }
 }

@@ -29,8 +29,6 @@ use Maltz\Mvc\Model;
 
 class ResourceType extends Model
 {
-    private $album;
-
     /*
      * construtor
      *
@@ -41,5 +39,15 @@ class ResourceType extends Model
     public function __construct($db)
     {
         parent::__construct($db, 'resource_type', 'resource_types', 'resource_type_id');
+    }
+
+    public function list() {
+        $sql = "";
+        $result = $this->db->run($sql);
+    }
+
+    public function show() {
+        $sql = "";
+        $result = $this->db->run($sql);
     }
 }

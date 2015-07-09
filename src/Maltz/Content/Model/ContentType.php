@@ -10,4 +10,12 @@ class ContentType
     {
         parent::__construct($db, 'content_type', 'content_types', 'content_type_id');
     }
+
+    public function list() {
+    	
+    }
+
+    public function show() {
+    	
+    }
 }

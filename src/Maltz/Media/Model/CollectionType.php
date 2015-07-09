@@ -10,4 +10,14 @@ class CollectionType extends Model
     {
         parent::__construct($db, 'collection_type', 'collection_types', 'collection_type_id');
     }
+
+    public function list() {
+        $sql = "";
+        $result = $this->db->run($sql);
+    }
+
+    public function show() {
+        $sql = "";
+        $result = $this->db->run($sql);
+    }
 }

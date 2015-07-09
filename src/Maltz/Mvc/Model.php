@@ -135,43 +135,6 @@ abstract class Model
     }
 
     /*
-	 * list os registros
-	 * guarda resultado na var $data
-	 *
-	 * @param int
-	 * @param int
-	 *
-	 * return void
-	 */
-    public function index($perpage = 12, $page = 1, $where = "", $order = null, $activity = false)
-    {
-        if (!$order) {
-            $order = array('created', 'DESC');
-        }
-
-        $pagination = Pagination::pager($this->count(), $perpage, $page);
-
-        $data = $this->db->select(
-            $this->table,
-            $where,
-            array($pagination->offset, $pagination->limit),
-            $order,
-            '',
-            '*',
-            $activity
-        );
-        
-        if (!$data) {
-            return false;
-        }
-
-        $this->data['data.list'] = $data;
-        $this->data['pagination.pages'] = $pagination->num_pages;
-
-        return true;
-    }
-
-    /*
 	 *
 	 * modifica um registro identificado por id
 	 * guarda resultado na var $data
@@ -208,33 +171,6 @@ abstract class Model
             return false;
         }
         return $resultado;
-    }
-
-    /*
-	 *
-	 * mostra um registro identificado por id
-	 * guarda resultado na var $data
-	 *
-	 * @param int
-	 *
-	 * return void
-	 */
-    public function show($id, $activity = false)
-    {
-        $data = $this->db->select(
-            $this->table, // table
-            $this->identifier . "=" . $id, // where
-            '', // limite
-            '', // order
-            '', // bind
-            '*', // fields
-            $activity // activity
-        );
-        if (!empty($data)) {
-            $this->data['data.record'] = $data[0];
-            return true;
-        }
-        return false;
     }
 
     /*

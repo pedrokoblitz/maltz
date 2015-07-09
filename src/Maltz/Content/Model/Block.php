@@ -42,4 +42,18 @@ class Block extends Model
     {
         parent::__construct($db, 'block', 'blocks', 'block_id');
     }
+
+    /*
+     *
+     */
+    public function list() {
+
+    }
+
+    /*
+     *
+     */
+    public function show() {
+    	
+    }
 }

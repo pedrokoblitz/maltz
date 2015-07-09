@@ -12,9 +12,13 @@ class Term extends Model
         parent::__construct($db, 'term', 'terms', 'term_id');
     }
 
-    public function index()
-    {
+    public function list() {
         $sql = "SELECT t1.id AS id, t1.parent_id AS parent_id, t1.name AS name, t1.value AS value, t2.name AS type FROM terms t1 JOIN term_types t2 ON t1.term_type_id=t2.id LIMIT :offset,:quantity;";
+        $result = $this->db->run($sql);
+    }
+
+    public function show() {
+        $sql = "";
         $result = $this->db->run($sql);
     }
 

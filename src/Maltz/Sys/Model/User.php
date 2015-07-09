@@ -17,7 +17,6 @@ use Maltz\Mvc\Model;
  *
  * @version    0.1 alpha
  */
-
 /*
  *
  *
@@ -26,7 +25,6 @@ use Maltz\Mvc\Model;
  *
  * return void
  */
-
 class User extends Model
 {
     /*
@@ -38,10 +36,19 @@ class User extends Model
 	 * return void
 	 *
 	 */
-
     public function __construct($db)
     {
         parent::__construct($db, 'user', 'users', 'user_id');
+    }
+
+    public function list() {
+        $sql = "";
+        $result = $this->db->run($sql);
+    }
+
+    public function show() {
+        $sql = "";
+        $result = $this->db->run($sql);
     }
 
     /*
@@ -52,7 +59,6 @@ class User extends Model
 	 *
 	 * return void
 	 */
-
     public function insert($post)
     {
         if (isset($post['password']) && $post['password'] == '') {
@@ -73,7 +79,6 @@ class User extends Model
 	 *
 	 * return void
 	 */
-
     public function update($post, $id)
     {
         if (isset($post['password']) && $post['password'] == '') {
