@@ -27,7 +27,7 @@ use Maltz\Mvc\Model;
  * return void
  */
 
-class FileType extends Model
+class ResourceType extends Model
 {
     private $album;
 
@@ -40,6 +40,6 @@ class FileType extends Model
      */
     public function __construct($db)
     {
-        parent::__construct($db, 'file_type', 'file_types', 'file_type_id');
+        parent::__construct($db, 'resource_type', 'resource_types', 'resource_type_id');
     }
 }

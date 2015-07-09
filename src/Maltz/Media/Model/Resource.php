@@ -27,10 +27,8 @@ use Maltz\Mvc\Model;
  * return void
  */
 
-class File extends Model
+class Resource extends Model
 {
-    private $album;
-
     /*
 	 * construtor
 	 *
@@ -40,7 +38,7 @@ class File extends Model
 	 */
     public function __construct($db)
     {
-        parent::__construct($db, 'file', 'files', 'file_id');
+        parent::__construct($db, 'resource', 'resources', 'resource_id');
     }
 
     /*
