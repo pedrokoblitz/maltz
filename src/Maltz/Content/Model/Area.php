@@ -47,7 +47,7 @@ class Area extends Model
      *
      */
     public function list($offset, $limit) {
-        $sql = "";
+        $sql = "SELECT * FROM areas";
         $result = $this->db->run($sql);
         return $result;
     }
@@ -56,21 +56,21 @@ class Area extends Model
      *
      */
     public function show($id) {
-        $sql = "";
+        $sql = "SELECT * FROM areas WHERE id=$id";
         $result = $this->db->run($sql);
         return $result;
     }
 
     public function addBlock($block_id)
     {
-        $sql = "";
+        $sql = "SELECT * FROM areas";
         $result = $this->db->run($sql);
         return $result;
     }
 
     public function removeBlock($block_id)
     {
-        $sql = "";
+        $sql = "SELECT * FROM areas";
         $result = $this->db->run($sql);
         return $result;
     }

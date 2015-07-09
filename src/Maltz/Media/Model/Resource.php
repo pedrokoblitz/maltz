@@ -42,13 +42,13 @@ class Resource extends Model
     }
 
     public function list($offset, $limit) {
-        $sql = "";
+        $sql = "SELECT * FROM resources";
         $result = $this->db->run($sql);
         return $result;
     }
 
     public function show($id) {
-        $sql = "";
+        $sql = "SELECT * FROM resources WHERE id=$id";
         $result = $this->db->run($sql);
         return $result;
     }

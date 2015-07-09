@@ -41,85 +41,85 @@ class Content extends Model
     }
 
     public function insert() {
-        $sql = "";
+        $sql = "SELECT * FROM contents";
         $result = $this->db->run($sql);
         return $result;
     }
 
     public function update() {
-        $sql = "";
+        $sql = "SELECT * FROM contents";
         $result = $this->db->run($sql);
         return $result;
     }
 
     public function show($id) {
-        $sql = "";
+        $sql = "SELECT * FROM contents";
         $result = $this->db->run($sql);
         return $result;
     }
 
     public function list($offset, $limit) {
-        $sql = "";
+        $sql = "SELECT * FROM contents";
         $result = $this->db->run($sql);
         return $result;
     }
 
     public function delete() {
-        $sql = "";
+        $sql = "SELECT * FROM contents WHERE id=$id";
         $result = $this->db->run($sql);
         return $result;
     }
 
     public function addResources() {
-        $sql = "";
+        $sql = "SELECT * FROM contents";
         $result = $this->db->run($sql);
         return $result;
     }
 
     public function removeResources() {
-        $sql = "";
+        $sql = "SELECT * FROM contents";
         $result = $this->db->run($sql);
         return $result;
     }
 
     public function getResources() {
-        $sql = "";
+        $sql = "SELECT * FROM contents";
         $result = $this->db->run($sql);
         return $result;
     }
 
     public function addCollections() {
-        $sql = "";
+        $sql = "SELECT * FROM contents";
         $result = $this->db->run($sql);
         return $result;
     }
 
     public function removeCollections() {
-        $sql = "";
+        $sql = "SELECT * FROM contents";
         $result = $this->db->run($sql);
         return $result;
     }
 
     public function getCollections() {
-        $sql = "";
+        $sql = "SELECT * FROM contents";
         $result = $this->db->run($sql);
         return $result;
     }
 
     public function addTerms() {
-        $sql = "";
+        $sql = "SELECT * FROM contents";
         $result = $this->db->run($sql);
         return $result;
     }
 
     public function removeTerms() {
-        $sql = "";
+        $sql = "SELECT * FROM contents";
         $result = $this->db->run($sql);
         return $result;
     }
 
     public function getTerms() {
-        $sql = "";
+        $sql = "SELECT * FROM contents";
         $result = $this->db->run($sql);
         return $result;
     }

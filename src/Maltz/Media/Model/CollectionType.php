@@ -12,13 +12,13 @@ class CollectionType extends Model
     }
 
     public function list($offset, $limit) {
-        $sql = "";
+        $sql = "SELECT * FROM collection_types";
         $result = $this->db->run($sql);
         return $result;
     }
 
     public function show($id) {
-        $sql = "";
+        $sql = "SELECT * FROM collection_types WHERE id=$id";
         $result = $this->db->run($sql);
         return $result;
     }

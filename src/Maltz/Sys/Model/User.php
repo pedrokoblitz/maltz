@@ -42,12 +42,12 @@ class User extends Model
     }
 
     public function list($offset, $limit) {
-        $sql = "";
+        $sql = "SELECT * FROM users";
         $result = $this->db->run($sql);
     }
 
     public function show($id) {
-        $sql = "";
+        $sql = "SELECT * FROM users WHERE id=$id";
         $result = $this->db->run($sql);
     }
 

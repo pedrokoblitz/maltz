@@ -2,8 +2,8 @@
 
 namespace Maltz\Media\Ctrl;
 
-use Maltz\Media\Model\File;
-use Maltz\Media\Model\Album;
+use Maltz\Media\Model\Resource;
+use Maltz\Media\Model\Collection;
 use Maltz\Content\Model\Page;
 use Maltz\Content\Model\Content;
 use Maltz\Content\Model\Book;
@@ -65,7 +65,7 @@ class Media extends Controller
 		 * return void
 		 */
 
-        $app->get('/api/:name/album/:p_id/set/:g_id', function ($name, $p_id, $g_id) use ($app) {
+        $app->get('/api/:name/collection/:content_id/set/:collection_id', function ($name, $content_id, $collection_id) use ($app) {
 
             if (!$app->porteiro->loggedIn()) {
                 $app->redirect($app->urlFor('admin_login'));
@@ -74,24 +74,8 @@ class Media extends Controller
             $app->response->setStatus(200);
             $app->response->headers->set('Content-Type', 'application/json');
 
-            switch ($name) {
-                case 'page':
-                    $m = new Page($app->db);
-                    break;
-
-                case 'content':
-                    $m = new Content($app->db);
-                    break;
-
-                case 'book':
-                    $m = new Book($app->db);
-                    break;
-
-                default:
-                    $app->response->setStatus(404);
-                    break;
-            }
-            $body = json_encode($m->updateAlbum($p_id, $g_id));
+            $m = new Content($app->db);
+            $body = json_encode($m->updateCollection($p_id, $g_id));
             $app->response->setBody($body);
             $app->stop();
         })->name('api_set_album')->conditions(array('p_id' => '\d+', 'g_id' => '\d+'));
@@ -105,38 +89,20 @@ class Media extends Controller
 		 *
 		 * return void
 		 */
-
-        $app->get('/api/:name/cover/:p_id/set/:f_id', function ($name, $p_id, $f_id) use ($app) {
+        $app->get('/api/:type/content/:content_id/set/:resource_id', function ($type, $content_id, $resource_id) use ($app) {
 
             if (!$app->porteiro->loggedIn()) {
                 $app->redirect($app->urlFor('admin_login'));
             }
 
-            switch ($name) {
-                case 'pages':
-                    $m = new Page($app->db);
-                    break;
-
-                case 'contents':
-                    $m = new Content($app->db);
-                    break;
-
-                case 'books':
-                    $m = new Book($app->db);
-                    break;
-
-                default:
-                    $app->halt(HTTP_FORBIDDEN, 'Você está fazendo merdinha.');
-                    break;
-            }
-
-            $data = $m->updateCover($p_id, $f_id);
+            $m = new Content($app->db);
+            $data = $m->updateCover($content_id, $resource_id);
             $body = json_encode($data);
             $app->response->headers->set('Content-Type', 'application/json');
             $app->response->setStatus(200);
             $app->response->setBody($body);
             $app->stop();
-        })->name('api_set_cover')->conditions(array('p_id' => '\d+', 'f_id' => '\d+'));
+        })->name('api_set_cover')->conditions(array('content_id' => '\d+', 'resource_id' => '\d+'));
 
         /*
 		 *
@@ -147,31 +113,13 @@ class Media extends Controller
 		 *
 		 * return void
 		 */
-
-        $app->get('/api/:name/cover/:p_id/delete', function ($name, $p_id) use ($app) {
+        $app->get('/api/:type/:content_id/delete', function ($type, $content_id) use ($app) {
 
             if (!$app->porteiro->loggedIn()) {
                 $app->redirect($app->urlFor('admin_login'));
             }
 
-            switch ($name) {
-                case 'pages':
-                    $m = new Page($app->db);
-                    break;
-
-                case 'contents':
-                    $m = new Content($app->db);
-                    break;
-
-                case 'books':
-                    $m = new Book($app->db);
-                    break;
-
-                default:
-                    $app->halt(HTTP_FORBIDDEN, 'Você está fazendo merdinha.');
-                    break;
-            }
-
+            $m = new Content($app->db);
             $data = $model->deleteCover($p_id);
             $body = json_encode($data);
             $app->response->headers->set('Content-Type', 'application/json');
@@ -195,8 +143,8 @@ class Media extends Controller
             }
 
             $app->view->setView('blocks/album.cover.selector.tpl.php');
-            $model = new Album($app->db);
-            $data = $model->photosAlbum($id);
+            $model = new Collection($app->db);
+            $data = $model->photosCollection($id);
             $body = json_encode($data);
             $app->response->headers->set('Content-Type', 'application/json');
             $app->response->setStatus(200);
@@ -213,7 +161,6 @@ class Media extends Controller
 		 *
 		 * return void
 		 */
-
         $app->get('/api/:name/document/:p_id/set/:d_id', function ($name, $p_id, $d_id) use ($app) {
 
             if (!$app->porteiro->loggedIn()) {
@@ -248,8 +195,8 @@ class Media extends Controller
                 $app->redirect($app->urlFor('admin_login'));
             }
 
-            $model = new Album($app->db);
-            $data = $model->photosAlbum($id);
+            $model = new Collection($app->db);
+            $data = $model->photosCollection($id);
             $body = json_encode($data);
             $app->response->headers->set('Content-Type', 'application/json');
             $app->response->setStatus(200);
@@ -272,8 +219,8 @@ class Media extends Controller
                 $app->redirect($app->urlFor('admin_login'));
             }
 
-            $model = new File($app->db);
-            $data = $model->assocPhotoAlbum($f_id, $g_id);
+            $model = new Resource($app->db);
+            $data = $model->assocPhotoCollection($f_id, $g_id);
             $body = json_encode($data);
             $app->response->headers->set('Content-Type', 'application/json');
             $app->response->setStatus(200);
@@ -295,8 +242,8 @@ class Media extends Controller
                 $app->redirect($app->urlFor('admin_login'));
             }
 
-            $model = new File($app->db);
-            $data = $model->deletePhotoAlbum($f_id, $g_id);
+            $model = new Resource($app->db);
+            $data = $model->deletePhotoCollection($f_id, $g_id);
             $body = json_encode($data);
             $app->response->headers->set('Content-Type', 'application/json');
             $app->response->setStatus(200);
@@ -325,7 +272,7 @@ class Media extends Controller
                 if ($name == 'contents') {
                     $cpk = 'content_id';
                 }
-                $model = new File($app->db);
+                $model = new Resource($app->db);
                 $data = $model->assocPhotoCover($model, $cpk, $c_id, $f_id);
             } else {
                 $data = array();
@@ -359,7 +306,7 @@ class Media extends Controller
                 if ($name == 'contents') {
                     $cpk = 'content_id';
                 }
-                $model = new File($app->db);
+                $model = new Resource($app->db);
                 $data = $model->deletePhotoCover($name, $cpk, $c_id);
                 $body = json_encode($data);
                 $app->response->headers->set('Content-Type', 'application/json');
@@ -377,7 +324,6 @@ class Media extends Controller
 		 *
 		 * return string / void
 		 */
-
         $app->get('/admin/albums(/order/:key(/:order(/page/:pg)))', function ($key = 'created', $order = 'ASC', $pg = 1) use ($app) {
 
             if (!$app->porteiro->loggedIn()) {
@@ -385,7 +331,7 @@ class Media extends Controller
             }
 
             $db = $app->db;
-            $model = new Album($db);
+            $model = new Collection($db);
             $pp = $app->config('per_page');
             $dbOrder = array($key, $order);
             
@@ -416,7 +362,7 @@ class Media extends Controller
             }
 
             $db = $app->db;
-            $model = new Album($db);
+            $model = new Collection($db);
             $post = array('activity' => 0);
             $model->insert($post);
             $id = $model->get('meta.insert');
@@ -429,7 +375,6 @@ class Media extends Controller
                 $id
             );
             $app->flash('message', 'new registro created');
-            $app->redirect($app->urlFor('admin_album_edit', array('id' => $id)));
             $app->request->isAjax() ? $app->redirect($app->urlFor('admin_album_edit', array('id' => $id))) : false;
 
         })->name('api_album_new');
@@ -450,7 +395,7 @@ class Media extends Controller
             }
 
             $db = $app->db;
-            $model = new Album($db);
+            $model = new Collection($db);
 
             $model->show($id);
             $app->view->setTemplates('layouts/form.layout.tpl.php', 'backend/album.tpl.php');
@@ -483,7 +428,7 @@ class Media extends Controller
             }
 
             $db = $app->db;
-            $model = new Album($db);
+            $model = new Collection($db);
             $post = $app->request->post();
             $model->update($post, $id);
             
@@ -516,15 +461,15 @@ class Media extends Controller
             }
 
             if ($app->session->has('files')) {
-                $g = new Album($app->db);
+                $g = new Collection($app->db);
                 $g->insert(array('title' => 'album sem name'));
                 $g_id = $g->get('meta.insert');
-                $f = new File($app->db);
+                $f = new Resource($app->db);
                 $files = $app->session->get('files');
 
                 foreach (array_keys($files) as $c) {
                     $f_id = $files[$c];
-                    $f->assocPhotoAlbum($f_id, $g_id);
+                    $f->assocPhotoCollection($f_id, $g_id);
                 }
 
                 $app->session->remove('files');
@@ -571,7 +516,6 @@ class Media extends Controller
 		 *
 		 * return string / void
 		 */
-
         $app->get('/admin/upload', function () use ($app) {
 
             if (!$app->porteiro->loggedIn()) {
@@ -612,6 +556,7 @@ class Media extends Controller
             );
             $upload = new Upload($app->db, $app->session, $opts);
             $upload->exec();
+
         })->name('api_upload');
 
         /*
@@ -629,7 +574,7 @@ class Media extends Controller
             }
 
             // resolve parametros
-            $model = new File($app->db);
+            $model = new Resource($app->db);
             $fileMorto = $model->delete($id);
             $filesMortos = array();
             $filesMortos[] = $fileMorto['name'] . '.' . $fileMorto['extension'];
@@ -640,6 +585,7 @@ class Media extends Controller
                 $filesMortos[] = $fileMorto['name'] . '_m.' . $fileMorto['extension'];
                 $filesMortos[] = $fileMorto['name'] . '_p.' . $fileMorto['extension'];
             }
+
             foreach ($filesMortos as $am) {
                 if (is_writable($app->config('media_dir') . $am)) {
                     unlink($app->config('media_dir') . $am);
