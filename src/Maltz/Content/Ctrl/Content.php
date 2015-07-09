@@ -27,11 +27,6 @@ class Content extends Controller
 
     public function route($app)
     {
-
-        $app->container->singleton('view', function () use ($app) {
-            return new View($app->container['settings']);
-        });
-
         /*
 		 * list contents
 		 *

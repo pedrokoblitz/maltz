@@ -34,7 +34,6 @@ abstract class Collection
      */
     public function sort(\Closure $sorter)
     {
-
         $this->items = usort($this->items, $sorter);
     }
 
@@ -49,7 +48,6 @@ abstract class Collection
      */
     public function map(array $items)
     {
-
         array_map(array($this, 'set'), array_keys($items), $items);
     }
 
@@ -64,7 +62,6 @@ abstract class Collection
      */
     public function set($id, $item)
     {
-
         if (!is_scalar($id)) {
             throw new \InvalidArgumentException('$id must be scalar');
         }
@@ -97,7 +94,6 @@ abstract class Collection
      */
     public function get($id)
     {
-
         if (!is_scalar($id)) {
             throw new \InvalidArgumentException('$id must be scalar');
         }
@@ -120,7 +116,6 @@ abstract class Collection
      */
     public function remove($id)
     {
-
         if (!is_scalar($id)) {
             throw new \InvalidArgumentException('$id must be scalar');
         }
@@ -132,7 +127,6 @@ abstract class Collection
 
     public function clear()
     {
-
         $this->items = array();
     }
 }

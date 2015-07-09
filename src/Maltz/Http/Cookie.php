@@ -25,37 +25,31 @@ class Cookie
 
     public function get()
     {
-
         return $this->cookie;
     }
 
     public function setDomain($domain)
     {
-
         $this->cookie['domain'] = $domain;
     }
 
     public function setPath($path)
     {
-
         $this->cookie['path'] = $path;
     }
 
     public function setExpiration($expires)
     {
-
         $this->cookie['expires'] = $expires;
     }
 
     public function setSecure()
     {
-
         $this->cookie['secure'] = true;
     }
 
     public function setHttpOnly()
     {
-
         $this->cookie['httponly'] = true;
     }
 }

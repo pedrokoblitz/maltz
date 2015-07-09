@@ -18,7 +18,7 @@ class SessionCookieAuthHandler
         $this->allowedKeys = $keys;
     }
 
-    public function reflectSessionInCookie()
+    public function reflectSessionInCookies()
     {
         foreach ($this->keys as $key) {
             $item = $this->session->get($key);
@@ -26,7 +26,7 @@ class SessionCookieAuthHandler
         }
     }
 
-    public function reflectCookieInSession()
+    public function reflectCookiesInSession()
     {
         foreach ($this->keys as $key) {
             $item = $this->cookieJar->get($key);
@@ -46,7 +46,6 @@ class SessionCookieAuthHandler
 
     public function check()
     {
-
         $sessionData = $this->extract($this->session);
         $cookieData = $this->extract($this->cookieJar);
 

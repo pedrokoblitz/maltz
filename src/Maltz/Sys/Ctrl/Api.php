@@ -35,10 +35,6 @@ class Api extends Controller
     public function route($app)
     {
 
-        $app->container->singleton('view', function () use ($app) {
-            return new View($app->container['settings']);
-        });
-
         $app->model = function () use ($app) {
             switch ($app->config('model')) {
 
