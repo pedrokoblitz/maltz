@@ -13,13 +13,13 @@ class Role extends Model
 
     public function list($offset, $limit) {
         $sql = "SELECT * FROM roles";
-        $result = $this->db->run($sql);
-        return $result;
+        $resultado = $this->db->run($sql);
+        return $resultado;
     }
 
     public function show($id) {
         $sql = "SELECT * FROM roles WHERE id=$id";
-        $result = $this->db->run($sql);
-        return $result;
+        $resultado = $this->db->run($sql);
+        return $resultado;
     }
 }

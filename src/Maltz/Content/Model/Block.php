@@ -49,8 +49,8 @@ class Block extends Model
     public function list($offset, $limit) 
     {
         $sql = "SELECT * FROM blocks";
-        $result = $this->db->run($sql);
-        return $result;
+        $resultado = $this->db->run($sql);
+        return $resultado;
     }
 
     /*
@@ -58,7 +58,7 @@ class Block extends Model
      */
     public function show($id) {
         $sql = "SELECT * FROM blocks WHERE id=$id";
-        $result = $this->db->run($sql);
-        return $result;
+        $resultado = $this->db->run($sql);
+        return $resultado;
     }
 }

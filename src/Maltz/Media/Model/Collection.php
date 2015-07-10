@@ -49,31 +49,31 @@ class Collection extends Model
 
     public function list($offset, $limit) {
         $sql = "SELECT * FROM collections";
-        $result = $this->db->run($sql);
-        return $result;
+        $resultado = $this->db->run($sql);
+        return $resultado;
     }
 
     public function show($id) {
         $sql = "SELECT * FROM collections WHERE id=$id";
-        $result = $this->db->run($sql);
-        return $result;
+        $resultado = $this->db->run($sql);
+        return $resultado;
     }
 
     public function addResource() {
         $sql = "SELECT * FROM collections";
-        $result = $this->db->run($sql);
-        return $result;
+        $resultado = $this->db->run($sql);
+        return $resultado;
     }
 
     public function removeResource() {
         $sql = "SELECT * FROM collections";
-        $result = $this->db->run($sql);
-        return $result;
+        $resultado = $this->db->run($sql);
+        return $resultado;
     }
 
     public function getResources() {
         $sql = "SELECT * FROM collections";
-        $result = $this->db->run($sql);
-        return $result;
+        $resultado = $this->db->run($sql);
+        return $resultado;
     }
 }

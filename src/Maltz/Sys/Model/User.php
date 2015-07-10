@@ -43,12 +43,12 @@ class User extends Model
 
     public function list($offset, $limit) {
         $sql = "SELECT * FROM users";
-        $result = $this->db->run($sql);
+        $resultado = $this->db->run($sql);
     }
 
     public function show($id) {
         $sql = "SELECT * FROM users WHERE id=$id";
-        $result = $this->db->run($sql);
+        $resultado = $this->db->run($sql);
     }
 
     /*
@@ -66,8 +66,8 @@ class User extends Model
         } elseif (isset($post['password']) && $post['password'] != '') {
             $post['password'] = md5($post['password']);
         }
-        $result = $this->db->insert($this->table, $post);
-        return $result;
+        $resultado = $this->db->insert($this->table, $post);
+        return $resultado;
     }
 
     /*
@@ -89,16 +89,16 @@ class User extends Model
             $post['password'] = md5($post['password']);
         }
         
-        $result = $this->db->update($this->table, $post, "user_id=" . $id);
-        return $result;
+        $resultado = $this->db->update($this->table, $post, "user_id=" . $id);
+        return $resultado;
     }
 
     public function signUp($post)
     {
         $post['password'] = md5($post['password']);
         $id = $this->db->insert($this->table, $post);
-        $result = $token->generate($id, 'activation');
-        return $result;
+        $resultado = $token->generate($id, 'activation');
+        return $resultado;
     }
 
     public function remember($user_id)

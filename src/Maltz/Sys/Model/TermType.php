@@ -11,13 +11,13 @@ class TermType extends Model
 
     public function list($offset, $limit) {
         $sql = "SELECT * FROM term_types";
-        $result = $this->db->run($sql);
-        return $result;
+        $resultado = $this->db->run($sql);
+        return $resultado;
     }
 
     public function show($id) {
         $sql = "SELECT * FROM term_types WHERE id=$id";
-        $result = $this->db->run($sql);
-        return $result;
+        $resultado = $this->db->run($sql);
+        return $resultado;
     }
 }

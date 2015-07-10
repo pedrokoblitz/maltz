@@ -75,7 +75,7 @@ class Media extends Controller
             $app->response->headers->set('Content-Type', 'application/json');
 
             $m = new Content($app->db);
-            $body = json_encode($m->updateCollection($p_id, $g_id));
+            $body = json_encode($m->updateCollection($content_id, $collection_id));
             $app->response->setBody($body);
             $app->stop();
         })->name('api_set_album')->conditions(array('p_id' => '\d+', 'g_id' => '\d+'));

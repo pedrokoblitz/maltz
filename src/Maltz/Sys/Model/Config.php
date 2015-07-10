@@ -45,28 +45,28 @@ class Config extends Model
 
     public function list($offset, $limit) {
         $sql = "SELECT * FROM config";
-        $result = $this->db->run($sql);
-        return $result;
+        $resultado = $this->db->run($sql);
+        return $resultado;
     }
 
     public function show($id) {
         $sql = "SELECT * FROM config WHERE id=$id";
-        $result = $this->db->run($sql);
-        return $result;
+        $resultado = $this->db->run($sql);
+        return $resultado;
     }
 
     public function setValue($key, $value)
     {
         $sql = "UPDATE config SET value=\"$value\" WHERE key=\"$key\";";
-        $resultado = $this->db->run($sql);
-        return $result;
+        $resultadoado = $this->db->run($sql);
+        return $resultado;
     }
 
     public function getValue($key)
     {
         $sql = "SELECT value FROM config WHERE key=\"$key\";";
-        $resultado = $this->db->run($sql);
-        return $resultado[0]['value'];
+        $resultadoado = $this->db->run($sql);
+        return $resultadoado[0]['value'];
     }
 
     public function setRefresh($key)

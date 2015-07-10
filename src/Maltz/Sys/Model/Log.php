@@ -43,13 +43,13 @@ class Log extends Model
 
     public function list($offset, $limit) {
         $sql = "SELECT * FROM log";
-        $result = $this->db->run($sql);
-        return $result;
+        $resultado = $this->db->run($sql);
+        return $resultado;
     }
 
     public function show($id) {
         $sql = "SELECT * FROM log WHERE id=$id";
-        $result = $this->db->run($sql);
-        return $result;
+        $resultado = $this->db->run($sql);
+        return $resultado;
     }
 }

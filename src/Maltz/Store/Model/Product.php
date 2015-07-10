@@ -152,7 +152,7 @@ class Product extends Model
 
     /*
      * search AJAX
-     * search o product na base de data e retorna diretamente os resultados em JSON
+     * search o product na base de data e retorna diretamente os resultadoados em JSON
      *
      *
      *
@@ -165,16 +165,16 @@ class Product extends Model
 
         $data = $this->db->run($sql);
 
-        $resultados = array();
+        $resultadoados = array();
         
         foreach ($data as $data) {
             $sql = "SELECT * FROM photos WHERE product_id = :id";
             $bind = array('id' => $data['product_id']);
             $photos = $this->db->run($sql, $bind);
             $data['photos'] = $photos;
-            $resultados[] = $data;
+            $resultadoados[] = $data;
         }
         
-        return $resultados;
+        return $resultadoados;
     }
 }

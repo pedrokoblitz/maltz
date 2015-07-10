@@ -26,7 +26,8 @@ CREATE TABLE `config` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `key` varchar(60) COLLATE utf8_unicode_ci DEFAULT NULL,
   `value` varchar(120) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `activity` tinyint(1) unsigned NOT NULL DEFAULT 0,
+  `activity` tinyint(1) unsigned NOT NULL DEFAULT 1,
+  `modified` datetime NOT NULL,
   `created` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `key` (`key`)
@@ -45,9 +46,9 @@ CREATE TABLE `log` (
   `user` varchar(120) COLLATE utf8_unicode_ci DEFAULT NULL,
   `user_id` int(10) unsigned NOT NULL,
   `action` varchar(120) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `model` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `object_id` int(10) unsigned DEFAULT NULL,
-  `activity` tinyint(1) unsigned NOT NULL DEFAULT 0,
+  `item_name` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `item_id` int(10) unsigned DEFAULT NULL,
+  `activity` tinyint(1) unsigned NOT NULL DEFAULT 1,
   `created` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -77,7 +78,6 @@ CREATE TABLE `users` (
   `province` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
   `password` varchar(10) COLLATE utf8_unicode_ci DEFAULT NULL,
   `token` varchar(120) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `level` int(10) unsigned NOT NULL,
   `activity` tinyint(1) unsigned NOT NULL DEFAULT 0,
   `created` datetime NOT NULL,
   PRIMARY KEY (`id`),
@@ -100,6 +100,19 @@ CREATE TABLE `roles` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Table structure for table `roles`
+--
+
+DROP TABLE IF EXISTS `users_roles`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `users_roles` (
+  `user_id` int(10) unsigned NOT NULL,
+  `role_id` int(10) unsigned NOT NULL,
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Table structure for table `tokens`
@@ -110,11 +123,12 @@ DROP TABLE IF EXISTS `tokens`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tokens` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int(10) unsigned DEFAULT NULL,
-  `token` varchar(120) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `type` varchar(120) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `activity` tinyint(1) unsigned NOT NULL DEFAULT 0,
+  `user_id` int(10) unsigned NOT NULL,
+  `token` varchar(120) COLLATE utf8_unicode_ci NOT NULL,
+  `type` tinyint(1) unsigned NOT NULL,
+  `activity` tinyint(1) unsigned NOT NULL DEFAULT 1,
   `created` datetime NOT NULL,
+  `used` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -214,9 +228,9 @@ CREATE TABLE `collection_types` (
 DROP TABLE IF EXISTS `items_collections`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `resources_collections` (
+CREATE TABLE `items_collections` (
   `item_name` enum('content', 'resource', 'term') COLLATE utf8_unicode_ci DEFAULT NULL,
-  `resource_id` int(10) unsigned NOT NULL,
+  `item_id` int(10) unsigned NOT NULL,
   `collection_id` int(10) unsigned NOT NULL,
   `order` int(10) unsigned NOT NULL,
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;

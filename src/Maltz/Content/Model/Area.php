@@ -48,8 +48,8 @@ class Area extends Model
      */
     public function list($offset, $limit) {
         $sql = "SELECT * FROM areas";
-        $result = $this->db->run($sql);
-        return $result;
+        $resultado = $this->db->run($sql);
+        return $resultado;
     }
 
     /*
@@ -57,22 +57,22 @@ class Area extends Model
      */
     public function show($id) {
         $sql = "SELECT * FROM areas WHERE id=$id";
-        $result = $this->db->run($sql);
-        return $result;
+        $resultado = $this->db->run($sql);
+        return $resultado;
     }
 
     public function addBlock($block_id)
     {
         $sql = "SELECT * FROM areas";
-        $result = $this->db->run($sql);
-        return $result;
+        $resultado = $this->db->run($sql);
+        return $resultado;
     }
 
     public function removeBlock($block_id)
     {
         $sql = "SELECT * FROM areas";
-        $result = $this->db->run($sql);
-        return $result;
+        $resultado = $this->db->run($sql);
+        return $resultado;
     }
 
     /*
@@ -86,7 +86,7 @@ class Area extends Model
      */
     public function getBlocks($area_id)
     {
-        $result = $this->db->run('SELECT * FROM blocks WHERE area_id=:area_id', array('area_id' => $area_id));
-        return $result;
+        $resultado = $this->db->run('SELECT * FROM blocks WHERE area_id=:area_id', array('area_id' => $area_id));
+        return $resultado;
     }
 }
