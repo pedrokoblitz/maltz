@@ -35,11 +35,11 @@ class Result {
         unset($this->items[$key]);
     }
 
-    public function validate($key, $type)
+    public function validate($key, $rule)
     {
-        switch ($type) {
+        switch ($rule) {
             case 'int':
-                $valid = intval($this->items[$key]) ? true : false;
+                $valid = Validacao::numero($this->items[$key]) ? true : false;
                 break;
             
             case 'string':
@@ -59,7 +59,7 @@ class Result {
                 break;
             
             case 'float':
-                $valid = floatval($this->items[$key]) ? true : false;
+                $valid = Validacao::numeroReal($this->items[$key]) ? true : false;
                 break;
             
             default:
@@ -148,15 +148,5 @@ class Result {
         $old_items = $this->toArray();
         $new_items = $other->toArray();
         $this->items = array_merge($old_items, $new_items);
-    }
-
-    public function getRecords()
-    {
-        return $this->items['records'];
-    }
-
-    public function getRow()
-    {
-        return $this->items['records'][0];
     }
 }

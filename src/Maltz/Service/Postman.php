@@ -1,6 +1,6 @@
 <?php
 
-namespace Maltz\Utils;
+namespace Maltz\Service;
 
 use Swift\Swift_Mailer;
 use Swift\Swift_Message;

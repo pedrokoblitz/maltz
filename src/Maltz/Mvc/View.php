@@ -2,8 +2,6 @@
 
 namespace Maltz\Mvc;
 
- use Maltz\Utils\UrlHelper;
-
 /**
  * CONVENCOES DO View
  * as funcoes set(), js(), json() e css() sao parte da biblioteca limonade-php

@@ -50,6 +50,7 @@ abstract class Model
         if (!$fk && $id === 'id') {
             $fk = $slug . '_' . $id;
         }
+        $this->slug = $slug;
         $this->db = $db;
         $this->table = $table;
         $this->fk = $fk;
@@ -66,7 +67,7 @@ abstract class Model
 	 */
     protected function __get($key)
     {
-        return isset($this->$key) && in_array($key, array('table', 'fk')) ? $this->$key : null;
+        return is_string($key) && isset($this->$key) && in_array($key, array('slug', 'table', 'fk')) ? $this->$key : null;
     }
 
     /*
@@ -79,7 +80,7 @@ abstract class Model
 	 *
 	 * return void
 	 */
-    public function update($data, $id)
+    public function update(array $data, $id)
     {
         return $this->db->update($this->table, $data, $this->identifier . "=" . $id);
     }
@@ -93,12 +94,8 @@ abstract class Model
 	 *
 	 * return void
 	 */
-    public function insert($data = null)
+    public function insert(array $data)
     {
-        if (!$data) {
-            $data = array();
-        }
-
         $resultado = $this->db->insert($this->table, $data);
         return $resultado;
     }
@@ -117,80 +114,9 @@ abstract class Model
         return $this->db->delete($this->table, $this->identifier . "=" . $id);
     }
 
-    /*
-	 *
-	 * apenas para tables que contem o campo 'activity'
-	 * muda value de activity para 1
-	 * guarda resultado na var $data
-	 *
-	 * @param int
-	 *
-	 * return void
-	 */
-    public function activate($id)
+    public static function query($db, $action, $params)
     {
-        return $this->db->update($this->table, array('activity' => 1), $this->identifier . "=" . $id);
-    }
-
-    /*
-	 *
-	 * apenas para tables que contem o campo 'activity'
-	 * muda value de activity para 0
-	 * guarda resultado na var $data
-	 *
-	 * @param int
-	 *
-	 * return void
-	 */
-    public function deactivate($id)
-    {
-        return $this->db->update($this->table, array('activity' => 0), $this->identifier . "=" . $id);
-    }
-
-    /*
-	 *
-	 * conta numero de registros na table
-	 *
-	 * @param
-	 *
-	 * return int
-	 */
-    public function count()
-    {
-        $contagem = $this->db->count($this->table);
-        $num = $contagem[0]["COUNT(id)"];
-        return $num;
-    }
-
-    /*
-	 *
-	 * checa existencia de campo com determinado value
-	 *
-	 * @param string
-	 * @param mixed
-	 *
-	 * return bool
-	 */
-    public function exists($campo, $value)
-    {
-        $exists = $this->db->exists($this->table, $campo, $value);
-        return $exists;
-    }
-
-    /*
-	 *
-	 * search value em determinado campo
-	 * guarda resultado na var $data
-	 *
-	 * @param string
-	 * @param mixed
-	 *
-	 * return void
-	 */
-    public function search($campo, $value)
-    {
-        $this->db;
-        $result = $this->db->search($this->table, $campo, $value);
-        return $result;
+        $model = new static($db);
+        return call_user_method_array($action, $model, $params);
     }
 }

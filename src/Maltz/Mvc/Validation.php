@@ -1,6 +1,6 @@
 <?php
 
-namespace Maltz\Utils;
+namespace Maltz\Mvc;
 
 /**
  * http://ideiasinsolitas.com.br/
@@ -21,7 +21,7 @@ namespace Maltz\Utils;
  * @version 0.1
  *
  */
-class Purifier
+class Validation
 {
 
     /**
@@ -47,7 +47,7 @@ class Purifier
      *
      * @return bool
      */
-    public static function numero($data)
+    public static function int($data)
     {
         return self::validate("/^[0-9]$/", $data);
     }
@@ -59,7 +59,7 @@ class Purifier
      *
      * @return bool
      */
-    public static function numeroReal($data)
+    public static function float($data)
     {
         return self::validate("/^[0-9]+?(.|,[0-9]+)$/", $data);
     }
@@ -71,7 +71,7 @@ class Purifier
      *
      * @return bool
      */
-    public static function alfanumeric($data)
+    public static function alphanum($data)
     {
         return self::validate("/^[a-zA-Z0-9]$/", $data);
     }

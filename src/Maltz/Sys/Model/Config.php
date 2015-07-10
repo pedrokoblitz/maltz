@@ -44,7 +44,7 @@ class Config extends Model
     }
 
     public function list($offset, $limit) {
-        $sql = "SELECT * FROM config";
+        $sql = "SELECT * FROM config LIMIT :offset, :limit";
         $resultado = $this->db->run($sql);
         return $resultado;
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Maltz\Utils;
+namespace Maltz\Service;
 
 /**
  * Parses the response from a Curl request into an object containing

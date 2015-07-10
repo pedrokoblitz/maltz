@@ -1,6 +1,6 @@
 <?php
 
-namespace Maltz\Utils;
+namespace Maltz\Service;
 
 use Maltz\Sys\Model\User;
 
