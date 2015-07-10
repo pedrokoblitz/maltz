@@ -41,85 +41,97 @@ class Content extends Model
     }
 
     public function insert() {
-        $sql = "SELECT * FROM contents";
+        $sql = "";
         $resultado = $this->db->run($sql);
         return $resultado;
     }
 
     public function update() {
-        $sql = "SELECT * FROM contents";
+        $sql = "";
         $resultado = $this->db->run($sql);
         return $resultado;
     }
 
     public function show($id) {
-        $sql = "SELECT * FROM contents";
+        $sql = "SELECT t1.content_type_id, t1.activity, t1.date_pub, t1.created 
+        FROM contents t1";
         $resultado = $this->db->run($sql);
         return $resultado;
     }
 
     public function list($offset, $limit) {
-        $sql = "SELECT * FROM contents";
+        $sql = "SELECT t1.content_type_id, t1.activity, t1.date_pub, t1.created 
+        FROM contents t1";
         $resultado = $this->db->run($sql);
         return $resultado;
     }
 
     public function delete() {
-        $sql = "SELECT * FROM contents WHERE id=$id";
+        $sql = "SELECT t1.content_type_id, t1.activity, t1.date_pub, t1.created 
+        FROM contents t1 WHERE id=$id";
         $resultado = $this->db->run($sql);
         return $resultado;
     }
 
     public function addResources() {
-        $sql = "SELECT * FROM contents";
+        $sql = "SELECT t1.content_type_id, t1.activity, t1.date_pub, t1.created 
+        FROM contents t1";
         $resultado = $this->db->run($sql);
         return $resultado;
     }
 
     public function removeResources() {
-        $sql = "SELECT * FROM contents";
+        $sql = "SELECT t1.content_type_id, t1.activity, t1.date_pub, t1.created 
+        FROM contents t1";
         $resultado = $this->db->run($sql);
         return $resultado;
     }
 
     public function getResources() {
-        $sql = "SELECT * FROM contents";
+        $sql = "SELECT t1.content_type_id, t1.activity, t1.date_pub, t1.created 
+        FROM contents t1";
         $resultado = $this->db->run($sql);
         return $resultado;
     }
 
     public function addCollections() {
-        $sql = "SELECT * FROM contents";
+        $sql = "SELECT t1.content_type_id, t1.activity, t1.date_pub, t1.created 
+        FROM contents t1";
         $resultado = $this->db->run($sql);
         return $resultado;
     }
 
     public function removeCollections() {
-        $sql = "SELECT * FROM contents";
+        $sql = "SELECT t1.content_type_id, t1.activity, t1.date_pub, t1.created 
+        FROM contents t1";
         $resultado = $this->db->run($sql);
         return $resultado;
     }
 
     public function getCollections() {
-        $sql = "SELECT * FROM contents";
+        $sql = "SELECT t1.content_type_id, t1.activity, t1.date_pub, t1.created 
+        FROM contents t1";
         $resultado = $this->db->run($sql);
         return $resultado;
     }
 
     public function addTerms() {
-        $sql = "SELECT * FROM contents";
+        $sql = "SELECT t1.content_type_id, t1.activity, t1.date_pub, t1.created 
+        FROM contents t1";
         $resultado = $this->db->run($sql);
         return $resultado;
     }
 
     public function removeTerms() {
-        $sql = "SELECT * FROM contents";
+        $sql = "SELECT t1.content_type_id, t1.activity, t1.date_pub, t1.created 
+        FROM contents t1";
         $resultado = $this->db->run($sql);
         return $resultado;
     }
 
     public function getTerms() {
-        $sql = "SELECT * FROM contents";
+        $sql = "SELECT t1.content_type_id, t1.activity, t1.date_pub, t1.created 
+        FROM contents t1";
         $resultado = $this->db->run($sql);
         return $resultado;
     }

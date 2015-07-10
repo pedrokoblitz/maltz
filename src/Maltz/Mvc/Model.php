@@ -30,20 +30,16 @@ use Maltz\Utils\Pagination;
 
 abstract class Model
 {
-    // PROPRIEDADES
-
     protected $db;
+
     protected $table;
+
     protected $fk;
+
     protected $identifier;
 
     /*
 	 *
-	 * CONSTRUTOR
-	 *
-	 * @param db objeto DB
-	 * @param table string
-	 * return void
 	 */
     public function __construct($db, $slug, $table, $fk = null, $id = 'id')
     {
@@ -59,11 +55,6 @@ abstract class Model
 
     /*
 	 *
-	 * name da table
-	 *
-	 * @param
-	 *
-	 * return string
 	 */
     protected function __get($key)
     {
@@ -71,52 +62,11 @@ abstract class Model
     }
 
     /*
-	 *
-	 * modifica um registro identificado por id
-	 * guarda resultado na var $data
-	 *
-	 * @param array
-	 * @param int
-	 *
-	 * return void
-	 */
-    public function update(array $data, $id)
+     *
+     */
+    public static function query(Query $query)
     {
-        return $this->db->update($this->table, $data, $this->identifier . "=" . $id);
-    }
-
-    /*
-	 *
-	 * insere um new registro
-	 * guarda resultado na var $data
-	 *
-	 * @param array
-	 *
-	 * return void
-	 */
-    public function insert(array $data)
-    {
-        $resultado = $this->db->insert($this->table, $data);
-        return $resultado;
-    }
-
-    /*
-	 *
-	 * apaga um registro no banco
-	 * guarda resultado na var $data
-	 *
-	 * @param int
-	 *
-	 * return void
-	 */
-    public function delete($id)
-    {
-        return $this->db->delete($this->table, $this->identifier . "=" . $id);
-    }
-
-    public static function query($db, $action, $params)
-    {
-        $model = new static($db);
-        return call_user_method_array($action, $model, $params);
+        $model = new static($query->db);
+        return call_user_method_array($query->action, $model, $query->params);
     }
 }

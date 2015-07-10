@@ -1,48 +1,38 @@
  <?php
         /*
          *
-         * muda campo activity do model selecionado para 1
-         *
-         * return void
          */
         $app->get('', function ($id) use ($app) {
 
-            if (!$app->porteiro->loggedIn()) {
-                $app->redirect($app->urlFor('admin_login'));
-            }
+            $app->httpHandler->authorized();
+            
+            $query = $app->query;
+            $query->action = 'update';
+            $query->params = array('type' => $type, 'id' => $id);
+            
+            $data = Content::query($query);
+            
+            $app->httpHandler->redirect('', '', $query->params);
 
-            $app->activity->write(
-                $app->db,
-                $app->session->get('user.username'),
-                $app->session->get('user.id'),
-                'activity',
-                $model,
-                $id
-            );
+        })->name('')->conditions(array('model' => '\w+', 'id' => '\d+'));
 
-            $app->flash('message', 'desativado');
-            $app->request->isAjax() ? $app->redirect($app->urlFor('admin_model_edit', array('model' => $model, 'id' => $id))) : false;
-        })->name('api_model_activate')->conditions(array('model' => '\w+', 'id' => '\d+'));
- /*
+        /*
          *
-         * list model selecionado
-         *
-         *
-         * return string / void
          */
+        $app->get('/admin/:type(/order/:key(/:order(/page/:pg)))', function ($type, $key = 'created', $order = 'ASC', $pg = 1) use ($app) {
 
-        $app->get('/admin/:model(/order/:key(/:order(/page/:pg)))', function ($model, $key = 'created', $order = 'ASC', $pg = 1) use ($app) {
-
-            if (!$app->porteiro->loggedIn()) {
-                $app->redirect($app->urlFor('admin_login'));
-            }
-
+            $app->httpHandler->authorized();
             $pp = $app->config('per_page');
+            
+            $query = $app->query;
+            $query->action = 'list';
+            $query->params = array('type' => $type, 'id' => $id, 'pp' => $pp);
+            
+            $data = Content::query($query);
+            $data->set('layout', '');
+            $data->set('view', '');
+            
+            $app->httpHandler->serveView($data);
 
-            $body = $app->view->render($data);
-            $app->response->headers->set('Content-Type', 'text/html');
-            $app->response->setStatus(200);
-            $app->response->setBody($body);
-            $app->stop();
         })->name('admin_model_index')->conditions(array('model' => '\w+', 'order' => '\w+', 'pp' => '\d+', 'pg' => '\d+'));
 ?>

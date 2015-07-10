@@ -6,13 +6,15 @@ use Maltz\Http\CookieJar;
 use Maltz\Http\Session;
 use Maltz\Http\Nonce;
 use Maltz\Mvc\DB;
+use Maltz\Mvc\Query;
+use Maltz\Mvc\HttpHandler;
 use Maltz\Sys\Model\Config;
 use Maltz\Sys\Model\Term;
-use Maltz\Utils\Carteiro;
-use Maltz\Utils\Correios;
-use Maltz\Utils\Pagination;
-use Maltz\Utils\Porteiro;
-use Maltz\Utils\LogHelper;
+use Maltz\Service\Postman;
+use Maltz\Service\Correios;
+use Maltz\Service\Pagination;
+use Maltz\Service\Dorman;
+use Maltz\Service\LogHelper;
 use Slim\Slim;
 
 class Maltz
@@ -55,6 +57,14 @@ class Maltz
         $app->nonce = function () {
             return new Nonce($app->session);
         };
+
+        $app->httpHandler = function () {
+            return new HttpHandler($app);
+        }
+
+        $app->query = function () {
+            return new Query($app->db);
+        }
 
         $app->activity = function () use ($app) {
             return new LogHelper($app->db);

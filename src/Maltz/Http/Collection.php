@@ -1,6 +1,6 @@
 <?php
 
-namespace Maltz\Http;
+namespace Maltz\Mvc;
 
 /**
  *
@@ -15,7 +15,7 @@ namespace Maltz\Http;
  * @author       Pedro Koblitz
  *
  */
-abstract class Collection
+class Collection
 {
 
     /**
