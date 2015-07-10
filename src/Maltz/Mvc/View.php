@@ -38,7 +38,7 @@ namespace Maltz\Mvc;
 class View
 {
     // PROPRIEDADES
-    protected $config;
+    protected $path;
     protected $layout;
     protected $view;
     protected $styleSheets = array();
@@ -48,16 +48,20 @@ class View
     protected $filters = array();
 
 
-    public function __construct($config, $layout = '', $view = '')
+    public function __construct(Result $result)
     {
-        $this->config = $config;
-        $this->layout = $layout;
-        $this->view = $view;
-        $this->data = array();
-        $styleSheets = array();
-        $javaScripts = array();
-        $data = array();
-        $filters = array();
+        $this->path = $this->result->get('templates.path');
+        $this->layout = $this->result->get('layout');
+        $this->view = $this->result->get('view');
+        $this->data = $this->result->get('records');
+
+        $styleSheets = array(
+            'bootstrap' => '',
+        );
+
+        $javaScripts = array(
+            'bootstrap' => '',
+        );
     }
 
     public function addStyleSheet($name, $external = false)
@@ -87,79 +91,6 @@ class View
         $this->javaScripts[] = $path;
     }
 
-    public function setTemplates($layout, $view)
-    {
-        $this->layout = $layout;
-        $this->view = $view;
-    }
-
-    /*
-    *
-    *  diz qual layout serÃ¡ usado para render
-    *
-    * @param string
-    *
-    * return void
-    */
-    public function setLayout($layout)
-    {
-        $this->layout = $layout;
-    }
-
-    /*
-    *
-    * pega name do layout sendo utilizado
-    *
-    * @param
-    *
-    * return string
-    */
-    public function getLayout()
-    {
-        return $this->layout;
-    }
-
-    /*
-    *
-    * passa o template a ser utilizado no render
-    *
-    * @param string
-    *
-    * return void
-    */
-    public function setView($view)
-    {
-        $this->view = $view;
-    }
-
-    /*
-    *
-    * pega name do template sendo utilizado
-    *
-    * @param
-    *
-    * return string
-    */
-    public function getView()
-    {
-        return $this->view;
-    }
-
-    public function addFilter($callable)
-    {
-        if (is_callable($callable)) {
-            $this->filters[] = $callable;
-        }
-    }
-
-    /*
-    *
-    */
-    public function set($key, $data)
-    {
-        $this->data[$key] = $data;
-    }
-
     public function renderStyleSheets()
     {
         $string = "";
@@ -184,18 +115,6 @@ class View
         return $string;
     }
 
-    public function setData($arg1, $arg2 = null)
-    {
-        if (is_string($arg1)) {
-            $this->set($arg1, $arg2);
-        }
-
-        if (is_array($arg1) && !$arg2) {
-            $this->data = is_array($this->data) && !empty($this->data) ? array_merge($arg1, $this->data) : $arg1;
-        }
-
-    }
-
     /*
     * passa os data template html usando metodos do limonade-php
     * junta data com template e layout
@@ -205,10 +124,8 @@ class View
     *
     * return string
     */
-    public function render($data = array(), $layout = '', $view = '')
+    public function render()
     {
-        $l = new UrlHelper(array());
-
         $styles = $this->renderStyleSheets();
         $scripts = $this->renderJavaScripts();
 
@@ -225,7 +142,7 @@ class View
             $this->data = array($this->data);
         }
 
-        $config = $this->config;
+        $path = $this->path;
 
         if (is_array($this->data) && is_array($data)) {
             $data = array_merge($data, $this->data);
@@ -237,16 +154,16 @@ class View
 
         if (!isset($this->layout) || empty($this->layout)) {
             ob_start();
-            include $this->config['templates.path'] . '/' . $this->view;
+            include $this->path . '/' . $this->view;
             $body = ob_get_clean();
 
         } else {
             ob_start();
-            include $this->config['templates.path'] . '/' . $this->view;
+            include $this->path . '/' . $this->view;
             $content = ob_get_clean();
 
             ob_start();
-            include $this->config['templates.path'] . '/' . $this->layout;
+            include $this->path . '/' . $this->layout;
             $body = ob_get_clean();
         }
         
@@ -282,7 +199,7 @@ class View
             extract($data);
         }
         $l = new UrlHelper(array());
-        include $this->config['templates.path'] . '/' . $name;
+        include $this->path['templates.path'] . '/' . $name;
         $partial = ob_get_clean();
         $this->e($partial);
     }
@@ -290,168 +207,5 @@ class View
     public function e($string)
     {
         echo $string;
-    }
-
-
-    /*
-    * pagination do admin
-    *
-    *
-    * @param $pgs int
-    * @param $component string
-    *
-    * return string
-    */
-    public function backEndPg($pgs, $component, $pg)
-    {
-        if ($pgs < 2) {
-            return false;
-        }
-
-        $html = '';
-        $html .= '<div class="pagination"><ul>';
-
-        if ($pg > 1) {
-            $ant = $pg - 1;
-            $html .= '<li><a href="' . '/admin/' . $component . '/list/' . $ant . '">anterior</a></li>';
-        }
-
-        for ($i = 1; $i <= $pgs; $i++) {
-            if ($i < 5 || $i % 5 == 0 || $pgs - $i < 4) {
-                if ($i == $pg) {
-                    $liclasse = 'class="active"';
-                } else {
-                    $liclasse = '';
-                }
-
-                $html .= '<li ' . $liclasse . '">';
-                $html .= '<a href="' . '/admin/' . $component . '/list/' . $i . '">' . $i . '</a>';
-                $html .= '</li>';
-            }
-        }
-
-        if ($pg < $pgs) {
-            $prox = $pg + 1;
-            $html .= '<li><a href="/admin/' . $component . '/list/' . $prox . '">próxima</a></li>';
-        }
-
-        $html .= '</ul></div>';
-        $this->e($html);
-    }
-
-    /*
-    *
-    * pagination do frontend
-    *
-    * @param $pgs int
-    * @param $component string
-    *
-    * return string
-    */
-    public function frontEndPg($pgs, $component, $pg = 1, $cat = null)
-    {
-        if ($pgs < 2) {
-            return false;
-        }
-
-        $html = '';
-        $html .= '<div class="pagination"><ul>';
-        if ($pg > 1) {
-            $ant = $pg - 1;
-            $html .= '<li><a href="' . '/' . $component . '/' . $ant;
-            if ($cat !== '') {
-                $html .= '/' . $cat;
-            }
-            $html .= '">anterior</a></li>';
-        }
-
-        for ($i = 1; $i <= $pgs; $i++) {
-            if ($i < 5 || $i % 5 == 0 || $pgs - $i < 4) {
-                if ($i == $pg) {
-                    $liclasse = 'class="active"';
-
-                } else {
-                    $liclasse = '';
-                }
-
-                $html .= '<li ' . $liclasse . '">';
-                $html .= '<a href="' . '/' . $component . '/' . $i;
-                if ($cat !== '') {
-                    $html .= '/' . $cat;
-                }
-                $html .= '">' . $i . '</a>';
-                $html .= '</li>';
-            }
-        }
-        if ($pg < $pgs) {
-            $prox = $pg + 1;
-            $html .= '<li><a href="' . '/' . $component . '/' . $prox;
-            if ($cat) {
-                $html .= '/' . $cat;
-            }
-            $html .= '">próxima</a></li>';
-
-        }
-        $html .= '</ul></div>';
-        $this->e($html);
-    }
-
-    /*
-    * formata a data
-    *
-    *
-    * @param $data array
-    * @param $formato string
-    *
-    * return string
-    */
-    public function date($data, $formato = null)
-    {
-        $d = explode(' ', $data);
-        $dd = array('data' => explode('-', $d[0]), 'hora' => explode(':', $d[1]));
-        $data = $dd['data'];
-        $hora = $dd['hora'];
-        $adata = $data[2] . '/' . $data[1] . '/' . $data[0];
-        $ahora = $hora[0] . 'h' . $hora[1];
-
-        switch ($formato) {
-            case 'data':
-                return $adata;
-            break;
-
-            case 'hora':
-                return $ahora;
-            break;
-
-            case 'extenso':
-                return 'às ' . $ahora . ' em ' . $adata;
-            break;
-
-            default:
-                return $dd;
-            break;
-        }
-    }
-
-    /*
-    * reduz o block de texto para 200 caracteres
-    *
-    *
-    * @param $string string
-    * @param $limit int
-    * @param $pad int
-    *
-    * return string
-    */
-    public function excerpt($string, $limit = 200, $pad = 0)
-    {
-        $string = trim($string);
-
-        if (strlen($string) <= $limit) {
-            return strip_tags($string);
-        }
-
-        $string = substr($string, $pad, $limit);
-        return strip_tags($string);
     }
 }

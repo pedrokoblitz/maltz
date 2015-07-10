@@ -57,7 +57,7 @@ class DB extends \PDO
     public function delete($table, $where, $bind = "")
     {
         $sql = "DELETE FROM " . $table . " WHERE " . $where . ";";
-        $this->run($sql, $bind);
+        return $this->run($sql, $bind);
     }
 
     /*
@@ -134,7 +134,7 @@ class DB extends \PDO
 
         $data = $this->run($sql, $bind);
         if ($data === false || $data === null || $data === array() || $data === '' || $data === 0) {
-            return null;
+            $data = null;
         }
         return $data;
     }
@@ -146,7 +146,7 @@ class DB extends \PDO
 	 * @param $bind
 	 *
 	 */
-    public function run($sql, $bind = "", $single = false)
+    public function run($sql, $bind = "")
     {
 
 //var_dump($sql);
@@ -159,88 +159,24 @@ class DB extends \PDO
             $pdostmt = $this->prepare($this->sql);
             if ($pdostmt->execute($this->bind) !== false) {
                 if (preg_match("/^(" . implode("|", array("select", "describe", "pragma")) . ") /i", $this->sql)) {
-                    if ($single === false) {
-                        return $pdostmt->fetchAll(\PDO::FETCH_ASSOC);
-                    } elseif ($single === true) {
-                        return $pdostmt->fetch(\PDO::FETCH_ASSOC);
-                    }
+                    $data = $pdostmt->fetchAll(\PDO::FETCH_ASSOC);
+                    return new Result(array('records' => $data, 'model.success' => true));
+                
+                } elseif (preg_match("/^(count) /i", $this->sql)) {
+                    $data = $pdostmt->fetchAll(\PDO::FETCH_ASSOC);
+                    return new Result(array('count' => $data['COUNT(id)'], 'model.success' => true));
+                
                 } elseif (preg_match("/^(insert) /i", $this->sql)) {
                     $last = \PDO::lastInsertId();
-                    return $last;
+                    return new Result(array('last_insert_id' => $last, 'model.success' => true));
+                
                 } else {
-                    return true;
+                    return new Result(array('success' => true));
                 }
             }
         } catch (\PDOException $e) {
             $this->error = $e->getMessage();
-            echo $e->getMessage();
-            return null;
-        }
-    }
-
-    /*
-	 *
-	 * @param $table
-	 * @param $where
-	 * @param $bind
-	 * $fields
-	 */
-    public function select(
-        $table,
-        $where = null,
-        $limit = null,
-        $order = null,
-        $bind = "",
-        $fields = "*",
-        $activity = false
-    ) {
-        if (is_array($fields)) {
-            $fields = implode(',', $fields);
-        }
-        $sql = "SELECT " . $fields . " FROM " . $table;
-        if (!empty($where)) {
-            $sql .= " WHERE " . $where;
-        }
-        if (!empty($where) && $activity == true) {
-            $sql .= " AND activity=1";
-        }
-        if (empty($where) && $activity == true) {
-            $sql .= " WHERE activity=1";
-        }
-        if (!empty($order)) {
-            $sql .= " ORDER BY " . $order[0] . " " . $order[1];
-        }
-        if (!empty($limit)) {
-            $sql .= " LIMIT " . $limit[0] . ", " . $limit[1];
-        }
-        $sql .= ";";
-        $data = $this->run($sql, $bind);
-
-        if ($data === false || $data === null || $data === array() || $data === '' || $data === 0) {
-            return null;
-        } else {
-            return $data;
-        }
-    }
-
-    /*
-	 *
-	 * @param $errorCallbackFunction
-	 * @param $errorMsgFormat
-	 * Variable functions for won't work with language constructs such as echo and print, so these are replaced with print_r.
-	 *
-	 */
-    public function setErrorCallbackFunction($errorCallbackFunction, $errorMsgFormat = "html")
-    {
-        if (in_array(strtolower($errorCallbackFunction), array("echo", "print"))) {
-            $errorCallbackFunction = "print_r";
-        }
-        if (function_exists($errorCallbackFunction)) {
-            $this->errorCallbackFunction = $errorCallbackFunction;
-            if (!in_array(strtolower($errorMsgFormat), array("html", "text"))) {
-                $errorMsgFormat = "html";
-            }
-            $this->errorMsgFormat = $errorMsgFormat;
+            return new Result('model.success' => false, 'model.error_message' => $e->getMessage());
         }
     }
 
@@ -292,14 +228,9 @@ class DB extends \PDO
         return $data;
     }
 
-    /*
-	 *
-	 * @param $table
-	 * @param $pk
-	 */
-    public function search($table, $field, $value)
+    public function foundRows()
     {
-        $sql = "SELECT * FROM " . $table . " WHERE " . $field . " = '" . $value . "';";
+        $sql = "SELECT FOUND_ROWS;";
         $data = $this->run($sql);
         if ($data === false || $data === null || $data === array() || $data === '' || $data === 0) {
             return null;

@@ -1,4 +1,8 @@
 <?php
+
+class Api {
+
+    public static function route($app) {
         /*
          *
          */
@@ -231,4 +235,7 @@
             $app->response->setBody($body);
             $app->stop();
         })->name('')->conditions(array('id' => '\d+'));
+    }
 
+    return $app;
+}

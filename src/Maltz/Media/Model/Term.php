@@ -1,6 +1,6 @@
 <?php
 
-namespace Maltz\Sys\Model;
+namespace Maltz\Media\Model;
 
 use Maltz\Mvc\Model;
 

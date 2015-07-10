@@ -1,6 +1,6 @@
 <?php
 
-namespace Maltz\Sys\Model;
+namespace Maltz\Media\Model;
 
 class TermType extends Model
 {

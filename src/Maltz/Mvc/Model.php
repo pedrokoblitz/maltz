@@ -56,39 +56,6 @@ abstract class Model
         $this->identifier = $id;
     }
 
-    // forca as classe filhas a implementarem esses mÃ©todos
-    //	abstract public function purificar($post);
-    //	abstract public function insert($estrutura);
-    /*
-	 * ordena os resultados com base na key
-	 *
-	 * @param array array
-	 * @param key string
-	 *
-	 * return array
-	 *
-	 */
-
-    protected function sort($array, $key)
-    {
-
-        $sorter = array();
-        $ret = array();
-        reset($array);
-
-        foreach ($array as $ii => $va) {
-            $sorter[$ii] = $va[$key];
-        }
-
-        asort($sorter);
-
-        foreach ($sorter as $ii => $va) {
-            $ret[$ii] = $array[$ii];
-        }
-
-        return $ret;
-    }
-
     /*
 	 *
 	 * name da table
@@ -97,22 +64,9 @@ abstract class Model
 	 *
 	 * return string
 	 */
-    protected function getTable()
+    protected function __get($key)
     {
-        return $this->table;
-    }
-
-    /*
-	 *
-	 *
-	 *
-	 *
-	 *
-	 * return key primaria
-	 */
-    protected function getFk()
-    {
-        return $this->fk;
+        return isset($this->$key) && in_array($key, array('table', 'fk')) ? $this->$key : null;
     }
 
     /*

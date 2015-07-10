@@ -47,7 +47,10 @@ class Area extends Model
      *
      */
     public function list($offset, $limit) {
-        $sql = "SELECT * FROM areas";
+        $sql = "SELECT t1.*, t2.* FROM areas t1
+        JOIN translations t2
+        ON t2.item_name=\"area\"
+        AND t2.item_id=t1.id";
         $resultado = $this->db->run($sql);
         return $resultado;
     }
@@ -56,21 +59,25 @@ class Area extends Model
      *
      */
     public function show($id) {
-        $sql = "SELECT * FROM areas WHERE id=$id";
+        $sql = "SELECT t1.*, t2.* FROM areas t1
+        JOIN translations t2
+        ON t2.item_name=\"area\"
+        AND t2.item_id=t1.id
+        WHERE id=$id";
         $resultado = $this->db->run($sql);
         return $resultado;
     }
 
-    public function addBlock($block_id)
+    public function addBlock()
     {
-        $sql = "SELECT * FROM areas";
+        $sql = "UPDATE blocks SET area_id=$area_id WHERE id=$block_id";
         $resultado = $this->db->run($sql);
         return $resultado;
     }
 
     public function removeBlock($block_id)
     {
-        $sql = "SELECT * FROM areas";
+        $sql = "DELETE * FROM areas";
         $resultado = $this->db->run($sql);
         return $resultado;
     }
@@ -86,7 +93,12 @@ class Area extends Model
      */
     public function getBlocks($area_id)
     {
-        $resultado = $this->db->run('SELECT * FROM blocks WHERE area_id=:area_id', array('area_id' => $area_id));
+        $sql = "SELECT t1.*, t2.* FROM blocks t1
+        JOIN translations t2
+        ON t2.item_name=\"blocks\"
+        AND t2.item_id=t1.id
+        WHERE area_id=:area_id";
+        $resultado = $this->db->run($sql, array('area_id' => $area_id));
         return $resultado;
     }
 }
