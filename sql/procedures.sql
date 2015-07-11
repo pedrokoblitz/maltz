@@ -22,12 +22,56 @@ CREATE PROCEDURE `insert_content`(
 )
 BEGIN
   SET @type_id = (SELECT id FROM types WHERE name=content_type AND item_name="content");
-  INSERT INTO contents (type_id, date_pub) VALUES (@type_id, date_pub, NOW());
+  INSERT INTO contents (
+    type_id, 
+    date_pub
+  ) 
+    VALUES (
+      @type_id, 
+      date_pub, 
+      NOW()
+    );
   SET @last_content_id = LAST_INSERT_ID();
-  INSERT INTO translations (user_id, language, item_name, item_id, slug, name, title, subtitle, excerpt, description, body) 
-    VALUES (user_id, language, "content", @last_content_id, slug, name, title, subtitle, excerpt, description, body);
-  INSERT INTO log (user_id, action, item_name, item_id, created)
-    VALUES (user_id, "insert", "content", @last_content_id, NOW());
+  INSERT INTO translations (
+    user_id, 
+    language, 
+    item_name, 
+    item_id, 
+    slug, 
+    name, 
+    title, 
+    subtitle, 
+    excerpt, 
+    description, 
+    body
+  ) 
+    VALUES (
+      user_id, 
+      language, 
+      "content", 
+      @last_content_id, 
+      slug, 
+      name, 
+      title, 
+      subtitle, 
+      excerpt, 
+      description, 
+      body
+    );
+  INSERT INTO log (
+    user_id, 
+    action, 
+    item_name, 
+    item_id, 
+    created
+  )
+    VALUES (
+      user_id, 
+      "insert", 
+      "content", 
+      @last_content_id, 
+      NOW()
+    );
 END$$
 
 CREATE PROCEDURE `update_content`(
@@ -78,12 +122,50 @@ CREATE PROCEDURE `insert_collection`(
 )
 BEGIN
   SET @type_id = (SELECT id FROM types WHERE name=collection_type AND item_name="collection");
-  INSERT INTO collections (type_id, created, modified)
-    VALUES (@type_id, NOW(), NOW());
-  INSERT INTO translations (user_id, language, item_name, item_id, slug, name, title, description)
-    VALUES (user_id, language, "collection", @last_content_id, slug, name, title, description);
-  INSERT INTO log (user_id, action, item_name, item_id, created)
-    VALUES (user_id, "insert", "collection", LAST_INSERT_ID(), NOW());
+  INSERT INTO collections (
+    type_id, 
+    created, 
+    modified
+  )
+    VALUES (
+      @type_id, 
+      NOW(), 
+      NOW()
+    );
+  INSERT INTO translations (
+    user_id, 
+    language, 
+    item_name, 
+    item_id, 
+    slug, 
+    name, 
+    title, 
+    description
+  )
+    VALUES (
+      user_id, 
+      language, 
+      "collection", 
+      @last_content_id, 
+      slug, 
+      name, 
+      title, 
+      description
+    );
+  INSERT INTO log (
+    user_id, 
+    action, 
+    item_name, 
+    item_id, 
+    created
+  )
+    VALUES (
+      user_id, 
+      "insert", 
+      "collection", 
+      LAST_INSERT_ID(), 
+      NOW()
+    );
 END$$
 
 CREATE PROCEDURE `update_collection`(
@@ -126,12 +208,58 @@ CREATE PROCEDURE `insert_resource`(
 )
 BEGIN
   SET @type_id = (SELECT id FROM types WHERE name=resource_type AND item_name="resource");
-  INSERT INTO resources (type_id, url, filepath, filename, extension, created, modified) 
-    VALUES (@type_id, url, filepath, filename, extension, NOW(), NOW());
-  INSERT INTO translations (user_id, language, item_name, item_id, slug, name, title, description) 
-    VALUES (user_id, language, "resource", @last_content_id, slug, name, title, description);
-  INSERT INTO log (user_id, action, item_name, item_id, created)
-    VALUES (user_id, "insert", "resource", LAST_INSERT_ID(), NOW());
+  INSERT INTO resources (
+    type_id, 
+    url, 
+    filepath, 
+    filename, 
+    extension, 
+    created, 
+    modified
+  ) 
+    VALUES (
+      @type_id, 
+      url, 
+      filepath, 
+      filename, 
+      extension, 
+      NOW(), 
+      NOW()
+    );
+  INSERT INTO translations (
+    user_id, 
+    language, 
+    item_name, 
+    item_id, 
+    slug, 
+    name, 
+    title, 
+    description
+  ) 
+    VALUES (
+      user_id, 
+      language, 
+      "resource", 
+      @last_content_id, 
+      slug, 
+      name, 
+      title, 
+      description
+    );
+  INSERT INTO log (
+    user_id, 
+    action, 
+    item_name, 
+    item_id, 
+    created
+  )
+    VALUES (
+      user_id, 
+      "insert", 
+      "resource", 
+      LAST_INSERT_ID(), 
+      NOW()
+    );
 END$$
 
 CREATE PROCEDURE `update_resource`(
@@ -162,8 +290,20 @@ BEGIN
     title=title, 
     description=description,
     WHERE item_id=id AND item_name="resource";
-  INSERT INTO log (user_id, action, item_name, item_id, created)
-    VALUES (user_id, "update", "resource", id, NOW());
+  INSERT INTO log (
+    user_id, 
+    action, 
+    item_name, 
+    item_id, 
+    created
+  )
+    VALUES (
+      user_id, 
+      "update", 
+      "resource", 
+      id, 
+      NOW()
+    );
 END$$
 
 DELIMITER ;
