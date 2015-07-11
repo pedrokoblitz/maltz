@@ -26,7 +26,6 @@ class Doorman
     {
         $this->session = $session;
         $this->cookieJar = $cookieJar;
-        $this->user = new User($db);
     }
 
     public function remember($user_id)

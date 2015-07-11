@@ -4,7 +4,8 @@ namespace Maltz\Mvc;
 
 class Type
 {
-
+    protected $items;
+    
     /*
 	 *
 	 */
@@ -18,8 +19,7 @@ class Type
 	 */
     public function set($key, $value)
     {
-        $this->dirty = true;
-        $this->items[$key] = $key;
+        $this->items[$key] = $value;
     }
 
     /*
@@ -43,7 +43,6 @@ class Type
 	 */
     public function remove($key)
     {
-        $this->dirty = true;
         unset($this->items[$key]);
     }
 
@@ -56,11 +55,19 @@ class Type
     }
 
     /*
-	 *
-	 */
+     *
+     */
     public function values()
     {
         return array_values($this->items);
+    }
+
+    /*
+     *
+     */
+    public function count()
+    {
+        return count($this->items);
     }
 
     /*
@@ -68,73 +75,6 @@ class Type
 	 */
     public function clear()
     {
-        $this->dirty = true;
         $this->items = array();
-    }
-
-    /*
-	 *
-	 */
-    public function fromArray(array $items)
-    {
-        $this->items = $items;
-    }
-
-    /*
-	 *
-	 */
-    public function toArray()
-    {
-        return $this->items;
-    }
-
-    /*
-	 *
-	 */
-    public function toObject()
-    {
-        return (object) $this->items;
-    }
-
-    /*
-	 *
-	 */
-    public function fromJson($json)
-    {
-        $this->dirty = false;
-        $this->items = json_decode($json);
-    }
-
-    /*
-	 *
-	 */
-    public function toJson()
-    {
-        return json_encode($this->items);
-    }
-
-    /*
-	 *
-	 */
-    public function unserialize($items)
-    {
-        $this->dirty = false;
-        $this->items = unserialize($items);
-    }
-
-    /*
-	 *
-	 */
-    public function serialize()
-    {
-        return serialize($this->items);
-    }
-
-    /*
-	 *
-	 */
-    public function getMd5()
-    {
-        return md5(serialize($this->items));
     }
 }

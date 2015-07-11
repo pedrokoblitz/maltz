@@ -43,49 +43,49 @@ class Config extends Model
         parent::__construct($db, 'config', 'config', 'config_id');
     }
 
-    public function list($offset, $limit) {
-        $sql = "SELECT * FROM config LIMIT :offset, :limit";
+    public function display() {
+        $sql = "SELECT id, key, value, activity, modified, created FROM config";
         $resultado = $this->db->run($sql);
         return $resultado;
     }
 
+    public function list($offset, $limit) {
+        $sql = "SELECT id, key, value, activity, modified, created FROM config LIMIT ?,?";
+        $resultado = $this->db->run($sql, array($offset, $limit));
+        return $resultado;
+    }
+
     public function show($id) {
-        $sql = "SELECT * FROM config WHERE id=$id";
-        $resultado = $this->db->run($sql);
+        $sql = "SELECT id, key, value, activity, modified, created FROM config WHERE id=?";
+        $resultado = $this->db->run($sql, array($id));
         return $resultado;
     }
 
     public function setValue($key, $value)
     {
-        $sql = "UPDATE config SET value=\"$value\" WHERE key=\"$key\";";
-        $resultadoado = $this->db->run($sql);
+        $sql = "UPDATE config SET value=? WHERE key=?";
+        $resultadoado = $this->db->run($sql, array($value, $key));
         return $resultado;
     }
 
     public function getValue($key)
     {
-        $sql = "SELECT value FROM config WHERE key=\"$key\";";
-        $resultadoado = $this->db->run($sql);
+        $sql = "SELECT value FROM config WHERE key=?";
+        $resultadoado = $this->db->run($sql, array($key));
         return $resultadoado[0]['value'];
     }
 
     public function setRefresh($key)
     {
-        $sql = "UPDATE config SET value=\"1\" WHERE key=:key";
-        $res = $this->db->run($sql, array('key' => $key));
-        if ($res) {
-            return $res;
-        }
-        return false;
+        $sql = "UPDATE config SET value=? WHERE key=?";
+        $res = $this->db->run($sql, array('value' => 1, 'key' => $key));
+        return $res;
     }
 
     public function refresh($key)
     {
-        $sql = "UPDATE config SET value=\"0\" WHERE key=:key";
-        $res = $this->db->run($sql, array('key' => $key));
-        if ($res) {
-            return $res;
-        }
-        return false;
+        $sql = "UPDATE config SET value=? WHERE key=?";
+        $res = $this->db->run($sql, array('value' => 0, 'key' => $key));
+        return $res;
     }
 }

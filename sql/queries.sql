@@ -1,61 +1,87 @@
--- config
-SELECT id, key, value, activity, modified, created FROM config;
-INSERT INTO config (key, value, activity, created) VALUES ();
-UPDATE config SET key=, value=, activity=, modified=NOW(), created=;
-
 -- log
 SELECT id, user_id, action, item_name, item_id, created FROM log;
-INSERT INTO log (user_id, action, item_name, item_id, created) VALUES ();
+
+INSERT INTO log (user_id, action, item_name, item_id, created)
+  VALUES (user_id, "insert", "config", LAST_INSERT_ID(), NOW());
+
+
+-- config
+SELECT id, key, value, activity, modified, created FROM config;
+
+INSERT INTO config (key, value, activity, created) 
+  VALUES ();
+
+UPDATE config SET key=?, value=?, activity=?, modified=NOW(), created=;
 
 -- translations
-INSERT INTO translations (user_id, language, item_name, item_id, slug, name, title, subtitle, excerpt, description, body) VALUES ():
-UPDATE translations SET user_id=, language=, item_name=, item_id=, slug=, name=, title=, subtitle=, excerpt=, description=, body=;
+INSERT INTO translations (user_id, language, item_name, item_id, slug, name, title, subtitle, excerpt, description, body)
+	VALUES ():
+
+UPDATE translations SET user_id=?, language=?, item_name=?, item_id=?, slug=?, name=?, title=?, subtitle=?, excerpt=?, description=?, body=;
 
 --users
-INSERT INTO users (username, name, email, cpf, cnpj, cellphone, phone, zipcode, address, address2, district, city, province, password, activity, created) VALUES ();
-UPDATE users SET username=, name=, email=, cpf=, cnpj=, cellphone=, phone=, zipcode=, address=, address2=, district=, city=, province=, password=, token=, activity=, created=;
+INSERT INTO users (username, name, email, cpf, cnpj, cellphone, phone, zipcode, address, address2, district, city, province, password, activity, created)
+	VALUES ();
+UPDATE users SET username=?, name=?, email=?, cpf=?, cnpj=?, cellphone=?, phone=?, zipcode=?, address=?, address2=?, district=?, city=?, province=?, password=?, token=?, activity=?, created=;
 
 --roles
-INSERT INTO roles (name, activity) VALUES ();
-UPDATE roles SET name=, activity=;
+INSERT INTO roles (name, activity)
+	VALUES ();
+UPDATE roles SET name=?, activity=;
 
 --tokens
-INSERT INTO tokens (user_id, ip, token, type, activity, created, used) VALUES (0, 0, "", MD5(NOW()), "", 1, NOW(), "");
-UPDATE tokens SET user_id=, ip=, token=, type=, activity=, used=;
+INSERT INTO tokens (user_id, ip, token, type, activity, created, used)
+	VALUES (?, ?, ?, MD5(NOW()), ?, ?, NOW(), ?);
+
+UPDATE tokens SET user_id=?, ip=?, token=?, type=?, activity=?, used=;
 
 --collections
-INSERT INTO collections (type_id, activity, modified, created) VALUES ();
-UPDATE collections SET activity=, modified=NOW();
+INSERT INTO collections (type_id, activity, modified, created)
+	VALUES ();
+
+UPDATE collections SET activity=?, modified=NOW();
 
 --terms
-INSERT INTO terms (parent_id, type_id, activity) VALUES ();
-UPDATE terms SET parent_id=, type_id=, activity=;
+INSERT INTO terms (parent_id, type_id, activity)
+	VALUES ();
+
+UPDATE terms SET parent_id=?, type_id=?, activity=;
 
 --areas
-INSERT INTO areas (name, activity) VALUES ();
-UPDATE areas SET name=, activity=;
+INSERT INTO areas (name, activity)
+	VALUES ();
+
+UPDATE areas SET name=?, activity=;
 
 --blocks
-INSERT INTO blocks (area_id, activity) VALUES ();
-UPDATE blocks SET area_id=, activity=;
+INSERT INTO blocks (area_id, activity)
+	VALUES ();
+
+UPDATE blocks SET area_id=?, activity=;
 
 --contents
-INSERT INTO contents (type_id, activity, date_pub, created) VALUES ();
-UPDATE contents SET type_id=, activity=, date_pub=, modified=NOW();
+INSERT INTO contents (type_id, activity, date_pub, created)
+	VALUES ();
+
+UPDATE contents SET type_id=?, activity=?, date_pub=?, modified=NOW();
 
 --resources
-INSERT INTO resources (type_id, url, filepath, filename, extension, activity, created) VALUES ();
-UPDATE resources SET type_id=, url=, filepath=, filename=, extension=, activity=, modified=NOW();
+INSERT INTO resources (type_id, url, filepath, filename, extension, activity, created)
+	VALUES ();
+
+UPDATE resources SET type_id=?, url=?, filepath=?, filename=?, extension=?, activity=?, modified=NOW();
 
 --types
-INSERT INTO types (item_name, name) VALUES ();
-UPDATE types SET item_name=, name=;
+INSERT INTO types (item_name, name)
+	VALUES (?,?);
+
+UPDATE types SET item_name=?, name=?;
 
 
 
 
 -- avaiable translations
-SELECT item_id, language, slug, name, title FROM translations WHERE item_name=:type AND item_id=:id;
+SELECT item_id, language, slug, name, title FROM translations WHERE item_name=? AND item_id=?;
 
 -- update activity
 UPDATE $table SET activity=:activity;
@@ -63,7 +89,7 @@ UPDATE $table SET modified=NOW();
 
 SELECT * FROM translations
   WHERE item_id IN (
-    SELECT id FROM contents ORDER BY modified DESC LIMIT :offset, :num;
+    SELECT id FROM contents ORDER BY modified DESC LIMIT ?,?;
   )
   AND item_name="content";
 
@@ -75,26 +101,26 @@ SELECT * FROM translations
 SELECT FROM translations t1
   LEFT JOIN contents t2
     ON t1.item_id=t2.id
-  WHERE slug=:slug 
-    -- OR WHERE t1.item_id=:id 
+  WHERE slug=? 
+    -- OR WHERE t1.item_id=? 
     AND t1.item_name = 'content'
-    AND t1.language=:lang
+    AND t1.language=?
     AND t2.activity > 0;
 
 SELECT FROM translations t1
   LEFT JOIN resources t2
     ON t1.item_id=t2.id
     AND t1.item_name = 'resource'
-  WHERE t1.slug=:slug 
-    AND t1.language=:lang
+  WHERE t1.slug=?
+    AND t1.language=?
     AND t2.activity > 0;
 
 SELECT FROM translations t1
   LEFT JOIN collections t2
     ON t1.item_id=t2.id
-  WHERE t1.slug=:slug 
+  WHERE t1.slug=?
     AND t1.item_name = 'collection'
-    AND t1.language=:lang
+    AND t1.language=?
     AND t2.activity > 0;
 
 
@@ -104,9 +130,9 @@ SELECT FROM translations t1
 SELECT FROM translations t1
   LEFT JOIN terms t2
     ON t1.item_id=t2.id
-  WHERE t1.item_id=:id 
+  WHERE t1.item_id=?
     AND t1.item_name = 'term'
-    AND t1.language=:lang
+    AND t1.language=?
     AND t2.activity > 0;
 
 
@@ -119,8 +145,8 @@ SELECT FROM translations t1
     AND t1.item_name = 'content'
   LEFT JOIN content_types t3
     ON t2.content_type_id=t3.id
-  WHERE t1.language=:lang
-    AND t3.name=:type
+  WHERE t1.language=?
+    AND t3.name=?
     AND t2.activity > 0
   ORDER BY t2.modified
   LIMIT :offset,:num;
@@ -129,17 +155,21 @@ SELECT t1.name AS area_name, t3.user_id, t3.language, t3.item_name, t3.item_id, 
   LEFT JOIN translations t3
     ON t2.id=t3.item_id
     AND t3.item_name="block"
-  WHERE t1.id=:id
-    AND t2.area_id=:id;
+  WHERE t1.id=?
+    AND t2.area_id=?;
 
 
 
 SELECT * FROM items_groups WHERE item_name= AND item_id= AND group_name= AND group_id=;
 
-INSERT INTO items_groups (item_name, item_id, collection_id) VALUES ('term', 1, 'content', 1, 1);
-INSERT INTO items_groups (item_name, item_id, collection_id) VALUES ('term', 2, 'content', 1, 2);
-INSERT INTO items_groups (item_name, item_id, collection_id) VALUES ('resource', 1, 'collection', 2, 1);
-INSERT INTO items_groups (item_name, item_id, collection_id) VALUES ('resource', 2, 'collection', 2, 2);
+INSERT INTO items_groups (item_name, item_id, collection_id)
+	VALUES ('term', 1, 'content', 1, 1);
+INSERT INTO items_groups (item_name, item_id, collection_id)
+	VALUES ('term', 2, 'content', 1, 2);
+INSERT INTO items_groups (item_name, item_id, collection_id)
+	VALUES ('resource', 1, 'collection', 2, 1);
+INSERT INTO items_groups (item_name, item_id, collection_id)
+	VALUES ('resource', 2, 'collection', 2, 2);
 
 
 
@@ -188,5 +218,5 @@ SELECT t1.id FROM users t1
   LEFT JOIN roles t3
   ON t2.role_id=t3.id
   WHERE t3.name=:name 
-  AND t1.id=:id;
+  AND t1.id=?;
 

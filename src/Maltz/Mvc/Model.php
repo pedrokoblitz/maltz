@@ -31,17 +31,13 @@ use Maltz\Utils\Pagination;
 abstract class Model
 {
     protected $db;
-
     protected $table;
-
     protected $fk;
-
-    protected $identifier;
 
     /*
 	 *
 	 */
-    public function __construct($db, $slug, $table, $fk = null, $id = 'id')
+    public function __construct($db, $slug, $table, $fk = null)
     {
         if (!$fk && $id === 'id') {
             $fk = $slug . '_' . $id;
@@ -50,7 +46,6 @@ abstract class Model
         $this->db = $db;
         $this->table = $table;
         $this->fk = $fk;
-        $this->identifier = $id;
     }
 
     /*

@@ -42,12 +42,15 @@ class User extends Model
     }
 
     public function list($offset, $limit) {
-        $sql = "SELECT * FROM users";
+        $sql = "SELECT id, username, name, email, cpf, cnpj, cellphone, phone, zipcode, address, address2, district, city, province, password, activity, created
+            FROM users";
         $resultado = $this->db->run($sql);
     }
 
     public function show($id) {
-        $sql = "SELECT * FROM users WHERE id=$id";
+        $sql = "SELECT id, username, name, email, cpf, cnpj, cellphone, phone, zipcode, address, address2, district, city, province, password, activity, created
+            FROM users 
+            WHERE id=$id";
         $resultado = $this->db->run($sql);
     }
 
@@ -59,14 +62,20 @@ class User extends Model
 	 *
 	 * return void
 	 */
-    public function insert($post)
+    public function insert(Record $post)
     {
-        if (isset($post['password']) && $post['password'] == '') {
-            unset($post['password']);
-        } elseif (isset($post['password']) && $post['password'] != '') {
-            $post['password'] = md5($post['password']);
+        $password = $record->get('password');
+        if (!empty($password)) {
+            $record->set('password', sha1($password));
+        } else {
+            $record->remove('password');
         }
-        $resultado = $this->db->insert($this->table, $post);
+        $fields = $record->getFieldsList();
+        $values = $record->getInsertValueString();
+        $bind = $record->values();
+        $sql = "INSERT INTO users $fields 
+            VALUES $values";
+        $resultado = $this->db->run($sql, $bind);
         return $resultado;
     }
 
@@ -79,24 +88,27 @@ class User extends Model
 	 *
 	 * return void
 	 */
-    public function update($post, $id)
+    public function update(Record $post, $id)
     {
-        if (isset($post['password']) && $post['password'] == '') {
-            // se o campo da password esta vazio, nao update
-            unset($post['password']);
-        } elseif (isset($post['password']) && $post['password'] != '') {
-            // se nao esta vazio, criptografar password
-            $post['password'] = md5($post['password']);
+        $password = $record->get('password');
+        if (!empty($password)) {
+            $record->set('password', sha1($password));
+        } else {
+            $record->remove('password');
         }
-        
-        $resultado = $this->db->update($this->table, $post, "user_id=" . $id);
+
+        $updateValues = $record->getUpdateValueString();
+        $bind = $record->values();
+        $sql = "UPDATE users 
+            SET $updateValues";
+        $resultado = $this->db->run($sql, $bind);
         return $resultado;
     }
 
-    public function signUp($post)
+    public function signUp(Record $record)
     {
-        $post['password'] = md5($post['password']);
-        $id = $this->db->insert($this->table, $post);
+        $res = $this->insert($record);
+        $id = $res->get('last_insert_id');
         $resultado = $token->generate($id, 'activation');
         return $resultado;
     }

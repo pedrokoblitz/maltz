@@ -4,70 +4,71 @@ namespace Maltz\Mvc;
 
 class Result extends Type
 {
-    protected $dirty = false;
-
-    protected $valid = true;
-
-    protected $items = array();
+    /*
+     *
+     */
+    public function fromJson($json)
+    {
+        $this->dirty = false;
+        $this->items = json_decode($json);
+    }
 
     /*
      *
      */
-    public function validate($key, $rule)
+    public function toJson()
     {
-        switch ($rule) {
-            case 'int':
-                $valid = Validacao::numero($this->items[$key]) ? true : false;
-                break;
-            
-            case 'string':
-                $valid = is_string($this->items[$key]) ? true : false;
-                break;
-            
-            case 'array':
-                $valid = is_array($this->items[$key]) ? true : false;
-                break;
+        return json_encode($this->toArray());
+    }
 
-            case 'scalar':
-                $valid = is_scalar($this->items[$key]) ? true : false;
-                break;
-            
-            case 'object':
-                $valid = is_object($this->items[$key]) ? true : false;
-                break;
-            
-            case 'float':
-                $valid = Validacao::numeroReal($this->items[$key]) ? true : false;
-                break;
-            
-            default:
-                $valid = preg_match($type, $this->items[$key]) ? true : false;
-                break;
+    /*
+     *
+     */
+    public function unserialize($items)
+    {
+        $this->dirty = false;
+        $this->items = unserialize($items);
+    }
+
+    /*
+     *
+     */
+    public function serialize()
+    {
+        return serialize($this->toArray());
+    }
+
+    public function getFirstRecord()
+    {
+        return $this->items['records'][0];
+    }
+
+    public function getRecords()
+    {
+        return $this->items['records'];
+    }
+
+    public function getRecordsAsArray()
+    {
+        $result = array();
+        foreach ($this->items['records'] as $record) {
+            $result[] = $record->toArray();
         }
-        $this->valid = $valid;
+        return $result;
     }
 
-    /*
-     *
-     */
-    public function isValid()
+    public function toArray()
     {
-        return $this->valid;
-    }
-
-    /*
-     *
-     */
-    public function isDirty()
-    {
-        return $this->dirty;
-    }
-
-    /*
-     *
-     */
-    public function isEquals(Result $other)
-    {
-        return $this->getMd5() === $other->getMd5();
+        $newItems = array();
+        foreach ($this->items as $value) {
+            if (is_array($value)) {
+                $newItems[] = $this->recordsToArray($value);
+            } elseif (instanceof Record) {
+                $newItems[] = $value->toArray();
+            } elseif (is_scalar($value)) {
+                $newItems[] = $value;
+            }
+        }
+        return $newItems;
     }
 }

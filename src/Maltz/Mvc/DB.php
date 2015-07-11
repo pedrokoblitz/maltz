@@ -77,27 +77,27 @@ class DB extends \PDO
             $pdostmt = $this->prepare($this->sql);
             if ($pdostmt->execute($this->bind) !== false) {
 
-                if (preg_match("/^(select) /i", $this->sql)) {
+                if (preg_match("/^(select)/i", $this->sql)) {
                     $data = $pdostmt->fetchAll(\PDO::FETCH_ASSOC);
                     $results = array();
                     foreach ($data as $value) {
-                        $results[] = new Result($value);
+                        $results[] = new Record($value);
                     }
                     return new Result(array('records' => $results, 'success' => true, 'message' => DbMessage::SELECTED));
 
-                } elseif (preg_match("/^(count) /i", $this->sql)) {
+                } elseif (preg_match("/^(count)/i", $this->sql)) {
                     $data = $pdostmt->fetchAll(\PDO::FETCH_ASSOC);
                     return new Result(array('count' => $data['COUNT(id)'], 'success' => true, 'message' => DbMessage::COUNTED));
                 
-                } elseif (preg_match("/^(insert) /i", $this->sql)) {
+                } elseif (preg_match("/^(insert)/i", $this->sql)) {
                     $last = \PDO::lastInsertId();
                     return new Result(array('last_insert_id' => $last, 'success' => true, 'message' => DbMessage::INSERTED));
                 
-                } elseif (preg_match("/^(update) /i", $this->sql)) {
+                } elseif (preg_match("/^(update)/i", $this->sql)) {
                     return new Result(array('success' => true, 'message' => DbMessage::UPDATED));
                 }
                 
-                } elseif (preg_match("/^(delete) /i", $this->sql)) {
+                } elseif (preg_match("/^(delete)/i", $this->sql)) {
                     return new Result(array('success' => true, 'message' => DbMessage::DELETED));
                 }
             }

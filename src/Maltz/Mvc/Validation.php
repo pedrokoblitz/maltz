@@ -125,7 +125,7 @@ class Validation
     public static function phone($data)
     {
         //(99)9999-9999
-        return self::validate("/^[0-9]{2}-[0-9]{4}-[0-9]{4}$/", $data);
+        return self::validate("/^[0-9]{2}-[0-9]{4-5}-[0-9]{4}$/", $data);
     }
 
     /**

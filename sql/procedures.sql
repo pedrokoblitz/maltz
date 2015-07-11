@@ -84,17 +84,11 @@ CREATE PROCEDURE `update_content`(
   IN subtitle VARCHAR(255),
   IN excerpt VARCHAR(255),
   IN description BLOB,
-  IN body BLOB,
-  IN album_id INT,
-  IN document_id INT,
-  IN cover_id INT
+  IN body BLOB
 )
 BEGIN
   UPDATE contents SET 
     modified=NOW() 
-    album_id=album_id, 
-    document_id=document_id, 
-    cover_id=cover_id
     WHERE id=id;
   UPDATE translations SET 
     user_id=user_id, 
@@ -106,9 +100,22 @@ BEGIN
     excerpt=excerpt,
     description=description,
     body=body
-    WHERE item_id=id AND item_name="content";
-  INSERT INTO log (user_id, action, item_name, item_id, created)
-    VALUES (user_id, "update", "content", id, NOW());
+    WHERE item_id=id 
+      AND item_name="content";
+  INSERT INTO log (
+      user_id, 
+      action, 
+      item_name, 
+      item_id, 
+      created
+    )
+    VALUES (
+      user_id, 
+      "update", 
+      "content", 
+      id, 
+      NOW()
+    );
 END$$
 
 
@@ -180,14 +187,14 @@ CREATE PROCEDURE `update_collection`(
 BEGIN
   UPDATE collections SET 
     modified=NOW()
-    WHERE id=:id;
+    WHERE id=id;
   UPDATE translations SET 
     user_id=user_id, 
     lang=lang, 
     slug=slug, 
     name=name, 
     title=title, 
-    description=description,
+    description=description
     WHERE item_id=id AND item_name="collection";
   INSERT INTO log (user_id, action, item_name, item_id, created)
     VALUES (user_id, "update", "collection", id, NOW());
@@ -278,7 +285,7 @@ CREATE PROCEDURE `update_resource`(
 BEGIN
   UPDATE resources SET 
     modified=NOW() 
-    WHERE id=:id;
+    WHERE id=id;
   UPDATE translations SET 
     user_id=user_id, 
     lang=lang, 
@@ -288,8 +295,9 @@ BEGIN
     filename=filename, 
     name=name, 
     title=title, 
-    description=description,
-    WHERE item_id=id AND item_name="resource";
+    description=description
+    WHERE item_id=id 
+    AND item_name="resource";
   INSERT INTO log (
     user_id, 
     action, 
@@ -307,3 +315,4 @@ BEGIN
 END$$
 
 DELIMITER ;
+

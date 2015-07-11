@@ -42,14 +42,16 @@ class Log extends Model
     }
 
     public function list($offset, $limit) {
-        $sql = "SELECT * FROM log";
-        $resultado = $this->db->run($sql);
+        $sql = "SELECT (user_id, action, item_name, item_id, created) FROM log LIMIT ?,?";
+        $resultado = $this->db->run($sql, array($offset, $limit));
         return $resultado;
     }
 
-    public function show($id) {
-        $sql = "SELECT * FROM log WHERE id=$id";
-        $resultado = $this->db->run($sql);
+    public function insert(Record $record) {
+        $sql = "INSERT INTO log (user_id, action, item_name, item_id, created)
+            VALUES (?, ?, ?, LAST_INSERT_ID(), NOW())";
+        $values = $record->values();
+        $resultado = $this->db->run($sql, $values);
         return $resultado;
     }
 }

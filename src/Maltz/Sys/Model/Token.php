@@ -16,18 +16,17 @@ class Token extends Model
     {
         $this->db->run("DELETE FROM tokens WHERE type=:type AND user_id=:user_id", array('type' => $type, 'user_id' => $user_id));
         $token = md5(microtime() . $type . $user_id);
-        $data = $this->db->insert($this->table, array('user_id'=> $user_id, 'token' => $token, 'type' => $type));
-        $this->set('meta.insert', $data);
+        $data = $this->db->run("INSERT INTO tokens (user_id, token, type) VALUES (?,?,?)", array('user_id'=> $user_id, 'token' => $token, 'type' => $type));
         return $token;
     }
 
     public function validate($token, $type)
     {
-        $data = $this->db->run("SELECT * FROM tokens WHERE type=:type AND token=:token", array('type' => $type, 'token' => $token));
-        $this->set('data.record', $data);
-        if ($data[0]['token'] === $token) {
-            $user = $this->db->run("SELECT * FROM users WHERE id=:uid", array('uid' => $data[0]['user_id']));
-            return $user[0];
+        $data = $this->db->run("SELECT token,user_id FROM tokens WHERE type=:type AND token=:token", array('type' => $type, 'token' => $token));
+        $record = $data->getFirst();
+        if ($record->get('token') === $token) {
+            $user = $this->db->run("SELECT * FROM users WHERE id=?", array($record->get('user_id')));
+            return $user->getFirst();
         }
         return false;
     }

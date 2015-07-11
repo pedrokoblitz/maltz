@@ -228,15 +228,16 @@ CREATE TABLE `collections` (
 
 
 -- item_name, item_id, group_name, group_id, order
-DROP TABLE IF EXISTS `items_groups`;
+DROP TABLE IF EXISTS `item_group_relationships`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `items_groups` (
-  `item_name` enum('content', 'resource', 'term') COLLATE utf8_unicode_ci NOT NULL,
-  `item_id` int(10) unsigned NOT NULL,
+CREATE TABLE `item_group_relationships` (
   `group_name` enum('content', 'collection') COLLATE utf8_unicode_ci NOT NULL,
   `group_id` int(10) unsigned NOT NULL,
-  `order` int(10) unsigned NOT NULL
+  `item_name` enum('content', 'collection', 'resource', 'term') COLLATE utf8_unicode_ci NOT NULL,
+  `item_id` int(10) unsigned NOT NULL,
+  `order` int(10) unsigned NOT NULL,
+  UNIQUE('group_name', 'group_id', 'item_name', 'item_id')
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -320,7 +321,7 @@ DROP TABLE IF EXISTS `contents`;
 CREATE TABLE `contents` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `type_id` int(10) unsigned NOT NULL,
-  `activity` tinyint(1) unsigned NOT NULL DEFAULT 0,
+  `activity` tinyint(1) unsigned NOT NULL DEFAULT 1,
   `date_pub` datetime NOT NULL,
   `modified` datetime NOT NULL,
   `created` datetime NOT NULL,
@@ -354,6 +355,36 @@ CREATE TABLE `resources` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 -- END CONTENT
+
+
+DROP TABLE IF EXISTS `comments`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `comments` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) unsigned DEFAULT NULL,
+  `name` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `email` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `url` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `comment` tinyblob COLLATE utf8_unicode_ci NOT NULL,
+  `created` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+
+DROP TABLE IF EXISTS `folksonomy`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `folksonomy` (
+  `term_id` int(10) unsigned DEFAULT NULL,
+  `user_id` int(10) unsigned DEFAULT NULL,
+  `item_name` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `item_id` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
