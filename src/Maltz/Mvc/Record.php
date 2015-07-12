@@ -35,10 +35,11 @@ class Record extends Type
     {
         return md5(serialize($this->items));
     }
+
     /*
      *
      */
-    public function validate($rules)
+    protected function validate($rules)
     {
         foreach ($rules as $key => $rule) {
             if ($this->has($key)) {
@@ -118,7 +119,7 @@ class Record extends Type
     {
         $str = '';
         foreach (array_filter($this->items) as $key => $value) {
-            $str .= $key . '=?,'
+            $str .= $key . '=:' . $key . ','
         }
         return rtrim($str, ',');
     }

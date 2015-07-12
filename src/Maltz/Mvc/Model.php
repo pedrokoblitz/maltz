@@ -59,9 +59,13 @@ abstract class Model
     /*
      *
      */
-    public static function query(Query $query)
+    public static function query()
     {
-        $model = new static($query->db);
-        return call_user_method_array($query->action, $model, $query->params);
+        $args = func_get_args();
+        $model = new static($args[0]);
+        $params = $args;
+        unset($params[0]);
+        unset($params[1]);
+        return call_user_method_array($args[1], $model, array_values($params));
     }
 }

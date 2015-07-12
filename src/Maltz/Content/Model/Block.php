@@ -15,7 +15,6 @@ use Maltz\Mvc\Model;
  * @license    GPL v2
  *
  * @package    Maltz
- *
  * @version    0.1 alpha
  */
 
@@ -44,21 +43,46 @@ class Block extends Model
     }
 
     /*
-     *
+     * CRUD
      */
-    public function list($offset, $limit) 
-    {
-        $sql = "SELECT * FROM blocks";
-        $resultado = $this->db->run($sql);
+
+    public function insert(Record $record) {
+        $fields = $record->getFieldsList();
+        $values = $record->getInsertValueString();
+        $sql = "INSERT INTO blocks $fields VALUES $values";
+        $resultado = $this->db->run($sql, $record->toArray());
         return $resultado;
     }
 
-    /*
-     *
-     */
+
+    public function update(Record $record) {
+        $id = $record->get('id');
+        $record->remove('id');
+        $values = $record->getUpdateValueString();
+        $bind = $record->toArray();
+        $bind[] = $id;
+        $sql = "UPDATE blocks SET $values WHERE id=:id";
+        $resultado = $this->db->run($sql, $bind);
+        return $resultado;
+    }
+
+
+    public function delete($id) {
+        $sql = "DELETE FROM blocks WHERE id=:id";
+        $resultado = $this->db->run($sql, array($id));
+        return $resultado;
+    }
+
+    public function list($offset = 12, $limit = 0, $key='', $order = 'asc') 
+    {
+        $sql = "SELECT * FROM blocks ORDER BY $key $order LIMIT :offset,:limit";
+        $resultado = $this->db->run($sql, array('offset' => $offset, 'limit' => $limit));
+        return $resultado;
+    }
+
     public function show($id) {
-        $sql = "SELECT * FROM blocks WHERE id=$id";
-        $resultado = $this->db->run($sql);
+        $sql = "SELECT * FROM blocks WHERE id=:id";
+        $resultado = $this->db->run($sql, array($id));
         return $resultado;
     }
 }

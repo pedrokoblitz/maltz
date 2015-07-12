@@ -41,27 +41,23 @@ class User extends Model
         parent::__construct($db, 'user', 'users', 'user_id');
     }
 
-    public function list($offset, $limit) {
+    /*
+     * CRUD
+     */
+
+    public function list($offset=0, $limit=12, $key='username', $order='asc') {
         $sql = "SELECT id, username, name, email, cpf, cnpj, cellphone, phone, zipcode, address, address2, district, city, province, password, activity, created
-            FROM users";
-        $resultado = $this->db->run($sql);
+            FROM users ORDER BY $key $order LIMIT :offset,:limit";
+        $resultado = $this->db->run($sql, array('offset' => $offset, 'limit' => $limit));
     }
 
     public function show($id) {
         $sql = "SELECT id, username, name, email, cpf, cnpj, cellphone, phone, zipcode, address, address2, district, city, province, password, activity, created
             FROM users 
-            WHERE id=$id";
+            WHERE id=:id";
         $resultado = $this->db->run($sql);
     }
 
-    /*
-	 *
-	 * insere new user
-	 *
-	 * @param $post array
-	 *
-	 * return void
-	 */
     public function insert(Record $post)
     {
         $password = $record->get('password');
@@ -72,22 +68,13 @@ class User extends Model
         }
         $fields = $record->getFieldsList();
         $values = $record->getInsertValueString();
-        $bind = $record->values();
-        $sql = "INSERT INTO users $fields 
-            VALUES $values";
+        $bind = $record->toArray();
+        $sql = "INSERT INTO users $fields, created 
+            VALUES $values, NOW()";
         $resultado = $this->db->run($sql, $bind);
         return $resultado;
     }
 
-    /*
-	 *
-	 * modifica user
-	 *
-	 * @param $post array
-	 * @param $id int
-	 *
-	 * return void
-	 */
     public function update(Record $post, $id)
     {
         $password = $record->get('password');
@@ -98,39 +85,40 @@ class User extends Model
         }
 
         $updateValues = $record->getUpdateValueString();
-        $bind = $record->values();
+        $bind = $record->toArray();
         $sql = "UPDATE users 
-            SET $updateValues";
+            SET $updateValues, modified=NOW()";
         $resultado = $this->db->run($sql, $bind);
         return $resultado;
     }
+
+    /*
+     * USER REGISTRATION
+     */
 
     public function signUp(Record $record)
     {
         $res = $this->insert($record);
         $id = $res->get('last_insert_id');
-        $resultado = $token->generate($id, 'activation');
+        $resultado = Token::query($this->db, 'generate', $id, 'activation');
         return $resultado;
     }
 
     public function remember($user_id)
     {
-        $token = new Token($this->db);
-        $data = $token->generate($user_id, 'remember');
+        $data = Token::query($this->db, 'generate', $user_id, 'remember');
         return $data;
     }
 
     public function forgot($user_id)
     {
-        $token = new Token($this->db);
-        $data = $token->generate($user_id, 'forgot');
+        $data = Token::query($this->db, 'generate', $user_id, 'forgot');
         return $data;
     }
 
     public function validate($user_token, $type)
     {
-        $token = new Token($this->db);
-        $data = $token->validate($user_token, $type);
+        $data = Token::query($this->db, 'validate', $user_token, $type);
         return $data;
     }
 }

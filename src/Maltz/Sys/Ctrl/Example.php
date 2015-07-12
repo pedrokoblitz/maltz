@@ -2,37 +2,27 @@
         /*
          *
          */
-        $app->get('', function ($id) use ($app) {
+        $app->post('', function ($id) use ($app) {
 
             $app->httpHandler->authorized();
             
-            $query = $app->query;
-            $query->action = 'update';
-            $query->params = array('type' => $type, 'id' => $id);
-            
-            $data = Content::query($query);
-            
-            $app->httpHandler->redirect('', '', $query->params);
+            $app->httpHandler->redirect('', '', $params);
+            Log::query($app->db, 'log', $user_id, 'action', 'name', $id);
 
         })->name('')->conditions(array('model' => '\w+', 'id' => '\d+'));
 
         /*
          *
          */
-        $app->get('/admin/:type(/order/:key(/:order(/page/:pg)))', function ($type, $key = 'created', $order = 'ASC', $pg = 1) use ($app) {
+        $app->get('', function ($type, $key = 'created', $order = 'ASC', $pg = 1) use ($app) {
 
             $app->httpHandler->authorized();
             $pp = $app->config('per_page');
-            
-            $query = $app->query;
-            $query->action = 'list';
-            $query->params = array('type' => $type, 'id' => $id, 'pp' => $pp);
-            
-            $data = Content::query($query);
-            $data->set('layout', '');
-            $data->set('view', '');
-            
-            $app->httpHandler->serveView($data);
+            $pagination = $app->paginate($pp, $pg);
+
+            $content = Content::query($app->db, 'list', $pagination->offset, $pagination->limit, $key, $order);
+
+            $app->httpHandler->serve($data);
 
         })->name('admin_model_index')->conditions(array('model' => '\w+', 'order' => '\w+', 'pp' => '\d+', 'pg' => '\d+'));
 ?>

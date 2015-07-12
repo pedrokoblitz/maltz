@@ -4,6 +4,7 @@ namespace Maltz\Mvc;
 
 class Result extends Type
 {
+
     /*
      *
      */
@@ -26,7 +27,6 @@ class Result extends Type
      */
     public function unserialize($items)
     {
-        $this->dirty = false;
         $this->items = unserialize($items);
     }
 

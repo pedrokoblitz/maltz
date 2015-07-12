@@ -28,8 +28,15 @@ class Maltz
     public static function initialize()
     {
         $app = new Slim();
+        
+        $logger = new \Flynsarmy\SlimMonolog\Log\MonologWriter(array(
+            'handlers' => array(
+                new \Monolog\Handler\StreamHandler('./logs/dev.log'),
+            ),
+        ));
 
         $app->config(array(
+            'log.writer' => $logger,
             'debug' => true,
             'templates.path' => './views',
             'base.uri' => '/',
