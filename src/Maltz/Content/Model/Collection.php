@@ -3,7 +3,9 @@
 namespace Maltz\Media\Model;
 
 use Maltz\Mvc\Model;
-use Maltz\Utils\Pagination;
+use Maltz\Mvc\Activity;
+use Maltz\Mvc\Translateable;
+use Maltz\Mvc\ItemRelationships;
 
 /**
  * db de collection pertencente a
@@ -33,6 +35,10 @@ use Maltz\Utils\Pagination;
 
 class Collection extends Model
 {
+    use Activity;
+    use Translateable;
+    use ItemRelationships;
+        
     /*
      * construtor
      *

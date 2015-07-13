@@ -3,9 +3,12 @@
 namespace Maltz\Sys\Model;
 
 use Maltz\Mvc\Model;
+use Maltz\Mvc\Activity;
 
 class Role extends Model
 {
+    use Activity;
+
     public function __construct($db)
     {
         parent::__construct($db, 'role', 'roles', 'role_id');
@@ -44,11 +47,4 @@ class Role extends Model
         $resultado = $this->db->run($sql, $record->toArray());
         return $resultado;
     }
-
-    public function delete($id) {
-        $sql = "DELETE FROM roles WHERE id=:id";
-        $resultado = $this->db->run($sql, array($id));
-        return $resultado;
-    }
-
 }

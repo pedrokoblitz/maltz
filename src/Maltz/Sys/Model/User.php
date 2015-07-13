@@ -3,6 +3,7 @@
 namespace Maltz\Sys\Model;
 
 use Maltz\Mvc\Model;
+use Maltz\Mvc\Activity;
 
 /**
  * db de user com password para autenticação
@@ -27,6 +28,8 @@ use Maltz\Mvc\Model;
  */
 class User extends Model
 {
+    use Activity;
+    
     /*
 	 *
 	 * construtor

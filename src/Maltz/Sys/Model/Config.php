@@ -3,6 +3,7 @@
 namespace Maltz\Sys\Model;
 
 use Maltz\Mvc\Model;
+use Maltz\Mvc\Activity;
 
 /**
  * db de configuração
@@ -30,6 +31,8 @@ use Maltz\Mvc\Model;
 
 class Config extends Model
 {
+    use Activity;
+
     /*
 	 * construtor
 	 *
@@ -46,6 +49,18 @@ class Config extends Model
     /*
      * CRUD
      */
+
+    public function (Record $record) {
+        $sql = "";
+        $resultado = $this->db->run($sql);
+        return $resultado;
+    }
+
+    public function update(Record $record) {
+        $sql = "";
+        $resultado = $this->db->run($sql);
+        return $resultado;
+    }
 
     public function display() {
         $sql = "SELECT id, key, value, activity, modified, created FROM config";

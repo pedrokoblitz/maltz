@@ -3,6 +3,8 @@
 namespace Maltz\Media\Model;
 
 use Maltz\Mvc\Model;
+use Maltz\Mvc\Activity;
+use Maltz\Mvc\Translatable;
 
 /**
  * db de files pertencentes a albums
@@ -29,6 +31,9 @@ use Maltz\Mvc\Model;
 
 class Resource extends Model
 {
+    use Activity;
+    use Translatable;
+
     /*
 	 * construtor
 	 *

@@ -2,10 +2,10 @@
 
 namespace Maltz\Content\Model;
 
-use Maltz\Media\Model\DocumentAdapter;
-use Maltz\Media\Model\MediaAdapter;
 use Maltz\Mvc\Model;
-use Maltz\Utils\Pagination;
+use Maltz\Mvc\Activity;
+use Maltz\Mvc\Traslateable;
+use Maltz\Mvc\ItemRelationships;
 
 /**
  * db de conteúdo dinamico com
@@ -26,6 +26,10 @@ use Maltz\Utils\Pagination;
 
 class Content extends Model
 {
+    use Activity;
+    use Traslateable;
+    use ItemRelationships;
+    
     /*
 	 * construtor
 	 *

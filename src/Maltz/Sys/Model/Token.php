@@ -24,8 +24,12 @@ class Token extends Model
         $data = $this->db->run("SELECT token,user_id FROM tokens WHERE type=:type AND token=:token", array('type' => $type, 'token' => $token));
         $record = $data->getFirst();
         if ($record->get('token') === $token) {
-            $user = $this->db->run("SELECT * FROM users WHERE id=:id", array('id' => $record->get('user_id')));
-            return $user->getFirst();
+            $sql = "UPDATE tokens SET used=NOW() WHERE type=:type AND token=:token";
+            $this->db->run($sql, array('type' => $type, 'token' => $token));
+            $sql = "SELECT * FROM users WHERE id=:id";
+            $user = $this->db->run($sql, array('id' => $record->get('user_id')));
+            $record = $user->getFirstRecord();
+            return $record;
         }
         return false;
     }

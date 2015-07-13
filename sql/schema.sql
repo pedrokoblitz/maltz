@@ -44,6 +44,8 @@ SELECT id, item_name, name FROM types WHERE item_name="collection";
 -- id, key, value, activity, modified, created
 -- t.id, t.key, t.value, t.activity, t.modified, t.created
 
+-- activity?
+
 DROP TABLE IF EXISTS `config`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -118,6 +120,8 @@ CREATE TABLE `translations` (
 -- id, username, name, email, cpf, cnpj, cellphone, phone, zipcode, address, address2, district, city, province, password, activity, created
 -- t.id, t.username, t.name, t.email, t.cpf, t.cnpj, t.cellphone, t.phone, t.zipcode, t.address, t.address2, t.district, t.city, t.province, t.password, t.activity, t.created
 
+-- activity
+
 DROP TABLE IF EXISTS `users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -138,6 +142,7 @@ CREATE TABLE `users` (
   `province` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
   `password` varchar(10) COLLATE utf8_unicode_ci DEFAULT NULL,
   `activity` tinyint(1) unsigned NOT NULL DEFAULT 1,
+  `modified` datetime NOT NULL,
   `created` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE(`email`),
@@ -153,6 +158,8 @@ CREATE TABLE `users` (
 
 -- id, name, activity
 -- t.id, t.name, t.activity
+
+-- activity
 
 DROP TABLE IF EXISTS `roles`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -199,7 +206,6 @@ CREATE TABLE `tokens` (
   `ip` varchar(16) COLLATE utf8_unicode_ci DEFAULT NULL,
   `token` varchar(120) COLLATE utf8_unicode_ci NOT NULL,
   `type` tinyint(1) unsigned NOT NULL,
-  `activity` tinyint(1) unsigned NOT NULL DEFAULT 1,
   `created` datetime NOT NULL,
   `used` datetime NOT NULL,
   PRIMARY KEY (`id`),
@@ -218,6 +224,8 @@ CREATE TABLE `tokens` (
 
 -- id, activity, modified, created
 -- t.id, t.activity, t.modified, t.created
+
+-- activity, translatable
 
 DROP TABLE IF EXISTS `collections`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -256,6 +264,8 @@ CREATE TABLE `item_group_relationships` (
 -- id, parent_id, term_type_id, activity
 -- t.id, t.parent_id, t.term_type_id, t.activity
 
+-- activity, translatable
+
 DROP TABLE IF EXISTS `terms`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -279,6 +289,8 @@ CREATE TABLE `terms` (
 -- id, name, activity
 -- t.id, t.name, t.activity
 
+-- activity, translatable
+
 DROP TABLE IF EXISTS `areas`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -296,7 +308,9 @@ CREATE TABLE `areas` (
 --
 
 -- id, area_id, activity
--- t.id, t.area_id, t.activity
+-- t.id, t.area_id
+
+-- activity, translatable
 
 DROP TABLE IF EXISTS `blocks`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -304,7 +318,6 @@ DROP TABLE IF EXISTS `blocks`;
 CREATE TABLE `blocks` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `area_id` int(10) unsigned NOT NULL,
-  `activity` tinyint(1) unsigned NOT NULL DEFAULT 1,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -321,6 +334,8 @@ CREATE TABLE `blocks` (
 
 -- id, content_type_id, activity, date_pub, modified, created
 -- t.id, t.content_type_id, t.activity, t.date_pub, t.modified, t.created
+
+-- activity, translatable
 
 DROP TABLE IF EXISTS `contents`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -343,6 +358,8 @@ CREATE TABLE `contents` (
 
 -- id, resource_type_id, url, path, filename, extension, activity, modified, created
 -- t.id, t.resource_type_id, t.url, t.path, t.filename, t.extension, t.activity, t.modified, t.created
+
+-- activity, translatable
 
 DROP TABLE IF EXISTS `resources`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;

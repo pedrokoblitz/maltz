@@ -3,6 +3,7 @@
 namespace Maltz\Content\Model;
 
 use Maltz\Mvc\Model;
+use Maltz\Mvc\Activity;
 
 /**
  * Define blocks estáticos para serem guardata no banco
@@ -30,6 +31,8 @@ use Maltz\Mvc\Model;
 
 class Area extends Model
 {
+    use Activity;
+
     /*
      *
      * @param $db DB

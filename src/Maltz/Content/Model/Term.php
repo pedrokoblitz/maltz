@@ -3,9 +3,13 @@
 namespace Maltz\Media\Model;
 
 use Maltz\Mvc\Model;
+use Maltz\Mvc\Activity;
+use Maltz\Mvc\Translateable;
 
 class Term extends Model
 {
+    use Activity;
+    use Translateable;
 
     public function __construct($db)
     {

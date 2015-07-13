@@ -56,6 +56,14 @@ abstract class Model
         return is_string($key) && isset($this->$key) && in_array($key, array('slug', 'table', 'fk')) ? $this->$key : null;
     }
 
+    public function save(Record $record)
+    {
+        if ($record->has('id')) {
+            return $this->update($record);
+        }
+        return $this->insert($record);
+    }
+
     /*
      *
      */
@@ -66,6 +74,8 @@ abstract class Model
         $params = $args;
         unset($params[0]);
         unset($params[1]);
-        return call_user_method_array($args[1], $model, array_values($params));
+        $result = call_user_method_array($args[1], $model, array_values($params));
+        $result->set('slug', $this->slug);
+        return $result;
     }
 }
