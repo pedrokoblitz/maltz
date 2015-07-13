@@ -15,71 +15,36 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
---
--- Table structure for table `arquivos`
---
 
-DROP TABLE IF EXISTS `files`;
+
+-- id, name, item_name
+-- t.id, t.name
+
+DROP TABLE IF EXISTS `types`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `files` (
+CREATE TABLE `types` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `title` varchar(60) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `title_en` varchar(60) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `slug` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `item_name` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
   `name` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `description` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `description_en` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `extension` varchar(6) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `activity` tinyint(1) unsigned DEFAULT NULL,
-  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `blocos`
---
-
-DROP TABLE IF EXISTS `blocks`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `blocks` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `slug` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `title` varchar(60) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `title_en` varchar(60) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `body` text COLLATE utf8_unicode_ci,
-  `body_en` text COLLATE utf8_unicode_ci,
-  `area` text COLLATE utf8_unicode_ci DEFAULT NULL,
-  `activity` tinyint(1) unsigned DEFAULT NULL,
-  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `categorias`
---
-
-DROP TABLE IF EXISTS `categories`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `categories` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `parent_id` int(10) unsigned NOT NULL DEFAULT '0',
-  `label` varchar(120) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `name` varchar(120) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `activity` tinyint(1) unsigned DEFAULT NULL,
-  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `name` (`name`)
+  UNIQUE(`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+SELECT id, item_name, name FROM types WHERE item_name="content";
+SELECT id, item_name, name FROM types WHERE item_name="resource";
+SELECT id, item_name, name FROM types WHERE item_name="term";
+SELECT id, item_name, name FROM types WHERE item_name="collection";
 
 --
 -- Table structure for table `config`
 --
+
+-- id, key, value, activity, modified, created
+-- t.id, t.key, t.value, t.activity, t.modified, t.created
+
+-- activity?
 
 DROP TABLE IF EXISTS `config`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -87,65 +52,12 @@ DROP TABLE IF EXISTS `config`;
 CREATE TABLE `config` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `key` varchar(60) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `value` varchar(120) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `activity` tinyint(1) unsigned DEFAULT NULL,
-  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `value` BLOB,
+  `activity` tinyint(1) unsigned NOT NULL DEFAULT 1,
+  `modified` datetime NOT NULL,
+  `created` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `key` (`key`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `documentos_folders`
---
-
-DROP TABLE IF EXISTS `documents_folders`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `documents_folders` (
-  `file_id` int(10) unsigned NOT NULL,
-  `folder_id` int(10) unsigned NOT NULL,
-  `order` int(3) NOT NULL,
-  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  KEY `file_id` (`file_id`),
-  KEY `folder_id` (`folder_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `fotos_galerias`
---
-
-DROP TABLE IF EXISTS `photos_albums`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `photos_albums` (
-  `file_id` int(10) unsigned NOT NULL,
-  `album_id` int(10) unsigned NOT NULL,
-  `order` int(3) NOT NULL,
-  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  KEY `file_id` (`file_id`),
-  KEY `album_id` (`album_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `galerias`
---
-
-DROP TABLE IF EXISTS `albums`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `albums` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `title` varchar(120) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `title_en` varchar(120) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `slug` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `description` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `description_en` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `activity` tinyint(1) unsigned DEFAULT NULL,
-  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
+  UNIQUE(`key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -153,116 +65,62 @@ CREATE TABLE `albums` (
 -- Table structure for table `log`
 --
 
+-- id, user, user_id, action, item_name, item_id, created
+-- t.id, t.user, t.user_id, t.action, t.item_name, t.item_id, t.created
+
 DROP TABLE IF EXISTS `log`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `log` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `user` varchar(120) COLLATE utf8_unicode_ci DEFAULT NULL,
   `user_id` int(10) unsigned NOT NULL,
   `action` varchar(120) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `model` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `object_id` int(10) unsigned DEFAULT NULL,
-  `activity` tinyint(1) unsigned DEFAULT NULL,
-  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `item_name` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `item_id` int(10) unsigned DEFAULT NULL,
+  `created` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `paginas`
+-- Table structure for table `translations`
 --
 
-DROP TABLE IF EXISTS `pages`;
+-- id, user_id, language, item_name, item_id, slug, name, title, subtitle, excerpt, description, body
+-- t.id, t.user_id, t.language, t.item_name, t.item_id, t.slug, t.name, t.title, t.subtitle, t.excerpt, t.description, t.body
+
+DROP TABLE IF EXISTS `translations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `pages` (
+CREATE TABLE `translations` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) unsigned NOT NULL,
+  `language` varchar(5) COLLATE utf8_unicode_ci DEFAULT "pt-br",
+  `item_name` enum('content', 'resource', 'collection', 'term', 'block', 'type') COLLATE utf8_unicode_ci DEFAULT NULL,
+  `item_id` int(10) unsigned NOT NULL,
+  `slug` varchar(120) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `name` varchar(120) COLLATE utf8_unicode_ci DEFAULT NULL,
   `title` varchar(120) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `title_en` varchar(120) COLLATE utf8_unicode_ci DEFAULT NULL,
   `subtitle` varchar(120) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `subtitle_en` varchar(120) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `date_pub` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `slug` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `body` text COLLATE utf8_unicode_ci,
-  `body_en` text COLLATE utf8_unicode_ci,
-  `cover_id` int(10) unsigned DEFAULT NULL,
-  `album_id` int(10) unsigned DEFAULT NULL,
-  `activity` tinyint(1) unsigned DEFAULT NULL,
-  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
+  `excerpt` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `description` BLOB,
+  `body` BLOB,
+  PRIMARY KEY (`id`),
+  UNIQUE(`language`,`item_name`,`item_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Table structure for table `folders`
---
 
-DROP TABLE IF EXISTS `folders`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `folders` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `title` varchar(120) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `title_en` varchar(120) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `slug` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `description` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `description_en` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `activity` tinyint(1) unsigned DEFAULT NULL,
-  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+-- BEGIN USERS
 
 --
--- Table structure for table `posts`
+-- Table structure for table `users`
 --
 
-DROP TABLE IF EXISTS `posts`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `posts` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `title` varchar(120) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `slug` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `body` text COLLATE utf8_unicode_ci,
-  `featured` tinyint(1) unsigned DEFAULT NULL,
-  `activity` tinyint(1) unsigned DEFAULT NULL,
-  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+-- id, username, name, email, cpf, cnpj, cellphone, phone, zipcode, address, address2, district, city, province, password, activity, created
+-- t.id, t.username, t.name, t.email, t.cpf, t.cnpj, t.cellphone, t.phone, t.zipcode, t.address, t.address2, t.district, t.city, t.province, t.password, t.activity, t.created
 
---
--- Table structure for table `projetos`
---
-
-DROP TABLE IF EXISTS `projects`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `projects` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `title` varchar(120) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `title_en` varchar(120) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `date_pub` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `slug` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `description` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `description_en` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `body` text COLLATE utf8_unicode_ci,
-  `body_en` text COLLATE utf8_unicode_ci,
-  `cover_id` int(10) unsigned DEFAULT NULL,
-  `album_id` int(10) unsigned DEFAULT NULL,
-  `document_id` int(10) unsigned DEFAULT NULL,
-  `type` varchar(120) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `activity` tinyint(1) unsigned DEFAULT NULL,
-  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `usuarios`
---
+-- activity
 
 DROP TABLE IF EXISTS `users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -283,42 +141,275 @@ CREATE TABLE `users` (
   `city` varchar(60) COLLATE utf8_unicode_ci DEFAULT NULL,
   `province` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
   `password` varchar(10) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `token` varchar(120) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `level` int(10) unsigned NOT NULL,
-  `activity` tinyint(1) unsigned DEFAULT NULL,
-  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `activity` tinyint(1) unsigned NOT NULL DEFAULT 1,
+  `modified` datetime NOT NULL,
+  `created` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `email` (`email`)
+  UNIQUE(`email`),
+  UNIQUE(`cpf`),
+  UNIQUE(`cnpj`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+
 --
--- Table structure for table `books`
+-- Table structure for table `roles`
 --
 
-DROP TABLE IF EXISTS `books`;
+-- id, name, activity
+-- t.id, t.name, t.activity
+
+-- activity
+
+DROP TABLE IF EXISTS `roles`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `books` (
+CREATE TABLE `roles` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `title` varchar(120) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `title_en` varchar(120) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `date_pub` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `description` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `description_en` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `slug` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `body` text COLLATE utf8_unicode_ci,
-  `body_en` text COLLATE utf8_unicode_ci,
-  `cover_id` int(10) unsigned DEFAULT NULL,
-  `album_id` int(10) unsigned DEFAULT NULL,
-  `pdf_url` int(10) unsigned DEFAULT NULL,
-  `type` varchar(120) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `activity` tinyint(1) unsigned DEFAULT NULL,
-  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
+  `name` varchar(20),
+  `activity` tinyint(1) unsigned NOT NULL DEFAULT 1,
+  PRIMARY KEY (`id`),
+  UNIQUE(`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+
+--
+-- Table structure for table `roles`
+--
+
+-- user_id, role_id
+
+DROP TABLE IF EXISTS `users_roles`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `users_roles` (
+  `user_id` int(10) unsigned NOT NULL,
+  `role_id` int(10) unsigned NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+
+--
+-- Table structure for table `tokens`
+--
+
+-- id, user_id, ip, token, type, activity, created, used
+-- t.id, t.user_id, t.ip, t.token, t.type, t.activity, t.created, t.used
+
+DROP TABLE IF EXISTS `tokens`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tokens` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) unsigned NOT NULL,
+  `ip` varchar(16) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `token` varchar(120) COLLATE utf8_unicode_ci NOT NULL,
+  `type` tinyint(1) unsigned NOT NULL,
+  `created` datetime NOT NULL,
+  `used` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE(`token`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+-- END USERS
+
+-- BEGIN ATTRIBUTES
+
+--
+-- Table structure for table `collections`
+--
+
+-- id, activity, modified, created
+-- t.id, t.activity, t.modified, t.created
+
+-- activity, translatable
+
+DROP TABLE IF EXISTS `collections`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `collections` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `type_id` int(10) unsigned NOT NULL,
+  `activity` tinyint(1) unsigned NOT NULL DEFAULT 1,
+  `modified` datetime NOT NULL,
+  `created` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+
+-- item_name, item_id, group_name, group_id, order
+DROP TABLE IF EXISTS `item_group_relationships`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `item_group_relationships` (
+  `group_name` enum('content', 'collection') COLLATE utf8_unicode_ci NOT NULL,
+  `group_id` int(10) unsigned NOT NULL,
+  `item_name` enum('content', 'collection', 'resource', 'term') COLLATE utf8_unicode_ci NOT NULL,
+  `item_id` int(10) unsigned NOT NULL,
+  `order` int(10) unsigned NOT NULL,
+  UNIQUE('group_name', 'group_id', 'item_name', 'item_id')
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+
+
+--
+-- Table structure for table `term`
+--
+
+-- id, parent_id, term_type_id, activity
+-- t.id, t.parent_id, t.term_type_id, t.activity
+
+-- activity, translatable
+
+DROP TABLE IF EXISTS `terms`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `terms` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `parent_id` int(10) unsigned NOT NULL DEFAULT 0,
+  `type_id` int(10) unsigned NOT NULL,
+  `activity` tinyint(1) unsigned NOT NULL DEFAULT 1,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+
+-- END ATTRIBUTES
+-- BEGIN SITE BUILDING
+
+--
+-- Table structure for table `areas`
+--
+
+-- id, name, activity
+-- t.id, t.name, t.activity
+
+-- activity, translatable
+
+DROP TABLE IF EXISTS `areas`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `areas` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `activity` tinyint(1) unsigned NOT NULL DEFAULT 1,
+  PRIMARY KEY (`id`),
+  UNIQUE(`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `blocks`
+--
+
+-- id, area_id, activity
+-- t.id, t.area_id
+
+-- activity, translatable
+
+DROP TABLE IF EXISTS `blocks`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `blocks` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `area_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+
+-- END SITE BUILDING
+
+
+-- BEGIN CONTENT
+
+--
+-- Table structure for table `contents`
+--
+
+-- id, content_type_id, activity, date_pub, modified, created
+-- t.id, t.content_type_id, t.activity, t.date_pub, t.modified, t.created
+
+-- activity, translatable
+
+DROP TABLE IF EXISTS `contents`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `contents` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `type_id` int(10) unsigned NOT NULL,
+  `activity` tinyint(1) unsigned NOT NULL DEFAULT 1,
+  `date_pub` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  `created` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+
+--
+-- Table structure for table `resources`
+--
+
+-- id, resource_type_id, url, path, filename, extension, activity, modified, created
+-- t.id, t.resource_type_id, t.url, t.path, t.filename, t.extension, t.activity, t.modified, t.created
+
+-- activity, translatable
+
+DROP TABLE IF EXISTS `resources`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `resources` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `type_id` int(10) unsigned NOT NULL,
+  `url` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `filepath` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `filename` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `extension` varchar(6) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `activity` tinyint(1) unsigned NOT NULL DEFAULT 1,
+  `modified` datetime NOT NULL,
+  `created` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+-- END CONTENT
+
+
+DROP TABLE IF EXISTS `comments`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `comments` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) unsigned DEFAULT NULL,
+  `name` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `email` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `url` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `comment` tinyblob COLLATE utf8_unicode_ci NOT NULL,
+  `created` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+
+DROP TABLE IF EXISTS `folksonomy`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `folksonomy` (
+  `term_id` int(10) unsigned DEFAULT NULL,
+  `user_id` int(10) unsigned DEFAULT NULL,
+  `item_name` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `item_id` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE(`term_id`,`user_id`,`item_name`,`item_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
@@ -329,51 +420,3 @@ CREATE TABLE `books` (
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2015-05-12  8:03:38
-
-
-
-
-DROP TABLE IF EXISTS `menus`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `menus` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(120) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `url` varchar(120) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `activity` tinyint(1) unsigned DEFAULT NULL,
-  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  UNIQUE(`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
-INSERT INTO `menus` (name, url, activity) VALUES
-('admin_page_index','/admin/page',1),
-('admin_book_index','/admin/book',1),
-('admin_project_index','/admin/project',1),
-('admin_folder_index','/admin/folder',1),
-('admin_document_index','/admin/document',1),
-('admin_file_index','/admin/file',1),
-('admin_album_index','/admin/album',1),
-('admin_token_index','/admin/token',1),
-('admin_user_index','/admin/user',1),
-('admin_menu_index','/admin/menu',1),
-('admin_config_index','/admin/config',1),
-('admin_log_index','/admin/log',1);
-
-
-
-DROP TABLE IF EXISTS `tokens`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tokens` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int(10) unsigned DEFAULT NULL,
-  `token` varchar(120) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `type` varchar(120) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `activity` tinyint(1) unsigned DEFAULT NULL,
-  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

@@ -1,9 +1,10 @@
 {
     "require": {
-        "monolog/monolog": "1.0.*",
-        "slim/slim": "dev-master",
-		"swiftmailer/swiftmailer": "6.0.*@dev",
-        "simplepie/simplepie": "dev-master"
+        "monolog/monolog": "dev-master",
+        "slim/slim": "2.6.2",
+		"swiftmailer/swiftmailer": "dev-master",
+        "simplepie/simplepie": "dev-master",
+        "flynsarmy/slim-monolog": "dev-master"
     },
     "autoload": {
         "psr-0": {
