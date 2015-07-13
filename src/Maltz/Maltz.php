@@ -135,10 +135,7 @@ class Maltz
 
         $controllers = array(
             'Maltz\Api\Ctrl\Api',
-            'Maltz\Content\Ctrl\Site',
-            'Maltz\Content\Ctrl\Content',
-            'Maltz\Sys\Ctrl\Asset',
-            'Maltz\Sys\Ctrl\Sys',
+            'Maltz\Api\Ctrl\App',
         );
 
         foreach ($controllers as $controller) {

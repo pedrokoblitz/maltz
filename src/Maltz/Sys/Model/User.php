@@ -3,7 +3,9 @@
 namespace Maltz\Sys\Model;
 
 use Maltz\Mvc\Model;
+use Maltz\Mvc\Record;
 use Maltz\Mvc\Activity;
+use Maltz\Service\Pagination;
 
 /**
  * db de user com password para autenticação
@@ -48,23 +50,31 @@ class User extends Model
      * CRUD
      */
 
-    public function display($key='username', $order='asc') {
+    public function display($key='username', $order='asc')
+    {
         $sql = "SELECT id, username, name, email, cpf, cnpj, cellphone, phone, zipcode, address, address2, district, city, province, password, activity, created
             FROM users ORDER BY $key $order";
         $resultado = $this->db->run($sql);
+        return $resultado;
     }
 
-    public function list($offset=0, $limit=12, $key='username', $order='asc') {
+    public function list($page=1, $per_page=12, $key='username', $order='asc') 
+    {
+        $pagination = Pagination::paginate($page, $per_page);
+
         $sql = "SELECT id, username, name, email, cpf, cnpj, cellphone, phone, zipcode, address, address2, district, city, province, password, activity, created
             FROM users ORDER BY $key $order LIMIT :offset,:limit";
-        $resultado = $this->db->run($sql, array('offset' => $offset, 'limit' => $limit));
+        $resultado = $this->db->run($sql, array('offset' => $pagination->offset, 'limit' => $pagination->limit));
+        return $resultado;
     }
 
-    public function show($id) {
+    public function show($id) 
+    {
         $sql = "SELECT id, username, name, email, cpf, cnpj, cellphone, phone, zipcode, address, address2, district, city, province, password, activity, created
             FROM users 
             WHERE id=:id";
         $resultado = $this->db->run($sql);
+        return $resultado;
     }
 
     public function insert(Record $post)

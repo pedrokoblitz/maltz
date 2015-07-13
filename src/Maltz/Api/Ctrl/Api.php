@@ -2,6 +2,12 @@
 
 namespace Maltz\Api\Ctrl;
 
+use Maltz\Mvc\Record;
+use Maltz\Content\Model\Content;
+use Maltz\Content\Model\Collection;
+use Maltz\Content\Model\Resource;
+use Maltz\Content\Model\Term;
+
 class Api {
 
     public static function route($app) {
@@ -10,7 +16,7 @@ class Api {
         /*
          *
          */
-        $app->get('/api/:model/:type/:key/:order/:pg', function ($model, $type, $key = 'created', $order = 'ASC', $pg = 1) use ($app) {
+        $app->get('/api/:model/:type/:key/:order/:pg', function ($model, $type, $key = 'created', $order = 'ASC', $page = 1) use ($app) {
 
             switch ($model) {
                 case 'content':
@@ -27,14 +33,20 @@ class Api {
                     break;
             }
 
-            $pp = $app->config('per_page');
-            $pagination = $app->paginate($pp, $pg);
-            $data = $entity->listByType($type, $key, $order, $pagination->offset, $pagination->limit);
             $app->response->headers->set('Content-Type', 'application/json');
-            $app->response->setStatus(200);
-            $app->response->setBody($data->toJson());
+            $per_page = $app->config('per_page');
+            $result = $entity->listByType($type, $key, $order, $page, $per_page);
+
+            if ($result->get('success')) {
+                $app->response->setStatus(200);
+            } else {
+                $app->response->setStatus(404);
+            }
+
+            $app->response->setBody($result->toJson());
             $app->stop();
-        })->name('list')->conditions(array('id' => '\d+'));
+
+        })->name('list')->conditions(array('model' => '\w+', 'type' => '\w+', 'key' => '\w+', 'order' => 'asc|desc', 'pg' => '\d+'));
 
         /*
          *
@@ -55,14 +67,19 @@ class Api {
                     break;
             }
 
-            $data = $entity->show($id);
-
             $app->response->headers->set('Content-Type', 'application/json');
-            $app->response->setStatus(200);
-            $app->response->setBody($data->toJson());
+            $result = $entity->show($id);
+
+            if ($result->get('success')) {
+                $app->response->setStatus(200);
+            } else {
+                $app->response->setStatus(404);
+            }
+
+            $app->response->setBody($result->toJson());
             $app->stop();
 
-        })->name('show')->conditions(array('id' => '\d+'));
+        })->name('show')->conditions(array('model' => '\w+', 'id' => '\d+'));
 
         /*
          *
@@ -88,14 +105,31 @@ class Api {
                     break;
             }
 
-            $record = new Record($app->request->post());
+            $app->response->headers->set('Content-Type', 'application/json');
+
+            if ($app->request->isAjax()) {
+                $body = $app->request->getBody();
+                $record = new Record(json_decode($body, true));
+            } else {
+                $post = $app->request->post();
+                $record = new Record($post);
+            }
+
+            $app->response->headers->set('Content-Type', 'application/json');
             $result = $entity->save($record);
 
-            $id = $record->has('id') ? $record->get('id') : $result->get('last_insert_id');
-            Log::query('log', $app->session->get('user.id'), $model, 'save', $id);
+            if ($result->get('success')) {
+                $id = $record->has('id') ? $record->get('id') : $result->get('last_insert_id');
+                Log::query('log', $app->session->get('user.id'), $model, 'save', $id);
+                $app->response->setStatus(200);
+            } else {
+                $app->response->setStatus(404);
+            }
 
+            $app->response->setBody($result->toJson());
             $app->stop();
-        })->name('show')->conditions(array('id' => '\d+'));
+
+        })->name('show')->conditions(array('model' => '\w+'));
 
         /*
          *
@@ -116,11 +150,21 @@ class Api {
                     break;
             }
 
-            $entity->delete($id);
-            Log::query('log', $app->session->get('user.id'), $model, 'delete', $id);
+            $app->response->headers->set('Content-Type', 'application/json');
+            $result = $entity->delete($id);
+
+            if ($result->get('success')) {
+                Log::query('log', $app->session->get('user.id'), $model, 'delete', $id);
+                $app->response->setStatus(200);
+                $app->response->setBody($result->toJson());
+            } else {
+                $app->response->setStatus(404);
+            }
+
+            $app->response->setBody($result->toJson());
             $app->stop();
 
-        })->name('delete')->conditions(array('id' => '\d+'));
+        })->name('delete')->conditions(array('model' => '\w+', 'id' => '\d+'));
 
         /*
          *
@@ -136,11 +180,20 @@ class Api {
                     break;
             }
 
-            $entity->add($id, $item, $item_id, $order);
+            $app->response->headers->set('Content-Type', 'application/json');
+            $result = $entity->add($id, $item, $item_id, $order);
 
-            Log::query('log', $app->session->get('user.id'), $model, 'add_item', $id);
+            if ($result->get('success')) {
+                Log::query('log', $app->session->get('user.id'), $model, 'add_item', $id);
+                $app->response->setStatus(200);
+            } else {
+                $app->response->setStatus(404);
+            }
 
-        })->name('add_item')->conditions(array('id' => '\d+'));
+            $app->response->setBody($result->toJson());
+            $app->stop();
+
+        })->name('add_item')->conditions(array('model' => '\w+', 'id' => '\d+'));
 
 
         /*
@@ -157,11 +210,20 @@ class Api {
                     break;
             }
 
-            $entity->remove($id, $item, $item_id);
+            $app->response->headers->set('Content-Type', 'application/json');
+            $result = $entity->remove($id, $item, $item_id);
 
-            Log::query('log', $app->session->get('user.id'), $model, 'remove_item', $id);
+            if ($result->get('success')) {
+                Log::query('log', $app->session->get('user.id'), $model, 'remove_item', $id);
+                $app->response->setStatus(200);
+            } else {
+                $app->response->setStatus(404);
+            }
 
-        })->name('remove_item')->conditions(array('id' => '\d+'));
+            $app->response->setBody($result->toJson());
+            $app->stop();
+
+        })->name('remove_item')->conditions(array('model' => '\w+', 'id' => '\d+'));
 
         return $app;
     }

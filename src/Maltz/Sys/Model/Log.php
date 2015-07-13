@@ -3,6 +3,7 @@
 namespace Maltz\Sys\Model;
 
 use Maltz\Mvc\Model;
+use Maltz\Service\Pagination;
 
 /**
  * db de relatório de atividade
@@ -45,13 +46,17 @@ class Log extends Model
      * CRUD
      */
 
-    public function list($offset=0, $limit=12, $key='created', $order='desc') {
+    public function list($page=1, $per_page=12, $key='created', $order='desc') 
+    {
+        $pagination = Pagination::paginate($page, $per_page);
+
         $sql = "SELECT (user_id, action, item_name, item_id, created) FROM log ORDER BY $key $order LIMIT :offset,:limit";
-        $resultado = $this->db->run($sql, array('offset' => $offset, 'limit' => $limit));
+        $resultado = $this->db->run($sql, array('offset' => $pagination->offset, 'limit' => $pagination->limit));
         return $resultado;
     }
 
-    public function insert(Record $record) {
+    public function insert(Record $record) 
+    {
         $sql = "INSERT INTO log (user_id, action, item_name, item_id, created)
             VALUES (:user_id, :action, :item_name, :item_id, NOW())";
         $values = $record->toArray();

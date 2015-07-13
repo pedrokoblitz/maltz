@@ -2,6 +2,10 @@
 
 namespace Maltz\Media\Model;
 
+use Maltz\Mvc\Model;
+use Maltz\Mvc\Record;
+use Maltz\Service\Pagination;
+
 class Type extends Model
 {
     public function __construct($db)
@@ -19,9 +23,11 @@ class Type extends Model
         return $resultado;
     }
 
-    public function list($offset=0, $limit=12, $key='name', $order='asc') {
+    public function list($page=1, $per_page=12, $key='name', $order='asc') {
+        $pagination = Pagination::paginate($page, $per_page);
+
         $sql = "SELECT id, item_name, name FROM types ORDER By $key $order LIMIT :offset,:limit";
-        $resultado = $this->db->run($sql, array('offset' => $offset, 'limit' => $limit));
+        $resultado = $this->db->run($sql, array('offset' => $pagination->offset, 'limit' => $pagination->limit));
         return $resultado;
     }
 

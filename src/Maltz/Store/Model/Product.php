@@ -87,11 +87,11 @@ class Product extends Model
      * return void ou bool
      */
 
-    public function listWithPhotos($pp, $pg)
+    public function listWithPhotos($pp, $page)
     {
         
         $registros = $this->count();
-        $pagination = Pagination::pager($registros, $pp, $pg);
+        $pagination = Pagination::pager($registros, $pp, $page);
         $sql = "SELECT * FROM products ORDER BY created DESC LIMIT " . $pagination->offset . ", " . $pagination->limit;
         $data = $this->db->run($sql);
         $products = array();
@@ -103,7 +103,7 @@ class Product extends Model
             $products[] = $data;
         }
         
-        $pgs = $pagination->num_pages;
+        $pages = $pagination->num_pages;
         return $products;
     }
 

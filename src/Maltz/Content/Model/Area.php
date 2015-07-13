@@ -3,7 +3,9 @@
 namespace Maltz\Content\Model;
 
 use Maltz\Mvc\Model;
+use Maltz\Mvc\Record;
 use Maltz\Mvc\Activity;
+use Maltz\Service\Pagination;
 
 /**
  * Define blocks estáticos para serem guardata no banco
@@ -74,12 +76,14 @@ class Area extends Model
     }
 
 
-    public function list($offset=0, $limit=12, $key='name', $order='asc') {
+    public function list($page=1, $per_page=12, $key='name', $order='asc') {
+        $pagination = Pagination::paginate($page, $per_page);
+        
         $sql = "SELECT id, name, activity 
         FROM areas
             ORDER BY $key $order
             LIMIT :offset,:limit";
-        $resultado = $this->db->run($sql, array('offset' => $offset, 'limit' => $limit, 'item_name' => 'area'));
+        $resultado = $this->db->run($sql, array('offset' => $pagination->offset, 'limit' => $pagination->limit, 'item_name' => 'area'));
         return $resultado;
     }
 

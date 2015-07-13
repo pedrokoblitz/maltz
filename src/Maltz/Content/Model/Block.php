@@ -3,7 +3,9 @@
 namespace Maltz\Content\Model;
 
 use Maltz\Mvc\Model;
+use Maltz\Mvc\Record;
 use Maltz\Mvc\Translateable;
+use Maltz\Service\Pagination;
 
 /**
  * Define blocks estáticos para serem guardata no banco
@@ -76,8 +78,10 @@ class Block extends Model
         return $resultado;
     }
 
-    public function list($offset = 12, $limit = 0, $key='title', $order = 'asc') 
+    public function list($page=1, $per_page=12, $key='title', $order = 'asc') 
     {
+        $pagination = Pagination::paginate($page, $per_page);
+
         $sql = "SELECT t1.id, t1.area_id, t2.title, t2.description 
         FROM blocks 
             JOIN translations t2
@@ -85,7 +89,7 @@ class Block extends Model
                 AND t2.item_name=:item_name
             ORDER BY $key $order 
             LIMIT :offset,:limit";
-        $resultado = $this->db->run($sql, array('item_name' => 'block', 'offset' => $offset, 'limit' => $limit));
+        $resultado = $this->db->run($sql, array('item_name' => 'block', 'offset' => $pagination->offset, 'limit' => $pagination->limit));
         return $resultado;
     }
 

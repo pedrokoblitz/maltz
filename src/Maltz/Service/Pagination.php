@@ -16,32 +16,15 @@ namespace Maltz\Service;
 
 class Pagination
 {
-
-    protected $offset;
-    protected $limit;
-    protected $num_pages;
-    protected $page;
-
-    public function __get($key)
+    public static function paginate($page, $per_page)
     {
-        if (in_array($key, array('offset', 'limit', 'num_pages', 'page'))) {
-            return $this->$key;
-        }
+        $ret = new \stdClass;
+        $ret->offset = ($page - 1) * $per_page;
+        $ret->limit = $per_page;
+        return $ret;
     }
 
-    /**
-     * calcula numero das páginas
-     *
-     * @param int $num_pages
-     *
-     * @param int $limit
-     *
-     * @param $page
-     *
-     * @return object
-     *
-     **/
-    public function paginate($num_pages, $limit, $page)
+    public static function pager($num_pages, $per_page, $page)
     {
 
         /*** the number of pages ***/
@@ -55,12 +38,16 @@ class Pagination
             $offset = 0;
         }
 
-        /*** assign the variables to the return class object ***/
-        $this->offset = (int) $offset;
-        $this->limit = (int) $limit;
-        $this->num_pages = (int) $num_pages;
-        $this->page = (int) $page;
+        /*** a new instance of stdClass ***/
+        $ret = new \stdClass;
 
-        return $this;
+        /*** assign the variables to the return class object ***/
+        $ret->offset = (int) $offset;
+        $ret->limit = (int) $limit;
+        $ret->num_pages = (int) $num_pages;
+        $ret->page = (int) $page;
+
+        /*** return the object ***/
+        return $ret;
     }
 } /*** fin ***/

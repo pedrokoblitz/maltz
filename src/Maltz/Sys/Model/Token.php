@@ -3,6 +3,7 @@
 namespace Maltz\Sys\Model;
 
 use Maltz\Mvc\Model;
+use Maltz\Service\Pagination;
 
 class Token extends Model
 {

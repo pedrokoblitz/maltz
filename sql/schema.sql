@@ -71,6 +71,8 @@ CREATE TABLE `log` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned NOT NULL,
   `action` varchar(120) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `model_name` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `model_id` int(10) unsigned DEFAULT NULL,
   `item_name` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
   `item_id` int(10) unsigned DEFAULT NULL,
   `created` datetime NOT NULL,
@@ -228,6 +230,8 @@ DROP TABLE IF EXISTS `collections`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `collections` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `parent_id` int(10) unsigned NOT NULL DEFAULT 0,
   `type_id` int(10) unsigned NOT NULL,
   `activity` tinyint(1) unsigned NOT NULL DEFAULT 1,
   `created` datetime NOT NULL,
@@ -267,6 +271,7 @@ DROP TABLE IF EXISTS `terms`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `terms` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
   `parent_id` int(10) unsigned NOT NULL DEFAULT 0,
   `type_id` int(10) unsigned NOT NULL,
   `activity` tinyint(1) unsigned NOT NULL DEFAULT 1,

@@ -3,13 +3,17 @@
 namespace Maltz\Media\Model;
 
 use Maltz\Mvc\Model;
+use Maltz\Mvc\Record;
 use Maltz\Mvc\Activity;
 use Maltz\Mvc\Translateable;
+use Maltz\Service\Pagination;
+use Maltz\Mvc\Hierarchy;
 
 class Term extends Model
 {
     use Activity;
     use Translateable;
+    use Hierarchy;
 
     public function __construct($db)
     {
@@ -22,29 +26,30 @@ class Term extends Model
 
     public function insert(Record $record)
     {
-        $sql = "";
-        $resultado = $this->db->run($sql);
-        $sql = "";
-        $resultado = $this->db->run($sql, array());
+        $sql = "INSERT INTO terms (type_id, name, created, modified)
+            VALUES (:type_id, :name, NOW(), NOW())";
+        $resultado = $this->db->run($sql, array('type_id' => $record->get('type_id'), 'name' => $record->get('name')));
+        $record->remove('type_id');
+        $record->remove('name');
+
+        $sql = "INSERT INTO translations (user_id, language, item_name, item_id, slug, title)
+            VALUES (:user_id, :language, :item_name, LAST_INSERT_ID(), :slug, :title)";
+        $resultado = $this->db->run($sql, $record->toArray());
         return $resultado;
     }
 
     public function update(Record $record)
     {
-        $sql = "";
-        $resultado = $this->db->run($sql, array());
-        $sql = "";
-        $resultado = $this->db->run($sql, array());
+        $sql = "UPDATE terms SET modified=NOW() WHERE id=:id";
+        $resultado = $this->db->run($sql, array('id' => $record->get('id')));
+        $sql = "UPDATE translations SET user_id=:user_id, lang=:lang, slug=:slug, title=:title
+            WHERE item_id=:id AND item_name=:item_name";
+        $resultado = $this->db->run($sql, $record->toArray());
         return $resultado;
     }
 
-    public function delete($id)
+    public function display($key='type', $order='asc') 
     {
-        $sql = "UPDATE terms SET activity=:activity WHERE id=:id";
-        $resultado = $this->db->run($sql, array());
-    }
-
-    public function display($key='type', $order='asc') {
         $sql = "SELECT t1.id AS id, t1.parent_id AS parent_id, t1.name AS name, t1.value AS value, t3.name AS type 
         FROM terms t1 
             JOIN translations t2
@@ -57,7 +62,10 @@ class Term extends Model
         return $resultado;
     }
 
-    public function list($offset=0, $limit=12, $key='type', $order='desc') {
+    public function list($page=1, $per_page=12, $key='type', $order='desc') 
+    {
+        $pagination = Pagination::paginate($page, $per_page);
+
         $sql = "SELECT t1.id AS id, t1.parent_id AS parent_id, t1.name AS name, t1.value AS value, t3.name AS type 
         FROM terms t1 
             JOIN translations t2
@@ -67,11 +75,14 @@ class Term extends Model
                 ON t1.type_id=t3.id 
             ORDER BY $key $order
             LIMIT :offset,:limit";
-        $resultado = $this->db->run($sql, array('item_name' => $item_name, 'offset' => $offset, 'limit' => $limit));
+        $resultado = $this->db->run($sql, array('item_name' => $item_name, 'offset' => $pagination->offset, 'limit' => $pagination->limit));
         return $resultado;
     }
 
-    public function listByType(type, $offset=0, $limit=12, $key='name', $order='asc') {
+    public function listByType(type, $page=1, $per_page=12, $key='name', $order='asc') 
+    {
+        $pagination = Pagination::paginate($page, $per_page);
+
         $sql = "SELECT t1.id AS id, t1.parent_id AS parent_id, t1.name AS name, t1.value AS value, t3.name AS type 
         FROM terms t1 
             JOIN translations t2
@@ -79,10 +90,10 @@ class Term extends Model
                 AND t2.item_name=:item_name
             JOIN types t3 
                 ON t1.type_id=t3.id 
-            WHERE type=:type
+            WHERE t3.name=:type
             ORDER BY $key $order
             LIMIT :offset,:limit";
-        $resultado = $this->db->run($sql, array('type' => $type, 'offset' => $offset, 'limit' => $limit));
+        $resultado = $this->db->run($sql, array('type' => $type, 'offset' => $pagination->offset, 'limit' => $pagination->limit));
         return $resultado;
     }
 
