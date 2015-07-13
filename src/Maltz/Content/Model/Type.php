@@ -13,24 +13,29 @@ class Type extends Model
      * CRUD
      */
 
+    public function display($key='name', $order='asc') {
+        $sql = "SELECT id, item_name, name FROM types ORDER By $key $order";
+        $resultado = $this->db->run($sql);
+        return $resultado;
+    }
+
     public function list($offset=0, $limit=12, $key='name', $order='asc') {
-        $sql = "SELECT id, item_name, name FROM types ORDER BU $key $order LIMIT :offset,:limit";
+        $sql = "SELECT id, item_name, name FROM types ORDER By $key $order LIMIT :offset,:limit";
         $resultado = $this->db->run($sql, array('offset' => $offset, 'limit' => $limit));
         return $resultado;
     }
 
     public function show($id) {
         $sql = "SELECT id, item_name, name FROM types WHERE id=:id";
-        $resultado = $this->db->run($sql);
+        $resultado = $this->db->run($sql, array('id' => $id));
         return $resultado;
     }
 
     public function insert(Record $record) 
     {
         $values = $record->getInsertValueString();
-        $bind = $record->toArray();
         $sql = "INSERT INTO types (id, item_name, name) VALUES $values";        
-        $resultado = $this->db->run($sql, $bind);
+        $resultado = $this->db->run($sql, $record->toArray());
         return $resultado;
     }
 
@@ -45,7 +50,7 @@ class Type extends Model
     public function delete($id) 
     {
         $sql = "DELETE FROM types WHERE id=:id";
-        $resultado = $this->db->run($sql, array($id));
+        $resultado = $this->db->run($sql, array('id' => $id));
         return $resultado;
     }
 }

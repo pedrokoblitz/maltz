@@ -79,6 +79,11 @@ class DB extends \PDO
 
                 if (preg_match("/^(select)/i", $this->sql)) {
                     $data = $pdostmt->fetchAll(\PDO::FETCH_ASSOC);
+                    
+                    if (empty($data)) {
+                        return new Result('success' => false, 'message' => DbMessage::NOT_FOUND);
+                    }
+
                     $results = array();
                     foreach ($data as $value) {
                         $results[] = new Record($value);

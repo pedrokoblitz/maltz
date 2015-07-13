@@ -125,29 +125,18 @@ class Api {
         /*
          *
          */
-        $app->get('/api/:model/items/list', function ($model) use ($app) {
+        $app->post('/api/:model/:id/:item/:item_id/:order/add', function ($model, $id, $item, $item_id, $order) use ($app) {
 
             switch ($model) {
                 case 'content':
-                    $group = new Content($app->db);
+                    $entity = new Content($app->db);
                     break;
                 case 'collection':
-                    $group = new Collection($app->db);
-                    break;
-                case 'resource':
-                    $group = new Resource($app->db);
-                    break;
-                case 'term':
-                    $group = new Term($app->db);
+                    $entity = new Collection($app->db);
                     break;
             }
 
-        })->name('groups_items')->conditions(array('id' => '\d+'));
-
-        /*
-         *
-         */
-        $app->post('/api/:model/:id/:item/:item_id/add', function ($model, $id, $item, $item_id) use ($app) {
+            $entity->add($id, $item, $item_id, $order);
 
             Log::query('log', $app->session->get('user.id'), $model, 'add_item', $id);
 
@@ -157,7 +146,18 @@ class Api {
         /*
          *
          */
-        $app->post('/api/:model/:id/:item/:item_id/add', function ($model, $id, $item, $item_id) use ($app) {
+        $app->post('/api/:model/:id/:item/:item_id/remove', function ($model, $id, $item, $item_id) use ($app) {
+
+            switch ($model) {
+                case 'content':
+                    $entity = new Content($app->db);
+                    break;
+                case 'collection':
+                    $entity = new Collection($app->db);
+                    break;
+            }
+
+            $entity->remove($id, $item, $item_id);
 
             Log::query('log', $app->session->get('user.id'), $model, 'remove_item', $id);
 

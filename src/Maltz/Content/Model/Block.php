@@ -49,42 +49,55 @@ class Block extends Model
      */
 
     public function insert(Record $record) {
-        $fields = $record->getFieldsList();
-        $values = $record->getInsertValueString();
-        $sql = "INSERT INTO blocks $fields VALUES $values";
-        $resultado = $this->db->run($sql, $record->toArray());
         return $resultado;
     }
 
 
     public function update(Record $record) {
-        $id = $record->get('id');
-        $record->remove('id');
-        $values = $record->getUpdateValueString();
-        $bind = $record->toArray();
-        $bind[] = $id;
-        $sql = "UPDATE blocks SET $values WHERE id=:id";
-        $resultado = $this->db->run($sql, $bind);
         return $resultado;
     }
 
 
     public function delete($id) {
         $sql = "DELETE FROM blocks WHERE id=:id";
-        $resultado = $this->db->run($sql, array($id));
+        $resultado = $this->db->run($sql, array('id' => $id));
         return $resultado;
     }
 
-    public function list($offset = 12, $limit = 0, $key='', $order = 'asc') 
+    public function display($key='title', $order = 'asc') 
     {
-        $sql = "SELECT * FROM blocks ORDER BY $key $order LIMIT :offset,:limit";
-        $resultado = $this->db->run($sql, array('offset' => $offset, 'limit' => $limit));
+        $sql = "SELECT t1.id, t1.area_id, t2.title, t2.description 
+        FROM blocks 
+            JOIN translations t2
+                ON t1.id=t2.item_id
+                AND t2.item_name=:item_name
+            ORDER BY $key $order";
+        $resultado = $this->db->run($sql, array('item_name' => 'block'));
         return $resultado;
     }
 
-    public function show($id) {
-        $sql = "SELECT * FROM blocks WHERE id=:id";
-        $resultado = $this->db->run($sql, array($id));
+    public function list($offset = 12, $limit = 0, $key='title', $order = 'asc') 
+    {
+        $sql = "SELECT t1.id, t1.area_id, t2.title, t2.description 
+        FROM blocks 
+            JOIN translations t2
+                ON t1.id=t2.item_id
+                AND t2.item_name=:item_name
+            ORDER BY $key $order 
+            LIMIT :offset,:limit";
+        $resultado = $this->db->run($sql, array('item_name' => 'block', 'offset' => $offset, 'limit' => $limit));
+        return $resultado;
+    }
+
+    public function show($id) 
+    {
+        $sql = "SELECT t1.id, t1.area_id, t2.title, t2.description 
+        FROM blocks t1
+            JOIN translations t2
+                ON t1.id=t2.item_id
+                AND t2.item_name=:item_name
+            WHERE id=:id";
+        $resultado = $this->db->run($sql, array('item_name' => 'block', 'id' => $id));
         return $resultado;
     }
 }

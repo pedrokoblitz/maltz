@@ -1,3 +1,9 @@
+
+SELECT id, item_name, name FROM types WHERE item_name="content";
+SELECT id, item_name, name FROM types WHERE item_name="resource";
+SELECT id, item_name, name FROM types WHERE item_name="term";
+SELECT id, item_name, name FROM types WHERE item_name="collection";
+
 -- log
 SELECT id, user_id, action, item_name, item_id, created FROM log;
 

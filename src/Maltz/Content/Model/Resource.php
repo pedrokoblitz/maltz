@@ -72,8 +72,21 @@ class Resource extends Model
         return $resultado;
     }
 
-    public function list($offset=0, $limit=12, $key='title', $order='asc') {
-        $sql = "SELECT t1.id, t1.url, t1.filepath, t1.filename, t1.extension, t1.activity, t1.created, t1.modified, t2.title, t2.description, t3.name
+    public function display($key='title', $order='asc') {
+        $sql = "SELECT t1.id AS id, t1.url AS url, t1.filepath AS filepath, t1.filename AS filename, t1.extension AS extension, t1.embed AS embed, t1.activity AS activity, t1.created AS created, t1.modified AS modified, t2.title AS title, t2.description AS description, t3.name AS type
+        FROM resources t1
+            JOIN translations t2
+                ON t1.id=t2.item_id
+                AND t2.item_name=:item_name
+            JOIN types t3
+                ON t1.type_id=t3.id
+        ORDER BY $key $order";
+        $resultado = $this->db->run($sql, array('item_name' => 'resource'));
+        return $resultado;
+    }
+
+    public function list($offset=0, $limit=12, $key='modified', $order='desc') {
+        $sql = "SELECT t1.id AS id, t1.url AS url, t1.filepath AS filepath, t1.filename AS filename, t1.extension AS extension, t1.embed AS embed, t1.activity AS activity, t1.created AS created, t1.modified AS modified, t2.title AS title, t2.description AS description, t3.name AS type
         FROM resources t1
             JOIN translations t2
                 ON t1.id=t2.item_id
@@ -87,7 +100,7 @@ class Resource extends Model
     }
 
     public function listByType($type, $offset=0, $limit=12, $key='title', $order='asc') {
-        $sql = "SELECT t1.id, t1.url, t1.filepath, t1.filename, t1.extension, t1.activity, t1.created, t1.modified, t2.title, t2.description, t3.name
+        $sql = "SELECT t1.id AS id, t1.url AS url, t1.filepath AS filepath, t1.filename AS filename, t1.extension AS extension, t1.embed AS embed, t1.activity AS activity, t1.created AS created, t1.modified AS modified, t2.title AS title, t2.description AS description, t3.name AS type
         FROM resources t1
             JOIN translations t2
                 ON t1.id=t2.item_id
@@ -102,7 +115,7 @@ class Resource extends Model
     }
 
     public function show($id) {
-        $sql = "SELECT t1.id, t1.url, t1.filepath, t1.filename, t1.extension, t1.activity, t1.created, t1.modified, t2.title, t2.description, t3.name
+        $sql = "SELECT t1.id AS id, t1.url AS url, t1.filepath AS filepath, t1.filename AS filename, t1.extension AS extension, t1.embed AS embed, t1.activity AS activity, t1.created AS created, t1.modified AS modified, t2.title AS title, t2.description AS description, t3.name AS type
         FROM resources t1
             JOIN translations t2
                 ON t1.id=t2.item_id

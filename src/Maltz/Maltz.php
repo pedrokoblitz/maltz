@@ -6,8 +6,6 @@ use Maltz\Http\CookieJar;
 use Maltz\Http\Session;
 use Maltz\Http\Nonce;
 use Maltz\Mvc\DB;
-use Maltz\Mvc\Query;
-use Maltz\Mvc\HttpHandler;
 use Maltz\Sys\Model\Config;
 use Maltz\Sys\Model\Term;
 use Maltz\Service\Postman;
@@ -29,6 +27,22 @@ class Maltz
     {
         $app = new Slim();
         
+        /* LOG LEVELS
+
+            \Slim\Log::EMERGENCY
+            \Slim\Log::ALERT
+            \Slim\Log::CRITICAL
+            \Slim\Log::ERROR
+            \Slim\Log::WARN
+            \Slim\Log::NOTICE
+            \Slim\Log::INFO
+            \Slim\Log::DEBUG
+
+            USAGE
+
+            $log = $app->getLog();
+            $log->write('message', \Slim\Log::DEBUG);
+        */
         $logger = new \Flynsarmy\SlimMonolog\Log\MonologWriter(array(
             'handlers' => array(
                 new \Monolog\Handler\StreamHandler('./logs/dev.log'),
@@ -37,6 +51,7 @@ class Maltz
 
         $app->config(array(
             'log.writer' => $logger,
+            'mode' => 'development',
             'debug' => true,
             'templates.path' => './views',
             'base.uri' => '/',
@@ -68,14 +83,6 @@ class Maltz
         $app->httpHandler = function () {
             return new HttpHandler($app);
         }
-
-        $app->query = function () {
-            return new Query($app->db);
-        }
-
-        $app->activity = function () use ($app) {
-            return new LogHelper($app->db);
-        };
 
         $app->porteiro = function () use ($app) {
             return new Doorman($app->db, $app->session, $app->cookie);
@@ -121,94 +128,24 @@ class Maltz
             return new Correios();
         };
 
-        // config
-        $configModel = new Config($app->db);
-        $configModel->index(999, 1);
-        $configRows = $configModel->all();
-        if ($configRows['data.list']) {
-            foreach ($configRows['data.list'] as $rec) {
-                $app->config($rec['key'], $rec['value']);
-            }
+        $config = Config::query($app->db, 'display');
+        foreach ($config->getRecords() as $key => $value) {
+            $app->config($key, $value);
         }
-/*
-        $terms = array();
-        $termModel = new Term($app->db);
-        $termModel->getAllLinks();
-        $termRows = $termModel->all();
-        if (isset($termRows['data.list'])) {
-            foreach ($termRows['data.list'] as $rec) {
-                $terms[] = $rec;
-            }
-        }
-        $app->config('menu', $terms);
-*/
-
-        // types/categorias dos contents
-        $avaiable_types = array(
-            array("foto", array("photografia", "photography")),
-            array("texto", array("texto", "text")),
-            array("video", array("vídeo", "video")),
-            array("multimidia", array("multimídia", "multimedia")),
-            array("instalacao", array("instalação", "installation")),
-            array("exposicao", array("exposição", "exhibition")),
-            array("livro", array("livro", "book")),
-            array("reportagem", array("reportagem", "reportage")),
-            array("publicacao", array("publicação", "publication")),
-            array("semcategoria", array("sem categoria", "uncategorized")),
-        );
-
-        // seleciona types já utilizados
-        $t = $configModel->types();
-
-        // filtra disponiveis, baseado nos utilizado
-        $types = array();
-        foreach ($avaiable_types as $type) {
-            if (in_array($type[0], $t)) {
-                $types[] = $type;
-            }
-        }
-
-        $app->config('types', $types);
-
-        $extensions = array(
-            'pdf', 'PDF',
-            'jpg', 'JPG',
-            'gif', 'GIF',
-            'jpeg', 'JPEG',
-            'png', 'PNG',
-            'doc', 'DOC',
-            'ppt', 'PPT',
-            'pps', 'PPS',
-        );
-
-        $app->config('extensions', $extensions);
 
         $controllers = array(
+            'Maltz\Api\Ctrl\Api',
             'Maltz\Content\Ctrl\Site',
             'Maltz\Content\Ctrl\Content',
-            'Maltz\Media\Ctrl\Media',
-            //'Maltz\Sys\Ctrl\Asset',
+            'Maltz\Sys\Ctrl\Asset',
             'Maltz\Sys\Ctrl\Sys',
-            'Maltz\Sys\Ctrl\Api',
         );
 
         foreach ($controllers as $controller) {
             $ctrl = new $controller();
             $app = $ctrl->route($app);
         }
-/*
-        if ($app->config('routing.refresh') === "1") {
-            $result = array();
-            $routes = $app->router()->getNamedRoutes();
-            foreach ($routes as $route) {
-                $pattern = $route->getPattern();
-                $name = $route->getName();
-                $term = array('name' => $name, 'type' => 'route', 'url' => $pattern);
-                $termModel->insert($menu);
-            }
-            $configModel->update('config', array('value' => "false"), "key=\"routing.refresh\"");
-        }
-*/
+
         return $app;
     }
 }

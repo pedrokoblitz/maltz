@@ -48,6 +48,12 @@ class User extends Model
      * CRUD
      */
 
+    public function display($key='username', $order='asc') {
+        $sql = "SELECT id, username, name, email, cpf, cnpj, cellphone, phone, zipcode, address, address2, district, city, province, password, activity, created
+            FROM users ORDER BY $key $order";
+        $resultado = $this->db->run($sql);
+    }
+
     public function list($offset=0, $limit=12, $key='username', $order='asc') {
         $sql = "SELECT id, username, name, email, cpf, cnpj, cellphone, phone, zipcode, address, address2, district, city, province, password, activity, created
             FROM users ORDER BY $key $order LIMIT :offset,:limit";
@@ -72,8 +78,8 @@ class User extends Model
         $fields = $record->getFieldsList();
         $values = $record->getInsertValueString();
         $bind = $record->toArray();
-        $sql = "INSERT INTO users $fields, created 
-            VALUES $values, NOW()";
+        $sql = "INSERT INTO users $fields, created, modified
+            VALUES $values, NOW(), NOW()";
         $resultado = $this->db->run($sql, $bind);
         return $resultado;
     }

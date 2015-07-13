@@ -5,7 +5,7 @@ namespace Maltz\Content\Model;
 trait ItemRelationships
 {
 
-    protected function add($id, $item_name, $item_id, $order)
+    public function add($id, $item_name, $item_id, $order)
     {
         $bind = array('group_name' => $this->slug, 'group_id' => $id, 'item_name' => $item_name, 'item_id' => $item_id, 'order' => $order);
         $sql = "INSERT INTO groups_items_relationships (group_name, group_id, item_name, item_id, order) VALUES (:group_name, :group_id, :item_name, :item_id, :order)";
@@ -13,7 +13,7 @@ trait ItemRelationships
         return $resultado;
     }
 
-    protected function remove($id, $item_name, $item_id)
+    public function remove($id, $item_name, $item_id)
     {
         $bind = array('group_name' => $this->slug, 'group_id' => $id, 'item_name' => $item_name, 'item_id' => $item_id);
         $sql = "DELETE FROM groups_items_relationships WHERE group_name=:group_name, group_id=:group_id, item_name=:item_name, item_id=:item_id";
@@ -21,7 +21,7 @@ trait ItemRelationships
         return $resultado;
     }
 
-    protected function removeAll($id, $item_name)
+    public function removeAll($id, $item_name)
     {
         $bind = array('group_name' => $this->slug, 'group_id' => $id, 'item_name' => $item_name);
         $sql = "DELETE FROM groups_items_relationships WHERE group_name=:group_name, group_id=:group_id, item_name=:item_name";
@@ -29,11 +29,28 @@ trait ItemRelationships
         return $resultado;
     }
 
-    protected function getAll($id, $item_name)
+    public function getAll($id, $item_name)
     {
+        $fields = 't2.id AS id, '
+        switch ($item_name) {
+            case 'content':
+                $fields .= '';
+                break;
+            case 'collection':
+                $fields .= '';
+                break;
+            case 'resource':
+                $fields .= '';
+                break;
+            case 'term':
+                $fields .= '';
+                break;
+        }
+        $fields .= 't3.title AS title, t3.subtitle AS subtitle, t3.excerpt AS excerpt, t3.description AS description, t3.body AS body, t4.name AS type';
+
         $item_table = $item_name . 's';
         $bind = array('group_name' => $this->slug, 'group_id' => $id, 'item_name' => $item_name);
-        $sql = "SELECT t2.id, t3.title, t3.subtitle, t3.excerpt, t3.description, t3.body, t4.name AS type
+        $sql = "SELECT $fields
         FROM groups_items_relationships t1
             JOIN $item_table t2
                 ON t1.item_id=t2.id
@@ -43,9 +60,9 @@ trait ItemRelationships
                 AND t3.item_name=:item_name
             JOIN types t4
                 ON t2.type_id=t4.id
-            WHERE t1.group_name=:group_name
-                AND t1.group_id=:group_id
-            ORDER BY t1.order";
+        WHERE t1.group_name=:group_name
+            AND t1.group_id=:group_id
+        ORDER BY t1.order";
         $resultado = $this->db->run($sql, $bind);
         return $resultado;
     }

@@ -50,15 +50,18 @@ class Config extends Model
      * CRUD
      */
 
-    public function (Record $record) {
-        $sql = "";
-        $resultado = $this->db->run($sql);
+    public function insert(Record $record) {
+        if (!$record->has('activity')) {
+            $record->set('activity', 2);
+        }
+        $sql = "INSERT INTO config (key, value, activity, created, modified) VALUES (:key, :value, :activity, NOW(), NOW())";
+        $resultado = $this->db->run($sql, $record->toArray());
         return $resultado;
     }
 
     public function update(Record $record) {
-        $sql = "";
-        $resultado = $this->db->run($sql);
+        $sql = "UPDATE config SET value=:value, modified=NOW() WHERE key=:key";
+        $resultado = $this->db->run($sql, $record->toArray());
         return $resultado;
     }
 

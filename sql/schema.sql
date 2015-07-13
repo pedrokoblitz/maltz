@@ -32,10 +32,6 @@ CREATE TABLE `types` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
-SELECT id, item_name, name FROM types WHERE item_name="content";
-SELECT id, item_name, name FROM types WHERE item_name="resource";
-SELECT id, item_name, name FROM types WHERE item_name="term";
-SELECT id, item_name, name FROM types WHERE item_name="collection";
 
 --
 -- Table structure for table `config`
@@ -54,8 +50,8 @@ CREATE TABLE `config` (
   `key` varchar(60) COLLATE utf8_unicode_ci DEFAULT NULL,
   `value` BLOB,
   `activity` tinyint(1) unsigned NOT NULL DEFAULT 1,
-  `modified` datetime NOT NULL,
   `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE(`key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -78,6 +74,7 @@ CREATE TABLE `log` (
   `item_name` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
   `item_id` int(10) unsigned DEFAULT NULL,
   `created` datetime NOT NULL,
+  `used` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -96,10 +93,9 @@ CREATE TABLE `translations` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned NOT NULL,
   `language` varchar(5) COLLATE utf8_unicode_ci DEFAULT "pt-br",
-  `item_name` enum('content', 'resource', 'collection', 'term', 'block', 'type') COLLATE utf8_unicode_ci DEFAULT NULL,
+  `item_name` enum('content', 'resource', 'collection', 'term', 'block', 'type') COLLATE utf8_unicode_ci NOT NULL,
   `item_id` int(10) unsigned NOT NULL,
-  `slug` varchar(120) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `name` varchar(120) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `slug` varchar(120) COLLATE utf8_unicode_ci NOT NULL,
   `title` varchar(120) COLLATE utf8_unicode_ci DEFAULT NULL,
   `subtitle` varchar(120) COLLATE utf8_unicode_ci DEFAULT NULL,
   `excerpt` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -142,8 +138,8 @@ CREATE TABLE `users` (
   `province` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
   `password` varchar(10) COLLATE utf8_unicode_ci DEFAULT NULL,
   `activity` tinyint(1) unsigned NOT NULL DEFAULT 1,
-  `modified` datetime NOT NULL,
   `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE(`email`),
   UNIQUE(`cpf`),
@@ -234,8 +230,8 @@ CREATE TABLE `collections` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `type_id` int(10) unsigned NOT NULL,
   `activity` tinyint(1) unsigned NOT NULL DEFAULT 1,
-  `modified` datetime NOT NULL,
   `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -371,6 +367,7 @@ CREATE TABLE `resources` (
   `filepath` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
   `filename` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
   `extension` varchar(6) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `embed` tinyblob DEFAULT NULL,
   `activity` tinyint(1) unsigned NOT NULL DEFAULT 1,
   `modified` datetime NOT NULL,
   `created` datetime NOT NULL,

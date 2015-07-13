@@ -44,7 +44,20 @@ class Term extends Model
         $resultado = $this->db->run($sql, array());
     }
 
-    public function list($offset=0, $limit=12, $key='type', $order='asc') {
+    public function display($key='type', $order='asc') {
+        $sql = "SELECT t1.id AS id, t1.parent_id AS parent_id, t1.name AS name, t1.value AS value, t3.name AS type 
+        FROM terms t1 
+            JOIN translations t2
+                ON t1.id=t2.item_id
+                AND t2.item_name=:item_name
+            JOIN types t3 
+                ON t1.type_id=t3.id 
+            ORDER BY $key $order";
+        $resultado = $this->db->run($sql, array('item_name' => $item_name));
+        return $resultado;
+    }
+
+    public function list($offset=0, $limit=12, $key='type', $order='desc') {
         $sql = "SELECT t1.id AS id, t1.parent_id AS parent_id, t1.name AS name, t1.value AS value, t3.name AS type 
         FROM terms t1 
             JOIN translations t2
@@ -54,11 +67,11 @@ class Term extends Model
                 ON t1.type_id=t3.id 
             ORDER BY $key $order
             LIMIT :offset,:limit";
-        $resultado = $this->db->run($sql, array('offset' => $offset, 'limit' => $limit));
+        $resultado = $this->db->run($sql, array('item_name' => $item_name, 'offset' => $offset, 'limit' => $limit));
         return $resultado;
     }
 
-    public function listByType(type, $offset=0, $limit=12, $key='type', $order='asc') {
+    public function listByType(type, $offset=0, $limit=12, $key='name', $order='asc') {
         $sql = "SELECT t1.id AS id, t1.parent_id AS parent_id, t1.name AS name, t1.value AS value, t3.name AS type 
         FROM terms t1 
             JOIN translations t2
