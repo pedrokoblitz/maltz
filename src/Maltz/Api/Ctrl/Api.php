@@ -59,22 +59,60 @@ class Api {
             $app->response->setBody($data->toJson());
             $app->stop();
         })->name('list')->conditions(array('id' => '\d+'));
-    }
 
         /*
          *
          */
         $app->get('/api/:model/:id/show', function ($model, $id) use ($app) {
-
-            if (!$app->porteiro->loggedIn()) {
-                $app->redirect($app->urlFor('admin_login'));
+            switch ($model) {
+                case 'content':
+                    $entity = new Content($app->db);
+                    break;
+                case 'collection':
+                    $entity = new Collection($app->db);
+                    break;
+                case 'resource':
+                    $entity = new Resource($app->db);
+                    break;
+                case 'term':
+                    $entity = new Term($app->db);
+                    break;
             }
 
             $data = $entity->show($id);
 
             $app->response->headers->set('Content-Type', 'application/json');
             $app->response->setStatus(200);
-            $app->response->setBody($body);
+            $app->response->setBody($data->toJson());
+            $app->stop();
+        })->name('show')->conditions(array('id' => '\d+'));
+
+        /*
+         *
+         */
+        $app->post('/api/:model/save', function ($model) use ($app) {
+
+            if (!$app->porteiro->loggedIn()) {
+                $app->redirect($app->urlFor('admin_login'));
+            }
+
+            switch ($model) {
+                case 'content':
+                    $entity = new Content($app->db);
+                    break;
+                case 'collection':
+                    $entity = new Collection($app->db);
+                    break;
+                case 'resource':
+                    $entity = new Resource($app->db);
+                    break;
+                case 'term':
+                    $entity = new Term($app->db);
+                    break;
+            }
+
+            $record = new Record($app->request->post());
+            $entity->save($record);
             $app->stop();
         })->name('show')->conditions(array('id' => '\d+'));
     }
