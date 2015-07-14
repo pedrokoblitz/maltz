@@ -56,7 +56,9 @@ class DB extends \PDO
         }
 
         foreach ($bind as $key => $val) {
-            $bind[$key] = stripslashes($val);
+            if (!is_array($val)) {
+                $bind[$key] = stripslashes($val);
+            }
         }
 
         return $bind;
@@ -77,19 +79,11 @@ class DB extends \PDO
             $pdostmt = $this->prepare($this->sql);
             if ($pdostmt->execute($this->bind) !== false) {
 
-                if (preg_match("/^(found_rows)/i", $this->sql)) {
-                    $data = $pdostmt->fetch(\PDO::FETCH_COLUMN);
-                    return new Result('count' => $data, 'success' => true, 'message' => DbMessage::COUNTED);
-
-                } elseif (preg_match("/^(count)/i", $this->sql)) {
-                    $data = $pdostmt->fetchAll(\PDO::FETCH_ASSOC);
-                    return new Result(array('count' => $data['COUNT(id)'], 'success' => true, 'message' => DbMessage::COUNTED));
-                
-                } elseif (preg_match("/^(select)/i", $this->sql)) {
+                if (preg_match("/^(select)/i", $this->sql)) {
                     $data = $pdostmt->fetchAll(\PDO::FETCH_ASSOC);
                     
                     if (empty($data)) {
-                        return new Result('success' => false, 'message' => DbMessage::NOT_FOUND);
+                        return new Result(array('success' => false, 'message' => DbMessage::NOT_FOUND));
                     }
 
                     $results = array();
@@ -98,22 +92,29 @@ class DB extends \PDO
                     }
                     return new Result(array('records' => $results, 'success' => true, 'message' => DbMessage::SELECTED));
 
+                } elseif (preg_match("/^(select found_rows)/i", $this->sql)) {
+                    $data = $pdostmt->fetch(\PDO::FETCH_COLUMN);
+                    return new Result(array('count' => $data, 'success' => true, 'message' => DbMessage::COUNTED));
+
+                } elseif (preg_match("/^(count)/i", $this->sql)) {
+                    $data = $pdostmt->fetch(\PDO::FETCH_COLUMN);
+                    return new Result(array('count' => $data, 'success' => true, 'message' => DbMessage::COUNTED));
+                
                 } elseif (preg_match("/^(insert)/i", $this->sql)) {
                     $last = \PDO::lastInsertId();
                     return new Result(array('last_insert_id' => $last, 'success' => true, 'message' => DbMessage::INSERTED));
                 
                 } elseif (preg_match("/^(update)/i", $this->sql)) {
                     return new Result(array('success' => true, 'message' => DbMessage::UPDATED));
-                }
                 
                 } elseif (preg_match("/^(delete)/i", $this->sql)) {
                     return new Result(array('success' => true, 'message' => DbMessage::DELETED));
                 }
             }
-            return false;
+            return new Result(array('success' => false, 'message' => DbMessage::QUERY_FAIL));
 
         } catch (\PDOException $e) {
-            return new Result('success' => false, 'message' => $e->getMessage());
+            return new Result(array('success' => false, 'message' => $e->getMessage()));
         }
     }
 }

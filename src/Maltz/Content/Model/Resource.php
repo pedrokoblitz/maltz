@@ -1,6 +1,6 @@
 <?php
 
-namespace Maltz\Media\Model;
+namespace Maltz\Content\Model;
 
 use Maltz\Mvc\Model;
 use Maltz\Mvc\Record;
@@ -103,10 +103,9 @@ class Resource extends Model
         return $resultado;
     }
 
-    public function list($page=1, $per_page=12, $key='modified', $order='desc') 
+    public function find($page=1, $per_page=12, $key='modified', $order='desc') 
     {
         $pagination = Pagination::paginate($page, $per_page);
-
         $sql = "SELECT t1.id AS id, t1.url AS url, t1.filepath AS filepath, t1.filename AS filename, t1.extension AS extension, t1.embed AS embed, t1.activity AS activity, t1.created AS created, t1.modified AS modified, t2.title AS title, t2.description AS description, t3.name AS type
         FROM resources t1
             JOIN translations t2
@@ -115,12 +114,12 @@ class Resource extends Model
             JOIN types t3
                 ON t1.type_id=t3.id
         ORDER BY $key $order
-        LIMIT :offset,:limit";
-        $resultado = $this->db->run($sql, array('offset' => $pagination->offset, 'limit' => $pagination->limit, 'item_name' => 'resource'));
+        LIMIT $pagination->offset,$pagination->limit";
+        $resultado = $this->db->run($sql, array('item_name' => 'resource'));
         return $resultado;
     }
 
-    public function listByType($type, $page=1, $per_page=12, $key='title', $order='asc') 
+    public function findByType($type, $page=1, $per_page=12, $key='title', $order='asc') 
     {
         $pagination = Pagination::paginate($page, $per_page);
 
@@ -133,8 +132,8 @@ class Resource extends Model
                 ON t1.type_id=t3.id
             WHERE t3.name=:type
         ORDER BY $key $order
-        LIMIT :offset,:limit";
-        $resultado = $this->db->run($sql, array('type' => $type,'offset' => $pagination->offset, 'limit' => $pagination->limit, 'item_name' => 'resource'));
+        LIMIT $pagination->offset,$pagination->limit";
+        $resultado = $this->db->run($sql, array('type' => $type, 'item_name' => 'resource'));
         return $resultado;
     }
 
@@ -147,7 +146,7 @@ class Resource extends Model
                 AND t2.item_name=:item_name
             JOIN types t3
                 ON t1.type_id=t3.id
-        WHERE id=:id";
+        WHERE t1.id=:id";
         $resultado = $this->db->run($sql, array('item_id' => $id, 'item_name' => 'resource'));
         return $resultado;
     }

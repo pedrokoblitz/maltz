@@ -5,13 +5,47 @@ namespace Maltz\Mvc;
 class Result extends Type
 {
 
+    protected function restoreRecords($items)
+    {
+        foreach ($items['records'] as $key => $value) {
+            $items['records'][$key] = new Record($value);
+        }
+        return $items;
+    }
+
+    protected function getRecordsAsArray()
+    {
+        $result = array();
+        if (isset($this->items['records'])) {
+            foreach ($this->items['records'] as $record) {
+                $result[] = $record->toArray();
+            }
+        }
+        return $result;
+    }
+
+    protected function itemsToArray($items)
+    {
+        $newItems = array();
+        foreach ($items as $value) {
+            if (is_array($value)) {
+                $newItems[] = $this->itemsToArray($value);
+            } elseif ($value instanceof Record) {
+                $newItems[] = $value->toArray();
+            } elseif (is_scalar($value)) {
+                $newItems[] = $value;
+            }
+        }
+        return $newItems;
+    }
+
     /*
      *
      */
     public function fromJson($json)
     {
         $this->dirty = false;
-        $this->items = json_decode($json);
+        $this->items = $this->restoreRecords(json_decode($json));
     }
 
     /*
@@ -27,7 +61,7 @@ class Result extends Type
      */
     public function unserialize($items)
     {
-        $this->items = unserialize($items);
+        $this->items = $this->restoreRecords(unserialize($items));
     }
 
     /*
@@ -40,35 +74,16 @@ class Result extends Type
 
     public function getFirstRecord()
     {
-        return $this->items['records'][0];
+        return isset($this->items['records']) ? $this->items['records'][0] : null;
     }
 
     public function getRecords()
     {
-        return $this->items['records'];
-    }
-
-    public function getRecordsAsArray()
-    {
-        $result = array();
-        foreach ($this->items['records'] as $record) {
-            $result[] = $record->toArray();
-        }
-        return $result;
+        return isset($this->items['records']) ? $this->items['records'] : null;
     }
 
     public function toArray()
     {
-        $newItems = array();
-        foreach ($this->items as $value) {
-            if (is_array($value)) {
-                $newItems[] = $this->recordsToArray($value);
-            } elseif (instanceof Record) {
-                $newItems[] = $value->toArray();
-            } elseif (is_scalar($value)) {
-                $newItems[] = $value;
-            }
-        }
-        return $newItems;
+        return $this->itemsToArray($this->items);
     }
 }

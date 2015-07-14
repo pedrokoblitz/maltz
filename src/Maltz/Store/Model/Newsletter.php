@@ -11,7 +11,7 @@ class Newsletter {
         $this->postman = $postman;
     }
 
-    public function listRecipientes() {
+    public function findRecipientes() {
         $sql = "SELECT email,name FROM customers;";
         $this->recipients = $this->db->run($sql);
     }

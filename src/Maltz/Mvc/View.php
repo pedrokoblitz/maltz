@@ -37,21 +37,15 @@ class View
 {
     // PROPRIEDADES
     protected $path;
-    protected $layout;
-    protected $view;
     protected $styleSheets = array();
     protected $conditionalStyleSheets = array();
     protected $javaScripts = array();
-    protected $data = array();
     protected $filters = array();
 
 
-    public function __construct(Result $result)
+    public function __construct($path)
     {
-        $this->path = $this->result->get('templates.path');
-        $this->layout = $this->result->get('layout');
-        $this->view = $this->result->get('view');
-        $this->data = $this->result->get('records');
+        $this->path = $path;
 
         $styleSheets = array(
             'bootstrap' => '',
@@ -113,6 +107,11 @@ class View
         return $string;
     }
 
+    public function setData()
+    {
+        return false;
+    }
+
     /*
     * passa os data template html usando metodos do limonade-php
     * junta data com template e layout
@@ -122,65 +121,34 @@ class View
     *
     * return string
     */
-    public function render()
+    public function render($view, $layout = '', $data = array())
     {
         $styles = $this->renderStyleSheets();
         $scripts = $this->renderJavaScripts();
 
-        if ($layout != '') {
-            $this->layout = $layout;
-        }
-
-        if ($view != '') {
-            $this->view = $view;
-        }
-
-        // condicao de teste
-        if (!is_array($this->data)) {
-            $this->data = array($this->data);
-        }
-
-        $path = $this->path;
-
-        if (is_array($this->data) && is_array($data)) {
-            $data = array_merge($data, $this->data);
-        } elseif (is_array($this->data)) {
-            $data = $this->data;
-        } else {
-            $data = array();
-        }
-
-        if (!isset($this->layout) || empty($this->layout)) {
+        if ($layout === '') {
             ob_start();
-            include $this->path . '/' . $this->view;
+            if (is_array($data)) {
+                extract($data);
+            }
+            include $this->path . '/' . $view;
             $body = ob_get_clean();
 
         } else {
             ob_start();
-            include $this->path . '/' . $this->view;
+            if (is_array($data)) {
+                extract($data);
+            }
+            include $this->path . '/' . $view;
             $content = ob_get_clean();
 
             ob_start();
-            include $this->path . '/' . $this->layout;
+            include $this->path . '/' . $layout;
             $body = ob_get_clean();
         }
         
         return $body;
     }
-
-    /*
-    *
-    * transforma data em JSON
-    *
-    * @param
-    *
-    * return string
-    */
-    public function renderJSON($data)
-    {
-        $this->e(json_encode($data));
-    }
-
 
     /*
     * insere block no template

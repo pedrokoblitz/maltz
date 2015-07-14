@@ -6,6 +6,7 @@ use Maltz\Http\CookieJar;
 use Maltz\Http\Session;
 use Maltz\Http\Nonce;
 use Maltz\Mvc\DB;
+use Maltz\Mvc\View;
 use Maltz\Sys\Model\Config;
 use Maltz\Sys\Model\Term;
 use Maltz\Service\Postman;
@@ -65,7 +66,7 @@ class Maltz
         //db
         $app->container->singleton('db', function () {
             //return new DB('mysql:dbname=db169616_cms;host=internal-db.s169616.gridserver.com', 'db169616', 'morte666');
-            return new DB('mysql:dbname=maltz;host=localhost', 'root', 'root');
+            return new DB('mysql:dbname=maltz-novo;host=localhost', 'root', 'root');
         });
 
         $app->session = function () {
@@ -82,14 +83,14 @@ class Maltz
 
         $app->httpHandler = function () {
             return new HttpHandler($app);
-        }
+        };
 
         $app->porteiro = function () use ($app) {
             return new Doorman($app->db, $app->session, $app->cookie);
         };
 
-        $app->container->singleton('view', function () {
-            return new View($app->container['settings']);
+        $app->container->singleton('view', function () use ($app) {
+            return new View($app->container['settings']['templates.path']);
         });
 
         $app->hook('slim.before', function () use ($app) {
@@ -129,9 +130,27 @@ class Maltz
         };
 
         $config = Config::query($app->db, 'display');
-        foreach ($config->getRecords() as $key => $value) {
-            $app->config($key, $value);
+        if ($config->has('records')) {
+            foreach ($config->getRecords() as $key => $value) {
+                $app->config($key, $value);
+            }
         }
+
+        $app->configureMode('production', function () use ($app) {
+            $app->config(array(
+                'log.enable' => true,
+                'debug' => false
+            ));
+        });
+
+        $app->configureMode('development', function () use ($app) {
+            $app->config(array(
+                'log.enable' => true,
+                'debug' => true,
+                'per_page' => 12
+            ));
+            $app->session->set('user.id', 1);
+        });
 
         $controllers = array(
             'Maltz\Api\Ctrl\Api',

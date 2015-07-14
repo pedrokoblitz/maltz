@@ -1,6 +1,6 @@
 <?php
 
-namespace Maltz\Content\Model;
+namespace Maltz\Mvc;
 
 trait ItemRelationships
 {
@@ -31,19 +31,19 @@ trait ItemRelationships
 
     public function getAll($id, $item_name)
     {
-        $fields = 't2.id AS id, '
+        $fields = 't2.id AS id, ';
         switch ($item_name) {
             case 'content':
-                $fields .= '';
+                $fields .= 't3.title AS title, t3.description AS description ';
                 break;
             case 'collection':
-                $fields .= '';
+                $fields .= 't3.title AS title, t3.description AS description ';
                 break;
             case 'resource':
-                $fields .= '';
+                $fields .= 't2.filename AS filename, t2.filepath AS filepath, t2.url AS url, t2.embed AS embed, t3.title AS title, t3.description AS description ';
                 break;
             case 'term':
-                $fields .= '';
+                $fields .= 't3.title AS title, t3.description AS description ';
                 break;
         }
         $fields .= 't3.title AS title, t3.subtitle AS subtitle, t3.excerpt AS excerpt, t3.description AS description, t3.body AS body, t4.name AS type';

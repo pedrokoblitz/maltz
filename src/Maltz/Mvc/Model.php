@@ -37,23 +37,19 @@ abstract class Model
     /*
 	 *
 	 */
-    public function __construct($db, $slug, $table, $fk = null)
+    public function __construct($db, $slug, $table)
     {
-        if (!$fk && $id === 'id') {
-            $fk = $slug . '_' . $id;
-        }
-        $this->slug = $slug;
         $this->db = $db;
         $this->table = $table;
-        $this->fk = $fk;
+        $this->slug = $slug;
     }
 
     /*
 	 *
 	 */
-    protected function __get($key)
+    public function __get($key)
     {
-        return is_string($key) && isset($this->$key) && in_array($key, array('slug', 'table', 'fk')) ? $this->$key : null;
+        return is_string($key) && isset($this->$key) && in_array($key, array('slug', 'table')) ? $this->$key : null;
     }
 
     public function save(Record $record)
@@ -70,12 +66,17 @@ abstract class Model
     public static function query()
     {
         $args = func_get_args();
-        $model = new static($args[0]);
-        $params = $args;
-        unset($params[0]);
-        unset($params[1]);
-        $result = call_user_method_array($args[1], $model, array_values($params));
-        $result->set('slug', $this->slug);
-        return $result;
+        $db = $args[0];
+        $method = $args[1];
+        unset($args[0]);
+        unset($args[1]);
+        $params = array_values($args);
+        $model = new static($db);
+        if (method_exists($model, $method)) {
+            $call = array($model, $method);
+            $result = call_user_func_array($call, $params);
+            return $result;
+        }
+        return new Result(array('message' => 'Such method does not exists.'));
     }
 }

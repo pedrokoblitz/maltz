@@ -87,7 +87,7 @@ class Product extends Model
      * return void ou bool
      */
 
-    public function listWithPhotos($pp, $page)
+    public function findWithPhotos($pp, $page)
     {
         
         $registros = $this->count();

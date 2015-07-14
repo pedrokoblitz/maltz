@@ -1,51 +1,50 @@
 <?php 
 
-namespace Maltz\Mvc\Model;
+namespace Maltz\Mvc;
 
 trait Activity
 {
-    const TRASH = 0;
-    const INACTIVE = 1;
-    const ACTIVE = 2;
-    const DRAFT = 3;
-    const PENDING = 4;
-    const PUBLISHED = 5;
 
-    protected $setActivityQuery = "UPDATE $this->table SET activity=:activity WHERE id=:id";
-    protected $getActivityQuery = "SELECT activity FROM $this->table WHERE id=:id";
 
     public function delete($id)
     {
-        return $this->db->run($setActivityQuery, array('activity' => self::TRASH, 'id' => $id));
+        $setActivityQuery = "UPDATE $this->table SET activity=:activity WHERE id=:id";
+        return $this->db->run($setActivityQuery, array('activity' => 0, 'id' => $id));
     }
 
     public function deactivate($id)
     {
-        return $this->db->run($setActivityQuery, array('activity' => self::INACTIVE, 'id' => $id));
+        $setActivityQuery = "UPDATE $this->table SET activity=:activity WHERE id=:id";
+        return $this->db->run($setActivityQuery, array('activity' => 1, 'id' => $id));
     }
 
     public function activate($id)
     {
-        return $this->db->run($setActivityQuery, array('activity' => self::ACTIVE, 'id' => $id));
+        $setActivityQuery = "UPDATE $this->table SET activity=:activity WHERE id=:id";
+        return $this->db->run($setActivityQuery, array('activity' => 2, 'id' => $id));
     }
 
     public function setAsDraft($id)
     {
-        return $this->db->run($setActivityQuery, array('activity' => self::DRAFT, 'id' => $id));
+        $setActivityQuery = "UPDATE $this->table SET activity=:activity WHERE id=:id";
+        return $this->db->run($setActivityQuery, array('activity' => 3, 'id' => $id));
     }
 
     public function setAsPending($id)
     {
-        return $this->db->run($setActivityQuery, array('activity' => self::PENDING, 'id' => $id));
+        $setActivityQuery = "UPDATE $this->table SET activity=:activity WHERE id=:id";
+        return $this->db->run($setActivityQuery, array('activity' => 4, 'id' => $id));
     }
 
     public function pulish($id)
     {
-        return $this->db->run($setActivityQuery, array('activity' => self::PUBLISHED, 'id' => $id));
+        $setActivityQuery = "UPDATE $this->table SET activity=:activity WHERE id=:id";
+        return $this->db->run($setActivityQuery, array('activity' => 5, 'id' => $id));
     }
 
     public function promote($id)
     {
+        $getActivityQuery = "SELECT activity FROM $this->table WHERE id=:id";
         $res = $this->db->run($getActivityQuery, array('id' => $id));
         $activity = $res->getFirstRecord()->get('activity');
         $activity++;
@@ -54,6 +53,7 @@ trait Activity
 
     public function demote($id)
     {
+        $getActivityQuery = "SELECT activity FROM $this->table WHERE id=:id";
         $res = $this->db->run($getActivityQuery, array('id' => $id));
         $activity = $res->getFirstRecord()->get('activity');
         if ($activity > 0) {
@@ -64,6 +64,7 @@ trait Activity
 
     public function getActivity($id)
     {
+        $getActivityQuery = "SELECT activity FROM $this->table WHERE id=:id";
         return $this->db->run($getActivityQuery, array('id' => $id));
     }
 }

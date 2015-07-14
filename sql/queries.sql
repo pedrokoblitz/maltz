@@ -1,3 +1,122 @@
+SELECT id, name, type, date_pub, url, filepath, filename, extension, slug, title, subtitle, excerpt, description, body, activity, created, modified FROM
+  (
+    (
+      SELECT 
+        t1.id AS id,
+        "content" AS name,
+        t3.name AS type,
+        t1.date_pub AS date_pub,
+        null AS url,
+        null AS filepath,
+        null AS filename,
+        null AS extension,
+        t2.slug AS slug,
+        t2.title AS title,
+        t2.subtitle AS subtitle,
+        t2.excerpt AS excerpt,
+        t2.description AS description,
+        t2.body AS body,
+        t1.activity AS activity,
+        t1.created AS created,
+        t1.modified AS modified
+      FROM contents t1
+      JOIN translations t2 
+        ON t1.id=t2.item_id
+        AND t2.item_name="content"
+      JOIN types t3 
+        ON t1.type_id=t3.id
+      LIMIT 0,10
+    )
+    UNION
+    (
+      SELECT 
+        t1.id AS id, 
+        "resource" AS name,
+        t3.name AS type,
+        null AS date_pub,
+        t1.url AS url,
+        t1.filepath AS filepath,
+        t1.filename AS filename,
+        t1.extension AS extension,
+        t2.slug AS slug,
+        t2.title AS title,
+        t2.subtitle AS subtitle,
+        t2.excerpt AS excerpt,
+        t2.description AS description,
+        t2.body AS body,
+        t1.activity AS activity,
+        t1.created AS created,
+        t1.modified AS modified
+      FROM resources t1
+      JOIN translations t2 
+        ON t1.id=t2.item_id
+        AND t2.item_name="resource"
+      JOIN types t3 
+        ON t1.type_id=t3.id
+      LIMIT 0,10
+    )
+    UNION
+    (
+      SELECT 
+        t1.id AS id,
+        "collection" AS name,
+        t3.name AS type,
+        null AS date_pub,
+        null AS url,
+        null AS filepath,
+        null AS filename,
+        null AS extension,
+        t2.slug AS slug,
+        t2.title AS title,
+        t2.subtitle AS subtitle,
+        t2.excerpt AS excerpt,
+        t2.description AS description,
+        t2.body AS body,
+        t1.activity AS activity,
+        t1.created AS created,
+        t1.modified AS modified
+      FROM collections t1
+      JOIN translations t2 
+        ON t1.id=t2.item_id
+        AND t2.item_name="collection"
+      JOIN types t3 
+        ON t1.type_id=t3.id
+      LIMIT 0,10
+    )
+    UNION
+    (
+      SELECT 
+        t1.id AS id,
+        "term" AS name,
+        t3.name AS type,
+        null AS date_pub,
+        null AS url,
+        null AS filepath,
+        null AS filename,
+        null AS extension,
+        t2.slug AS slug,
+        t2.title AS title,
+        t2.subtitle AS subtitle,
+        t2.excerpt AS excerpt,
+        t2.description AS description,
+        t2.body AS body,
+        t1.activity AS activity,
+        null AS created,
+        null AS modified
+      FROM terms t1
+      JOIN translations t2 
+        ON t1.id=t2.item_id
+        AND t2.item_name="term"
+      JOIN types t3 
+        ON t1.type_id=t3.id
+      LIMIT 0,10
+    )
+  ) master
+ORDER BY master.type ASC, master.activity DESC, master.modified DESC;
+
+
+
+
 
 SELECT id, item_name, name FROM types WHERE item_name="content";
 SELECT id, item_name, name FROM types WHERE item_name="resource";

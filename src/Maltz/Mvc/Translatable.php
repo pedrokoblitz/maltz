@@ -1,6 +1,8 @@
 <?php
 
-trait Translateable
+namespace Maltz\Mvc;
+
+trait Translatable
 {
     public function getTranslations($item_id)
     {
@@ -44,7 +46,7 @@ trait Translateable
         while ($this->checkSlug($slug)) {
             $c = (string) $i;
             $slug = $string . '-' . $c;
-            $i++
+            $i++;
         }
         return $slug;
     }

@@ -1,12 +1,12 @@
 <?php
 
-namespace Maltz\Media\Model;
+namespace Maltz\Content\Model;
 
 use Maltz\Mvc\Model;
 use Maltz\Mvc\Record;
 use Maltz\Mvc\Activity;
-use Maltz\Mvc\Translateable;
-use Maltz\Content\ItemRelationships;
+use Maltz\Mvc\Translatable;
+use Maltz\Mvc\ItemRelationships;
 use Maltz\Mvc\Hierarchy;
 use Maltz\Service\Pagination;
 
@@ -39,9 +39,9 @@ use Maltz\Service\Pagination;
 class Collection extends Model
 {
     use Activity;
-    use Translateable;
+    use Translatable;
     use ItemRelationships;
-    use Hierarchy;
+    //use Hierarchy;
         
     /*
      * construtor
@@ -98,7 +98,7 @@ class Collection extends Model
         return $resultado;
     }
 
-    public function list($page=1, $per_page=12, $key='modified', $order='desc') 
+    public function find($page=1, $per_page=12, $key='modified', $order='desc') 
     {
         $pagination = Pagination::paginate($page, $per_page);
 
@@ -110,12 +110,12 @@ class Collection extends Model
             JOIN types t3
                 ON t1.type_id=t3.id
             ORDER BY $key $order
-            LIMIT :offset,:limit";
-        $resultado = $this->db->run($sql, array('item_name' => 'collection', 'offset' => $pagination->offset, 'limit' => $pagination->limit));
+            LIMIT $pagination->offset,$pagination->limit";
+        $resultado = $this->db->run($sql, array('item_name' => 'collection', ));
         return $resultado;
     }
 
-    public function listByType($type, $page=1, $per_page=12, $key='modified', $order='desc') 
+    public function findByType($type, $page=1, $per_page=12, $key='modified', $order='desc') 
     {
         $pagination = Pagination::paginate($page, $per_page);
 
@@ -128,8 +128,8 @@ class Collection extends Model
                 ON t1.type_id=t3.id
             WHERE t3.name=:type
             ORDER BY $key $order
-            LIMIT :offset,:limit";
-        $resultado = $this->db->run($sql, array('item_name' => 'collection', 'offset' => $pagination->offset, 'limit' => $pagination->limit));
+            LIMIT $pagination->offset,$pagination->limit";
+        $resultado = $this->db->run($sql, array('item_name' => 'collection', 'type' => $type));
         return $resultado;
     }
 
@@ -142,7 +142,7 @@ class Collection extends Model
                 AND t2.item_name=:item_name
             JOIN types t3
                 ON t1.type_id=t3.id
-            WHERE id=:id";
+            WHERE t1.id=:id";
         $resultado = $this->db->run($sql, array('item_name' => 'collection', 'id' => $id));
         return $resultado;
     }

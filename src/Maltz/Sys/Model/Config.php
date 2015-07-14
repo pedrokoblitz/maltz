@@ -76,12 +76,12 @@ class Config extends Model
         return $resultado;
     }
 
-    public function list($page=1, $per_page=12, $key='key', $order='asc') 
+    public function find($page=1, $per_page=12, $key='key', $order='asc') 
     {
         $pagination = Pagination::paginate($page, $per_page);
 
-        $sql = "SELECT id, key, value, activity, modified, created FROM config ORDER BY $key $order LIMIT :offset,:limit";
-        $resultado = $this->db->run($sql, array('offset' => $pagination->offset, 'limit' => $pagination->limit));
+        $sql = "SELECT id, key, value, activity, modified, created FROM config ORDER BY $key $order LIMIT $pagination->offset,$pagination->limit";
+        $resultado = $this->db->run($sql, array());
         return $resultado;
     }
 

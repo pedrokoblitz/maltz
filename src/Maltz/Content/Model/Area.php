@@ -76,14 +76,14 @@ class Area extends Model
     }
 
 
-    public function list($page=1, $per_page=12, $key='name', $order='asc') {
+    public function find($page=1, $per_page=12, $key='name', $order='asc') {
         $pagination = Pagination::paginate($page, $per_page);
         
         $sql = "SELECT id, name, activity 
         FROM areas
             ORDER BY $key $order
-            LIMIT :offset,:limit";
-        $resultado = $this->db->run($sql, array('offset' => $pagination->offset, 'limit' => $pagination->limit, 'item_name' => 'area'));
+            LIMIT $pagination->offset,$pagination->limit";
+        $resultado = $this->db->run($sql, array(), 'item_name' => 'area'));
         return $resultado;
     }
 

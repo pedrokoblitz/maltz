@@ -1,6 +1,6 @@
 <?php
 
-namespace Maltz\Media\Model;
+namespace Maltz\Content\Model;
 
 use Maltz\Mvc\Model;
 use Maltz\Mvc\Record;
@@ -23,11 +23,11 @@ class Type extends Model
         return $resultado;
     }
 
-    public function list($page=1, $per_page=12, $key='name', $order='asc') {
+    public function find($page=1, $per_page=12, $key='name', $order='asc') {
         $pagination = Pagination::paginate($page, $per_page);
 
-        $sql = "SELECT id, item_name, name FROM types ORDER By $key $order LIMIT :offset,:limit";
-        $resultado = $this->db->run($sql, array('offset' => $pagination->offset, 'limit' => $pagination->limit));
+        $sql = "SELECT id, item_name, name FROM types ORDER By $key $order LIMIT $pagination->offset,$pagination->limit";
+        $resultado = $this->db->run($sql, array());
         return $resultado;
     }
 

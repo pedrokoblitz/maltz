@@ -111,15 +111,14 @@ class Record extends Type
 
     public function getInsertValueString()
     {
-        $count = count(array_filter($this->items));
-        return '(' . rtrim(str_repeat('?,', $count), ',') . ')';
+        return '(:' . implode(',:', array_filter($this->items)) . ')';
     }
 
     public function getUpdateValueString()
     {
         $str = '';
         foreach (array_filter($this->items) as $key => $value) {
-            $str .= $key . '=:' . $key . ','
+            $str .= $key . '=:' . $key . ',';
         }
         return rtrim($str, ',');
     }

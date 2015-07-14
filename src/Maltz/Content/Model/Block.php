@@ -4,7 +4,7 @@ namespace Maltz\Content\Model;
 
 use Maltz\Mvc\Model;
 use Maltz\Mvc\Record;
-use Maltz\Mvc\Translateable;
+use Maltz\Mvc\Translatable;
 use Maltz\Service\Pagination;
 
 /**
@@ -32,7 +32,7 @@ use Maltz\Service\Pagination;
 
 class Block extends Model
 {
-    use Translateable;
+    use Translatable;
     
     /*
 	 *
@@ -78,7 +78,7 @@ class Block extends Model
         return $resultado;
     }
 
-    public function list($page=1, $per_page=12, $key='title', $order = 'asc') 
+    public function find($page=1, $per_page=12, $key='title', $order = 'asc') 
     {
         $pagination = Pagination::paginate($page, $per_page);
 
@@ -88,8 +88,8 @@ class Block extends Model
                 ON t1.id=t2.item_id
                 AND t2.item_name=:item_name
             ORDER BY $key $order 
-            LIMIT :offset,:limit";
-        $resultado = $this->db->run($sql, array('item_name' => 'block', 'offset' => $pagination->offset, 'limit' => $pagination->limit));
+            LIMIT $pagination->offset,$pagination->limit";
+        $resultado = $this->db->run($sql, array('item_name' => 'block', ));
         return $resultado;
     }
 

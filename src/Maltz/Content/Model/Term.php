@@ -1,18 +1,18 @@
 <?php
 
-namespace Maltz\Media\Model;
+namespace Maltz\Content\Model;
 
 use Maltz\Mvc\Model;
 use Maltz\Mvc\Record;
 use Maltz\Mvc\Activity;
-use Maltz\Mvc\Translateable;
+use Maltz\Mvc\Translatable;
 use Maltz\Service\Pagination;
 use Maltz\Mvc\Hierarchy;
 
 class Term extends Model
 {
     use Activity;
-    use Translateable;
+    use Translatable;
     use Hierarchy;
 
     public function __construct($db)
@@ -62,7 +62,7 @@ class Term extends Model
         return $resultado;
     }
 
-    public function list($page=1, $per_page=12, $key='type', $order='desc') 
+    public function find($page=1, $per_page=12, $key='type', $order='desc') 
     {
         $pagination = Pagination::paginate($page, $per_page);
 
@@ -74,12 +74,12 @@ class Term extends Model
             JOIN types t3 
                 ON t1.type_id=t3.id 
             ORDER BY $key $order
-            LIMIT :offset,:limit";
-        $resultado = $this->db->run($sql, array('item_name' => $item_name, 'offset' => $pagination->offset, 'limit' => $pagination->limit));
+            LIMIT $pagination->offset,$pagination->limit";
+        $resultado = $this->db->run($sql, array('item_name' => $item_name, ));
         return $resultado;
     }
 
-    public function listByType(type, $page=1, $per_page=12, $key='name', $order='asc') 
+    public function findByType(type, $page=1, $per_page=12, $key='name', $order='asc') 
     {
         $pagination = Pagination::paginate($page, $per_page);
 
@@ -92,8 +92,8 @@ class Term extends Model
                 ON t1.type_id=t3.id 
             WHERE t3.name=:type
             ORDER BY $key $order
-            LIMIT :offset,:limit";
-        $resultado = $this->db->run($sql, array('type' => $type, 'offset' => $pagination->offset, 'limit' => $pagination->limit));
+            LIMIT $pagination->offset,$pagination->limit";
+        $resultado = $this->db->run($sql, array('type' => $type, ));
         return $resultado;
     }
 
@@ -101,10 +101,13 @@ class Term extends Model
     {
         $sql = "SELECT t1.id AS id, t1.parent_id AS parent_id, t1.name AS name, t1.value AS value, t2.name AS type 
         FROM terms t1 
-            JOIN types t2 
-                ON t1.type_id=t2.id
-            WHERE id=:id";
-        $resultado = $this->db->run($sql, array($id));
+            JOIN translations t2 
+                ON t1.id=t2.item_id
+                AND t2.item_name=:item_name
+            JOIN types t3 
+                ON t1.type_id=t3.id
+            WHERE t1.id=:id";
+        $resultado = $this->db->run($sql, array('id' => $id, 'item_name' => 'term'));
         return $resultado;
     }
 

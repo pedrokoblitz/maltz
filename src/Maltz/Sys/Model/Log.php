@@ -46,12 +46,12 @@ class Log extends Model
      * CRUD
      */
 
-    public function list($page=1, $per_page=12, $key='created', $order='desc') 
+    public function find($page=1, $per_page=12, $key='created', $order='desc') 
     {
         $pagination = Pagination::paginate($page, $per_page);
 
-        $sql = "SELECT (user_id, action, item_name, item_id, created) FROM log ORDER BY $key $order LIMIT :offset,:limit";
-        $resultado = $this->db->run($sql, array('offset' => $pagination->offset, 'limit' => $pagination->limit));
+        $sql = "SELECT (user_id, action, item_name, item_id, created) FROM log ORDER BY $key $order LIMIT $pagination->offset,$pagination->limit";
+        $resultado = $this->db->run($sql, array());
         return $resultado;
     }
 
@@ -70,8 +70,8 @@ class Log extends Model
             array(
                 'user_id' => $user_id,
                 'action' => $action,
-                'item_name' => $name,
-                'item_id' => $id,
+                'group_name' => $name,
+                'group_id' => $id,
                 )
             );
         $this->insert($record);

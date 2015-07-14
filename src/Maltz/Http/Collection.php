@@ -1,6 +1,7 @@
 <?php
 
-namespace Maltz\Mvc;
+namespace Maltz\Http;
+
 
 /**
  *

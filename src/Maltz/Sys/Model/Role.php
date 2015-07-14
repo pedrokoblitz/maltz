@@ -26,11 +26,11 @@ class Role extends Model
         return $resultado;
     }
 
-    public function list($page=1, $per_page=12, $key='name', $order='asc') {
+    public function find($page=1, $per_page=12, $key='name', $order='asc') {
         $pagination = Pagination::paginate($page, $per_page);
 
-        $sql = "SELECT id, name, activity FROM roles ORDER BY $key $order LIMIT :offset,:limit";
-        $resultado = $this->db->run($sql, array('offset' => $pagination->offset, 'limit' => $pagination->limit));
+        $sql = "SELECT id, name, activity FROM roles ORDER BY $key $order LIMIT $pagination->offset,$pagination->limit";
+        $resultado = $this->db->run($sql, array());
         return $resultado;
     }
 

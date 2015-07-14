@@ -9,9 +9,10 @@ INSERT INTO types (item_name, name) VALUES
 ("resource", "link"), 
 ("resource", "file"), 
 ("term", "section"), 
+("term", "vote"), 
 ("term", "tag");
 
-INSERT INTO types (key, value, activity, created, modified) VALUES 
+INSERT INTO config (key, value, activity, created, modified) VALUES 
 ("system_email", "pedrokoblitz@gmail.com", 2, NOW(), NOW()),
 ("per_page", "12", 2, NOW(), NOW()),
 ("upload_dir", "/public/media", 2, NOW(), NOW()),
@@ -34,3 +35,21 @@ INSERT INTO types (key, value, activity, created, modified) VALUES
 ("twitter_profile_url", "http://twitter.com/pedrokoblitz", 2, NOW(), NOW()),
 ("linkedin_profile_url", "http://br.linkedin.com/pedrokoblitz", 2, NOW(), NOW()),
 ("pinterest_profile_url", "http://pinterest.com/pedrokoblitz", 2, NOW(), NOW());
+
+SET @type_id = (SELECT id FROM types WHERE name="album" AND item_name="content");
+INSERT INTO contents (type_id, date_pub, created, modified) 
+VALUES (@type_id, NOW(), NOW(), NOW());
+SET @last_content_id = LAST_INSERT_ID();
+INSERT INTO translations (user_id, language, item_name, item_id, slug, title, subtitle, excerpt, description, body) 
+VALUES (1, 'pt-br', "content", @last_content_id, 'teste-9', 'teste', 'testando', 'testando 123 ', 'testando 123 ', 'testando 123 ');
+INSERT INTO log (user_id, action, item_name, item_id, created)
+VALUES (1, "insert", "content", @last_content_id, NOW());
+
+SET @type_id = (SELECT id FROM types WHERE name="album" AND item_name="collection");
+INSERT INTO collections (type_id, created, modified) 
+VALUES (@type_id, NOW(), NOW());
+SET @last_content_id = LAST_INSERT_ID();
+INSERT INTO translations (user_id, language, item_name, item_id, slug, title, subtitle, excerpt, description, body) 
+VALUES (1, 'pt-br', "collection", @last_content_id, 'teste-9', 'teste', 'testando', 'testando 123 ', 'testando 123 ', 'testando 123 ');
+INSERT INTO log (user_id, action, item_name, item_id, created)
+VALUES (1, "insert", "collection", @last_content_id, NOW());

@@ -58,13 +58,13 @@ class User extends Model
         return $resultado;
     }
 
-    public function list($page=1, $per_page=12, $key='username', $order='asc') 
+    public function find($page=1, $per_page=12, $key='username', $order='asc') 
     {
         $pagination = Pagination::paginate($page, $per_page);
 
         $sql = "SELECT id, username, name, email, cpf, cnpj, cellphone, phone, zipcode, address, address2, district, city, province, password, activity, created
-            FROM users ORDER BY $key $order LIMIT :offset,:limit";
-        $resultado = $this->db->run($sql, array('offset' => $pagination->offset, 'limit' => $pagination->limit));
+            FROM users ORDER BY $key $order LIMIT $pagination->offset,$pagination->limit";
+        $resultado = $this->db->run($sql, array());
         return $resultado;
     }
 

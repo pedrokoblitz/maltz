@@ -5,7 +5,8 @@ namespace Maltz\Content\Model;
 use Maltz\Mvc\Model;
 use Maltz\Mvc\Record;
 use Maltz\Mvc\Activity;
-use Maltz\Mvc\Traslateable;
+use Maltz\Mvc\Hierarchy;
+use Maltz\Mvc\Translatable;
 use Maltz\Mvc\ItemRelationships;
 use Maltz\Service\Pagination;
 
@@ -29,8 +30,9 @@ use Maltz\Service\Pagination;
 class Content extends Model
 {
     use Activity;
-    use Traslateable;
+    use Translatable;
     use ItemRelationships;
+    //use Hierarchy;
     
     /*
 	 * construtor
@@ -84,12 +86,12 @@ class Content extends Model
                 AND t2.item_name=:item_name
             JOIN types t3
                 ON t1.type_id=t3.id
-            WHERE t.1=:id";
-        $resultado = $this->db->run($sql);
+            WHERE t1.id=:id";
+        $resultado = $this->db->run($sql, array('id' => $id, 'item_name' => 'content'));
         return $resultado;
     }
 
-    public function list($page=1, $per_page=12, $key='modified', $order='asc') 
+    public function find($page=1, $per_page=12, $key='modified', $order='asc') 
     {
         $pagination = Pagination::paginate($page, $per_page);
 
@@ -101,12 +103,12 @@ class Content extends Model
             JOIN types t3
                 ON t1.type_id=t3.id
             ORDER BY $key $order
-            LIMIT :offset,:limit";
-        $resultado = $this->db->run($sql, array('offset' => $pagination->offset, 'limit' => $pagination->limit));
+            LIMIT $pagination->offset,$pagination->limit";
+        $resultado = $this->db->run($sql, array('item_name' => 'content'));
         return $resultado;
     }
 
-    public function listByType($type, $page=1, $per_page=12, $key='modified', $order='asc') 
+    public function findByType($type, $page=1, $per_page=12, $key='modified', $order='asc') 
     {
         $pagination = Pagination::paginate($page, $per_page);
 
@@ -119,8 +121,8 @@ class Content extends Model
                 ON t1.type_id=t3.id
             WHERE t3.name=:type
             ORDER BY $key $order
-            LIMIT :offset,:limit";
-        $resultado = $this->db->run($sql, array('type' => $type, 'item_name' => 'content', 'offset' => $pagination->offset, 'limit' => $pagination->limit));
+            LIMIT $pagination->offset,$pagination->limit";
+        $resultado = $this->db->run($sql, array('type' => $type, 'item_name' => 'content'));
         return $resultado;
     }
 }
