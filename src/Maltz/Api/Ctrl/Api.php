@@ -24,8 +24,6 @@ class Api {
         
         $app->get('/api/:model/:type(/:pg(/:key(/:order)))', function ($model, $type, $pg = 1, $key = 'created', $order = 'asc') use ($app) {
             
-            //$app->getLog()->write('', \Slim\Log::DEBUG);
-
             switch ($model) {
                 case 'content':
                     $entity = new Content($app->db);
@@ -42,8 +40,8 @@ class Api {
             }
 
             $app->response->headers->set('Content-Type', 'application/json');
-            $per_page = $app->config('per_page');
-            $result = $entity->findByType($type, $pg, $per_page, $key, $order);
+
+            $result = $entity->findByType($type, $pg, $app->config('per_page'), $key, $order);
 
             if ($result->get('success')) {
                 $app->response->setStatus(200);

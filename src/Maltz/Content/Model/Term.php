@@ -58,7 +58,7 @@ class Term extends Model
         return $resultado;
     }
 
-    public function display($key='type', $order='asc') 
+    public function display($key='type', $order='asc', $lang='pt-br') 
     {
         $sql = "SELECT t1.id AS id, t1.parent_id AS parent_id, t1.name AS name, t1.value AS value, t3.name AS type 
         FROM terms t1 
@@ -67,12 +67,14 @@ class Term extends Model
                 AND t2.item_name=:item_name
             JOIN types t3 
                 ON t1.type_id=t3.id 
+            WHERE t1.activity > 0
+            AND t2.language=:lang
             ORDER BY $key $order";
-        $resultado = $this->db->run($sql, array('item_name' => $item_name));
+        $resultado = $this->db->run($sql, array('item_name' => $item_name, 'lang' => $lang));
         return $resultado;
     }
 
-    public function find($page=1, $per_page=12, $key='type', $order='desc') 
+    public function find($page=1, $per_page=12, $key='type', $order='desc', $lang='pt-br') 
     {
         $pagination = Pagination::paginate($page, $per_page);
 
@@ -83,13 +85,15 @@ class Term extends Model
                 AND t2.item_name=:item_name
             JOIN types t3 
                 ON t1.type_id=t3.id 
+            WHERE t1.activity > 0
+            AND t2.language=:lang
             ORDER BY $key $order
             LIMIT $pagination->offset,$pagination->limit";
-        $resultado = $this->db->run($sql, array('item_name' => $item_name, ));
+        $resultado = $this->db->run($sql, array('item_name' => $item_name, 'lang' => $lang));
         return $resultado;
     }
 
-    public function findByType(type, $page=1, $per_page=12, $key='name', $order='asc') 
+    public function findByType(type, $page=1, $per_page=12, $key='name', $order='asc', $lang='pt-br') 
     {
         $pagination = Pagination::paginate($page, $per_page);
 
@@ -101,13 +105,15 @@ class Term extends Model
             JOIN types t3 
                 ON t1.type_id=t3.id 
             WHERE t3.name=:type
+            AND t1.activity > 0
+            AND t2.language=:lang
             ORDER BY $key $order
             LIMIT $pagination->offset,$pagination->limit";
-        $resultado = $this->db->run($sql, array('type' => $type, ));
+        $resultado = $this->db->run($sql, array('type' => $type, 'lang' => $lang));
         return $resultado;
     }
 
-    public function show($id)
+    public function show($id, $lang='pt-br')
     {
         $sql = "SELECT t1.id AS id, t1.parent_id AS parent_id, t1.name AS name, t1.value AS value, t2.name AS type 
         FROM terms t1 
@@ -116,52 +122,10 @@ class Term extends Model
                 AND t2.item_name=:item_name
             JOIN types t3 
                 ON t1.type_id=t3.id
-            WHERE t1.id=:id";
-        $resultado = $this->db->run($sql, array('id' => $id, 'item_name' => 'term'));
-        return $resultado;
-    }
-
-    /*
-     * RELATIONSHIPS
-     */
-
-    public function loadTypes()
-    {
-        $sql = "SELECT id, name FROM types WHERE item_name=:item_name;";
-        $resultado = $this->db->run($sql, array('item_name' => 'term'));
-        return $resultado;
-    }
-
-    public function getByType($type)
-    {
-        $sql = "SELECT t1.id AS id, t1.parent_id AS parent_id, t1.name AS name, t1.value AS value, t2.name AS type 
-        FROM terms t1 
-            JOIN types t2 
-                ON t1.type_id=t2.id 
-            WHERE type=:type";
-        $resultado = $this->db->run($sql, array($type));
-        return $resultado;
-    }
-
-    public function getByName($name)
-    {
-        $sql = "SELECT t1.id AS id, t1.parent_id AS parent_id, t1.name AS name, t1.value AS value, t2.name AS type 
-        FROM terms t1 
-            JOIN types t2 
-                ON t1.type_id=t2.id 
-            WHERE name=:name";
-        $resultado = $this->db->run($sql, array($name));
-        return $resultado;
-    }
-
-    public function getByValue($value)
-    {
-        $sql = "SELECT t1.id AS id, t1.parent_id AS parent_id, t1.name AS name, t1.value AS value, t2.name AS type 
-        FROM terms t1 
-            JOIN types t2 
-                ON t1.type_id=t2.id 
-            WHERE value=:value";
-        $resultado = $this->db->run($sql, array($value));
+            WHERE t1.id=:id
+        AND t2.language=:lang
+        AND t1.activity > 0";
+        $resultado = $this->db->run($sql, array('id' => $id, 'item_name' => 'term', 'lang' => $lang));
         return $resultado;
     }
 }

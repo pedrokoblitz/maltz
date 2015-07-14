@@ -7,13 +7,14 @@ use Maltz\Http\Session;
 use Maltz\Http\SessionDataStore;
 use Maltz\Http\Nonce;
 use Maltz\Mvc\DB;
+use Maltz\Mvc\HttpHandler;
 use Maltz\Mvc\View;
 use Maltz\Sys\Model\Config;
 use Maltz\Sys\Model\Term;
 use Maltz\Service\Postman;
+use Maltz\Service\Doorman;
 use Maltz\Service\Correios;
 use Maltz\Service\Pagination;
-use Maltz\Service\Dorman;
 use Maltz\Service\LogHelper;
 use Slim\Slim;
 
@@ -78,11 +79,11 @@ class Maltz
             return new Nonce($app->session);
         };
 
-        $app->httpHandler = function () {
+        $app->httpHandler = function () use ($app) {
             return new HttpHandler($app);
         };
 
-        $app->porteiro = function () use ($app) {
+        $app->doorman = function () use ($app) {
             return new Doorman($app->db, $app->session, $app->cookie);
         };
 
@@ -98,22 +99,6 @@ class Maltz
 
         });
         
-        $app->auth = function () use ($app) {
-
-            $keys = array(
-                'user.authenticated',
-                'user.level',
-                'user.username',
-                'user.email',
-                'user.name',
-                'token.auth',
-                'token.remember',
-                'token.forgot',
-                'token.signup',
-            );
-            return new SessionCookieAuthHandler($app->session, $app->cookie, $keys);
-        };
-
         $app->container->singleton('db', function () use ($app) {
             return new DB($app->config('db.dsn'), $app->config('db.user'), $app->config('db.pass'));
         });
@@ -130,13 +115,13 @@ class Maltz
             return new Correios();
         };
         
-        $config = Config::query($app->db, 'display');
-        if ($config->has('records')) {
-            foreach ($config->getRecords() as $key => $value) {
-                $app->config($key, $value);
+        $app->lang = function () use ($app) {
+            $get = $app->request->get();
+            if (isset($get['lang'])) {
+                $app->session->set('app.language', $get['lang']);
             }
-        }
-
+        };
+       
         $app->configureMode('production', function () use ($app) {
             $app->config('whoops.editor', 'sublime'); 
             $app->add(new \Zeuxisoo\Whoops\Provider\Slim\WhoopsMiddleware);
@@ -170,6 +155,13 @@ class Maltz
             ));
             $app->session->set('user.id', 1);
         });
+
+        $config = Config::query($app->db, 'display');
+        if ($config->has('records')) {
+            foreach ($config->getRecords() as $key => $value) {
+                $app->config($key, $value);
+            }
+        }
 
         $controllers = array(
             'Maltz\Api\Ctrl\Api',

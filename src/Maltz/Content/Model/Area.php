@@ -75,7 +75,8 @@ class Area extends Model
     public function display($key='name', $order='asc') {
         $sql = "SELECT id, name, activity 
         FROM areas
-            ORDER BY $key $order";
+            ORDER BY $key $order
+            WHERE activity > 0";
         $resultado = $this->db->run($sql);
         return $resultado;
     }
@@ -87,14 +88,16 @@ class Area extends Model
         $sql = "SELECT id, name, activity 
         FROM areas
             ORDER BY $key $order
-            LIMIT $pagination->offset,$pagination->limit";
+            LIMIT $pagination->offset,$pagination->limit
+        WHERE activity > 0";
         $resultado = $this->db->run($sql, array(), 'item_name' => 'area'));
         return $resultado;
     }
 
     public function show($id) {
         $sql = "SELECT id, name, activity FROM areas
-            WHERE t1.id=:id";
+            WHERE id=:id
+                AND activity > 0";
         $resultado = $this->db->run($sql, array('id' => $id));
         return $resultado;
     }
@@ -124,7 +127,8 @@ class Area extends Model
             JOIN translations t2
                 ON t2.item_name=:item_name
                 AND t2.item_id=t1.id
-            WHERE t1.area_id=:area_id";
+            WHERE t1.area_id=:area_id
+                AND t1.activity > 0";
         $resultado = $this->db->run($sql, array('item_name' => 'block', 'area_id' => $area_id));
         return $resultado;
     }

@@ -121,7 +121,7 @@ CREATE TABLE `translations` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned NOT NULL,
   `language` varchar(5) COLLATE utf8_unicode_ci DEFAULT "pt-br",
-  `item_name` enum('content', 'resource', 'collection', 'term', 'block') COLLATE utf8_unicode_ci NOT NULL,
+  `item_name` enum('content', 'resource', 'collection', 'term', 'block','type') COLLATE utf8_unicode_ci NOT NULL,
   `item_id` int(10) unsigned NOT NULL,
   `slug` varchar(120) COLLATE utf8_unicode_ci NOT NULL,
   `title` varchar(120) COLLATE utf8_unicode_ci DEFAULT NULL,

@@ -95,7 +95,7 @@ class Collection extends Model
         return $resultado;
     }
 
-    public function display($key='title', $order='asc') 
+    public function display($key='title', $order='asc', $lang='pt-br') 
     {
         $sql = "SELECT t1.id AS id, t1.activity AS activity, t1.created AS created, t1.modified AS modified, t2.slug AS slug, t2.title AS title, t2.description AS description, t3.name AS type
         FROM collections t1
@@ -104,12 +104,14 @@ class Collection extends Model
                 AND t2.item_name=:item_name
             JOIN types t3
                 ON t1.type_id=t3.id
+            WHERE t1.activity > 0
+            AND t2.language=:lang
             ORDER BY $key $order";
-        $resultado = $this->db->run($sql, array('item_name' => 'collection'));
+        $resultado = $this->db->run($sql, array('item_name' => 'collection', 'lang' => $lang));
         return $resultado;
     }
 
-    public function find($page=1, $per_page=12, $key='modified', $order='desc') 
+    public function find($page=1, $per_page=12, $key='modified', $order='desc', $lang='pt-br') 
     {
         $pagination = Pagination::paginate($page, $per_page);
 
@@ -120,13 +122,15 @@ class Collection extends Model
                 AND t2.item_name=:item_name
             JOIN types t3
                 ON t1.type_id=t3.id
+            WHERE t1.activity > 0
+            AND t2.language=:lang
             ORDER BY $key $order
             LIMIT $pagination->offset,$pagination->limit";
-        $resultado = $this->db->run($sql, array('item_name' => 'collection', ));
+        $resultado = $this->db->run($sql, array('item_name' => 'collection', 'lang' => $lang));
         return $resultado;
     }
 
-    public function findByType($type, $page=1, $per_page=12, $key='modified', $order='desc') 
+    public function findByType($type, $page=1, $per_page=12, $key='modified', $order='desc', $lang='pt-br') 
     {
         $pagination = Pagination::paginate($page, $per_page);
 
@@ -138,13 +142,15 @@ class Collection extends Model
             JOIN types t3
                 ON t1.type_id=t3.id
             WHERE t3.name=:type
+            AND t1.activity > 0
+            AND t2.language=:lang
             ORDER BY $key $order
             LIMIT $pagination->offset,$pagination->limit";
-        $resultado = $this->db->run($sql, array('item_name' => 'collection', 'type' => $type));
+        $resultado = $this->db->run($sql, array('item_name' => 'collection', 'type' => $type, 'lang' => $lang));
         return $resultado;
     }
 
-    public function show($id) 
+    public function show($id, $lang='pt-br') 
     {
         $sql = "SELECT t1.id AS id, t1.activity AS activity, t1.created AS created, t1.modified AS modified, t2.slug AS slug, t2.title AS title, t2.description AS description, t3.name AS type
         FROM collections t1
@@ -153,8 +159,10 @@ class Collection extends Model
                 AND t2.item_name=:item_name
             JOIN types t3
                 ON t1.type_id=t3.id
-            WHERE t1.id=:id";
-        $resultado = $this->db->run($sql, array('item_name' => 'collection', 'id' => $id));
+            WHERE t1.id=:id
+            AND t2.language=:lang
+            AND t1.activity > 0";
+        $resultado = $this->db->run($sql, array('item_name' => 'collection', 'id' => $id, 'lang' => $lang));
         return $resultado;
     }
 }

@@ -74,19 +74,21 @@ class Block extends Model
         return $resultado;
     }
 
-    public function display($key='title', $order = 'asc') 
+    public function display($key='title', $order = 'asc', $lang='pt-br') 
     {
         $sql = "SELECT t1.id, t1.area_id, t2.title, t2.description 
         FROM blocks 
             JOIN translations t2
                 ON t1.id=t2.item_id
                 AND t2.item_name=:item_name
+            WHERE t2.language=:lang
+            AND t1.activity > 0
             ORDER BY $key $order";
-        $resultado = $this->db->run($sql, array('item_name' => 'block'));
+        $resultado = $this->db->run($sql, array('item_name' => 'block', 'lang' => $lang));
         return $resultado;
     }
 
-    public function find($page=1, $per_page=12, $key='title', $order = 'asc') 
+    public function find($page=1, $per_page=12, $key='title', $order = 'asc', $lang='pt-br') 
     {
         $pagination = Pagination::paginate($page, $per_page);
 
@@ -95,21 +97,25 @@ class Block extends Model
             JOIN translations t2
                 ON t1.id=t2.item_id
                 AND t2.item_name=:item_name
+            WHERE t2.language=:lang
+            AND t1.activity > 0
             ORDER BY $key $order 
             LIMIT $pagination->offset,$pagination->limit";
-        $resultado = $this->db->run($sql, array('item_name' => 'block', ));
+        $resultado = $this->db->run($sql, array('item_name' => 'block', 'lang' => $lang));
         return $resultado;
     }
 
-    public function show($id) 
+    public function show($id, $lang='pt-br') 
     {
         $sql = "SELECT t1.id, t1.area_id, t2.title, t2.description 
         FROM blocks t1
             JOIN translations t2
                 ON t1.id=t2.item_id
                 AND t2.item_name=:item_name
-            WHERE id=:id";
-        $resultado = $this->db->run($sql, array('item_name' => 'block', 'id' => $id));
+            WHERE id=:id
+            AND t2.language=:lang
+            AND t1.activity > 0";
+        $resultado = $this->db->run($sql, array('item_name' => 'block', 'id' => $id, 'lang' => $lang));
         return $resultado;
     }
 }

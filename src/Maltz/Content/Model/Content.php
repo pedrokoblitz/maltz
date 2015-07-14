@@ -91,7 +91,7 @@ class Content extends Model
         return $resultado;
     }
 
-    public function show($id) 
+    public function show($id, $lang='pt-br') 
     {
         $sql = "SELECT t1.id AS id, t1.activity AS activity, t1.date_pub AS date_pub, t1.created AS created, t1.modified AS modified, t2.slug AS slug, t2.title AS title, t2.subtitle AS subtitle, t2.excerpt AS excerpt, t2.description AS description, t2.body AS body, t3.name
             FROM contents t1
@@ -100,12 +100,14 @@ class Content extends Model
                 AND t2.item_name=:item_name
             JOIN types t3
                 ON t1.type_id=t3.id
-            WHERE t1.id=:id";
-        $resultado = $this->db->run($sql, array('id' => $id, 'item_name' => 'content'));
+            WHERE t1.id=:id
+            AND t2.language=:lang
+            AND t1.activity > 0";
+        $resultado = $this->db->run($sql, array('id' => $id, 'item_name' => 'content', 'lang' => $lang));
         return $resultado;
     }
 
-    public function find($page=1, $per_page=12, $key='modified', $order='asc') 
+    public function find($page=1, $per_page=12, $key='modified', $order='asc', $lang='pt-br') 
     {
         $pagination = Pagination::paginate($page, $per_page);
 
@@ -116,13 +118,15 @@ class Content extends Model
                 AND t2.item_name=:item_name
             JOIN types t3
                 ON t1.type_id=t3.id
+            WHERE t1.activity > 0
+            AND t2.language=:lang
             ORDER BY $key $order
             LIMIT $pagination->offset,$pagination->limit";
-        $resultado = $this->db->run($sql, array('item_name' => 'content'));
+        $resultado = $this->db->run($sql, array('item_name' => 'content', 'lang' => $lang));
         return $resultado;
     }
 
-    public function findByType($type, $page=1, $per_page=12, $key='modified', $order='asc') 
+    public function findByType($type, $page=1, $per_page=12, $key='modified', $order='asc', $lang='pt-br') 
     {
         $pagination = Pagination::paginate($page, $per_page);
 
@@ -134,9 +138,11 @@ class Content extends Model
             JOIN types t3
                 ON t1.type_id=t3.id
             WHERE t3.name=:type
+            AND t2.language=:lang
+            AND t1.activity > 0
             ORDER BY $key $order
             LIMIT $pagination->offset,$pagination->limit";
-        $resultado = $this->db->run($sql, array('type' => $type, 'item_name' => 'content'));
+        $resultado = $this->db->run($sql, array('type' => $type, 'item_name' => 'content', 'lang' => $lang));
         return $resultado;
     }
 }
