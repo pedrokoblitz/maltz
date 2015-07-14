@@ -45,7 +45,22 @@ class Resource extends Model
 	 */
     public function __construct($db)
     {
-        parent::__construct($db, 'resource', 'resources', 'resource_id');
+        $rules = array(
+            'id' => 'int',
+            'type_id' => 'int',
+            'activity' => 'int',
+            'url' => 'string',
+            'filepath' => 'string',
+            'filename' => 'string',
+            'extension' => 'string',
+            'embed' => 'string',
+            'user_id' => 'int',
+            'slug' => 'slug',
+            'title' => 'string',
+            'description' => 'textarea',
+            'language' => 'string',
+            );
+        parent::__construct($db, 'resource', 'resources', $rules);
     }
 
     /*

@@ -5,7 +5,6 @@ namespace Maltz\Mvc;
 trait Activity
 {
 
-
     public function delete($id)
     {
         $setActivityQuery = "UPDATE $this->table SET activity=:activity WHERE id=:id";

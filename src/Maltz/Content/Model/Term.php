@@ -7,17 +7,27 @@ use Maltz\Mvc\Record;
 use Maltz\Mvc\Activity;
 use Maltz\Mvc\Translatable;
 use Maltz\Service\Pagination;
-use Maltz\Mvc\Hierarchy;
+use Maltz\Mvc\HierarchyTree;
 
 class Term extends Model
 {
     use Activity;
     use Translatable;
-    use Hierarchy;
+    use HierarchyTree;
 
     public function __construct($db)
     {
-        parent::__construct($db, 'term', 'terms', 'term_id');
+        $rules = array(
+            'id' => 'int',
+            'parent_id' => 'int',
+            'type_id' => 'int',
+            'activity' => 'int',
+            'user_id' => 'int',
+            'slug' => 'slug',
+            'title' => 'string',
+            'language' => 'string',
+            );
+        parent::__construct($db, 'term', 'terms', $rules);
     }
 
     /*

@@ -2,7 +2,7 @@
 
 namespace Maltz\Mvc;
 
-class Result extends Type
+class Result extends TypeArray
 {
 
     protected function restoreRecords($items)
@@ -39,34 +39,22 @@ class Result extends Type
         return $newItems;
     }
 
-    /*
-     *
-     */
     public function fromJson($json)
     {
         $this->dirty = false;
         $this->items = $this->restoreRecords(json_decode($json));
     }
 
-    /*
-     *
-     */
     public function toJson()
     {
         return json_encode($this->toArray());
     }
 
-    /*
-     *
-     */
     public function unserialize($items)
     {
         $this->items = $this->restoreRecords(unserialize($items));
     }
 
-    /*
-     *
-     */
     public function serialize()
     {
         return serialize($this->toArray());

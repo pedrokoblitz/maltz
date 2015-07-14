@@ -75,6 +75,7 @@ CREATE TABLE `config` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `key` varchar(60) COLLATE utf8_unicode_ci DEFAULT NULL,
   `value` BLOB,
+  `format` tinyint(1) unsigned NOT NULL DEFAULT 1,
   `activity` tinyint(1) unsigned NOT NULL DEFAULT 1,
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
@@ -96,13 +97,12 @@ DROP TABLE IF EXISTS `log`;
 CREATE TABLE `log` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned NOT NULL,
-  `action` varchar(120) COLLATE utf8_unicode_ci DEFAULT NULL,
   `group_name` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
   `group_id` int(10) unsigned DEFAULT NULL,
+  `action` varchar(120) COLLATE utf8_unicode_ci DEFAULT NULL,
   `item_name` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
   `item_id` int(10) unsigned DEFAULT NULL,
   `created` datetime NOT NULL,
-  `used` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -128,7 +128,7 @@ CREATE TABLE `translations` (
   `subtitle` varchar(120) COLLATE utf8_unicode_ci DEFAULT NULL,
   `excerpt` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `description` BLOB,
-  `body` BLOB,
+  `body` MEDIUMBLOB,
   PRIMARY KEY (`id`),
   UNIQUE(`language`,`item_name`,`item_id`),
   UNIQUE(`slug`)
@@ -288,7 +288,7 @@ CREATE TABLE `resources` (
   `filepath` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
   `filename` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
   `extension` varchar(6) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `embed` tinyblob DEFAULT NULL,
+  `embed` BLOB DEFAULT NULL,
   `activity` tinyint(1) unsigned NOT NULL DEFAULT 1,
   `modified` datetime NOT NULL,
   `created` datetime NOT NULL,
@@ -407,7 +407,7 @@ CREATE TABLE `comments` (
   `name` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
   `email` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
   `url` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `comment` tinyblob NOT NULL,
+  `comment` BLOB NOT NULL,
   `created` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;

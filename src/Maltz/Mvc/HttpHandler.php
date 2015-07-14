@@ -21,21 +21,4 @@ class HttpHandler
         $app->flash('message', $message);
         $app->request->isAjax() ? $app->redirect($app->urlFor($name, $params)) : false;
 	}
-
-	public function serveView(Result $data)
-	{
-        $body = $app->view->render($data->toArray);
-        $app->response->headers->set('Content-Type', 'text/html');
-        $app->response->setStatus(200);
-        $app->response->setBody($body);
-        $app->stop();
-	}
-
-	public function serveJson(Result $data)
-	{
-        $app->response->headers->set('Content-Type', 'application/json');
-        $app->response->setStatus(200);
-        $app->response->setBody($data->toJson);
-        $app->stop();
-	}
 }

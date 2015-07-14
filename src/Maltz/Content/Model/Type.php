@@ -10,7 +10,14 @@ class Type extends Model
 {
     public function __construct($db)
     {
-        parent::__construct($db, 'type', 'types', 'type_id');
+        $rules = array(
+            'id' => 'int',
+            'item_name' => 'string',
+            'name' => 'string',
+            'title' => 'string',
+            'lang' => 'string',
+            );
+        parent::__construct($db, 'type', 'types', $rules);
     }
 
     /*

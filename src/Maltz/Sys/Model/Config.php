@@ -5,6 +5,7 @@ namespace Maltz\Sys\Model;
 use Maltz\Mvc\Model;
 use Maltz\Mvc\Record;
 use Maltz\Mvc\Activity;
+use Maltz\Mvc\ValueFormat;
 use Maltz\Service\Pagination;
 
 /**
@@ -34,8 +35,9 @@ use Maltz\Service\Pagination;
 class Config extends Model
 {
     use Activity;
+    use ValueFormat;
 
-    /*
+    /* 
 	 * construtor
 	 *
 	 * @param $db DB
@@ -45,19 +47,31 @@ class Config extends Model
 	 */
     public function __construct($db)
     {
-        parent::__construct($db, 'config', 'config', 'config_id');
+        $rules = array(
+            'id' => 'int',
+            'key' => 'string',
+            'value' => 'string',
+            'format' => 'int',
+            'activity' => 'int',
+            );
+        parent::__construct($db, 'config', 'config', 'config_id', $rules);
     }
 
     /*
      * CRUD
      */
 
-    public function insert(Record $record) 
+    public function processRecord(Record $record)
     {
         if (!$record->has('activity')) {
             $record->set('activity', 2);
         }
-        $sql = "INSERT INTO config (key, value, activity, created, modified) VALUES (:key, :value, :activity, NOW(), NOW())";
+        return $record;
+    }
+
+    public function insert(Record $record) 
+    {
+        $sql = "INSERT INTO config (`key`, value, format, activity, created, modified) VALUES (:key, :value, :activity, NOW(), NOW())";
         $resultado = $this->db->run($sql, $record->toArray());
         return $resultado;
     }
@@ -71,7 +85,7 @@ class Config extends Model
 
     public function display() 
     {
-        $sql = "SELECT id, key, value, activity, modified, created FROM config";
+        $sql = "SELECT id, `key`, value, format, activity, modified, created FROM config";
         $resultado = $this->db->run($sql);
         return $resultado;
     }
@@ -80,14 +94,14 @@ class Config extends Model
     {
         $pagination = Pagination::paginate($page, $per_page);
 
-        $sql = "SELECT id, key, value, activity, modified, created FROM config ORDER BY $key $order LIMIT $pagination->offset,$pagination->limit";
+        $sql = "SELECT id, `key`, value, format, activity, modified, created FROM config ORDER BY $key $order LIMIT $pagination->offset,$pagination->limit";
         $resultado = $this->db->run($sql, array());
         return $resultado;
     }
 
     public function show($id) 
     {
-        $sql = "SELECT id, key, value, activity, modified, created FROM config WHERE id=:id";
+        $sql = "SELECT id, `key`, value, activity, modified, created FROM config WHERE id=:id";
         $resultado = $this->db->run($sql, array($id));
         return $resultado;
     }

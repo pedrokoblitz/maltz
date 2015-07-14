@@ -2,7 +2,7 @@
 
 namespace Maltz\Mvc;
 
-trait Hierarchy
+trait HierarchyTree
 {
     public function generateTree($hierarchy, $parent_id = 0, $depth = 0)
     {
@@ -38,13 +38,17 @@ trait Hierarchy
         return $resultado;
     }
 
-    public function addChild($parent_id)
+    public function addChild($parent_id, $child_id)
     {
-
+        $sql = "UPDATE $this->table SET parent_id=:parent_id WHERE id=:child_id";
+        $resultado = $this->db->run($sql, array('parent_id' => $parent_id, 'child_id' => $child_id));
+        return $resultado;
     }
 
-    public function removeChild($parent_id, $child_id)
+    public function removeChild($child_id)
     {
-        
+        $sql = "UPDATE $this->table SET parent_id=:parent_id WHERE id=:child_id";
+        $resultado = $this->db->run($sql, array('parent_id' => 0, 'child_id' => $child_id));
+        return $resultado;
     }
 }

@@ -39,7 +39,16 @@ class Log extends Model
 	 */
     public function __construct($db)
     {
-        parent::__construct($db, 'log', 'log', 'log_id');
+        $rules = array(
+            'id' => 'int',
+            'user_id' => 'int',
+            'group_name' => 'string',
+            'group_id' => 'int',
+            'action' => 'string',
+            'item_name' => 'string',
+            'item_id' => 'int'
+            );
+        parent::__construct($db, 'log', 'log', $rules);
     }
 
     /*
@@ -65,14 +74,16 @@ class Log extends Model
         return $resultado;
     }
 
-    public function log($user_id, $action, $name, $id)
+    public function log($user_id, $group_name, $group_id, $action, $item_name = null, $item_id = null)
     {
         $record = new Record(
             array(
                 'user_id' => $user_id,
+                'group_name' => $group_name,
+                'group_id' => $group_id,
                 'action' => $action,
-                'group_name' => $name,
-                'group_id' => $id,
+                'item_name' => $item_name,
+                'item_id' => $item_id,
                 )
             );
         $this->insert($record);

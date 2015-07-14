@@ -1,18 +1,5 @@
-INSERT INTO types (item_name, name) VALUES 
-("content", "page"), 
-("content", "book"), 
-("content", "post"), 
-("content", "project"), 
-("collection", "album"), 
-("collection", "folder"), 
-("resource", "embed"), 
-("resource", "link"), 
-("resource", "file"), 
-("term", "section"), 
-("term", "vote"), 
-("term", "tag");
-
-INSERT INTO config (key, value, activity, created, modified) VALUES 
+DELETE FROM `config`;
+INSERT INTO `config` (`key`, `value`, `activity`, `created`, `modified`) VALUES 
 ("system_email", "pedrokoblitz@gmail.com", 2, NOW(), NOW()),
 ("per_page", "12", 2, NOW(), NOW()),
 ("upload_dir", "/public/media", 2, NOW(), NOW()),
@@ -187,7 +174,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `translations` WRITE;
 /*!40000 ALTER TABLE `translations` DISABLE KEYS */;
-INSERT INTO `translations` VALUES (1,1,'pt-br','content',1,'teste','teste','testando','testando 123 ','testando 123 ','testando 123 '),(2,1,'pt-br','content',2,'teste-2','teste','testando','testando 123 ','testando 123 ','testando 123 '),(3,1,'pt-br','content',3,'teste-3','teste','testando','testando 123 ','testando 123 ','testando 123 '),(4,1,'pt-br','content',4,'teste-4','teste','testando','testando 123 ','testando 123 ','testando 123 '),(5,1,'pt-br','content',5,'teste-5','teste','testando','testando 123 ','testando 123 ','testando 123 '),(6,1,'pt-br','content',6,'teste-6','teste','testando','testando 123 ','testando 123 ','testando 123 '),(7,1,'pt-br','content',7,'teste-7','teste','testando','testando 123 ','testando 123 ','testando 123 '),(8,1,'pt-br','content',8,'teste-8','teste','testando','testando 123 ','testando 123 ','testando 123 '),(9,1,'pt-br','content',9,'teste-9','teste','testando','testando 123 ','testando 123 ','testando 123 '),(10,1,'pt-br','content',10,'teste-10','teste','testando','testando 123 ','testando 123 ','testando 123 '),(11,1,'pt-br','collection',1,'teste-9','teste','testando','testando 123 ','testando 123 ','testando 123 '),(12,1,'pt-br','collection',2,'teste-10','teste','testando','testando 123 ','testando 123 ','testando 123 ');
+INSERT INTO `translations` VALUES (1,1,'pt-br','content',1,'teste','teste','testando','testando 123 ','testando 123 ','testando 123 '),(2,1,'pt-br','content',2,'teste-2','teste','testando','testando 123 ','testando 123 ','testando 123 '),(3,1,'pt-br','content',3,'teste-3','teste','testando','testando 123 ','testando 123 ','testando 123 '),(4,1,'pt-br','content',4,'teste-4','teste','testando','testando 123 ','testando 123 ','testando 123 '),(5,1,'pt-br','content',5,'teste-5','teste','testando','testando 123 ','testando 123 ','testando 123 '),(6,1,'pt-br','content',6,'teste-6','teste','testando','testando 123 ','testando 123 ','testando 123 '),(7,1,'pt-br','content',7,'teste-7','teste','testando','testando 123 ','testando 123 ','testando 123 '),(8,1,'pt-br','content',8,'teste-8','teste','testando','testando 123 ','testando 123 ','testando 123 '),(9,1,'pt-br','content',9,'teste-9','teste','testando','testando 123 ','testando 123 ','testando 123 '),(10,1,'pt-br','content',10,'teste-10','teste','testando','testando 123 ','testando 123 ','testando 123 '),(11,1,'pt-br','collection',1,'teste-9-1','teste','testando','testando 123 ','testando 123 ','testando 123 '),(12,1,'pt-br','collection',2,'teste-10-1','teste','testando','testando 123 ','testando 123 ','testando 123 ');
 /*!40000 ALTER TABLE `translations` ENABLE KEYS */;
 UNLOCK TABLES;
 

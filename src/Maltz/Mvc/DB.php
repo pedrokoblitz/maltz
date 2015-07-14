@@ -19,6 +19,7 @@ namespace Maltz\Mvc;
 class DB extends \PDO
 {
 
+    private $settings;
     private $error;
     private $sql;
     private $bind;
@@ -40,11 +41,16 @@ class DB extends \PDO
         } catch (\PDOException $e) {
             $this->error = $e->getMessage();
         }
+
+        $this->settings['result.keys']['success'] = 'success';
+        $this->settings['result.keys']['message'] = 'message';
+        $this->settings['result.keys']['records'] = 'records';
+        $this->settings['result.keys']['id.list'] = 'id.list';
+        $this->settings['result.keys']['last.insert.id'] = 'last.insert.id';
+        $this->settings['result.keys']['count'] = 'count';
+        $this->settings['return.value'] = new Result(array('success' => false));
     }
 
-    /*
-	 *
-	 */
     private function cleanup($bind)
     {
         if (!is_array($bind)) {
@@ -64,12 +70,11 @@ class DB extends \PDO
         return $bind;
     }
 
-    /*
-	 *
-	 */
-    public function run($sql, $bind = "")
+    public function run($sql, $bind = "", array $settings = array())
     {
         //var_dump($sql);
+
+        $settings = array_merge($settings, $this->settings);
 
         $this->sql = trim($sql);
         $this->bind = $this->cleanup($bind);
@@ -83,38 +88,69 @@ class DB extends \PDO
                     $data = $pdostmt->fetchAll(\PDO::FETCH_ASSOC);
                     
                     if (empty($data)) {
-                        return new Result(array('success' => false, 'message' => DbMessage::NOT_FOUND));
+                        $result = $settings['return.value'];
+                        $result->set('message', DbMessage::NOT_FOUND);
+                        return $result;
                     }
 
-                    $results = array();
+                    $records = array();
+                    $ids = array();
                     foreach ($data as $value) {
-                        $results[] = new Record($value);
+                        if (isset($value['id'])) {
+                            $ids[] = $value['id'];
+                        }
+                        $records[] = new Record($value);
                     }
-                    return new Result(array('records' => $results, 'success' => true, 'message' => DbMessage::SELECTED));
+                    $result = $settings['return.value'];
+                    $result->set('success', true);
+                    $result->set('records', $records);
+                    $result->set('message', DbMessage::SELECTED);
+                    !empty($ids) ? $result->set('id_list', $ids) : false;
+                    return $result;
 
                 } elseif (preg_match("/^(select found_rows)/i", $this->sql)) {
                     $data = $pdostmt->fetch(\PDO::FETCH_COLUMN);
-                    return new Result(array('count' => $data, 'success' => true, 'message' => DbMessage::COUNTED));
+                    $result = $settings['return.value'];
+                    $result->set('success', true);
+                    $result->set('count', $data);
+                    $result->set('message', DbMessage::COUNTED);
+                    return $result;
 
                 } elseif (preg_match("/^(count)/i", $this->sql)) {
                     $data = $pdostmt->fetch(\PDO::FETCH_COLUMN);
-                    return new Result(array('count' => $data, 'success' => true, 'message' => DbMessage::COUNTED));
+                    $result = $settings['return.value'];
+                    $result->set('success', true);
+                    $result->set('count', $data);
+                    $result->set('message', DbMessage::COUNTED);
+                    return $result;
                 
                 } elseif (preg_match("/^(insert)/i", $this->sql)) {
                     $last = \PDO::lastInsertId();
-                    return new Result(array('last_insert_id' => $last, 'success' => true, 'message' => DbMessage::INSERTED));
+                    $result = $settings['return.value'];
+                    $result->set('success', true);
+                    $result->set('last.insert.id', $last);
+                    $result->set('message', DbMessage::INSERTED);
+                    return $result;
                 
                 } elseif (preg_match("/^(update)/i", $this->sql)) {
-                    return new Result(array('success' => true, 'message' => DbMessage::UPDATED));
+                    $result = $settings['return.value'];
+                    $result->set('success', true);
+                    $result->set('message', DbMessage::UPDATED);
+                    return $result;
                 
                 } elseif (preg_match("/^(delete)/i", $this->sql)) {
-                    return new Result(array('success' => true, 'message' => DbMessage::DELETED));
+                    $result = $settings['return.value'];
+                    $result->set('success', true);
+                    $result->set('message', DbMessage::DELETED);
+                    return $result;
                 }
             }
             return new Result(array('success' => false, 'message' => DbMessage::QUERY_FAIL));
 
         } catch (\PDOException $e) {
-            return new Result(array('success' => false, 'message' => $e->getMessage()));
+            $result = $settings['return.value'];
+            $result->set('message', $e->getMessage());
+            return $result;
         }
     }
 }

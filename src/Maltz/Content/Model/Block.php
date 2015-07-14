@@ -43,7 +43,15 @@ class Block extends Model
 	 */
     public function __construct($db)
     {
-        parent::__construct($db, 'block', 'blocks', 'block_id');
+        $rules = array(
+            'id' => 'int',
+            'area_id' => 'int',
+            'user_id' => 'int',
+            'slug' => 'slug',
+            'title' => 'string',
+            'body' => 'textarea',
+            );
+        parent::__construct($db, 'block', 'blocks', $rules);
     }
 
     /*

@@ -4,6 +4,7 @@ namespace Maltz;
 
 use Maltz\Http\CookieJar;
 use Maltz\Http\Session;
+use Maltz\Http\SessionDataStore;
 use Maltz\Http\Nonce;
 use Maltz\Mvc\DB;
 use Maltz\Mvc\View;
@@ -41,8 +42,6 @@ class Maltz
 
             USAGE
 
-            $log = $app->getLog();
-            $log->write('message', \Slim\Log::DEBUG);
         */
         $logger = new \Flynsarmy\SlimMonolog\Log\MonologWriter(array(
             'handlers' => array(
@@ -52,7 +51,7 @@ class Maltz
 
         $app->config(array(
             'log.writer' => $logger,
-            'mode' => 'development',
+            'mode' => 'production',
             'debug' => true,
             'templates.path' => './views',
             'base.uri' => '/',
@@ -63,18 +62,16 @@ class Maltz
             'per_page' => '12'
         ));
 
-        //db
-        $app->container->singleton('db', function () {
-            //return new DB('mysql:dbname=db169616_cms;host=internal-db.s169616.gridserver.com', 'db169616', 'morte666');
-            return new DB('mysql:dbname=maltz-novo;host=localhost', 'root', 'root');
-        });
-
         $app->session = function () {
             return new Session();
         };
 
         $app->cookie = function () {
             return new CookieJar();
+        };
+
+        $app->sessionDataStore = function () use ($app) {
+            return new SessionDataStore($app->session);
         };
 
         $app->nonce = function () {
@@ -117,6 +114,10 @@ class Maltz
             return new SessionCookieAuthHandler($app->session, $app->cookie, $keys);
         };
 
+        $app->container->singleton('db', function () use ($app) {
+            return new DB($app->config('db.dsn'), $app->config('db.user'), $app->config('db.pass'));
+        });
+
         $app->pagination = function () {
             return new Pagination();
         };
@@ -128,7 +129,7 @@ class Maltz
         $app->correios = function () {
             return new Correios();
         };
-
+        
         $config = Config::query($app->db, 'display');
         if ($config->has('records')) {
             foreach ($config->getRecords() as $key => $value) {
@@ -137,13 +138,31 @@ class Maltz
         }
 
         $app->configureMode('production', function () use ($app) {
+            $app->config('whoops.editor', 'sublime'); 
+            $app->add(new \Zeuxisoo\Whoops\Provider\Slim\WhoopsMiddleware);
+            $app->add(new \Slim\Middleware\DebugBar);
+
+            $app->config('db.dsn', 'mysql:dbname=db169616_teste;host=internal-db.s169616.gridserver.com');
+            $app->config('db.user', 'db169616');
+            $app->config('db.pass', 'morte666');
+
             $app->config(array(
                 'log.enable' => true,
-                'debug' => false
+                'debug' => true,
+                'per_page' => 12
             ));
+            $app->session->set('user.id', 1);
         });
 
         $app->configureMode('development', function () use ($app) {
+            $app->config('whoops.editor', 'sublime'); 
+            $app->add(new \Zeuxisoo\Whoops\Provider\Slim\WhoopsMiddleware);
+            $app->add(new \Slim\Middleware\DebugBar);
+
+            $app->config('db.dsn', 'mysql:dbname=maltz-novo;host=localhost');
+            $app->config('db.user', 'root');
+            $app->config('db.pass', 'root');
+
             $app->config(array(
                 'log.enable' => true,
                 'debug' => true,

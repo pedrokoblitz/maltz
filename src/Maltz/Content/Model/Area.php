@@ -44,7 +44,12 @@ class Area extends Model
      */
     public function __construct($db)
     {
-        parent::__construct($db, 'area', 'areas', 'area_id');
+        $rules = array(
+            'id' => 'int',
+            'name' => 'string',
+            'activity' => 'int',
+            );
+        parent::__construct($db, 'area', 'areas', $rules);
     }
 
     /*

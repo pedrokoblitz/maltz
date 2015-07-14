@@ -13,7 +13,12 @@ class Role extends Model
 
     public function __construct($db)
     {
-        parent::__construct($db, 'role', 'roles', 'role_id');
+        $rules = array(
+            'id' => 'int',
+            'name' => 'string',
+            'activity' => 'int',
+            );
+        parent::__construct($db, 'role', 'roles', $rules);
     }
 
     /*

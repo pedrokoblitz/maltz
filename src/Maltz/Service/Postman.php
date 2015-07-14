@@ -23,18 +23,12 @@ class Postman
     protected $message;
     protected $mailer;
 
-    /*
-     *
-     */
     public function __construct()
     {
         $transport = Swift_SendmailTransport::newInstance('/usr/sbin/sendmail -bs');
         $this->mailer = Swift_Mailer::newInstance($transport);
     }
 
-    /*
-     *
-     */
     public function createMessage($senderEmail, $senderName, $subject, $body)
     {
         $message = Swift_Message::newInstance()
@@ -45,9 +39,6 @@ class Postman
         return $this;
     }
 
-    /*
-     *
-     */
     public function send($recipientEmail, $recipientName)
     {
         $this->message->setTo(array($recipientEmail => $recipientName));

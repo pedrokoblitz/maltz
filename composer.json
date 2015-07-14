@@ -4,7 +4,10 @@
         "slim/slim": "2.6.2",
 		"swiftmailer/swiftmailer": "dev-master",
         "simplepie/simplepie": "dev-master",
-        "flynsarmy/slim-monolog": "dev-master"
+        "flynsarmy/slim-monolog": "dev-master",
+        "yusukezzz/slim-debugbar": "1.*",
+        "zeuxisoo/slim-whoops": "0.3.0",
+        "gargron/fileupload": "1.0.*"
     },
     "autoload": {
         "psr-0": {

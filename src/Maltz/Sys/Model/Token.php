@@ -10,7 +10,8 @@ class Token extends Model
 
     public function __construct($db)
     {
-        parent::__construct($db, 'token', 'tokens', 'token_id');
+        $rules = array();
+        parent::__construct($db, 'token', 'tokens', $rules);
     }
 
     public function generate($user_id, $type)
