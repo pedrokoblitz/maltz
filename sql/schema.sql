@@ -130,7 +130,8 @@ CREATE TABLE `translations` (
   `description` BLOB,
   `body` BLOB,
   PRIMARY KEY (`id`),
-  UNIQUE(`language`,`item_name`,`item_id`)
+  UNIQUE(`language`,`item_name`,`item_id`),
+  UNIQUE(`slug`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

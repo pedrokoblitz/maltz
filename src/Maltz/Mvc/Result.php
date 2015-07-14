@@ -27,13 +27,13 @@ class Result extends Type
     protected function itemsToArray($items)
     {
         $newItems = array();
-        foreach ($items as $value) {
+        foreach ($items as $key => $value) {
             if (is_array($value)) {
-                $newItems[] = $this->itemsToArray($value);
+                $newItems[$key] = $this->itemsToArray($value);
             } elseif ($value instanceof Record) {
-                $newItems[] = $value->toArray();
+                $newItems[$key] = $value->toArray();
             } elseif (is_scalar($value)) {
-                $newItems[] = $value;
+                $newItems[$key] = $value;
             }
         }
         return $newItems;

@@ -32,37 +32,44 @@ abstract class Model
 {
     protected $db;
     protected $table;
-    protected $fk;
+    protected $rules;
 
-    /*
-	 *
-	 */
-    public function __construct($db, $slug, $table)
+    public function __construct($db, $slug, $table, $rules)
     {
         $this->db = $db;
         $this->table = $table;
         $this->slug = $slug;
+        $this->rules = $rules;
     }
 
-    /*
-	 *
-	 */
     public function __get($key)
     {
-        return is_string($key) && isset($this->$key) && in_array($key, array('slug', 'table')) ? $this->$key : null;
+        return is_string($key) && isset($this->$key) && in_array($key, array('slug', 'table', 'rules')) ? $this->$key : null;
+    }
+
+    //abstract public function processRecord(Record $record);
+
+    protected function checkRecord(Record $record)
+    {
+        $record->validate($this->rules);
+        return $record->isValid();
     }
 
     public function save(Record $record)
     {
-        if ($record->has('id')) {
-            return $this->update($record);
+        if ($this->checkRecord($record)) {
+            if (method_exists($this, 'processRecord')) {
+                $record = $this->processRecord($record);
+            }
+
+            if ($record->has('id')) {
+                return $this->update($record);
+            }
+            return $this->insert($record);
         }
-        return $this->insert($record);
+        return new Result(array('success' => false, 'message' => 'Invalid record.'));
     }
 
-    /*
-     *
-     */
     public static function query()
     {
         $args = func_get_args();
@@ -77,6 +84,6 @@ abstract class Model
             $result = call_user_func_array($call, $params);
             return $result;
         }
-        return new Result(array('message' => 'Such method does not exists.'));
+        return new Result(array('success' => false, 'message' => 'Such method does not exists.'));
     }
 }

@@ -43,7 +43,19 @@ class User extends Model
 	 */
     public function __construct($db)
     {
-        parent::__construct($db, 'user', 'users', 'user_id');
+        $rules = array();
+        parent::__construct($db, 'user', 'users', $rules);
+    }
+
+    protected function processRecord(Record $record)
+    {
+        $password = $record->get('password');
+        if (!empty($password)) {
+            $record->set('password', sha1($password));
+        } else {
+            $record->remove('password');
+        }
+        return $record;
     }
 
     /*
@@ -79,12 +91,6 @@ class User extends Model
 
     public function insert(Record $post)
     {
-        $password = $record->get('password');
-        if (!empty($password)) {
-            $record->set('password', sha1($password));
-        } else {
-            $record->remove('password');
-        }
         $fields = $record->getFieldsList();
         $values = $record->getInsertValueString();
         $bind = $record->toArray();
@@ -96,13 +102,6 @@ class User extends Model
 
     public function update(Record $post, $id)
     {
-        $password = $record->get('password');
-        if (!empty($password)) {
-            $record->set('password', sha1($password));
-        } else {
-            $record->remove('password');
-        }
-
         $updateValues = $record->getUpdateValueString();
         $bind = $record->toArray();
         $sql = "UPDATE users 

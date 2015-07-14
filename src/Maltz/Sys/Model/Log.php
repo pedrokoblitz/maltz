@@ -50,8 +50,9 @@ class Log extends Model
     {
         $pagination = Pagination::paginate($page, $per_page);
 
-        $sql = "SELECT (user_id, action, item_name, item_id, created) FROM log ORDER BY $key $order LIMIT $pagination->offset,$pagination->limit";
-        $resultado = $this->db->run($sql, array());
+        $sql = "SELECT user_id, action, item_name, item_id, created
+            FROM log ORDER BY $key $order LIMIT $pagination->offset,$pagination->limit";
+        $resultado = $this->db->run($sql);
         return $resultado;
     }
 

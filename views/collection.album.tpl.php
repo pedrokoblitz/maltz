@@ -22,6 +22,8 @@ $(document).ready(function(){
 
 </script>
 
+
+<!--table-->
 <div id="recordList" class="col-md-8">
     <table class="table">
       <caption>Optional table caption.</caption>
@@ -53,6 +55,9 @@ $(document).ready(function(){
 	teste
 </div>
 
+
+<!--form-->
+
 <div id="mainForm">
 	<form class="form-horizontal">
 	<fieldset>
@@ -63,7 +68,7 @@ $(document).ready(function(){
 	  <label class="col-md-4 control-label" for="title">Title</label>  
 	  <div class="col-md-6">
 	  <input id="title" name="title" placeholder="placeholder" class="form-control input-md" type="text">
-	  <span class="help-block">help</span>  
+	  <span class="help-block">help</span>
 	  </div>
 	</div>
 
@@ -106,6 +111,8 @@ $(document).ready(function(){
 
 	</fieldset>
 
+
+	<!--select and dropdown-->
 	<fieldset>
 
 	<legend>Form Name</legend>
@@ -132,6 +139,7 @@ $(document).ready(function(){
 
 	</fieldset>
 
+	<!-- buttons -->
 	<fieldset>
 
 	<legend>Form Name</legend>

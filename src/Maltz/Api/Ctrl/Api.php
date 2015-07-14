@@ -7,18 +7,24 @@ use Maltz\Content\Model\Content;
 use Maltz\Content\Model\Collection;
 use Maltz\Content\Model\Resource;
 use Maltz\Content\Model\Term;
+use Maltz\Content\Model\Type;
+use Maltz\Content\Model\Area;
+use Maltz\Content\Model\Block;
+use Maltz\Sys\Model\Config;
+use Maltz\Sys\Model\User;
 use Maltz\Sys\Model\Log;
 
 class Api {
 
     public static function route($app) {
-      
 
         /*
-         * CRUD
+         * CONTENT
          */
         
         $app->get('/api/:model/:type/:key/:order/:pg', function ($model, $type, $key = 'created', $order = 'ASC', $page = 1) use ($app) {
+
+            //$app->getLog()->write('', \Slim\Log::DEBUG);
 
             switch ($model) {
                 case 'content':
@@ -157,7 +163,7 @@ class Api {
          * RELATIONSHIPS
          */
         
-        $app->post('/api/:group_name/:group_id/:item_name/:item_id/:order/add', function ($group_name, $group_id, $item_name, $item_id, $order) use ($app) {
+        $app->get('/api/:group_name/:group_id/:item_name/:item_id/:order/add', function ($group_name, $group_id, $item_name, $item_id, $order) use ($app) {
 
             switch ($group_name) {
                 case 'content':
@@ -186,7 +192,7 @@ class Api {
 
         })->name('add_item')->conditions(array('model' => '\w+', 'id' => '\d+'));
 
-        $app->post('/api/:group_name/:group_id/:item_name/:item_id/remove', function ($group_name, $group_id, $item_name, $item_id) use ($app) {
+        $app->get('/api/:group_name/:group_id/:item_name/:item_id/remove', function ($group_name, $group_id, $item_name, $item_id) use ($app) {
 
             switch ($group_name) {
                 case 'content':
@@ -211,106 +217,6 @@ class Api {
             $app->stop();
 
         })->name('remove_item')->conditions(array('model' => '\w+', 'id' => '\d+'));
-
-        /*
-         * TYPES
-        
-        $app->get('/api/type/:key/:order/:pg', function($key, $order, $pg) {
-
-        })->name()->conditions(array());
-
-        $app->get('/api/type/:id/delete', function($id) {
-
-        })->name()->conditions(array());
-
-        $app->post('/api/type/save', function() {
-
-        })->name()->conditions(array());
-
-         */
-
-        /*
-         * SITE BUILDING
-        
-        $app->get('/api/area/:key/:order/:pg', function($key, $order, $pg) {
-
-        })->name()->conditions(array());
-
-        $app->get('/api/area/:id/delete', function($id) {
-
-        })->name()->conditions(array());
-
-        $app->post('/api/area/save', function() {
-
-        })->name()->conditions(array());
-
-
-        $app->get('/api/block/:key/:order/:pg', function($key, $order, $pg) {
-
-        })->name()->conditions(array());
-
-        $app->get('/api/block/:id/delete', function($id) {
-
-        })->name()->conditions(array());
-
-        $app->post('/api/block/save', function() {
-
-        })->name()->conditions(array());
-
-         */
-
-        /*
-         * USERS
-        
-        $app->get('/api/user/:key/:order/:pg', function($key, $order, $pg) {
-
-        })->name()->conditions(array());
-
-        $app->get('/api/user/:id/profile', function($id) {
-
-        })->name()->conditions(array());
-
-        $app->get('/api/user/:id/delete', function($id) {
-
-        })->name()->conditions(array());
-
-        $app->post('/api/user/save', function() {
-
-        })->name()->conditions(array());
-
-         */
-
-
-        /*
-         * LANG
-        $app->get('/lang/:lang', function($lang) {
-            $app->session->set('language', $lang);
-        })->name()->conditions(array());
-         */
-
-
-        /*
-         * SYSTEM
-        
-        $app->get('/api/config', function() {
-
-        })->name()->conditions(array());
-
-        $app->post('/api/config', function() {
-
-        })->name()->conditions(array());
-
-
-        $app->get('/api/log/:pg', function($pg = 1) {
-
-        })->name()->conditions(array());
-
-        $app->post('/api/log', function() {
-
-        })->name()->conditions(array());
-
-         */
-
         return $app;
     }
 }

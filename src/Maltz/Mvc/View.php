@@ -2,6 +2,8 @@
 
 namespace Maltz\Mvc;
 
+use Slim\View as SlimView;
+
 /**
  * CONVENCOES DO View
  * as funcoes set(), js(), json() e css() sao parte da biblioteca limonade-php
@@ -33,7 +35,7 @@ namespace Maltz\Mvc;
  *
  */
 
-class View
+class View extends SlimView
 {
     // PROPRIEDADES
     protected $path;
@@ -41,20 +43,6 @@ class View
     protected $conditionalStyleSheets = array();
     protected $javaScripts = array();
     protected $filters = array();
-
-
-    public function __construct($path)
-    {
-        $this->path = $path;
-
-        $styleSheets = array(
-            'bootstrap' => '',
-        );
-
-        $javaScripts = array(
-            'bootstrap' => '',
-        );
-    }
 
     public function addStyleSheet($name, $external = false)
     {
@@ -107,11 +95,6 @@ class View
         return $string;
     }
 
-    public function setData()
-    {
-        return false;
-    }
-
     /*
     * passa os data template html usando metodos do limonade-php
     * junta data com template e layout
@@ -121,7 +104,7 @@ class View
     *
     * return string
     */
-    public function render($view, $layout = '', $data = array())
+    public function _render($view, $layout = '', $data = array())
     {
         $styles = $this->renderStyleSheets();
         $scripts = $this->renderJavaScripts();
