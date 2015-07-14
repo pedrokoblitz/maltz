@@ -1,2 +1,0 @@
-# maltz
-simple cms solution
