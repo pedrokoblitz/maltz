@@ -139,13 +139,7 @@ class User extends Model
      */
     public function getRoles($user)
     {
-        if (is_string($user)) {
-            $sql = "SELECT id FROM users WHERE username=:user OR email=:user";
-            $res = $this->db->run($sql, array('user' => $user));
-            $user_id = $res->getFirstRecord()->get('id');
-        } elseif (is_int($user)) {
-            $user_id = $user;
-        }
+        $user_id = $this->parseUser($user);
         $sql = "SELECT t1.id, t1.name 
         FROM roles t1
             JOIN users_roles t2

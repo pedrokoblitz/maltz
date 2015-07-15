@@ -170,6 +170,7 @@ CREATE TABLE `users` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE(`username`),
   UNIQUE(`email`),
   UNIQUE(`cpf`),
   UNIQUE(`cnpj`)

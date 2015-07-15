@@ -51,14 +51,13 @@ class Doorman
 	 */
     public function login($username, $password, $remember = null)
     {
-        $this->user->search('username', $username);
-        $login = $this->user->all();
-        $data = $login['data.search'][0];
+        $login = User::query('findByUsernameOrEmail', $username);
+        $record = $login->getFirstRecord();
     
-        if ($data['password'] == md5($password)) {
+        if ($record->get('password') === sha1($password)) {
             $this->sessionDataStore->setUserData($data);
             if ($remember) {
-                $this->remember($data['id']);
+                $this->remember($record->get('id'));
             }
             return true;
         }
@@ -90,40 +89,31 @@ class Doorman
 	 *
 	 * return bool
 	 */
-    public function loggedIn()
+    public function isUserAllowed(array $roles)
     {
+        $authenticated = false;
         $cookie = $this->cookieJar->has('token.remember');
         if (!$cookie && $this->sessionDataStore->isUserAuthenticated()) {
-            return true;
+            $authenticated = true;
         } elseif ($cookie) {
             $tokenCookie = $this->cookieJar->get('token.remember');
             $cookieValue = $tokenCookie->get();
             $token = $cookieValue['value'];
             $data = $this->user->validate($token, 'remember');
             $this->sessionDataStore->setUserData($data);
-            return true;
+            $authenticated = true;
         }
-        $this->logout();
-        return false;
-    }
 
-    /*
-	 * checa permissao e deixa passar ou nao
-	 *
-	 * @param $minimo int
-	 *
-	 * return bool
-	 */
-    public function allow($roles)
-    {
-        if ($this->logado()) {
-            $userRoles = $this->getRoles();
+        if ($authenticated === true) {
+            $userRoles = $this->getRoles($this->sessionDataStore->getUserId)
             foreach ($roles as $role) {
                 if (in_array($role, $userRoles)) {
                     return true;
                 }
             }
         }
+
+        $this->logout();
         return false;
     }
 
@@ -137,8 +127,7 @@ class Doorman
     private function getRoles()
     {
         $userId = $this->sessionDataStore->getUserId();
-        $this->user->getRoles($userId);
-        $roles = $this->user->all();
+        $roles = User::query('getRoles', $userId);
         return $roles;
     }
 }

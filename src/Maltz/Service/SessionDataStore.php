@@ -1,6 +1,6 @@
 <?php
 
-namespace Maltz\Mvc;
+namespace Maltz\Service;
 
 use Maltz\Http\Session;
 
@@ -30,13 +30,13 @@ class SessionDataStore
 		return $this->session->get($key);
 	}
 
-	public function setUserData($data)
+	public function setUserData($record)
 	{
         $this->session->set('user.authenticated', true);
-        $this->session->set('user.id', $data['id']);
-        $this->session->set('user.username', $data['username']);
-        $this->session->set('user.name', $data['name']);
-        $this->session->set('user.email', $data['email']);
+        $this->session->set('user.id', $record->get('id'));
+        $this->session->set('user.username', $record->get('username'));
+        $this->session->set('user.name', $record->get('name'));
+        $this->session->set('user.email', $record->get('email'));
 	}
 
 	public function isUserAuthenticated()

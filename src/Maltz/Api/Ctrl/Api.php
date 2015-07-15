@@ -24,6 +24,8 @@ class Api {
         
         $app->get('/api/:model/:type(/:pg(/:key(/:order)))', function ($model, $type, $pg = 1, $key = 'created', $order = 'asc') use ($app) {
             
+            $app->handler->auth();
+
             switch ($model) {
                 case 'content':
                     $entity = new Content($app->db);
@@ -40,7 +42,7 @@ class Api {
             }
 
             $result = $entity->findByType($type, $pg, $app->config('per_page'), $key, $order);
-            $app->handler->handleApi($result);
+            $app->handler->handleApiResponse($result);
 
         })->name('api_list')->conditions(array('model' => 'content|collection|resource|term', 'type' => '\w+', 'pg' => '\d+', 'key' => '\w+', 'order' => 'asc|desc'));
 
@@ -61,7 +63,7 @@ class Api {
             }
 
             $result = $entity->show($id);
-            $app->handler->handleApi($result);
+            $app->handler->handleApiResponse($result);
 
         })->name('api_show')->conditions(array('model' => 'content|collection|resource|term', 'id' => '\d+'));
 
@@ -86,7 +88,7 @@ class Api {
             $result = $entity->save($record);
             $id = $record->has('id') ? $record->get('id') : $result->get('last.insert.id');
             Log::query('log', $app->session->get('user.id'), $model, $id, 'save');
-            $app->handler->handleApi($result);
+            $app->handler->handleApiResponse($result);
 
         })->name('api_save')->conditions(array('model' => 'content|collection|resource|term'));
 
@@ -111,7 +113,7 @@ class Api {
 
             $result = $entity->delete($id);
             Log::query('log', $app->session->get('user.id'), $model, $id, 'delete');
-            $app->handler->handleApi($result);
+            $app->handler->handleApiResponse($result);
 
         })->name('api_delete')->conditions(array('model' => 'content|collection|resource|term', 'id' => '\d+'));
 
@@ -133,7 +135,7 @@ class Api {
             }
 
             $result = $entity->displayTree();
-            $app->handler->handleApi($result);
+            $app->handler->handleApiResponse($result);
 
         })->name('api_tree')->conditions(array('model' => 'content|collection|term'));
 
@@ -152,7 +154,7 @@ class Api {
             }
 
             $result = $entity->getAll($group_id, $item_name);
-            $app->handler->handleApi($result);
+            $app->handler->handleApiResponse($result);
 
         })->name('api_show_items')->conditions(array('group_name' => 'content|collection', 'group_id' => '\d+', 'item_name' => 'content|collection|resource|term'));
         
@@ -168,7 +170,7 @@ class Api {
             }
 
             $result = $entity->add($group_id, $item_name, $item_id, $order);
-            $app->handler->handleApi($result);
+            $app->handler->handleApiResponse($result);
 
         })->name('api_add_item')->conditions(array('group_name' => 'content|collection', 'group_id' => '\d+', 'item_name' => 'content|collection|resource|term', 'item_id' => '\d+', 'order' => '\d+'));
 
@@ -184,7 +186,7 @@ class Api {
             }
 
             $result = $entity->remove($group_id, $item_name, $item_id);
-            $app->handler->handleApi($result);
+            $app->handler->handleApiResponse($result);
 
         })->name('api_remove_item')->conditions(array('group_name' => 'content|collection', 'group_id' => '\d+', 'item_name' => 'content|collection|resource|term', 'item_id' => '\d+'));
 
@@ -195,7 +197,7 @@ class Api {
         $app->get('/api/type(/:pg(/:key(/:order)))', function($pg = 1, $key = 'name', $order = 'asc') use ($app) {
 
             $result = Type::query($app->db, 'display');
-            $app->handler->handleApi($result);
+            $app->handler->handleApiResponse($result);
 
         })->name('api_type_list')->conditions(array('pg' => '\d+', 'key' => '\w+', 'order' => 'asc|desc'));
 
@@ -203,7 +205,7 @@ class Api {
         $app->get('/api/type/:id/delete', function($id) use ($app) {
 
             $result = Type::query($app->db, 'delete', $id);
-            $app->handler->handleApi($result);
+            $app->handler->handleApiResponse($result);
 
         })->name('api_type_delete')->conditions(array('id' => '\d+'));
 
@@ -213,7 +215,7 @@ class Api {
             $result = Type::query($app->db, 'save', $record);
             $id = $record->has('id') ? $record->get('id') : $result->get('last.insert.id');
             Log::query('log', $app->session->get('user.id'), $model, $id, 'save');
-            $app->handler->handleApi($result);
+            $app->handler->handleApiResponse($result);
 
         })->name('api_type_save');
 
@@ -225,28 +227,28 @@ class Api {
         $app->get('/api/area(/:pg(/:key(/:order)))', function($pg = 1, $key = 'name', $order = 'asc') use ($app) {
 
             $result = Area::query($app->db, 'find', $pg, $app->config('per_page'), $key, $order);
-            $app->handler->handleApi($result);
+            $app->handler->handleApiResponse($result);
 
         })->name('api_area_list')->conditions(array('pg' => '\d+', 'key' => '\w+', 'order' => 'asc|desc'));
 
         $app->get('/api/area/:id/show', function($id) use ($app) {
 
             $result = Area::query($app->db, 'getBlocks', $id);
-            $app->handler->handleApi($result);
+            $app->handler->handleApiResponse($result);
 
         })->name('api_area_show')->conditions(array('pg' => '\d+', 'key' => '\w+', 'order' => 'asc|desc'));
 
         $app->get('/api/area/:group_id/block/:item_id/add', function($group_id, $item_id) use ($app) {
 
             $result = Area::query($app->db, 'show', $id);
-            $app->handler->handleApi($result);
+            $app->handler->handleApiResponse($result);
 
         })->name('api_area_block_add')->conditions(array('pg' => '\d+', 'key' => '\w+', 'order' => 'asc|desc'));
 
         $app->get('/api/area/:group_id/block/:item_id/remove', function($group_id, $item_id) use ($app) {
 
             $result = Area::query($app->db, 'show', $id);
-            $app->handler->handleApi($result);
+            $app->handler->handleApiResponse($result);
 
         })->name('api_area_block_remove')->conditions(array('pg' => '\d+', 'key' => '\w+', 'order' => 'asc|desc'));
 
@@ -254,7 +256,7 @@ class Api {
 
             $result = Area::query($app->db, 'delete', $id);
             Log::query('log', $app->session->get('user.id'), 'area', $id, 'delete');
-            $app->handler->handleApi($result);
+            $app->handler->handleApiResponse($result);
 
         })->name('api_area_delete')->conditions(array());
 
@@ -264,7 +266,7 @@ class Api {
             $result = Area::query($app->db, 'save', $record);
             $id = $record->has('id') ? $record->get('id') : $result->get('last.insert.id');
             Log::query('log', $app->session->get('user.id'), $model, $id, 'save');
-            $app->handler->handleApi($result);
+            $app->handler->handleApiResponse($result);
 
         })->name('api_area_save');
 
@@ -272,7 +274,7 @@ class Api {
         $app->get('/api/block(/:pg(/:key(/:order)))', function($pg = 1, $key = 'modified', $order = 'desc') use ($app) {
 
             $result = Block::query($app->db, 'find', $pg, $app->config('per_page'), $key, $order);
-            $app->handler->handleApi($result);
+            $app->handler->handleApiResponse($result);
 
         })->name('api_block_list')->conditions(array('pg' => '\d+', 'key' => '\w+', 'order' => 'asc|desc'));
 
@@ -280,7 +282,7 @@ class Api {
 
             $result = Block::query($app->db, 'delete', $id);
             Log::query('log', $app->session->get('user.id'), 'block', $id, 'delete');
-            $app->handler->handleApi($result);
+            $app->handler->handleApiResponse($result);
 
         })->name('api_block_delete')->conditions(array());
 
@@ -290,7 +292,7 @@ class Api {
             $result = Block::query($app->db, 'save', $record);
             $id = $record->has('id') ? $record->get('id') : $result->get('last.insert.id');
             Log::query('log', $app->session->get('user.id'), 'block', $id, 'save');
-            $app->handler->handleApi($result);
+            $app->handler->handleApiResponse($result);
 
         })->name('api_block_save')->conditions(array());
 
@@ -302,21 +304,21 @@ class Api {
         $app->get('/api/user(/:pg(/:key(/:order)))', function($pg = 1, $key = 'modified', $order = 'desc') use ($app) {
 
             $result = User::query($app->db, 'find', $pg, $app->config('per_page'), $key, $order);
-            $app->handler->handleApi($result);
+            $app->handler->handleApiResponse($result);
 
         })->name('api_user_list')->conditions(array('pg' => '\d+', 'key' => '\w+', 'order' => 'asc|desc'));
 
         $app->get('/api/user/:id/show', function($id) use ($app) {
 
             $result = User::query($app->db, 'show', $id);
-            $app->handler->handleApi($result);
+            $app->handler->handleApiResponse($result);
 
         })->name('api_user_show')->conditions(array());
 
         $app->get('/api/user/profile', function($id) use ($app) {
 
             $result = User::query($app->db, 'show', $app->session->get('user.id'));
-            $app->handler->handleApi($result);
+            $app->handler->handleApiResponse($result);
 
         })->name('api_user_profile');
 
@@ -326,7 +328,7 @@ class Api {
 
             Log::query('log', $app->session->get('user.id'), 'user', $id, 'delete');
             $app->response->setStatus(200);
-            $app->handler->handleApi($result);
+            $app->handler->handleApiResponse($result);
 
         })->name('api_user_delete')->conditions(array());
 
@@ -336,7 +338,7 @@ class Api {
             $result = User::query($app->db, 'save', $record);
             $id = $record->has('id') ? $record->get('id') : $result->get('last.insert.id');
             Log::query('log', $app->session->get('user.id'), $model, $id, 'save');
-            $app->handler->handleApi($result);
+            $app->handler->handleApiResponse($result);
 
         })->name('api_user_save');
 
@@ -357,7 +359,7 @@ class Api {
         $app->get('/api/config', function() use ($app) {
 
             $result = Config::query($app->db, 'display');
-            $app->handler->handleApi($result);
+            $app->handler->handleApiResponse($result);
 
         })->name('api_config_list')->conditions(array());
 
@@ -367,7 +369,7 @@ class Api {
             $result = Config::query($app->db, 'save', $record);
             $id = $record->has('id') ? $record->get('id') : $result->get('last.insert.id');
             Log::query('log', $app->session->get('user.id'), 'config', $id, 'save');
-            $app->handler->handleApi($result);
+            $app->handler->handleApiResponse($result);
 
         })->name('api_config_save');
 
@@ -375,7 +377,7 @@ class Api {
         $app->get('/api/log(/:pg)', function($pg = 1) use ($app) {
 
             $result = Log::query($app->db, 'find', $pg, $app->config('per_page'));
-            $app->handler->handleApi($result);
+            $app->handler->handleApiResponse($result);
 
         })->name('api_log_list')->conditions(array('pg' => '\d+'));
 

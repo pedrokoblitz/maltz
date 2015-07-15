@@ -1,6 +1,10 @@
 <?php
 
-namespace Maltz\Mvc;
+namespace Maltz\Service;
+
+use Maltz\Mvc\Result;
+use Maltz\Mvc\Record;
+
 
 class Handler
 {
@@ -14,7 +18,7 @@ class Handler
         return true;
     }
 
-    public function handleApi(Result $result)
+    public function handleApiResponse(Result $result)
     {
         $this->app->response->headers->set('Content-Type', 'application/json');
         if ($result->get('success')) {
@@ -37,5 +41,18 @@ class Handler
             $app->redirect('/error');
         }
         return $record;
+    }
+
+    public function handleGetRequest()
+    {
+
+    }
+
+    public function auth(array $roles = null)
+    {
+        if (!$roles) {
+            $roles = $this->app->defaultRoles
+        }
+        $allowed = $this->app->doorman->isUserAllowed($roles);
     }
 }

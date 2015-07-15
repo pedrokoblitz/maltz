@@ -4,18 +4,16 @@ namespace Maltz;
 
 use Maltz\Http\CookieJar;
 use Maltz\Http\Session;
-use Maltz\Http\SessionDataStore;
 use Maltz\Http\Nonce;
 use Maltz\Mvc\DB;
-use Maltz\Mvc\Handler;
 use Maltz\Mvc\View;
 use Maltz\Sys\Model\Config;
-use Maltz\Sys\Model\Term;
+use Maltz\Service\SessionDataStore;
+use Maltz\Service\Handler;
 use Maltz\Service\Postman;
 use Maltz\Service\Doorman;
 use Maltz\Service\Correios;
 use Maltz\Service\Pagination;
-use Maltz\Service\LogHelper;
 use Slim\Slim;
 
 class Maltz
@@ -122,6 +120,10 @@ class Maltz
             }
         };
        
+        $app->defaultRoles = function () {
+            $roles = array('admin');
+        };
+
         $app->configureMode('production', function () use ($app) {
             $app->config('whoops.editor', 'sublime'); 
             $app->add(new \Zeuxisoo\Whoops\Provider\Slim\WhoopsMiddleware);
