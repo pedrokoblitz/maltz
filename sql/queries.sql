@@ -123,14 +123,14 @@ SELECT id, item_name, name FROM types WHERE item_name="resource";
 SELECT id, item_name, name FROM types WHERE item_name="term";
 SELECT id, item_name, name FROM types WHERE item_name="collection";
 
--- log
+--log
 SELECT id, user_id, action, item_name, item_id, created FROM log;
 
 INSERT INTO log (user_id, action, item_name, item_id, created)
   VALUES (user_id, "insert", "config", LAST_INSERT_ID(), NOW());
 
 
--- config
+--config
 SELECT id, key, value, activity, modified, created FROM config;
 
 INSERT INTO config (key, value, activity, created) 
@@ -138,7 +138,7 @@ INSERT INTO config (key, value, activity, created)
 
 UPDATE config SET key=?, value=?, activity=?, modified=NOW(), created=;
 
--- translations
+--translations
 INSERT INTO translations (user_id, language, item_name, item_id, slug, name, title, subtitle, excerpt, description, body)
 	VALUES ():
 
@@ -205,10 +205,10 @@ UPDATE types SET item_name=?, name=?;
 
 
 
--- avaiable translations
+--avaiable translations
 SELECT item_id, language, slug, name, title FROM translations WHERE item_name=? AND item_id=?;
 
--- update activity
+--update activity
 UPDATE $table SET activity=:activity;
 UPDATE $table SET modified=NOW();
 
@@ -222,12 +222,12 @@ SELECT * FROM translations
 
 
 
--- select by slug
+--select by slug
 SELECT FROM translations t1
   LEFT JOIN contents t2
     ON t1.item_id=t2.id
   WHERE slug=? 
-    -- OR WHERE t1.item_id=? 
+    --OR WHERE t1.item_id=? 
     AND t1.item_name = 'content'
     AND t1.language=?
     AND t2.activity > 0;
@@ -251,7 +251,7 @@ SELECT FROM translations t1
 
 
 
--- select by id
+--select by id
 SELECT FROM translations t1
   LEFT JOIN terms t2
     ON t1.item_id=t2.id
@@ -263,7 +263,7 @@ SELECT FROM translations t1
 
 
 
--- select many
+--select many
 SELECT FROM translations t1
   LEFT JOIN contents t2
     ON t1.item_id=t2.id
@@ -301,16 +301,16 @@ INSERT INTO items_groups (item_name, item_id, collection_id)
 
 
 
--- validar cadastro
+--validar cadastro
 SELECT user_id FROM tokens WHERE token=token AND user_id=user_id AND activity=1;
 UPDATE users SET activity=1 WHERE id=user_id;
 UPDATE tokens SET activity=0, used=NOW() WHERE token=token AND user_id=user_id;
 
--- permission
--- :username users.username
--- :name roles.name
+--permission
+--:username users.username
+--:name roles.name
 
--- add role
+--add role
 INSERT INTO users_roles (user_id, role_id) 
   VALUES (
     (
@@ -323,7 +323,7 @@ INSERT INTO users_roles (user_id, role_id)
     )
   );
 
--- delete role
+--delete role
 DELETE FROM users_roles 
   WHERE user_id=
     (
@@ -336,7 +336,7 @@ DELETE FROM users_roles
         WHERE name=:name
     );
 
--- has permission?
+--has permission?
 SELECT t1.id FROM users t1
   LEFT JOIN users_roles t2
   ON t1.id=t2.user_id
@@ -344,4 +344,157 @@ SELECT t1.id FROM users t1
   ON t2.role_id=t3.id
   WHERE t3.name=:name 
   AND t1.id=?;
+
+
+
+
+
+
+
+
+
+
+
+--projects
+
+INSERT INTO projects (title, description) VALUES (:title, :description);
+
+SELECT title, description FROM projects WHERE id=:id;
+
+-- get users in projects
+SELECT t1.name, t1.email, t3.title FROM users t1
+  JOIN users_projects t2
+    ON t1.id=t2.user_id
+  JOIN projects t3
+    ON t2.project_id=t3.id
+  WHERE t3.id=:id
+-- get all project tickets
+SELECT t2.title, t1.hash, t1.priority, t1.activity, t1.created, t1.modified
+  FROM tickets t1
+  JOIN projects t2
+    ON t1.project_id=t2.id
+  WHERE t2.id=:project_id
+-- get project tickets assigned to dev
+SELECT t2.title, t1.hash, t1.priority, t1.activity, t1.created, t1.modified
+  FROM tickets t1
+  JOIN projects t2
+    ON t1.project_id=t2.id
+  WHERE t1.project_id=:project_id
+  AND t1.dev_id=:dev_id
+-- get all tickets assigned to dev
+SELECT t2.title, t1.hash, t1.priority, t1.activity, t1.created, t1.modified
+  FROM tickets t1
+  JOIN projects t2
+    ON t1.project_id=t2.id
+  WHERE t1.dev_id=:dev_id
+
+--tickets
+
+--new (dev unassigned)
+INSERT INTO tickets (project_id, hash, priority, description, activity, created, modified) VALUES
+(:project_id, MD5(NOW()), :priority, :description, :activity, NOW(), NOW());
+--list unassigned
+SELECT (id, project_id, hash, priority, description, activity, created, modified) FROM tickets
+WHERE project_id=:project_id AND activity = 1 -- 1 = unassigned
+--assign dev
+UPDATE tickets SET dev_id=:dev_id WHERE ticket_id=:ticket_id;
+
+-- select ticket if is open
+SELECT id FROM tickets WHERE id=:id AND activity=2 -- 2 = open
+
+--list
+SELECT (id, dev_id, project_id, hash, priority, description, activity, created, modified) FROM tickets
+WHERE activity=:activity
+ORDER BY modified DESC, project_id ASC, priority DESC, activity DESC
+
+-- count tickets by project
+SELECT COUNT(t1.id) as count, t2.title FROM tickets t1
+  JOIN projects t2
+    ON t1.project_id=t2.id
+  GROUP BY t1.project_id; 
+
+-- count tickets by dev
+SELECT COUNT(t1.id) as count, t2.name, t3.email, t3.title FROM tickets t1
+  JOIN users t2
+    ON t1.dev_id=t2.id
+  JOIN projects t3
+    ON t1.project_id=t3.id
+  GROUP BY t1.dev_id; 
+
+-- count devs on project
+SELECT COUNT(t1.dev_id) as count, t2.name, t2.email, t3.title  FROM tickets t1
+  JOIN users t2
+    ON t1.dev_id=t2.id
+  JOIN projects t3
+    ON t1.project_id=t3.id
+  GROUP BY t1.project_id;
+
+--show tickets
+SELECT t1.id, t1.dev_id, t1.project_id, t1.hash, t1.priority, t1.description, t1.activity, t1.created, t1.modified FROM tickets t1
+WHERE id=:id
+--show contactinfo for users
+SELECT name, email FROM users
+  WHERE id=:id;
+--change activity
+UPDATE tickets SET activity=:activity, modified=NOW() WHERE id=:id;
+--change priority
+UPDATE tickets SET priority=:priority, modified=NOW() WHERE id=:id;
+
+
+--time tracking
+
+--open
+INSERT INTO ticket_time_tracking ticket_id, (start) VALUES (:ticket_id, NOW())
+--is anything open?
+SELECT ticket_id FROM ticket_time_tracking WHERE stop=NULL;
+--close
+UPDATE ticket_time_tracking SET ticket_id=:ticket_id, stop=NOW()
+
+
+--generate report and/or invoice
+--billable hours by project (to see all hours remove "WHERE activity")
+SET @totalhours = (
+  SELECT
+      SEC_TO_TIME(SUM(TIME_TO_SEC(timediff(t1.start, t1.stop)))) AS totalhours,
+      t3.title AS title -- add activity for proj report and proj.title for full report
+    FROM ticket_time_tracking t1 
+    JOIN tickets t2
+      ON t1.ticket_id=t2.id
+    JOIN projects t3
+      ON t2.project_id=t3.id
+    WHERE t2.project_id=:project_id -- (remove for total report)
+      AND t2.activity = 4 -- for generating invoice, closed tickets only (remove for project report)
+);
+
+--billable hours by dev
+SET @totalhours = (
+  SELECT
+      SEC_TO_TIME(SUM(TIME_TO_SEC(timediff(t1.start, t1.stop)))) AS totalhours,
+      t3.title AS title
+    FROM ticket_time_tracking t1 
+    JOIN tickets t2
+      ON t1.ticket_id=t2.id
+    JOIN projects t3
+      ON t2.project_id=t3.id
+    WHERE t2.dev_id=:dev_id
+      AND t2.activity = 4
+);
+
+--billable hours by dev in project
+SET @totalhours = (
+  SELECT
+      SEC_TO_TIME(SUM(TIME_TO_SEC(timediff(t1.start, t1.stop)))) AS totalhours,
+      t3.title AS title
+    FROM ticket_time_tracking t1 
+    JOIN tickets t2
+      ON t1.ticket_id=t2.id
+    JOIN projects t3
+      ON t2.project_id=t3.id
+    WHERE t2.dev_id=:dev_id
+      AND t2.project_id=:project_id
+      AND t2.activity = 4
+);
+
+INSERT INTO invoices (project_id, hours, rate, total, activity, created) 
+  VALUES (:project_id, :totalhours, :rate, :total, 1, NOW());
 

@@ -25,13 +25,13 @@ class Postman
 
     public function __construct()
     {
-        $transport = Swift_SendmailTransport::newInstance('/usr/sbin/sendmail -bs');
-        $this->mailer = Swift_Mailer::newInstance($transport);
+        $transport = \Swift_SendmailTransport::newInstance('/usr/sbin/sendmail -bs');
+        $this->mailer = \Swift_Mailer::newInstance($transport);
     }
 
     public function createMessage($senderEmail, $senderName, $subject, $body)
     {
-        $message = Swift_Message::newInstance()
+        $message = \Swift_Message::newInstance()
             ->setSubject($subject)
             ->setFrom(array($senderEmail => $senderName))
             ->setBody($body);

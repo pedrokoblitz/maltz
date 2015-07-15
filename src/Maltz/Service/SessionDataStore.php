@@ -18,6 +18,22 @@ class SessionDataStore
 		return md5($key . 'hash-salt@NR#KN#');
 	}
 
+	public function addMessage($message)
+	{
+		if ($this->session->has('system.messages')) {
+			$messages = $this->session->has('system.messages');
+		} else {
+			$messages = array();
+		}
+		$messages[] = $message;
+		$messages = $this->session->set('system.messages', $messages);
+	}
+
+	public function getMessages()
+	{
+		return $this->session->get('system.messages');
+	}
+
 	public function storeItems($key, $value)
 	{
 		$hash = $this->generateKey($key);
@@ -39,6 +55,17 @@ class SessionDataStore
         $this->session->set('user.email', $record->get('email'));
 	}
 
+	public function getUserData()
+		
+		$data = array(
+			'authenticated' => $this->session->get('user.authenticated'),
+			'id' => $this->session->get('user.id'),
+			'username' => $this->session->get('user.username'),
+			'name' => $this->session->get('user.name'),
+			'email' => $this->session->get('user.email'),
+			);
+	}
+
 	public function isUserAuthenticated()
 	{
 		return $this->session->get('user.authenticated') === true;
@@ -47,6 +74,15 @@ class SessionDataStore
 	public function getUserId()
 	{
 		return $this->session->get('user.id');
+	}
+
+	public function getViewData()
+	{
+		$data = array(
+			'messages' => $this->getMessages(),
+			'user' => $this->getUserData()
+			);
+		return $data;
 	}
 
 	public function destroy()

@@ -61,8 +61,7 @@ class Doorman
             }
             return true;
         }
-
-        throw new \Exception("Não autorizado", 002);
+        return false;
     }
 
     /*
@@ -89,7 +88,7 @@ class Doorman
 	 *
 	 * return bool
 	 */
-    public function isUserAllowed(array $roles)
+    public function isUserAuthenticated()
     {
         $authenticated = false;
         $cookie = $this->cookieJar->has('token.remember');
@@ -103,8 +102,20 @@ class Doorman
             $this->sessionDataStore->setUserData($data);
             $authenticated = true;
         }
+        return $authenticated;
+    }
 
-        if ($authenticated === true) {
+    /*
+     *
+     * checa permissao
+     *
+     * @param
+     *
+     * return bool
+     */    
+    public function isUserAllowed(array $roles)
+    {
+        if ($this->isUserAuthenticated()) {
             $userRoles = $this->getRoles($this->sessionDataStore->getUserId)
             foreach ($roles as $role) {
                 if (in_array($role, $userRoles)) {
@@ -112,8 +123,6 @@ class Doorman
                 }
             }
         }
-
-        $this->logout();
         return false;
     }
 
