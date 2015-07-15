@@ -13,24 +13,21 @@ class SessionDataStore
 		$this->session = $session;
 	}
 
-	public function storeUploadedResources($user_id, array $records)
+	private function generateKey($key)
 	{
-		$this->session->set('uploaded.resources', $records);
+		return md5($key . 'hash-salt@NR#KN#');
 	}
 
-	public function getUploadedResources()
+	public function storeItems($key, $value)
 	{
-		return $this->session('uploaded.resources');
+		$hash = $this->generateKey($key);
+		$this->session->set($hash, $value);
 	}
 
-	public function storeGroupItems($user_id, $group_name, $group_id, array $records)
+	public function getItems($hash)
 	{
-		$this->session->set('group.items', array('user_id' => $user_id, 'group_name' => $group_name, 'group_id' => $group_id, 'records' => $records));
-	}
-
-	public function getGroupItems()
-	{
-		return $this->session('group.items');
+		$hash = $this->generateKey($key);
+		return $this->session->get($key);
 	}
 
 	public function setUserData($data)
