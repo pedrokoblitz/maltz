@@ -396,8 +396,7 @@ CREATE TABLE `blocks` (
 
 -- END SITE BUILDING
 
-
-
+-- USER INTERACTION
 
 DROP TABLE IF EXISTS `comments`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -427,15 +426,10 @@ CREATE TABLE `folksonomy` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+-- END USER INTERACTION
 
 
-
-
-
-
-
-
-
+-- PROJECT MANAGEMENT
 
 DROP TABLE IF EXISTS `projects`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -502,6 +496,11 @@ CREATE TABLE `invoices` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+-- END PROJECT MANAGEMENT
+
+-- CALENDAR
+
+-- END CALENDAR
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
