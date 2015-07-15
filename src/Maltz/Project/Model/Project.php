@@ -40,6 +40,13 @@ class Project
 		return $resultado;
 	}
 
+	public function getDevs($id)
+	{
+		$sql = "";
+		$resultado = $this->db->run($sql, array());
+		return $resultado;
+	}
+
 	public function getUsers($id)
 	{
 		$sql = "";

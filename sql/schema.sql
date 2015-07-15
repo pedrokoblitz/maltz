@@ -461,7 +461,7 @@ CREATE TABLE `tickets` (
   `project_id` int(10) unsigned NOT NULL,
   `hash` varchar(32) NOT NULL,
   `description` BLOB NOT NULL,
-  `activity` tinyint(1) unsigned NOT NULL DEFAULT 2, /* 0 = deleted, 1 = unassigned, 2 = open, 3 = active, 4 = closed */
+  `activity` tinyint(1) unsigned NOT NULL DEFAULT 2, /* 0 = deleted, 1 = unassigned, 2 = open, 3 = active, 4 = closed, 5 = charged */
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)

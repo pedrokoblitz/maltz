@@ -75,17 +75,18 @@ class Ticket
 		return $resultado;
 	}
 
-	public function getUserEmail($ticket_id)
+	public function getProjectMembers($ticket_id)
 	{
-		$sql = "SELECT t2.email FROM tickets t1
-			JOIN users t2
-				ON t1.user_id=t2.id
-			WHERE t1.id=:ticket_id";
+		
+	}
+
+	public function getProjectLeader($ticket_id)
+	{
 		$resultado = $this->db->run($sql, array('ticket_id' => $ticket_form));
 		return $resultado->getFirstRecord()->get('email');
 	}
 
-	public function getDevEmail($ticket_id)
+	public function getDev($ticket_id)
 	{
 		$sql = "SELECT t2.email FROM tickets t1
 			JOIN users t2

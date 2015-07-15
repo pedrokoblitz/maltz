@@ -361,32 +361,21 @@ INSERT INTO projects (title, description) VALUES (:title, :description);
 
 SELECT title, description FROM projects WHERE id=:id;
 
--- get users in projects
+-- get users in project
 SELECT t1.name, t1.email, t3.title FROM users t1
   JOIN users_projects t2
     ON t1.id=t2.user_id
   JOIN projects t3
     ON t2.project_id=t3.id
   WHERE t3.id=:id
--- get all project tickets
-SELECT t2.title, t1.hash, t1.priority, t1.activity, t1.created, t1.modified
-  FROM tickets t1
-  JOIN projects t2
-    ON t1.project_id=t2.id
-  WHERE t2.id=:project_id
--- get project tickets assigned to dev
-SELECT t2.title, t1.hash, t1.priority, t1.activity, t1.created, t1.modified
-  FROM tickets t1
-  JOIN projects t2
-    ON t1.project_id=t2.id
-  WHERE t1.project_id=:project_id
-  AND t1.dev_id=:dev_id
--- get all tickets assigned to dev
-SELECT t2.title, t1.hash, t1.priority, t1.activity, t1.created, t1.modified
-  FROM tickets t1
-  JOIN projects t2
-    ON t1.project_id=t2.id
-  WHERE t1.dev_id=:dev_id
+
+-- count devs on project
+SELECT COUNT(t1.dev_id) as count, t2.name, t2.email, t3.title  FROM tickets t1
+  JOIN users t2
+    ON t1.dev_id=t2.id
+  JOIN projects t3
+    ON t1.project_id=t3.id
+  GROUP BY t1.project_id;
 
 --tickets
 
@@ -421,14 +410,6 @@ SELECT COUNT(t1.id) as count, t2.name, t3.email, t3.title FROM tickets t1
     ON t1.project_id=t3.id
   GROUP BY t1.dev_id; 
 
--- count devs on project
-SELECT COUNT(t1.dev_id) as count, t2.name, t2.email, t3.title  FROM tickets t1
-  JOIN users t2
-    ON t1.dev_id=t2.id
-  JOIN projects t3
-    ON t1.project_id=t3.id
-  GROUP BY t1.project_id;
-
 --show tickets
 SELECT t1.id, t1.dev_id, t1.project_id, t1.hash, t1.priority, t1.description, t1.activity, t1.created, t1.modified FROM tickets t1
 WHERE id=:id
@@ -440,6 +421,25 @@ UPDATE tickets SET activity=:activity, modified=NOW() WHERE id=:id;
 --change priority
 UPDATE tickets SET priority=:priority, modified=NOW() WHERE id=:id;
 
+-- get all project tickets
+SELECT t2.title, t1.hash, t1.priority, t1.activity, t1.created, t1.modified
+  FROM tickets t1
+  JOIN projects t2
+    ON t1.project_id=t2.id
+  WHERE t2.id=:project_id
+-- get project tickets assigned to dev
+SELECT t2.title, t1.hash, t1.priority, t1.activity, t1.created, t1.modified
+  FROM tickets t1
+  JOIN projects t2
+    ON t1.project_id=t2.id
+  WHERE t1.project_id=:project_id
+  AND t1.dev_id=:dev_id
+-- get all tickets assigned to dev
+SELECT t2.title, t1.hash, t1.priority, t1.activity, t1.created, t1.modified
+  FROM tickets t1
+  JOIN projects t2
+    ON t1.project_id=t2.id
+  WHERE t1.dev_id=:dev_id
 
 --time tracking
 
@@ -448,34 +448,40 @@ INSERT INTO ticket_time_tracking ticket_id, (start) VALUES (:ticket_id, NOW())
 --is anything open?
 SELECT ticket_id FROM ticket_time_tracking WHERE stop=NULL;
 --close
-UPDATE ticket_time_tracking SET ticket_id=:ticket_id, stop=NOW()
+UPDATE ticket_time_tracking SET stop=NOW() WHERE id=:id
 
 
 --generate report and/or invoice
 --billable hours by project (to see all hours remove "WHERE activity")
 SET @totalhours = (
-  SELECT
-      SEC_TO_TIME(SUM(TIME_TO_SEC(timediff(t1.start, t1.stop)))) AS totalhours,
-      t3.title AS title -- add activity for proj report and proj.title for full report
-    FROM ticket_time_tracking t1 
-    JOIN tickets t2
-      ON t1.ticket_id=t2.id
-    JOIN projects t3
-      ON t2.project_id=t3.id
-    WHERE t2.project_id=:project_id -- (remove for total report)
-      AND t2.activity = 4 -- for generating invoice, closed tickets only (remove for project report)
+SELECT
+    SEC_TO_TIME(SUM(TIME_TO_SEC(timediff(t1.start, t1.stop)))) AS totalhours,
+    totalhours * t4.rate AS total,
+    t3.title AS title -- add activity for proj report and proj.title for full report
+  FROM ticket_time_tracking t1 
+  JOIN tickets t2
+    ON t1.ticket_id=t2.id
+  JOIN projects t3
+    ON t2.project_id=t3.id
+  JOIN users t4
+    ON t1.dev_id=t4.id
+  WHERE t2.project_id=:project_id -- (remove for total report)
+    AND t2.activity = 4 -- for generating invoice, closed tickets only (remove for project report)
 );
 
 --billable hours by dev
 SET @totalhours = (
   SELECT
       SEC_TO_TIME(SUM(TIME_TO_SEC(timediff(t1.start, t1.stop)))) AS totalhours,
+      totalhours * t4.rate AS total,
       t3.title AS title
     FROM ticket_time_tracking t1 
     JOIN tickets t2
       ON t1.ticket_id=t2.id
     JOIN projects t3
       ON t2.project_id=t3.id
+    JOIN users t4
+      ON t1.dev_id=t4.id
     WHERE t2.dev_id=:dev_id
       AND t2.activity = 4
 );
@@ -484,12 +490,15 @@ SET @totalhours = (
 SET @totalhours = (
   SELECT
       SEC_TO_TIME(SUM(TIME_TO_SEC(timediff(t1.start, t1.stop)))) AS totalhours,
+      totalhours * t4.rate AS total,
       t3.title AS title
     FROM ticket_time_tracking t1 
     JOIN tickets t2
       ON t1.ticket_id=t2.id
     JOIN projects t3
       ON t2.project_id=t3.id
+    JOIN users t4
+      ON t1.dev_id=t4.id
     WHERE t2.dev_id=:dev_id
       AND t2.project_id=:project_id
       AND t2.activity = 4
@@ -498,3 +507,7 @@ SET @totalhours = (
 INSERT INTO invoices (project_id, hours, rate, total, activity, created) 
   VALUES (:project_id, :totalhours, :rate, :total, 1, NOW());
 
+SELECT t1.id, t2.title AS project, t1.hours, t1.rate, t1.total, t1.activity, t1.created FROM invoices
+  JOIN projects t2
+    ON t1.project_id=t2.id
+  WHERE t1.id=:id

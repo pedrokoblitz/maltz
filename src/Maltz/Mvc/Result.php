@@ -72,6 +72,31 @@ class Result extends TypeArray
         return isset($this->items['records']) ? $this->items['records'] : null;
     }
 
+    public function getLastInsertId()
+    {
+        return isset($this->items['last.insert.id']) ? $this->items['last.insert.id'] : null;
+    }
+
+    public function getIdList()
+    {
+        return isset($this->items['id.list']) ? $this->items['id.list'] : null;
+    }
+
+    public function getCount()
+    {
+        return isset($this->items['count']) ? $this->items['count'] : null;
+    }
+
+    public function getMessage()
+    {
+        return isset($this->items['message']) ? $this->items['message'] : null;
+    }
+
+    public function isSuccessful()
+    {
+        return isset($this->items['success']) ? $this->items['success'] : null;
+    }
+
     public function toArray()
     {
         return $this->itemsToArray($this->items);

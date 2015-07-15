@@ -105,7 +105,7 @@ class DB extends \PDO
                     $result->set('success', true);
                     $result->set('records', $records);
                     $result->set('message', DbMessage::SELECTED);
-                    !empty($ids) ? $result->set('id_list', $ids) : false;
+                    !empty($ids) ? $result->set('id.list', $ids) : false;
                     return $result;
 
                 } elseif (preg_match("/^(select found_rows)/i", $this->sql)) {

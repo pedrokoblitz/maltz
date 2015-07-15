@@ -23,9 +23,7 @@ class Api {
          */
         
         $app->get('/api/:model/:type(/:pg(/:key(/:order)))', function ($model, $type, $pg = 1, $key = 'created', $order = 'asc') use ($app) {
-            
-            $app->handler->auth();
-
+                
             switch ($model) {
                 case 'content':
                     $entity = new Content($app->db);
