@@ -13,16 +13,14 @@ class Nonce
 
     public function generate()
     {
-        $token = sha1(microtime() . 'm4a3l2t1z');
+        $token = md5(microtime() . 'm4a3l2t1z');
         $this->session->set('token.nonce', $token);
+        return $token;
     }
 
     public function verify($token)
     {
         $nonce = $this->session->get('token.nonce');
-        if ($token === $nonce) {
-            return true;
-        }
-        return false;
+        return (string) $token === (string) $nonce;
     }
 }

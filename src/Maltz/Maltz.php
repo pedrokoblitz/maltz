@@ -7,7 +7,7 @@ use Maltz\Http\Session;
 use Maltz\Http\SessionDataStore;
 use Maltz\Http\Nonce;
 use Maltz\Mvc\DB;
-use Maltz\Mvc\HttpHandler;
+use Maltz\Mvc\Handler;
 use Maltz\Mvc\View;
 use Maltz\Sys\Model\Config;
 use Maltz\Sys\Model\Term;
@@ -75,12 +75,12 @@ class Maltz
             return new SessionDataStore($app->session);
         };
 
-        $app->nonce = function () {
+        $app->nonce = function () use ($app) {
             return new Nonce($app->session);
         };
 
-        $app->httpHandler = function () use ($app) {
-            return new HttpHandler($app);
+        $app->handler = function () use ($app) {
+            return new Handler($app);
         };
 
         $app->doorman = function () use ($app) {

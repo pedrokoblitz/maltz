@@ -39,18 +39,8 @@ class Api {
                     break;
             }
 
-            $app->response->headers->set('Content-Type', 'application/json');
-
             $result = $entity->findByType($type, $pg, $app->config('per_page'), $key, $order);
-
-            if ($result->get('success')) {
-                $app->response->setStatus(200);
-            } else {
-                $app->response->setStatus(404);
-            }
-
-            $app->response->setBody($result->toJson());
-            $app->stop();
+            $app->handler->handleApi($result);
 
         })->name('api_list')->conditions(array('model' => 'content|collection|resource|term', 'type' => '\w+', 'pg' => '\d+', 'key' => '\w+', 'order' => 'asc|desc'));
 
@@ -70,17 +60,8 @@ class Api {
                     break;
             }
 
-            $app->response->headers->set('Content-Type', 'application/json');
             $result = $entity->show($id);
-
-            if ($result->get('success')) {
-                $app->response->setStatus(200);
-            } else {
-                $app->response->setStatus(404);
-            }
-
-            $app->response->setBody($result->toJson());
-            $app->stop();
+            $app->handler->handleApi($result);
 
         })->name('api_show')->conditions(array('model' => 'content|collection|resource|term', 'id' => '\d+'));
 
@@ -101,24 +82,11 @@ class Api {
                     break;
             }
 
-            $app->response->headers->set('Content-Type', 'application/json');
-
-            $body = $app->request->getBody();
-            $record = new Record(json_decode($body, true));
-
-            $app->response->headers->set('Content-Type', 'application/json');
+            $record = $app->handler->handlePostRequest();
             $result = $entity->save($record);
-
-            if ($result->get('success')) {
-                $id = $record->has('id') ? $record->get('id') : $result->get('last.insert.id');
-                Log::query('log', $app->session->get('user.id'), $model, $id, 'save');
-                $app->response->setStatus(200);
-            } else {
-                $app->response->setStatus(404);
-            }
-
-            $app->response->setBody($result->toJson());
-            $app->stop();
+            $id = $record->has('id') ? $record->get('id') : $result->get('last.insert.id');
+            Log::query('log', $app->session->get('user.id'), $model, $id, 'save');
+            $app->handler->handleApi($result);
 
         })->name('api_save')->conditions(array('model' => 'content|collection|resource|term'));
 
@@ -141,19 +109,9 @@ class Api {
                     break;
             }
 
-            $app->response->headers->set('Content-Type', 'application/json');
             $result = $entity->delete($id);
-
-            if ($result->get('success')) {
-                Log::query('log', $app->session->get('user.id'), $model, $id, 'delete');
-                $app->response->setStatus(200);
-                $app->response->setBody($result->toJson());
-            } else {
-                $app->response->setStatus(404);
-            }
-
-            $app->response->setBody($result->toJson());
-            $app->stop();
+            Log::query('log', $app->session->get('user.id'), $model, $id, 'delete');
+            $app->handler->handleApi($result);
 
         })->name('api_delete')->conditions(array('model' => 'content|collection|resource|term', 'id' => '\d+'));
 
@@ -174,23 +132,29 @@ class Api {
                     break;
             }
 
-            $app->response->headers->set('Content-Type', 'application/json');
             $result = $entity->displayTree();
-
-            if ($result->get('success')) {
-                $app->response->setStatus(200);
-            } else {
-                $app->response->setStatus(404);
-            }
-
-            $app->response->setBody($result->toJson());
-            $app->stop();
+            $app->handler->handleApi($result);
 
         })->name('api_tree')->conditions(array('model' => 'content|collection|term'));
 
         /*
          * RELATIONSHIPS
          */
+        $app->get('/api/:group_name/:group_id/:item_name/show', function ($group_name, $group_id, $item_name) use ($app) {
+
+            switch ($group_name) {
+                case 'content':
+                    $entity = new Content($app->db);
+                    break;
+                case 'collection':
+                    $entity = new Collection($app->db);
+                    break;
+            }
+
+            $result = $entity->getAll($group_id, $item_name);
+            $app->handler->handleApi($result);
+
+        })->name('api_show_items')->conditions(array('group_name' => 'content|collection', 'group_id' => '\d+', 'item_name' => 'content|collection|resource|term'));
         
         $app->get('/api/:group_name/:group_id/:item_name/:item_id/:order/add', function ($group_name, $group_id, $item_name, $item_id, $order) use ($app) {
 
@@ -203,18 +167,8 @@ class Api {
                     break;
             }
 
-            $app->response->headers->set('Content-Type', 'application/json');
             $result = $entity->add($group_id, $item_name, $item_id, $order);
-
-            if ($result->get('success')) {
-                Log::query('log', $app->session->get('user.id'), $group_name, $group_id, 'add_item', $item_name, $item_id);
-                $app->response->setStatus(200);
-            } else {
-                $app->response->setStatus(404);
-            }
-
-            $app->response->setBody($result->toJson());
-            $app->stop();
+            $app->handler->handleApi($result);
 
         })->name('api_add_item')->conditions(array('group_name' => 'content|collection', 'group_id' => '\d+', 'item_name' => 'content|collection|resource|term', 'item_id' => '\d+', 'order' => '\d+'));
 
@@ -229,18 +183,8 @@ class Api {
                     break;
             }
 
-            $app->response->headers->set('Content-Type', 'application/json');
             $result = $entity->remove($group_id, $item_name, $item_id);
-
-            if ($result->get('success')) {
-                Log::query('log', $app->session->get('user.id'), $group_name, $group_id, 'add_item', $item_name, $item_id);
-                $app->response->setStatus(200);
-            } else {
-                $app->response->setStatus(404);
-            }
-
-            $app->response->setBody($result->toJson());
-            $app->stop();
+            $app->handler->handleApi($result);
 
         })->name('api_remove_item')->conditions(array('group_name' => 'content|collection', 'group_id' => '\d+', 'item_name' => 'content|collection|resource|term', 'item_id' => '\d+'));
 
@@ -249,52 +193,28 @@ class Api {
          */
         
         $app->get('/api/type(/:pg(/:key(/:order)))', function($pg = 1, $key = 'name', $order = 'asc') use ($app) {
-            $app->response->headers->set('Content-Type', 'application/json');
-            $result = Type::query($app->db, 'display');
-            if ($result->get('success')) {
-                $app->response->setStatus(200);
-            } else {
-                $app->response->setStatus(404);
-            }
 
-            $app->response->setBody($result->toJson());
-            $app->stop();
+            $result = Type::query($app->db, 'display');
+            $app->handler->handleApi($result);
+
         })->name('api_type_list')->conditions(array('pg' => '\d+', 'key' => '\w+', 'order' => 'asc|desc'));
 
 
         $app->get('/api/type/:id/delete', function($id) use ($app) {
-            $app->response->headers->set('Content-Type', 'application/json');
+
             $result = Type::query($app->db, 'delete', $id);
+            $app->handler->handleApi($result);
 
-            if ($result->get('success')) {
-                Log::query('log', $app->session->get('user.id'), $model, $id, 'delete');
-                $app->response->setStatus(200);
-            } else {
-                $app->response->setStatus(404);
-            }
-
-            $app->response->setBody($result->toJson());
-            $app->stop();
         })->name('api_type_delete')->conditions(array('id' => '\d+'));
 
         $app->post('/api/type/save', function() use ($app) {
-            $app->response->headers->set('Content-Type', 'application/json');
-            $body = $app->request->getBody();
-            $record = new Record(json_decode($body, true));
 
-            $app->response->headers->set('Content-Type', 'application/json');
+            $record = $app->handler->handlePostRequest();
             $result = Type::query($app->db, 'save', $record);
+            $id = $record->has('id') ? $record->get('id') : $result->get('last.insert.id');
+            Log::query('log', $app->session->get('user.id'), $model, $id, 'save');
+            $app->handler->handleApi($result);
 
-            if ($result->get('success')) {
-                $id = $record->has('id') ? $record->get('id') : $result->get('last.insert.id');
-                Log::query('log', $app->session->get('user.id'), $model, $id, 'save');
-                $app->response->setStatus(200);
-            } else {
-                $app->response->setStatus(404);
-            }
-
-            $app->response->setBody($result->toJson());
-            $app->stop();
         })->name('api_type_save');
 
 
@@ -303,144 +223,75 @@ class Api {
          */
 
         $app->get('/api/area(/:pg(/:key(/:order)))', function($pg = 1, $key = 'name', $order = 'asc') use ($app) {
-            $app->response->headers->set('Content-Type', 'application/json');
+
             $result = Area::query($app->db, 'find', $pg, $app->config('per_page'), $key, $order);
+            $app->handler->handleApi($result);
 
-            if ($result->get('success')) {
-                $app->response->setStatus(200);
-            } else {
-                $app->response->setStatus(404);
-            }
-
-            $app->response->setBody($result->toJson());
-            $app->stop();
         })->name('api_area_list')->conditions(array('pg' => '\d+', 'key' => '\w+', 'order' => 'asc|desc'));
 
         $app->get('/api/area/:id/show', function($id) use ($app) {
-            $app->response->headers->set('Content-Type', 'application/json');
+
             $result = Area::query($app->db, 'getBlocks', $id);
+            $app->handler->handleApi($result);
 
-            if ($result->get('success')) {
-                $app->response->setStatus(200);
-            } else {
-                $app->response->setStatus(404);
-            }
-
-            $app->response->setBody($result->toJson());
-            $app->stop();
         })->name('api_area_show')->conditions(array('pg' => '\d+', 'key' => '\w+', 'order' => 'asc|desc'));
 
-        $app->post('/api/area/:group_id/block/:item_id/add', function($group_id, $item_id) use ($app) {
-            $app->response->headers->set('Content-Type', 'application/json');
+        $app->get('/api/area/:group_id/block/:item_id/add', function($group_id, $item_id) use ($app) {
+
             $result = Area::query($app->db, 'show', $id);
+            $app->handler->handleApi($result);
 
-            if ($result->get('success')) {
-                $app->response->setStatus(200);
-            } else {
-                $app->response->setStatus(404);
-            }
-
-            $app->response->setBody($result->toJson());
-            $app->stop();
         })->name('api_area_block_add')->conditions(array('pg' => '\d+', 'key' => '\w+', 'order' => 'asc|desc'));
 
-        $app->post('/api/area/:group_id/block/:item_id/remove', function($group_id, $item_id) use ($app) {
-            $app->response->headers->set('Content-Type', 'application/json');
+        $app->get('/api/area/:group_id/block/:item_id/remove', function($group_id, $item_id) use ($app) {
+
             $result = Area::query($app->db, 'show', $id);
+            $app->handler->handleApi($result);
 
-            if ($result->get('success')) {
-                $app->response->setStatus(200);
-            } else {
-                $app->response->setStatus(404);
-            }
-
-            $app->response->setBody($result->toJson());
-            $app->stop();
         })->name('api_area_block_remove')->conditions(array('pg' => '\d+', 'key' => '\w+', 'order' => 'asc|desc'));
 
         $app->get('/api/area/:id/delete', function($id) use ($app) {
-            $app->response->headers->set('Content-Type', 'application/json');
+
             $result = Area::query($app->db, 'delete', $id);
+            Log::query('log', $app->session->get('user.id'), 'area', $id, 'delete');
+            $app->handler->handleApi($result);
 
-            if ($result->get('success')) {
-                Log::query('log', $app->session->get('user.id'), 'area', $id, 'delete');
-                $app->response->setStatus(200);
-            } else {
-                $app->response->setStatus(404);
-            }
-
-            $app->response->setBody($result->toJson());
-            $app->stop();
         })->name('api_area_delete')->conditions(array());
 
         $app->post('/api/area/save', function() use ($app) {
-            $app->response->headers->set('Content-Type', 'application/json');
-            $body = $app->request->getBody();
-            $record = new Record(json_decode($body, true));
 
-            $app->response->headers->set('Content-Type', 'application/json');
+            $record = $app->handler->handlePostRequest();
             $result = Area::query($app->db, 'save', $record);
+            $id = $record->has('id') ? $record->get('id') : $result->get('last.insert.id');
+            Log::query('log', $app->session->get('user.id'), $model, $id, 'save');
+            $app->handler->handleApi($result);
 
-            if ($result->get('success')) {
-                $id = $record->has('id') ? $record->get('id') : $result->get('last.insert.id');
-                Log::query('log', $app->session->get('user.id'), $model, $id, 'save');
-                $app->response->setStatus(200);
-            } else {
-                $app->response->setStatus(404);
-            }
-
-            $app->response->setBody($result->toJson());
-            $app->stop();
         })->name('api_area_save');
 
 
         $app->get('/api/block(/:pg(/:key(/:order)))', function($pg = 1, $key = 'modified', $order = 'desc') use ($app) {
-            $app->response->headers->set('Content-Type', 'application/json');
+
             $result = Block::query($app->db, 'find', $pg, $app->config('per_page'), $key, $order);
+            $app->handler->handleApi($result);
 
-            if ($result->get('success')) {
-                $app->response->setStatus(200);
-            } else {
-                $app->response->setStatus(404);
-            }
-
-            $app->response->setBody($result->toJson());
-            $app->stop();
         })->name('api_block_list')->conditions(array('pg' => '\d+', 'key' => '\w+', 'order' => 'asc|desc'));
 
         $app->get('/api/block/:id/delete', function($id) use ($app) {
-            $app->response->headers->set('Content-Type', 'application/json');
+
             $result = Block::query($app->db, 'delete', $id);
+            Log::query('log', $app->session->get('user.id'), 'block', $id, 'delete');
+            $app->handler->handleApi($result);
 
-            if ($result->get('success')) {
-                Log::query('log', $app->session->get('user.id'), 'block', $id, 'delete');
-                $app->response->setStatus(200);
-            } else {
-                $app->response->setStatus(404);
-            }
-
-            $app->response->setBody($result->toJson());
-            $app->stop();
         })->name('api_block_delete')->conditions(array());
 
         $app->post('/api/block/save', function() use ($app) {
-            $app->response->headers->set('Content-Type', 'application/json');
-            $body = $app->request->getBody();
-            $record = new Record(json_decode($body, true));
 
-            $app->response->headers->set('Content-Type', 'application/json');
+            $record = $app->handler->handlePostRequest();
             $result = Block::query($app->db, 'save', $record);
+            $id = $record->has('id') ? $record->get('id') : $result->get('last.insert.id');
+            Log::query('log', $app->session->get('user.id'), 'block', $id, 'save');
+            $app->handler->handleApi($result);
 
-            if ($result->get('success')) {
-                $id = $record->has('id') ? $record->get('id') : $result->get('last.insert.id');
-                Log::query('log', $app->session->get('user.id'), 'block', $id, 'save');
-                $app->response->setStatus(200);
-            } else {
-                $app->response->setStatus(404);
-            }
-
-            $app->response->setBody($result->toJson());
-            $app->stop();
         })->name('api_block_save')->conditions(array());
 
 
@@ -449,78 +300,44 @@ class Api {
          */
         
         $app->get('/api/user(/:pg(/:key(/:order)))', function($pg = 1, $key = 'modified', $order = 'desc') use ($app) {
-            $app->response->headers->set('Content-Type', 'application/json');
+
             $result = User::query($app->db, 'find', $pg, $app->config('per_page'), $key, $order);
+            $app->handler->handleApi($result);
 
-            if ($result->get('success')) {
-                $app->response->setStatus(200);
-            } else {
-                $app->response->setStatus(404);
-            }
-
-            $app->response->setBody($result->toJson());
-            $app->stop();
         })->name('api_user_list')->conditions(array('pg' => '\d+', 'key' => '\w+', 'order' => 'asc|desc'));
 
         $app->get('/api/user/:id/show', function($id) use ($app) {
-            $app->response->headers->set('Content-Type', 'application/json');
+
             $result = User::query($app->db, 'show', $id);
+            $app->handler->handleApi($result);
 
-            if ($result->get('success')) {
-                $app->response->setStatus(200);
-            } else {
-                $app->response->setStatus(404);
-            }
-
-            $app->response->setBody($result->toJson());
-            $app->stop();
         })->name('api_user_show')->conditions(array());
 
         $app->get('/api/user/profile', function($id) use ($app) {
-            $app->response->headers->set('Content-Type', 'application/json');
+
             $result = User::query($app->db, 'show', $app->session->get('user.id'));
+            $app->handler->handleApi($result);
 
-            if ($result->get('success')) {
-                $app->response->setStatus(200);
-            } else {
-                $app->response->setStatus(404);
-            }
-
-            $app->response->setBody($result->toJson());
-            $app->stop();
         })->name('api_user_profile');
 
         $app->get('/api/user/:id/delete', function($id) use ($app) {
-            $app->response->headers->set('Content-Type', 'application/json');
+
             $result = User::query($app->db, 'delete', $id);
 
-            if ($result->get('success')) {
-                Log::query('log', $app->session->get('user.id'), 'user', $id, 'delete');
-                $app->response->setStatus(200);
-            } else {
-                $app->response->setStatus(404);
-            }
+            Log::query('log', $app->session->get('user.id'), 'user', $id, 'delete');
+            $app->response->setStatus(200);
+            $app->handler->handleApi($result);
 
-            $app->response->setBody($result->toJson());
-            $app->stop();
         })->name('api_user_delete')->conditions(array());
 
         $app->post('/api/user/save', function() use ($app) {
-            $body = $app->request->getBody();
-            $record = new Record(json_decode($body, true));
-            $app->response->headers->set('Content-Type', 'application/json');
+
+            $record = $app->handler->handlePostRequest();
             $result = User::query($app->db, 'save', $record);
+            $id = $record->has('id') ? $record->get('id') : $result->get('last.insert.id');
+            Log::query('log', $app->session->get('user.id'), $model, $id, 'save');
+            $app->handler->handleApi($result);
 
-            if ($result->get('success')) {
-                $id = $record->has('id') ? $record->get('id') : $result->get('last.insert.id');
-                Log::query('log', $app->session->get('user.id'), $model, $id, 'save');
-                $app->response->setStatus(200);
-            } else {
-                $app->response->setStatus(404);
-            }
-
-            $app->response->setBody($result->toJson());
-            $app->stop();
         })->name('api_user_save');
 
 
@@ -538,50 +355,28 @@ class Api {
          */
         
         $app->get('/api/config', function() use ($app) {
-            $app->response->headers->set('Content-Type', 'application/json');
+
             $result = Config::query($app->db, 'display');
+            $app->handler->handleApi($result);
 
-            if ($result->get('success')) {
-                $app->response->setStatus(200);
-            } else {
-                $app->response->setStatus(404);
-            }
-
-            $app->response->setBody($result->toJson());
-            $app->stop();
         })->name('api_config_list')->conditions(array());
 
         $app->post('/api/config', function() use ($app) {
-            $body = $app->request->getBody();
-            $record = new Record(json_decode($body, true));
-            $app->response->headers->set('Content-Type', 'application/json');
+
+            $record = $app->handler->handlePostRequest();
             $result = Config::query($app->db, 'save', $record);
+            $id = $record->has('id') ? $record->get('id') : $result->get('last.insert.id');
+            Log::query('log', $app->session->get('user.id'), 'config', $id, 'save');
+            $app->handler->handleApi($result);
 
-            if ($result->get('success')) {
-                $id = $record->has('id') ? $record->get('id') : $result->get('last.insert.id');
-                Log::query('log', $app->session->get('user.id'), 'config', $id, 'save');
-                $app->response->setStatus(200);
-            } else {
-                $app->response->setStatus(404);
-            }
-
-            $app->response->setBody($result->toJson());
-            $app->stop();
         })->name('api_config_save');
 
 
         $app->get('/api/log(/:pg)', function($pg = 1) use ($app) {
-            $app->response->headers->set('Content-Type', 'application/json');
+
             $result = Log::query($app->db, 'find', $pg, $app->config('per_page'));
+            $app->handler->handleApi($result);
 
-            if ($result->get('success')) {
-                $app->response->setStatus(200);
-            } else {
-                $app->response->setStatus(404);
-            }
-
-            $app->response->setBody($result->toJson());
-            $app->stop();
         })->name('api_log_list')->conditions(array('pg' => '\d+'));
 
 
@@ -607,7 +402,7 @@ class Api {
             list($files, $headers) = $fileupload->processAll();
 
             foreach($headers as $header => $value) {
-              header($header . ': ' . $value);
+                header($header . ': ' . $value);
             }
 
             $body = json_encode(array('files' => $files));
