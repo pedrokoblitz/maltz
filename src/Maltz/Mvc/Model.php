@@ -47,8 +47,6 @@ abstract class Model
         return is_string($key) && isset($this->$key) && in_array($key, array('slug', 'table', 'rules')) ? $this->$key : null;
     }
 
-    //abstract public function processRecord(Record $record);
-
     protected function checkRecord(Record $record)
     {
         $record->validate($this->rules);

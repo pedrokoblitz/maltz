@@ -34,6 +34,7 @@ class DB extends \PDO
         $options = array(
             \PDO::ATTR_PERSISTENT => true,
             \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
+            \PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"
         );
 
         try {
@@ -73,7 +74,6 @@ class DB extends \PDO
     public function run($sql, $bind = "", array $settings = array())
     {
         //var_dump($sql);
-
         $settings = array_merge($settings, $this->settings);
 
         $this->sql = trim($sql);

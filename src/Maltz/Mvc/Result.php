@@ -32,7 +32,9 @@ class Result extends TypeArray
                 $newItems[$key] = $this->itemsToArray($value);
             } elseif ($value instanceof Record) {
                 $newItems[$key] = $value->toArray();
-            } elseif (is_scalar($value)) {
+            } elseif (is_int($value)) {
+                $newItems[$key] = $value;
+            } elseif (is_string($value)) {
                 $newItems[$key] = $value;
             }
         }

@@ -5,7 +5,7 @@ namespace Maltz\Content\Model;
 use Maltz\Mvc\Model;
 use Maltz\Mvc\Record;
 use Maltz\Mvc\Activity;
-use Maltz\Mvc\HierarchyTree;
+use Maltz\Mvc\Tree;
 use Maltz\Mvc\Translatable;
 use Maltz\Mvc\ItemRelationships;
 use Maltz\Service\Pagination;
@@ -32,7 +32,7 @@ class Content extends Model
     use Activity;
     use Translatable;
     use ItemRelationships;
-    //use HierarchyTree;
+    use Tree;
     /*
 	 * construtor
 	 *

@@ -52,7 +52,7 @@ class Maltz
 
         $app->config(array(
             'log.writer' => $logger,
-            'mode' => 'production',
+            'mode' => 'development',
             'debug' => true,
             'templates.path' => './views',
             'base.uri' => '/',
@@ -84,7 +84,7 @@ class Maltz
         };
 
         $app->doorman = function () use ($app) {
-            return new Doorman($app->db, $app->session, $app->cookie);
+            return new Doorman($app->db, $app->sessionDataStore, $app->cookie);
         };
 
         $app->container->singleton('view', function () use ($app) {
@@ -107,7 +107,7 @@ class Maltz
             return new Pagination();
         };
 
-        $app->carteiro = function () {
+        $app->postman = function () {
             return new Postman();
         };
 

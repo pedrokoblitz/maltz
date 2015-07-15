@@ -47,9 +47,9 @@ class Validation
      *
      * @return bool
      */
-    public static function int($data)
+    public function int($data)
     {
-        return self::validate("/^[0-9]$/", $data);
+        return $this->validate("/^[0-9]$/", $data);
     }
 
     /**
@@ -59,9 +59,9 @@ class Validation
      *
      * @return bool
      */
-    public static function float($data)
+    public function float($data)
     {
-        return self::validate("/^[0-9]+?(.|,[0-9]+)$/", $data);
+        return $this->validate("/^[0-9]+?(.|,[0-9]+)$/", $data);
     }
 
     /**
@@ -71,9 +71,9 @@ class Validation
      *
      * @return bool
      */
-    public static function alphanum($data)
+    public function alphanum($data)
     {
-        return self::validate("/^[a-zA-Z0-9]$/", $data);
+        return $this->validate("/^[a-zA-Z0-9]$/", $data);
     }
 
     /**
@@ -83,7 +83,7 @@ class Validation
      *
      * @return bool
      */
-    public static function email($data)
+    public function email($data)
     {
         if (filter_var($data, FILTER_VALIDATE_EMAIL)) {
             return true;
@@ -98,9 +98,9 @@ class Validation
      *
      * @return bool
      */
-    public static function date($data)
+    public function date($data)
     {
-        return self::validate("/^[0-9]{2}\-[0-9]{2}\-[0-9]{4}$/", $data);
+        return $this->validate("/^[0-9]{2}\-[0-9]{2}\-[0-9]{4}$/", $data);
     }
 
     /**
@@ -110,22 +110,34 @@ class Validation
      *
      * @return bool
      */
-    public static function url($data)
+    public function url($data)
     {
-        return self::validate("/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/", $data);
+        return $this->validate("/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/", $data);
     }
 
     /**
-     * Método que verifica se o telefone está no formato 99-9999-9999
+     * Método que verifica se o telefone está no formato (99) 9999-9999
      *
      * @param $data mixed
      *
      * @return bool
      */
-    public static function phone($data)
+    public function phone($data)
+    {
+        return $this->validate("/^\([0-9]{2}\)-[0-9]{4}-[0-9]{4}$/", $data);
+    }
+
+    /**
+     * Método que verifica se o telefone está no formato (99) 99999-9999 ou (99) 9999-9999
+     *
+     * @param $data mixed
+     *
+     * @return bool
+     */
+    public function cellphone($data)
     {
         //(99)9999-9999
-        return self::validate("/^[0-9]{2}-[0-9]{4-5}-[0-9]{4}$/", $data);
+        return $this->validate("/^\([0-9]{2}\) [0-9]{4-5}-[0-9]{4}$/", $data);
     }
 
     /**
@@ -135,9 +147,9 @@ class Validation
      *
      * @return bool
      */
-    public static function cnpj($data)
+    public function cnpj($data)
     {
-        return self::validate("/^\d{3}.?\d{3}.?\d{3}/?\d{3}-?\d{2}$/", $data);
+        return $this->validate("/^\d{3}.?\d{3}.?\d{3}/?\d{3}-?\d{2}$/", $data);
     }
 
     /**
@@ -147,9 +159,9 @@ class Validation
      *
      * @return bool
      */
-    public static function cpf($data)
+    public function cpf($data)
     {
-        return self::validate("/^\d{3}\.?\d{3}\.?\d{3}\-?\d{2}$/", $data);
+        return $this->validate("/^\d{3}\.?\d{3}\.?\d{3}\-?\d{2}$/", $data);
     }
 
     /**
@@ -159,8 +171,8 @@ class Validation
      *
      * @return bool
      */
-    public static function cep($data)
+    public function cep($data)
     {
-        return self::validate("^\d{5}\-?\d{3}$", $data);
+        return $this->validate("^\d{5}\-?\d{3}$", $data);
     }
 }

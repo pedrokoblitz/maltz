@@ -158,6 +158,37 @@ class Api {
         })->name('api_delete')->conditions(array('model' => 'content|collection|resource|term', 'id' => '\d+'));
 
         /*
+         * TREES
+         */
+        $app->get('/api/tree/:model', function ($model) use ($app) {
+
+            switch ($model) {
+                case 'content':
+                    $entity = new Content($app->db);
+                    break;
+                case 'collection':
+                    $entity = new Collection($app->db);
+                    break;
+                case 'term':
+                    $entity = new Term($app->db);
+                    break;
+            }
+
+            $app->response->headers->set('Content-Type', 'application/json');
+            $result = $entity->displayTree();
+
+            if ($result->get('success')) {
+                $app->response->setStatus(200);
+            } else {
+                $app->response->setStatus(404);
+            }
+
+            $app->response->setBody($result->toJson());
+            $app->stop();
+
+        })->name('api_tree')->conditions(array('model' => 'content|collection|term'));
+
+        /*
          * RELATIONSHIPS
          */
         
@@ -219,8 +250,7 @@ class Api {
         
         $app->get('/api/type(/:pg(/:key(/:order)))', function($pg = 1, $key = 'name', $order = 'asc') use ($app) {
             $app->response->headers->set('Content-Type', 'application/json');
-            $result = Type::query($app->db, 'find', $pg, $app->config('per_page'), $key, $order);
-
+            $result = Type::query($app->db, 'display');
             if ($result->get('success')) {
                 $app->response->setStatus(200);
             } else {
@@ -285,6 +315,48 @@ class Api {
             $app->response->setBody($result->toJson());
             $app->stop();
         })->name('api_area_list')->conditions(array('pg' => '\d+', 'key' => '\w+', 'order' => 'asc|desc'));
+
+        $app->get('/api/area/:id/show', function($id) use ($app) {
+            $app->response->headers->set('Content-Type', 'application/json');
+            $result = Area::query($app->db, 'getBlocks', $id);
+
+            if ($result->get('success')) {
+                $app->response->setStatus(200);
+            } else {
+                $app->response->setStatus(404);
+            }
+
+            $app->response->setBody($result->toJson());
+            $app->stop();
+        })->name('api_area_show')->conditions(array('pg' => '\d+', 'key' => '\w+', 'order' => 'asc|desc'));
+
+        $app->post('/api/area/:group_id/block/:item_id/add', function($group_id, $item_id) use ($app) {
+            $app->response->headers->set('Content-Type', 'application/json');
+            $result = Area::query($app->db, 'show', $id);
+
+            if ($result->get('success')) {
+                $app->response->setStatus(200);
+            } else {
+                $app->response->setStatus(404);
+            }
+
+            $app->response->setBody($result->toJson());
+            $app->stop();
+        })->name('api_area_block_add')->conditions(array('pg' => '\d+', 'key' => '\w+', 'order' => 'asc|desc'));
+
+        $app->post('/api/area/:group_id/block/:item_id/remove', function($group_id, $item_id) use ($app) {
+            $app->response->headers->set('Content-Type', 'application/json');
+            $result = Area::query($app->db, 'show', $id);
+
+            if ($result->get('success')) {
+                $app->response->setStatus(200);
+            } else {
+                $app->response->setStatus(404);
+            }
+
+            $app->response->setBody($result->toJson());
+            $app->stop();
+        })->name('api_area_block_remove')->conditions(array('pg' => '\d+', 'key' => '\w+', 'order' => 'asc|desc'));
 
         $app->get('/api/area/:id/delete', function($id) use ($app) {
             $app->response->headers->set('Content-Type', 'application/json');
@@ -542,7 +614,6 @@ class Api {
             $app->response->setBody($body);
             $app->stop();
         });
-
 
         return $app;
     }

@@ -9,7 +9,8 @@ class Record extends TypeArray
 
     public function __construct(array $items)
     {
-        $this->items = array_filter($items);
+        $this->items = $items;
+        $this->validation = new Validation();
     }
 
     public function fromArray(array $items)
@@ -24,14 +25,15 @@ class Record extends TypeArray
 
     public function getMd5()
     {
-        return md5(serialize($this->items));
+        return md5(serialize($this->toArray()));
     }
 
     protected function validate($rules)
     {
+        $items = array_filter($this->items);
         foreach ($rules as $key => $rule) {
             if ($this->has($key)) {
-                $valid = Validation::$rule($this->items[$key]);
+                $valid = $this->validation->$rule($items[$key]);
                 if (!$valid) {
                     $this->valid = false;
                     return;

@@ -22,9 +22,9 @@ class Doorman
     protected $session;
     protected $cookieJar;
 
-    public function __construct($db, $session, $cookieJar)
+    public function __construct($db, $sessionDataStore, $cookieJar)
     {
-        $this->session = $session;
+        $this->sessionDataStore = $sessionDataStore;
         $this->cookieJar = $cookieJar;
     }
 
@@ -38,15 +38,6 @@ class Doorman
         $cookie['path'] = '/';
         $cookie['expires'] = time() + (3600 * 24);
         $this->cookieJar->set('token.remember', $cookie);
-    }
-
-    public function setSessionData($data)
-    {
-        $this->session->set('user.authenticated', true);
-        $this->session->set('user.id', $data['id']);
-        $this->session->set('user.username', $data['username']);
-        $this->session->set('user.name', $data['name']);
-        $this->session->set('user.email', $data['email']);
     }
 
     /*
@@ -65,7 +56,7 @@ class Doorman
         $data = $login['data.search'][0];
     
         if ($data['password'] == md5($password)) {
-            $this->setSessionData($data);
+            $this->sessionDataStore->setUserData($data);
             if ($remember) {
                 $this->remember($data['id']);
             }
@@ -85,8 +76,7 @@ class Doorman
 	 */
     public function logout()
     {
-        session_destroy(); // destroy session data in storage
-        session_unset(); // unset $_SESSION variable for the runtime
+        $this->sessionDataStore->destroy();
         if ($this->cookieJar->has('token.remember')) {
             $this->cookieJar->remove('token.remember');
         }
@@ -103,14 +93,14 @@ class Doorman
     public function loggedIn()
     {
         $cookie = $this->cookieJar->has('token.remember');
-        if (!$cookie && $this->session->get('user.authenticated') === true) {
+        if (!$cookie && $this->sessionDataStore->isUserAuthenticated()) {
             return true;
         } elseif ($cookie) {
             $tokenCookie = $this->cookieJar->get('token.remember');
             $cookieValue = $tokenCookie->get();
             $token = $cookieValue['value'];
             $data = $this->user->validate($token, 'remember');
-            $this->setSessionData($data);
+            $this->sessionDataStore->setUserData($data);
             return true;
         }
         $this->logout();
@@ -146,7 +136,7 @@ class Doorman
      */
     private function getRoles()
     {
-        $userId = $this->session->get('user.id');
+        $userId = $this->sessionDataStore->getUserId();
         $this->user->getRoles($userId);
         $roles = $this->user->all();
         return $roles;

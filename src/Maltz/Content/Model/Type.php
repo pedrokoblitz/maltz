@@ -28,10 +28,10 @@ class Type extends Model
         $sql = "SELECT t1.id, t1.item_name, t1.name, t2.slug, t2.title
             FROM types t1
             JOIN translations t2
-            ON t1.id=t2.item_id
-            AND t2.item_name=:item_name
+                ON t1.id=t2.item_id
+                AND t2.item_name=:item_name
             WHERE t2.language=:lang
-            ORDER By $key $order";
+            ORDER BY $key $order";
         $resultado = $this->db->run($sql, array('item_name' => 'type', 'lang' => $lang));
         return $resultado;
     }
@@ -42,8 +42,8 @@ class Type extends Model
         $sql = "SELECT t1.id, t1.item_name, t1.name, t2.slug, t2.title
             FROM types t1
             JOIN translations t2
-            ON t1.id=t2.item_id
-            AND t2.item_name=:item_name
+                ON t1.id=t2.item_id
+                AND t2.item_name=:item_name
             WHERE t2.language=:lang
             ORDER By $key $order
             LIMIT $pagination->offset,$pagination->limit";

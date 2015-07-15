@@ -7,7 +7,7 @@ use Maltz\Mvc\Record;
 use Maltz\Mvc\Activity;
 use Maltz\Mvc\Translatable;
 use Maltz\Mvc\ItemRelationships;
-use Maltz\Mvc\HierarchyTree;
+use Maltz\Mvc\Tree;
 use Maltz\Service\Pagination;
 
 /**
@@ -38,10 +38,10 @@ use Maltz\Service\Pagination;
 
 class Collection extends Model
 {
+    use Tree;
     use Activity;
     use Translatable;
     use ItemRelationships;
-    use HierarchyTree;
         
     /*
      * construtor

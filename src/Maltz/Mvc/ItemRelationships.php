@@ -4,7 +4,6 @@ namespace Maltz\Mvc;
 
 trait ItemRelationships
 {
-
     public function add($id, $item_name, $item_id, $order)
     {
         $bind = array('group_name' => $this->slug, 'group_id' => $id, 'item_name' => $item_name, 'item_id' => $item_id, 'order' => $order);

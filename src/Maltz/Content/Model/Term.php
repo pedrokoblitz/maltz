@@ -7,13 +7,13 @@ use Maltz\Mvc\Record;
 use Maltz\Mvc\Activity;
 use Maltz\Mvc\Translatable;
 use Maltz\Service\Pagination;
-use Maltz\Mvc\HierarchyTree;
+use Maltz\Mvc\Tree;
 
 class Term extends Model
 {
     use Activity;
     use Translatable;
-    use HierarchyTree;
+    use Tree;
 
     public function __construct($db)
     {
