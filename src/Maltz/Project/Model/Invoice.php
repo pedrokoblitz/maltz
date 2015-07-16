@@ -50,34 +50,6 @@ class Invoice
 		return $resultado;
 	}
 
-	// ACTIONS
-
-	public function getProjectBillableHours($project_id)
-	{
-		$sql = "SELECT
-		    SEC_TO_TIME(SUM(TIME_TO_SEC(timediff(t1.start, t1.stop)))) AS totalhours,
-		    totalhours * t4.rate AS total,
-		    t3.title AS title -- add activity for proj report and proj.title for full report
-			  FROM ticket_time_tracking t1 
-			  JOIN tickets t2
-			    ON t1.ticket_id=t2.id
-			  JOIN projects t3
-			    ON t2.project_id=t3.id
-			  JOIN users t4
-			    ON t1.dev_id=t4.id
-			  WHERE t2.project_id=:project_id -- (remove for total report)
-			    AND t2.activity = :activity";
-		$resultado = $this->db->run($sql, array('activity' => 4, 'project_id' => $project_id));
-		return $resultado;
-	}
-
-	public function create($project_id, $rate)
-	{
-		$project = $this->getProjectBillableHours($project_id)->getFirstRecord();
-		$resultado = $this->db->run($sql, array('project_id' => $project_id));
-		return $resultado;
-	}
-
 	// ACTIVITY
 
 	public function setSent($id)

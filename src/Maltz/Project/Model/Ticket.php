@@ -61,13 +61,6 @@ class Ticket
 		return $resultado;
 	}
 
-	public function delete($id)
-	{
-		$sql = "UPDATE SET activity=:activity, modified=NOW() WHERE id=:id";
-		$resultado = $this->db->run($sql, array('activity' => 0, 'id' => $id));
-		return $resultado;
-	}
-
 	public function close($id)
 	{
 		$sql = "UPDATE SET activity=:activity, modified=NOW() WHERE id=:id";
@@ -75,20 +68,9 @@ class Ticket
 		return $resultado;
 	}
 
-	public function getProjectMembers($ticket_id)
-	{
-		
-	}
-
-	public function getProjectLeader($ticket_id)
-	{
-		$resultado = $this->db->run($sql, array('ticket_id' => $ticket_form));
-		return $resultado->getFirstRecord()->get('email');
-	}
-
 	public function getDev($ticket_id)
 	{
-		$sql = "SELECT t2.email FROM tickets t1
+		$sql = "SELECT t2.id, t2.username, t2.name, t2.email FROM tickets t1
 			JOIN users t2
 				ON t1.dev_id=t2.id
 			WHERE t1.id=:ticket_id";

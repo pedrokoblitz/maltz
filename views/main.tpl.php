@@ -44,7 +44,15 @@
     <header id="main-header" class="container-fluid">
       
       <div class="row">
-        
+        <div class="col-md-7">
+          &nbsp;
+        </div>
+        <div class="col-md-2">
+          &nbsp;
+        </div>
+        <div class="col-md-3">
+          &nbsp;
+        </div>        
       </div>
 
     </header>
@@ -52,7 +60,25 @@
     <section id="main" class="container-fluid">
       
       <div class="row">
-        
+        <div class="col-md-3">
+          &nbsp;
+        </div>
+        <div class="col-md-9">
+          &nbsp;
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-5">
+          &nbsp;
+        </div>
+        <div class="col-md-3">
+          &nbsp;
+        </div>
+          &nbsp;
+        <div class="col-md-4">
+          &nbsp;
+        </div>
       </div>
 
     </section>
@@ -60,7 +86,18 @@
     <footer id="main-footer" class="container-fluid">
       
       <div class="row">
-        
+        <div class="col-md-3">
+          &nbsp;
+        </div>
+        <div class="col-md-3">
+          &nbsp;
+        </div>
+        <div class="col-md-4">
+          &nbsp;
+        </div>
+        <div class="col-md-2">
+          &nbsp;
+        </div>        
       </div>
 
     </footer>
