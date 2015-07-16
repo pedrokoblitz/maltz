@@ -35,7 +35,7 @@ trait Activity
         return $this->db->run($setActivityQuery, array('activity' => 4, 'id' => $id));
     }
 
-    public function pulish($id)
+    public function publish($id)
     {
         $setActivityQuery = "UPDATE $this->table SET activity=:activity WHERE id=:id";
         return $this->db->run($setActivityQuery, array('activity' => 5, 'id' => $id));

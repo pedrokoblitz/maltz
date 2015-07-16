@@ -2,159 +2,71 @@
 
 namespace Maltz\Mvc;
 
-use Slim\View as SlimView;
 
-/**
- * CONVENCOES DO View
- * as funcoes set(), js(), json() e css() sao parte da biblioteca limonade-php
- * http://limonade-php.net (ver pÃ¡gina do README para detalhes)
- *
- * http://ideiasinsolitas.com.br/
- *
- * @copyright  Copyright (c) 2012-2013 Pedro Koblitz
- * @author      Pedro Koblitz pedrokoblitz@gmail.com
- * @license    GPL v2
- *
- * @package    Maltz
- *
- * @version    0.1 alpha
- */
-
-// getcwd();
-// dirname(__FILE__);
-// basename(__DIR__)
-// turn relative paths into absolute paths
-// $abs_path = realpath('../path/to/binary');
-
-/*
- *
- *
- *
- * @param objeto DB
- *
- *
- */
-
-class View extends SlimView
+class View extends \Slim\View
 {
-    // PROPRIEDADES
-    protected $path;
-    protected $styleSheets = array();
-    protected $conditionalStyleSheets = array();
-    protected $javaScripts = array();
-    protected $filters = array();
-
-    public function addStyleSheet($name, $external = false)
+    public function setLayout($layout = NULL, $data = array())
     {
-        $path = $name;
-        if ($external === false) {
-            $path = '/public/assets/css/' . $name;
-        }
-        $this->styleSheets[] = $path;
+        $this->_layout = $layout;
+        $this->_data = $data;
     }
 
-    public function addConditionalStyleSheet($name, $ie, $external = false)
+    public function setData($data = NULL)
     {
-        $path = $name;
-        if ($external === false) {
-            $path = '/public/assets/css/' . $name;
-        }
-        $this->conditionalStyleSheets[] = $path;
+        $this->_data = $data;
     }
 
-    public function addJavaScript($name, $external = false)
+    /**
+     * Overwrite the render method of Slim_View in order to include it in a layout
+     */
+    public function render($template)
     {
-        $path = $name;
-        if ($external === false) {
-            $path = '/public/assets/js/' . $name;
-        }
-        $this->javaScripts[] = $path;
-    }
-
-    public function renderStyleSheets()
-    {
-        $string = "";
-        foreach ($this->styleSheets as $sheet) {
-            $string .= "<link rel=\"stylesheet\" href=\"$sheet\">";
+        $templatePath = $this->getTemplatesDirectory() . '/' . ltrim($template, '/');
+        if (!file_exists($templatePath))
+        {
+            throw new RuntimeException('View cannot render template `' . $templatePath . '`. Template does not exist.');
         }
 
-        foreach ($this->conditionalStyleSheets as $sheet) {
-            $string .= "<link rel=\"stylesheet\" href=\"$sheet\">";
-        }
-
-        return $string;
-    }
-
-    public function renderJavaScripts()
-    {
-        $string = "";
-        foreach ($this->javaScripts as $script) {
-            $string .= "<script type=\"text/javascript\" src=\"$script\"></script>\n";
-        }
-
-        return $string;
-    }
-
-    /*
-    * passa os data template html usando metodos do limonade-php
-    * junta data com template e layout
-    * devolve HTML
-    *
-    * @param
-    *
-    * return string
-    */
-    public function _render($view, $layout = '', $data = array())
-    {
-        $styles = $this->renderStyleSheets();
-        $scripts = $this->renderJavaScripts();
-
-        if ($layout === '') {
-            ob_start();
-            if (is_array($data)) {
-                extract($data);
-            }
-            include $this->path . '/' . $view;
-            $body = ob_get_clean();
-
-        } else {
-            ob_start();
-            if (is_array($data)) {
-                extract($data);
-            }
-            include $this->path . '/' . $view;
-            $content = ob_get_clean();
-
-            ob_start();
-            include $this->path . '/' . $layout;
-            $body = ob_get_clean();
-        }
-        
-        return $body;
-    }
-
-    /*
-    * insere block no template
-    *
-    *
-    * @param $name string
-    *
-    * return string
-    */
-    public function partial($name, $data = null)
-    {
+        extract($this->data->all());
         ob_start();
-        if (is_array($data)) {
-            extract($data);
-        }
-        $l = new UrlHelper(array());
-        include $this->path['templates.path'] . '/' . $name;
-        $partial = ob_get_clean();
-        $this->e($partial);
+        require $templatePath;
+        $html = ob_get_clean();
+        
+        return $this->_renderLayout($html);
     }
 
-    public function e($string)
+    public function partial($template, $data = array())
     {
-        echo $string;
+        $templatePath = $this->getTemplatesDirectory() . '/partials/' . ltrim($template, '/');
+        if (!file_exists($templatePath))
+        {
+            throw new RuntimeException('View cannot render template `' . $templatePath . '`. Template does not exist.');
+        }
+
+        extract($data);
+        ob_start();
+        require $templatePath;
+        $html = ob_get_clean();
+        // echo $html?
+        return $html;
+    }
+
+    private function _renderLayout($content)
+    {
+        if(isset($this->_layout) && $this->_layout !== NULL)
+        {
+            $layoutPath = $this->getTemplatesDirectory() . '/' . ltrim($this->_layout, '/');
+            if (!file_exists($layoutPath))
+            {
+                throw new RuntimeException('View cannot render layout `' . $layoutPath . '`. Layout does not exist.');
+            }
+            // Base layout variables
+            extract($this->_data);
+            ob_start();
+            require $layoutPath;
+            $view = ob_get_clean();
+            return $view;
+        }
+        return $content;
     }
 }

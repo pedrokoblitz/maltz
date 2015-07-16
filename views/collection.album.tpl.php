@@ -81,14 +81,6 @@ $(document).ready(function(){
 	</div>
 
 	<div class="form-group">
-	  <label class="col-md-4 control-label" for="name">Name</label>  
-	  <div class="col-md-2">
-	  <input id="name" name="name" placeholder="placeholder" class="form-control input-md" type="text">
-	  <span class="help-block">help</span>  
-	  </div>
-	</div>
-
-	<div class="form-group">
 	  <label class="col-md-4 control-label" for="excerpt">Excerpt</label>
 	  <div class="col-md-4">                     
 	    <textarea class="form-control" id="excerpt" name="excerpt">default text</textarea>

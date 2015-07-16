@@ -48,10 +48,13 @@ class Maltz
             ),
         ));
 
+        $view = new View();
+
         $app->config(array(
             'log.writer' => $logger,
             'mode' => 'development',
             'debug' => true,
+            'view' => $view,
             'templates.path' => './views',
             'base.uri' => '/',
             'capa_blog_quant' => '4',
@@ -84,10 +87,6 @@ class Maltz
         $app->doorman = function () use ($app) {
             return new Doorman($app->db, $app->sessionDataStore, $app->cookie);
         };
-
-        $app->container->singleton('view', function () use ($app) {
-            return new View($app->container['settings']['templates.path']);
-        });
 
         $app->hook('slim.before', function () use ($app) {
 

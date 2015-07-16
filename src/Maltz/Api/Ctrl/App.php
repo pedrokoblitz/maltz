@@ -13,7 +13,8 @@ class App {
         		'model' => $model,
         		'type' => $type
     		);
-        	$app->render($model . '.' . $type . '.tpl.php', $vars);
+            // $app->render($model . '.' . $type . '.tpl.php', $vars);
+            $app->render('app.tpl.php', $vars);
     	});
 
     	return $app;
