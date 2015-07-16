@@ -1,6 +1,6 @@
 <?php
 
-namespace Maltz\Content\Model;
+namespace Maltz\Sys\Model;
 
 use Maltz\Mvc\Model;
 use Maltz\Mvc\Record;

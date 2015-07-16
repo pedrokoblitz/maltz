@@ -31,7 +31,6 @@ class View extends \Slim\View
         ob_start();
         require $templatePath;
         $html = ob_get_clean();
-        
         return $this->_renderLayout($html);
     }
 
@@ -43,7 +42,23 @@ class View extends \Slim\View
             throw new RuntimeException('View cannot render template `' . $templatePath . '`. Template does not exist.');
         }
 
-        extract($data);
+        $data !== array() ? extract($data) : null;
+        ob_start();
+        require $templatePath;
+        $html = ob_get_clean();
+        // echo $html?
+        return $html;
+    }
+
+    public function form($template, $data = array())
+    {
+        $templatePath = $this->getTemplatesDirectory() . '/forms/' . ltrim($template, '/');
+        if (!file_exists($templatePath))
+        {
+            throw new RuntimeException('View cannot render template `' . $templatePath . '`. Template does not exist.');
+        }
+
+        $data !== array() ? extract($data) : null;
         ob_start();
         require $templatePath;
         $html = ob_get_clean();
@@ -55,12 +70,12 @@ class View extends \Slim\View
     {
         if(isset($this->_layout) && $this->_layout !== NULL)
         {
-            $layoutPath = $this->getTemplatesDirectory() . '/' . ltrim($this->_layout, '/');
+            $layoutPath = $this->getTemplatesDirectory() . '/layouts/' . ltrim($this->_layout, '/');
             if (!file_exists($layoutPath))
             {
                 throw new RuntimeException('View cannot render layout `' . $layoutPath . '`. Layout does not exist.');
             }
-            // Base layout variables
+
             extract($this->_data);
             ob_start();
             require $layoutPath;

@@ -48,13 +48,10 @@ class Maltz
             ),
         ));
 
-        $view = new View();
-
         $app->config(array(
             'log.writer' => $logger,
             'mode' => 'development',
             'debug' => true,
-            'view' => $view,
             'templates.path' => './views',
             'base.uri' => '/',
             'capa_blog_quant' => '4',
@@ -63,6 +60,10 @@ class Maltz
             'tumblr_rss_url' => 'http://teste.com',
             'per_page' => '12'
         ));
+
+        $app->view = function () use ($app) {
+            $view = new View();
+        };
 
         $app->session = function () {
             return new Session();
@@ -100,10 +101,6 @@ class Maltz
             return new DB($app->config('db.dsn'), $app->config('db.user'), $app->config('db.pass'));
         });
 
-        $app->pagination = function () {
-            return new Pagination();
-        };
-
         $app->postman = function () {
             return new Postman();
         };
@@ -124,9 +121,6 @@ class Maltz
         };
 
         $app->configureMode('production', function () use ($app) {
-            $app->config('whoops.editor', 'sublime'); 
-            $app->add(new \Zeuxisoo\Whoops\Provider\Slim\WhoopsMiddleware);
-            $app->add(new \Slim\Middleware\DebugBar);
 
             $app->config('db.dsn', 'mysql:dbname=db169616_teste;host=internal-db.s169616.gridserver.com');
             $app->config('db.user', 'db169616');
@@ -134,10 +128,8 @@ class Maltz
 
             $app->config(array(
                 'log.enable' => true,
-                'debug' => true,
-                'per_page' => 12
+                'debug' => false
             ));
-            $app->session->set('user.id', 1);
         });
 
         $app->configureMode('development', function () use ($app) {

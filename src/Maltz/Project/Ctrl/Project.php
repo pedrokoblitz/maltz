@@ -2,6 +2,12 @@
 
 namespace Maltz\Project\Ctrl;
 
+use Maltz\Project\Model\Project;
+use Maltz\Project\Model\Ticket;
+use Maltz\Project\Model\TimeTracking;
+use Maltz\Project\Model\Invoice;
+
+
 class Project
 {
 	public function route($app)

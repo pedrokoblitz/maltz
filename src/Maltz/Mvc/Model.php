@@ -42,11 +42,6 @@ abstract class Model
         $this->rules = $rules;
     }
 
-    public function __get($key)
-    {
-        return is_string($key) && isset($this->$key) && in_array($key, array('slug', 'table', 'rules')) ? $this->$key : null;
-    }
-
     protected function checkRecord(Record $record)
     {
         $record->validate($this->rules);

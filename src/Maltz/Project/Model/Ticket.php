@@ -2,6 +2,9 @@
 
 namespace Maltz\Tickets\Model;
 
+use Maltz\Mvc\Record;
+use Maltz\Service\Pagination;
+
 class Ticket
 {
 	public function __construct($db)

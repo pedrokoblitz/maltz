@@ -2,12 +2,20 @@
 
 namespace Maltz\Project\Model;
 
+use Maltz\Mvc\Record;
+use Maltz\Service\Pagination;
+
 class Invoice
 {
 	public function __construct($db)
 	{
 		$rules = array(
-			'' => '',
+			'id' => 'int',
+			'project_id' => 'int',
+			'hours' => 'int',
+			'rate' => 'float',
+			'total' => 'float',
+			'activity' => 'int',
 			);
 		parent::__construct($db, 'invoice', 'invoices', $rules);
 	}
@@ -39,8 +47,9 @@ class Invoice
 		return $resultado;
 	}
 
-	public function find()
+	public function find($pg = 1, $per_page = 12, $key = 'title', $order = 'asc')
 	{
+		$pagination = Pagination::paginate($pg, $per_page);
 		$sql = "SELECT t1.id, t2.title AS project, t1.hours, t1.rate, t1.total, t1.activity, t1.created FROM invoices
 		  JOIN projects t2
 		    ON t1.project_id=t2.id
@@ -50,26 +59,18 @@ class Invoice
 		return $resultado;
 	}
 
-	// ACTIVITY
-
 	public function setSent($id)
 	{
-		$sql = "";
-		$resultado = $this->db->run($sql, array());
-		return $resultado;
+		$this->setActivity($id, 2);
 	}
 
 	public function setContested($id)
 	{
-		$sql = "";
-		$resultado = $this->db->run($sql, array());
-		return $resultado;
+		$this->setActivity($id, 3);
 	}
 
 	public function setPaid($id)
 	{
-		$sql = "";
-		$resultado = $this->db->run($sql, array());
-		return $resultado;
+		$this->setActivity($id, 4);
 	}
 }

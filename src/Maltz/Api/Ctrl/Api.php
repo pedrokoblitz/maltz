@@ -3,20 +3,20 @@
 namespace Maltz\Api\Ctrl;
 
 use Maltz\Mvc\Record;
+use Maltz\Sys\Model\Type;
+use Maltz\Sys\Model\Config;
+use Maltz\Sys\Model\User;
+use Maltz\Sys\Model\Log;
 use Maltz\Content\Model\Content;
 use Maltz\Content\Model\Collection;
 use Maltz\Content\Model\Resource;
 use Maltz\Content\Model\Term;
-use Maltz\Content\Model\Type;
 use Maltz\Content\Model\Area;
 use Maltz\Content\Model\Block;
-use Maltz\Sys\Model\Config;
-use Maltz\Sys\Model\User;
-use Maltz\Sys\Model\Log;
 
 class Api {
 
-    public static function route($app) {
+    public function route($app) {
 
         /*
          * CONTENT

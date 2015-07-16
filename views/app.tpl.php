@@ -17,7 +17,7 @@
 
 <link href="/public/assets/css/bootstrap.min.css" rel="stylesheet">
 
-<!--[if lt IE 9]><script src="../public/assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+<!--[if lt IE 9]><script src="/public/assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
 <script src="/public/assets/js/ie-emulation-modes-warning.js"></script>
 
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -75,49 +75,33 @@
 
                 <legend>Form Name</legend>
 
-                  <label class="col-md-4 control-label" for="activity">Activity</label>
-                    <select id="activity" name="activity" class="form-control">
-                      <option value="3">Draft</option>
-                      <option value="4">Pending</option>
-                      <option value="5">Published</option>
-                    </select>
+                <label class="col-md-4 control-label" for="activity">Activity</label>
+                <select id="activity" name="activity" class="form-control">
+                  <option value="3">Draft</option>
+                  <option value="4">Pending</option>
+                  <option value="5">Published</option>
+                </select>
 
-                  <label class="col-md-4 control-label" for="date_pub">Published</label>  
-                  <input id="date_pub" name="date_pub" placeholder="placeholder" class="form-control input-md" type="text">
-                  <span class="help-block">help</span>
+                <label class="col-md-4 control-label" for="date_pub">Published</label>  
+                <input id="date_pub" name="date_pub" placeholder="placeholder" class="form-control input-md" type="text">
+                <span class="help-block">help</span>
 
-                  <label class="col-md-4 control-label" for="title">Title</label>  
-                  <input id="title" name="title" placeholder="placeholder" class="form-control input-md" type="text">
-                  <span class="help-block">help</span>
+                <label class="col-md-4 control-label" for="title">Title</label>  
+                <input id="title" name="title" placeholder="placeholder" class="form-control input-md" type="text">
+                <span class="help-block">help</span>
 
-                <div class="form-group">
-                  <label class="col-md-4 control-label" for="subtitle">Subtitle</label>  
-                  <div class="col-md-8">
-                  <input id="subtitle" name="subtitle" placeholder="placeholder" class="form-control input-md" type="text">
-                  <span class="help-block">help</span>  
-                  </div>
-                </div>
+                <label class="col-md-4 control-label" for="subtitle">Subtitle</label>  
+                <input id="subtitle" name="subtitle" placeholder="placeholder" class="form-control input-md" type="text">
+                <span class="help-block">help</span>  
 
-                <div class="form-group">
-                  <label class="col-md-4 control-label" for="excerpt">Excerpt</label>
-                  <div class="col-md-4">                     
-                    <textarea class="form-control" id="excerpt" name="excerpt">default text</textarea>
-                  </div>
-                </div>
+                <label class="col-md-4 control-label" for="excerpt">Excerpt</label>
+                <textarea class="form-control" id="excerpt" name="excerpt">default text</textarea>
 
-                <div class="form-group">
-                  <label class="col-md-4 control-label" for="description">Description</label>
-                  <div class="col-md-4">                     
-                    <textarea class="form-control" id="description" name="description">default text</textarea>
-                  </div>
-                </div>
+                <label class="col-md-4 control-label" for="description">Description</label>
+                <textarea class="form-control" id="description" name="description">default text</textarea>
 
-                <div class="form-group">
-                  <label class="col-md-4 control-label" for="body">Body</label>
-                  <div class="col-md-4">                     
-                    <textarea class="form-control" id="body" name="body">default text</textarea>
-                  </div>
-                </div>
+                <label class="col-md-4 control-label" for="body">Body</label>
+                <textarea class="form-control" id="body" name="body">default text</textarea>
 
               </fieldset>
             </form>              

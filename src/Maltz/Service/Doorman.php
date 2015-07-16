@@ -2,6 +2,7 @@
 
 namespace Maltz\Service;
 
+use Maltz\Mvc\Record;
 use Maltz\Sys\Model\User;
 
 /**
@@ -49,14 +50,14 @@ class Doorman
 	 *
 	 * return string / void
 	 */
-    public function login($username, $password, $remember = null)
+    public function login(Record $credentials)
     {
-        $login = User::query('findByUsernameOrEmail', $username);
+        $login = User::query('findByUsernameOrEmail', $credentials->get('username'));
         $record = $login->getFirstRecord();
     
-        if ($record->get('password') === sha1($password)) {
+        if ($record->get('password') === sha1($credentials->get('password'))) {
             $this->sessionDataStore->setUserData($data);
-            if ($remember) {
+            if ($credentials->get('remember')) {
                 $this->remember($record->get('id'));
             }
             return true;
