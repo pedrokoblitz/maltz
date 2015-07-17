@@ -5,7 +5,6 @@ namespace Maltz\Service;
 use Maltz\Mvc\Result;
 use Maltz\Mvc\Record;
 
-
 class Handler
 {
     public function __construct($app)
@@ -21,7 +20,7 @@ class Handler
     public function handleApiResponse(Result $result)
     {
         $this->app->response->headers->set('Content-Type', 'application/json');
-        if ($result->get('success')) {
+        if ($result->isSuccessful()) {
             $this->app->response->setStatus(200);
             $nonce = $this->app->nonce->generate();
             $result->set('nonce', $nonce);
@@ -80,7 +79,7 @@ class Handler
     {
         $result = array('success' => false, 'message' => $message);
         $this->app->response->setStatus($status);
-        $app->render('error.tpl.php', $result);
+        $this->app->render('error.tpl.php', $result);
         $this->app->stop();
     }
 
@@ -89,7 +88,7 @@ class Handler
         $this->app
             ->postman
                 ->createMessage(
-                    $this->app->config('system.email'), 
+                    $this->app->config('system.email'),
                     $this->app->config('site.title'),
                     $subject,
                     $body

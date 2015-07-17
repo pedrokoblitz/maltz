@@ -48,6 +48,9 @@ class Session extends Collection
 
     public function set($id, $item)
     {
+        if ($id === 'slim.flash') {
+            return;
+        }
         $id = str_replace('.', '_', $id);
         $_SESSION[$id] = $item;
         parent::set($id, $item);

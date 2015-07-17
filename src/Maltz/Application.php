@@ -36,15 +36,12 @@ class Application
 
         $app->config(array(
             'log.writer' => $logger,
+            'view' => new View(),
             'mode' => 'development',
             'templates.path' => './views',
             'base.uri' => '/',
             'per_page' => '12'
         ));
-
-        $app->view = function () use ($app) {
-            $view = new View();
-        };
 
         $app->session = function () {
             return new Session();
@@ -96,12 +93,11 @@ class Application
         $app->configureMode('production', function () use ($app) {
 
             $app->config('db.dsn', 'mysql:dbname=db169616_teste;host=internal-db.s169616.gridserver.com');
-            $app->config('db.user', 'db169616');
-            $app->config('db.pass', 'morte666');
+            $app->config('db.user', '');
+            $app->config('db.pass', '');
         });
 
         $app->configureMode('development', function () use ($app) {
-            $app->config('whoops.editor', 'sublime'); 
             $app->add(new \Zeuxisoo\Whoops\Provider\Slim\WhoopsMiddleware);
             $app->add(new \Slim\Middleware\DebugBar);
 

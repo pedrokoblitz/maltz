@@ -28,6 +28,11 @@ class Record extends TypeArray
         return md5(serialize($this->toArray()));
     }
 
+    protected function filterByKeys($allowed)
+    {
+        return array_intersect_key($my_array, array_flip($allowed));
+    }
+
     protected function validate($rules)
     {
         $items = array_filter($this->items);

@@ -2,9 +2,10 @@
 
 namespace Maltz\Mvc;
 
-trait Tree
+trait Display
 {
-    public function display() {
+    public function display()
+    {
         $sql = "SELECT t1.id, t1.parent_id, t2.slug, t2.title, t2.subtitle, t2.excerpt, t2.description, t2.body, t3.name AS type
             FROM $this->table t1
                 JOIN translations t2
@@ -16,9 +17,10 @@ trait Tree
         return $result;
     }
 
-    public function displayByType($type) {
+    public function displayByType($type)
+    {
         if (!is_string($type)) {
-            throw new \Exception("Error Processing Request", 1);            
+            throw new \Exception("Error Processing Request", 1);
         }
 
         $sql = "SELECT t1.id, t1.parent_id, t2.slug, t2.title, t2.subtitle, t2.excerpt, t2.description, t2.body, t3.name AS type

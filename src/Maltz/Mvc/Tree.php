@@ -4,10 +4,12 @@ namespace Maltz\Mvc;
 
 trait Tree
 {
+    use Display;
+
     public function displayTree()
     {
         if (!method_exists($this, 'display')) {
-            throw new \Exception("Error Processing Request", 1);            
+            throw new \Exception("Error Processing Request", 1);
         }
 
         $result = $this->display()->toArray();
@@ -24,15 +26,11 @@ trait Tree
         foreach ($items as $item) {
             $this->elements[$item['id']] = $item;
         }
-
         return $this->buildTree();
     }
 
-    public function buildTree($parent_id = 0) {
-        if (!intval($parent_id)) {
-            throw new \Exception("Error Processing Request", 1);            
-        }
-
+    public function buildTree($parent_id = 0)
+    {
         $branch = array();
         foreach ($this->elements as $element) {
             if ((int) $element['parent_id'] === (int) $parent_id) {
@@ -49,8 +47,8 @@ trait Tree
 
     public function setParent($child_id, $parent_id = 0)
     {
-        if (!intval($parent_id) || !intval($child_id)) {
-            throw new \Exception("Error Processing Request", 1);            
+        if (!is_int($parent_id) || !is_int($child_id)) {
+            throw new \Exception("Error Processing Request", 1);
         }
 
         $sql = "UPDATE $this->table SET parent_id=:parent_id WHERE id=:child_id";
@@ -60,19 +58,19 @@ trait Tree
 
     public function getParent($child_id)
     {
-        if (!intval($child_id)) {
-            throw new \Exception("Error Processing Request", 1);            
+        if (!is_int($child_id)) {
+            throw new \Exception("Error Processing Request", 1);
         }
 
         $sql = "SELECT * FROM $this->table WHERE id=(SELECT parent_id FROM $this->table WHERE id=:child_id)";
         $resultado = $this->db->run($sql, array('child_id' => $child_id));
-        return $resultado;        
+        return $resultado;
     }
 
     public function getChildren($parent_id)
     {
-        if (!intval($parent_id)) {
-            throw new \Exception("Error Processing Request", 1);            
+        if (!is_int($parent_id)) {
+            throw new \Exception("Error Processing Request", 1);
         }
 
         $sql = "SELECT * FROM $this->table WHERE id=:parent_id";
@@ -82,8 +80,8 @@ trait Tree
 
     public function addChild($parent_id, $child_id)
     {
-        if (!intval($parent_id) || !intval($child_id)) {
-            throw new \Exception("Error Processing Request", 1);            
+        if (!is_int($parent_id) || !is_int($child_id)) {
+            throw new \Exception("Error Processing Request", 1);
         }
 
         $sql = "UPDATE $this->table SET parent_id=:parent_id WHERE id=:child_id";
@@ -93,8 +91,8 @@ trait Tree
 
     public function removeChild($child_id)
     {
-        if (!intval($child_id)) {
-            throw new \Exception("Error Processing Request", 1);            
+        if (!is_int($child_id)) {
+            throw new \Exception("Error Processing Request", 1);
         }
 
         $sql = "UPDATE $this->table SET parent_id=:parent_id WHERE id=:child_id";

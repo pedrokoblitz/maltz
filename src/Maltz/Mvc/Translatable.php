@@ -6,8 +6,8 @@ trait Translatable
 {
     public function getTranslations($item_id)
     {
-        if (!intval($item_id)) {
-            throw new \Exception("Error Processing Request", 1);            
+        if (!is_int($item_id)) {
+            throw new \Exception("Error Processing Request", 1);
         }
 
         $sql = "SELECT slug, title, subtitle, excerpt, description, body FROM translations WHERE item_name=:item_name AND item_id=item_id";
@@ -26,8 +26,8 @@ trait Translatable
 
     public function removeTranslation($item_id)
     {
-        if (!intval($item_id)) {
-            throw new \Exception("Error Processing Request", 1);            
+        if (!is_int($item_id)) {
+            throw new \Exception("Error Processing Request", 1);
         }
 
         $sql = "DELETE FROM translations WHERE item_name=:item_name, item_id=:item_id";
@@ -38,7 +38,7 @@ trait Translatable
     public function generateSlug($string)
     {
         if (!is_string($string)) {
-            throw new \Exception("Error Processing Request", 1);            
+            throw new \Exception("Error Processing Request", 1);
         }
 
         $string = preg_replace('~[^\\pL\d]+~u', '-', $string);
@@ -47,8 +47,7 @@ trait Translatable
         $string = strtolower($string);
         $string = preg_replace('~[^-\w]+~', '', $string);
 
-        if (empty($string))
-        {
+        if (empty($string)) {
             $slug = 'n-a';
         }
 
@@ -65,11 +64,11 @@ trait Translatable
     protected function checkSlug($slug)
     {
         if (!is_string($slug)) {
-            throw new \Exception("Error Processing Request", 1);            
+            throw new \Exception("Error Processing Request", 1);
         }
 
         $sql = "SELECT id FROM translations WHERE slug=:slug";
         $result = $this->db->run($sql, array('slug' => $slug));
-        return $result->get('success');
+        return $result->isSuccessful();
     }
 }

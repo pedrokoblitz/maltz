@@ -60,9 +60,11 @@ CREATE TABLE `log` (
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `username` varchar(60) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `name` varchar(120) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `email` varchar(60) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `username` varchar(60) COLLATE utf8_unicode_ci NOT NULL,
+  `first_name` varchar(120) COLLATE utf8_unicode_ci NOT NULL,
+  `middle_name` varchar(120) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `last_name` varchar(120) COLLATE utf8_unicode_ci DEFAULT NULL,  -- should be null or not?
+  `email` varchar(60) COLLATE utf8_unicode_ci NOT NULL,
   `cpf` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
   `cnpj` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
   `cellphone` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -249,7 +251,7 @@ CREATE TABLE `tickets` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `dev_id` int(10) unsigned DEFAULT NULL,
   `project_id` int(10) unsigned NOT NULL,
-  `hash` varchar(32) NOT NULL,
+  `problem_url` varchar(120) COLLATE utf8_unicode_ci DEFAULT NULL,
   `description` BLOB NOT NULL,
   `activity` tinyint(1) unsigned NOT NULL DEFAULT 2, /* 0 = deleted, 1 = unassigned, 2 = open, 3 = active, 4 = closed, 5 = charged */
   `created` datetime NOT NULL,
@@ -280,4 +282,71 @@ CREATE TABLE `invoices` (
 -- END PROJECT MANAGEMENT
 
 -- CALENDAR
+DROP TABLE IF EXISTS `events`;
+CREATE TABLE `events` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 -- END CALENDAR
+
+
+-- GEO
+DROP TABLE IF EXISTS `places`;
+CREATE TABLE `places` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `address_id` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+DROP TABLE IF EXISTS `addresses`;
+CREATE TABLE `addresses` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `district_id` int(10) unsigned DEFAULT NULL,
+  `city_id` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+DROP TABLE IF EXISTS `districts`;
+CREATE TABLE `districts` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `city_id` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+DROP TABLE IF EXISTS `cities`;
+CREATE TABLE `cities` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `country_id` int(10) unsigned DEFAULT NULL,
+  `province_id` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+DROP TABLE IF EXISTS `provinces`;
+CREATE TABLE `provinces` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `country_id` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+DROP TABLE IF EXISTS `countries`;
+CREATE TABLE `countries` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+DROP TABLE IF EXISTS `coordinates`;
+CREATE TABLE `coordinates` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+-- END
+
+
+-- REAL ESTATE
+DROP TABLE IF EXISTS `real_estate_places`;
+CREATE TABLE `real_estate_places` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `place_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+-- END

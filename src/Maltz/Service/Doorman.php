@@ -31,7 +31,7 @@ class Doorman
 
     public function remember($user_id)
     {
-        if (!intval($user_id)) {
+        if (!is_int($user_id)) {
             throw new \Exception("Must be integer", 001);
         }
 
@@ -113,11 +113,11 @@ class Doorman
      * @param
      *
      * return bool
-     */    
+     */
     public function isUserAllowed(array $roles)
     {
         if ($this->isUserAuthenticated()) {
-            $userRoles = $this->getRoles($this->sessionDataStore->getUserId)
+            $userRoles = $this->getRoles($this->sessionDataStore->getUserId);
             foreach ($roles as $role) {
                 if (in_array($role, $userRoles)) {
                     return true;

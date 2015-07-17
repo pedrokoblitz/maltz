@@ -80,10 +80,8 @@ class DB extends \PDO
         $this->bind = $this->cleanup($bind);
 
         try {
-            
             $pdostmt = $this->prepare($this->sql);
             if ($pdostmt->execute($this->bind) !== false) {
-
                 if (preg_match("/^(select)/i", $this->sql)) {
                     $data = $pdostmt->fetchAll(\PDO::FETCH_ASSOC);
                     
