@@ -10,9 +10,9 @@ class Project
 	public function __construct($db)
 	{
 		$rules = array(
-			'' => 'string',
-			'' => 'textarea',
-			'' => 'int'
+			'title' => 'string',
+			'description' => 'textarea',
+			'activity' => 'int'
 			);
 		parent::__construct($db, 'project', 'projects', $rules);
 	}

@@ -16,7 +16,7 @@ use Maltz\Service\Correios;
 use Maltz\Service\Pagination;
 use Slim\Slim;
 
-class Maltz
+class Application
 {
 
     /*
@@ -28,20 +28,6 @@ class Maltz
     {
         $app = new Slim();
         
-        /* LOG LEVELS
-
-            \Slim\Log::EMERGENCY
-            \Slim\Log::ALERT
-            \Slim\Log::CRITICAL
-            \Slim\Log::ERROR
-            \Slim\Log::WARN
-            \Slim\Log::NOTICE
-            \Slim\Log::INFO
-            \Slim\Log::DEBUG
-
-            USAGE
-
-        */
         $logger = new \Flynsarmy\SlimMonolog\Log\MonologWriter(array(
             'handlers' => array(
                 new \Monolog\Handler\StreamHandler('./logs/dev.log'),
@@ -51,13 +37,8 @@ class Maltz
         $app->config(array(
             'log.writer' => $logger,
             'mode' => 'development',
-            'debug' => true,
             'templates.path' => './views',
             'base.uri' => '/',
-            'capa_blog_quant' => '4',
-            'capa_books_quant' => '5',
-            'capa_contents_quant' => '6',
-            'tumblr_rss_url' => 'http://teste.com',
             'per_page' => '12'
         ));
 
@@ -88,14 +69,6 @@ class Maltz
         $app->doorman = function () use ($app) {
             return new Doorman($app->db, $app->sessionDataStore, $app->cookie);
         };
-
-        $app->hook('slim.before', function () use ($app) {
-
-        });
-
-        $app->hook('slim.after', function () use ($app) {
-
-        });
         
         $app->container->singleton('db', function () use ($app) {
             return new DB($app->config('db.dsn'), $app->config('db.user'), $app->config('db.pass'));
@@ -125,11 +98,6 @@ class Maltz
             $app->config('db.dsn', 'mysql:dbname=db169616_teste;host=internal-db.s169616.gridserver.com');
             $app->config('db.user', 'db169616');
             $app->config('db.pass', 'morte666');
-
-            $app->config(array(
-                'log.enable' => true,
-                'debug' => false
-            ));
         });
 
         $app->configureMode('development', function () use ($app) {

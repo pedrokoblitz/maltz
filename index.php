@@ -1,8 +1,8 @@
 <?php
 
-use Maltz\Maltz;
+use Maltz\Application;
 
 require dirname(__FILE__).'/vendor/autoload.php';
 
-$app = Maltz::initialize();
+$app = Application::initialize();
 $app->run();

@@ -77,7 +77,7 @@ class Ticket
 			JOIN users t2
 				ON t1.dev_id=t2.id
 			WHERE t1.id=:ticket_id";
-		$resultado = $this->db->run($sql, array('ticket_id' => $ticket_form));
+		$resultado = $this->db->run($sql, array('ticket_id' => $ticket_id));
 		return $resultado->getFirstRecord()->get('email');
 	}
 }

@@ -3,6 +3,7 @@
 namespace Maltz\Service;
 
 use Maltz\Http\Session;
+use Maltz\Mvc\Record;
 
 class SessionDataStore
 {
@@ -15,7 +16,7 @@ class SessionDataStore
 
 	private function generateKey($key)
 	{
-		return md5($key . 'hash-salt@NR#KN#');
+		return md5($key . 'salt@NR#KN#hash');
 	}
 
 	public function addMessage($message)
@@ -26,7 +27,7 @@ class SessionDataStore
 			$messages = array();
 		}
 		$messages[] = $message;
-		$messages = $this->session->set('system.messages', $messages);
+		$this->session->set('system.messages', $messages);
 	}
 
 	public function getMessages()
@@ -46,7 +47,7 @@ class SessionDataStore
 		return $this->session->get($key);
 	}
 
-	public function setUserData($record)
+	public function setUserData(Record $record)
 	{
         $this->session->set('user.authenticated', true);
         $this->session->set('user.id', $record->get('id'));
@@ -56,7 +57,7 @@ class SessionDataStore
 	}
 
 	public function getUserData()
-		
+	{
 		$data = array(
 			'authenticated' => $this->session->get('user.authenticated'),
 			'id' => $this->session->get('user.id'),
@@ -64,6 +65,7 @@ class SessionDataStore
 			'name' => $this->session->get('user.name'),
 			'email' => $this->session->get('user.email'),
 			);
+		return $data;
 	}
 
 	public function isUserAuthenticated()
