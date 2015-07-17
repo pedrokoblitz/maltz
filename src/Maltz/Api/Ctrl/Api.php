@@ -138,7 +138,7 @@ class Api {
         })->name('api_tree')->conditions(array('model' => 'content|collection|term'));
 
         /*
-         * RELATIONSHIPS
+         * ATTACHMENTS
          */
         $app->get('/api/:group_name/:group_id/:item_name/show', function ($group_name, $group_id, $item_name) use ($app) {
 
@@ -187,6 +187,54 @@ class Api {
             $app->handler->handleApiResponse($result);
 
         })->name('api_remove_item')->conditions(array('group_name' => 'content|collection', 'group_id' => '\d+', 'item_name' => 'content|collection|resource|term', 'item_id' => '\d+'));
+
+        /*
+         * METADATA
+         */
+        $app->get('/api/:item_name/:key/remove', function ($item_name, $item_id, $key) use ($app) {
+
+            switch ($group_name) {
+                case 'content':
+                    $entity = new Content($app->db);
+                    break;
+                case 'collection':
+                    $entity = new Collection($app->db);
+                    break;
+                case 'resource':
+                    $entity = new Resource($app->db);
+                    break;
+                case 'user':
+                    $entity = new User($app->db);
+                    break;
+            }
+
+            $record = 
+            $result = $entity->addMeta();
+            $app->handler->handleApiResponse($result);        
+
+        })->name('api_add_meta')->conditions(array('item_name' => 'content|collection|resource|user', 'item_id' => '\d+', 'key' => '\w+'));
+
+        $app->get('/api/:item_name/:key/add/:value', function ($item_name, $item_id, $key, $value) use ($app) {
+
+            switch ($group_name) {
+                case 'content':
+                    $entity = new Content($app->db);
+                    break;
+                case 'collection':
+                    $entity = new Collection($app->db);
+                    break;
+                case 'resource':
+                    $entity = new Resource($app->db);
+                    break;
+                case 'user':
+                    $entity = new User($app->db);
+                    break;
+            }
+
+            $result = $entity->removeMeta();
+            $app->handler->handleApiResponse($result);        
+
+        })->name('api_remove_meta')->conditions(array('item_name' => 'content|collection|resource|user', 'item_id' => '\d+', 'key' => '\w+', 'value' => '\w+'));
 
         /*
          * TYPES

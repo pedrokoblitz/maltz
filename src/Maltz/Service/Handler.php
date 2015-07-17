@@ -12,6 +12,43 @@ class Handler
         $this->app = $app;
     }
 
+    public function setViewInfo($info)
+    {
+
+        if (isset($info['meta.properties'])) {
+            foreach ($info['meta.properties'] as $name => $property) {
+                $this->app->view->setMetaProperty($name, $property);
+            }
+            unset($info['meta.properties']);
+        }
+
+        if (isset($info['styles'])) {
+            foreach ($info['styles'] as $name => $style) {
+                $this->app->view->enqueueStyle($name, $style);
+            }
+            unset($info['styles']);
+        }
+
+        if (isset($info['scripts'])) {
+            foreach ($info['scripts'] as $name => $script) {
+                $this->app->view->enqueueScript($name, $script);
+            }
+            unset($info['scripts']);
+        }
+
+        $this->viewInfo = $info;
+    }
+
+    public function render($layout, $template)
+    {
+        $this->app->view->setLayout($layout);
+        if (isset($this->viewInfo['layout.data'])) {
+            $this->app->view->setLayoutData($this->viewInfo['layout.data']);
+        }
+        $data = isset($this->viewInfo['view.data']) ? $this->viewInfo['view.data'] : array();
+        $this->app->render($template, $data);
+    }
+
     public function isAuthorized($user = null, $roles = null)
     {
         return true;
@@ -79,6 +116,7 @@ class Handler
     {
         $result = array('success' => false, 'message' => $message);
         $this->app->response->setStatus($status);
+        $app->view->setLayout('frontend.tpl.php');
         $this->app->render('error.tpl.php', $result);
         $this->app->stop();
     }

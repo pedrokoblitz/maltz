@@ -1,31 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <!-- Meta, title, CSS, favicons, etc. -->
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="keywords" content="">
-    <meta name="author" content="">
-    <title>
-    Bootstrap &middot; The world's most popular mobile-first and responsive front-end framework.
-    </title>
-    <link href="/public/assets/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/public/assets/css/sheet.css" rel="stylesheet">
-    <!--[if lt IE 9]><script src="/public/assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
-    <script src="/public/assets/js/ie-emulation-modes-warning.js"></script>
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
-    <!-- Favicons -->
-    <link rel="apple-touch-icon" href="/public/assets/img/apple-touch-icon.png">
-    <link rel="icon" href="/favicon.ico">
-  </head>
-  <body>
-    <body>
+
+
       <div class="container-fluid">
         <div id="screen" class="row">
           <div id="menu" class="col-md-3">
@@ -333,13 +307,5 @@
             </div>
           </div>
         </div>
-        
-        <script src="/public/assets/jquery.min.js"></script>
-        <script src="/public/assets/js/bootstrap.min.js"></script>
-        <script src="/public/assets/js/ie10-viewport-bug-workaround.js"></script>
-        <script src="/public/assets/js/init.js"></script>
-        
       </div>
     </div>
-  </body>
-</html>

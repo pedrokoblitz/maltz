@@ -6,26 +6,17 @@ use Maltz\Mvc\Record;
 
 trait Metadata
 {
-    public function saveMeta(Record $record)
-    {
-        if ($record->has('id')) {
-            return $this->updateMeta($record);
-        } else {
-            return $this->addMeta($record);
-        }
-    }
-
-    public function addMeta(Record $record)
+    public function addMeta($item_name, $item_id, $key, $value)
     {
         $sql = "INSERT INTO metadata (item_name, item_id, key, value) VALUES (:item_name, :item_id, :key, :value)";
-        $result = $this->db->run($sql, $record->toArray());
+        $result = $this->db->run($sql, array('item_name' => $item_name, 'item_id' => $item_id, 'key' => $key, 'value' => $value));
         return $result;
     }
 
-    public function updateMeta(Record $record)
+    public function updateMeta($item_name, $item_id, $key, $value)
     {
-        $sql = "";
-        $result = $this->db->run($sql, $record->toArray());
+        $sql = "UPDATE metadata SET value=:value WHERE item_name=:item_name AND item_id=:item_id AND key=:key";
+        $result = $this->db->run($sql, array('item_name' => $item_name, 'item_id' => $item_id, 'key' => $key, 'value' => $value));
         return $result;
     }
 

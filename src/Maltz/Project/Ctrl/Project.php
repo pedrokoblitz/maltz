@@ -178,6 +178,14 @@ class ProjectManagement
 
         })->name('ticket_close')->conditions(array('id' => '\d+'));
 
+        $app->post('/ticket/:id/comment', function ($id) use ($app) {
+
+        })->name('ticket_comment')->conditions(array('id' => '\d+'));
+
+        $app->get('/ticket/:id/call', function ($id) use ($app) {
+
+        })->name('ticket_request_call')->conditions(array('id' => '\d+'));
+
         return $app;
     }
 }

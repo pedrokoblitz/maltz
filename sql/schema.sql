@@ -2,8 +2,8 @@
 DROP TABLE IF EXISTS `types`;
 CREATE TABLE `types` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `item_name` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `name` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `item_name` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+  `name` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE(`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -11,10 +11,10 @@ CREATE TABLE `types` (
 DROP TABLE IF EXISTS `metadata`;
 CREATE TABLE `metadata` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `item_name` enum('content', 'resource') COLLATE utf8_unicode_ci DEFAULT NULL,
+  `item_name` enum('content', 'resource') COLLATE utf8_unicode_ci NOT NULL,
   `item_id` int(10) unsigned NOT NULL,
-  `key` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `value` BLOB DEFAULT NULL,
+  `key` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+  `value` TINYBLOB NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE(`item_name`, `item_id`, `key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -32,8 +32,8 @@ CREATE TABLE `attachments` (
 DROP TABLE IF EXISTS `config`;
 CREATE TABLE `config` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `key` varchar(60) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `value` BLOB,
+  `key` varchar(60) COLLATE utf8_unicode_ci NOT NULL,
+  `value` BLOB NOT NULL,
   `format` tinyint(1) unsigned NOT NULL DEFAULT 1,
   `activity` tinyint(1) unsigned NOT NULL DEFAULT 1, -- 0 = active, 1 = autoload, 2 = package specific, 3 = ...
   `created` datetime NOT NULL,
@@ -46,9 +46,9 @@ DROP TABLE IF EXISTS `log`;
 CREATE TABLE `log` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned NOT NULL,
-  `group_name` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `group_id` int(10) unsigned DEFAULT NULL,
-  `action` varchar(120) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `group_name` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+  `group_id` int(10) unsigned NOT NULL,
+  `action` varchar(120) COLLATE utf8_unicode_ci NOT NULL,
   `item_name` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
   `item_id` int(10) unsigned DEFAULT NULL,
   `created` datetime NOT NULL,
@@ -61,35 +61,43 @@ DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `username` varchar(60) COLLATE utf8_unicode_ci NOT NULL,
+  `email` varchar(60) COLLATE utf8_unicode_ci NOT NULL,
   `first_name` varchar(120) COLLATE utf8_unicode_ci NOT NULL,
   `middle_name` varchar(120) COLLATE utf8_unicode_ci DEFAULT NULL,
   `last_name` varchar(120) COLLATE utf8_unicode_ci DEFAULT NULL,  -- should be null or not?
-  `email` varchar(60) COLLATE utf8_unicode_ci NOT NULL,
-  `cpf` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `cnpj` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `cellphone` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `phone` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `zipcode` varchar(10) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `address` varchar(120) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `address2` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `district` varchar(60) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `city` varchar(60) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `province` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
   `password` varchar(10) COLLATE utf8_unicode_ci DEFAULT NULL,
   `activity` tinyint(1) unsigned NOT NULL DEFAULT 1, -- 0 = inactive, 1 = active
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE(`username`),
-  UNIQUE(`email`),
-  UNIQUE(`cpf`),
-  UNIQUE(`cnpj`)
+  UNIQUE(`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+DROP TABLE IF EXISTS `contacts`;
+CREATE TABLE `contacts` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) unsigned NOT NULL,
+  `type` enum('phone', 'cell', 'fax', 'email') COLLATE utf8_unicode_ci NOT NULL,
+  `value` varchar(60) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE(`value`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+DROP TABLE IF EXISTS `identifications`;
+CREATE TABLE `identifications` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) unsigned NOT NULL,
+  `type` enum('cpf', 'dnh', 'rg', 'cnpj', 'inscricao') COLLATE utf8_unicode_ci NOT NULL,
+  `value` varchar(120) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE(`value`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `roles`;
 CREATE TABLE `roles` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(20),
+  `name` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE(`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -104,7 +112,7 @@ DROP TABLE IF EXISTS `tokens`;
 CREATE TABLE `tokens` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned NOT NULL,
-  `ip` varchar(16) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `ip` varchar(16) COLLATE utf8_unicode_ci NOT NULL DEFAULT '0.0.0.0',
   `token` varchar(120) COLLATE utf8_unicode_ci NOT NULL,
   `type` tinyint(1) unsigned NOT NULL,
   `created` datetime NOT NULL,
@@ -113,6 +121,39 @@ CREATE TABLE `tokens` (
   UNIQUE(`token`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 -- END USERS
+
+-- USER INTERACTION
+DROP TABLE IF EXISTS `comments`;
+CREATE TABLE `comments` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `parent_id` int(10) unsigned DEFAULT NULL,
+  `user_id` int(10) unsigned DEFAULT NULL,
+  `name` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `email` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `url` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `comment` BLOB NOT NULL,
+  `created` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+DROP TABLE IF EXISTS `commenting`;
+CREATE TABLE `commenting` (
+  `comment_id` int(10) unsigned DEFAULT NULL,
+  `user_id` int(10) unsigned DEFAULT NULL,
+  `item_name` enum('content', 'project', 'place') COLLATE utf8_unicode_ci DEFAULT NULL,
+  `item_id` int(10) unsigned DEFAULT NULL,
+  UNIQUE(`term_id`,`user_id`,`item_name`,`item_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+DROP TABLE IF EXISTS `folksonomy`;
+CREATE TABLE `folksonomy` (
+  `term_id` int(10) unsigned DEFAULT NULL,
+  `user_id` int(10) unsigned DEFAULT NULL,
+  `item_name` enum('content', 'place') COLLATE utf8_unicode_ci DEFAULT NULL,
+  `item_id` int(10) unsigned DEFAULT NULL,
+  UNIQUE(`term_id`,`user_id`,`item_name`,`item_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+-- END USER INTERACTION
 
 -- BEGIN CONTENT
 DROP TABLE IF EXISTS `translations`;
@@ -125,9 +166,9 @@ CREATE TABLE `translations` (
   `slug` varchar(120) COLLATE utf8_unicode_ci NOT NULL,
   `title` varchar(120) COLLATE utf8_unicode_ci DEFAULT NULL,
   `subtitle` varchar(120) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `excerpt` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `description` BLOB,
-  `body` MEDIUMBLOB,
+  `excerpt` TINYBLOB DEFAULT NULL,
+  `description` BLOB DEFAULT NULL,
+  `body` BLOB DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE(`language`,`item_name`,`item_id`),
   UNIQUE(`slug`)
@@ -152,6 +193,7 @@ CREATE TABLE `resources` (
   `url` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
   `filepath` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
   `filename` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `mimetype` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
   `extension` varchar(6) COLLATE utf8_unicode_ci DEFAULT NULL,
   `embed` BLOB DEFAULT NULL,
   `activity` tinyint(1) unsigned NOT NULL DEFAULT 1, -- 0 = trash, 1 = ...
@@ -165,7 +207,6 @@ CREATE TABLE `resources` (
 DROP TABLE IF EXISTS `collections`;
 CREATE TABLE `collections` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
   `parent_id` int(10) unsigned NOT NULL DEFAULT 0,
   `type_id` int(10) unsigned NOT NULL,
   `activity` tinyint(1) unsigned NOT NULL DEFAULT 1, -- 0 = trash, 1 = ...
@@ -177,7 +218,6 @@ CREATE TABLE `collections` (
 DROP TABLE IF EXISTS `terms`;
 CREATE TABLE `terms` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
   `parent_id` int(10) unsigned NOT NULL DEFAULT 0,
   `type_id` int(10) unsigned NOT NULL,
   `activity` tinyint(1) unsigned NOT NULL DEFAULT 1, -- 0 = trash, 1 = ...
@@ -193,55 +233,22 @@ CREATE TABLE `areas` (
   `activity` tinyint(1) unsigned NOT NULL DEFAULT 1, -- 0 = off, 1 = on
   PRIMARY KEY (`id`),
   UNIQUE(`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `blocks`;
 CREATE TABLE `blocks` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `area_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 -- END SITE BUILDING
-
--- USER INTERACTION
-DROP TABLE IF EXISTS `comments`;
-CREATE TABLE `comments` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `parent_id` int(10) unsigned DEFAULT NULL,
-  `user_id` int(10) unsigned DEFAULT NULL,
-  `name` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `email` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `url` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `comment` BLOB NOT NULL,
-  `created` datetime NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-DROP TABLE IF EXISTS `commenting`;
-CREATE TABLE `commenting` (
-  `comment_id` int(10) unsigned DEFAULT NULL,
-  `user_id` int(10) unsigned DEFAULT NULL,
-  `item_name` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `item_id` int(10) unsigned DEFAULT NULL,
-  UNIQUE(`term_id`,`user_id`,`item_name`,`item_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-DROP TABLE IF EXISTS `folksonomy`;
-CREATE TABLE `folksonomy` (
-  `term_id` int(10) unsigned DEFAULT NULL,
-  `user_id` int(10) unsigned DEFAULT NULL,
-  `item_name` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `item_id` int(10) unsigned DEFAULT NULL,
-  UNIQUE(`term_id`,`user_id`,`item_name`,`item_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
--- END USER INTERACTION
 
 -- PROJECT MANAGEMENT
 DROP TABLE IF EXISTS `projects`;
 CREATE TABLE `projects` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(120) NOT NULL,
-  `description` BLOB NOT NULL,
+  `description` TINYBLOB NOT NULL,
   `activity` tinyint(1) unsigned NOT NULL DEFAULT 1, -- 0 = trash, 1 = ...
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -273,9 +280,9 @@ CREATE TABLE `invoices` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `project_id` int(10) unsigned NOT NULL,
   `hours` DECIMAL(10,2) unsigned NOT NULL,
-  `rate` DECIMAL(10,2) DEFAULT NULL,
-  `total` DECIMAL(10,2) DEFAULT NULL,
-  `activity` DECIMAL(10,2) DEFAULT NULL, -- 0 = deleted, 1 = active, 2 = sent, 3 = contested, 4 = paid
+  `rate` DECIMAL(10,2) NOT NULL,
+  `total` DECIMAL(10,2) NOT NULL,
+  `activity` DECIMAL(10,2) NOT NULL DEFAULT 1, -- 0 = deleted, 1 = active, 2 = sent, 3 = contested, 4 = paid
   `created` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -285,24 +292,93 @@ CREATE TABLE `invoices` (
 DROP TABLE IF EXISTS `events`;
 CREATE TABLE `events` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `place_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 -- END CALENDAR
+
+-- STORE
+DROP TABLE IF EXISTS `stores`;
+CREATE TABLE `stores` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `seller_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+DROP TABLE IF EXISTS `products`;
+CREATE TABLE `products` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `store_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+DROP TABLE IF EXISTS `cart`;
+CREATE TABLE `cart` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `customer_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+DROP TABLE IF EXISTS `orders`;
+CREATE TABLE `orders` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `customer_id` int(10) unsigned NOT NULL,
+  `shipping_method_id` int(10) unsigned NOT NULL,
+  `shipping_method_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+DROP TABLE IF EXISTS `order_items`;
+CREATE TABLE `order_items` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `store_id` int(10) unsigned NOT NULL,
+  `order_id` int(10) unsigned NOT NULL,
+  `product_id` int(10) unsigned NOT NULL,
+  `quantity` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+DROP TABLE IF EXISTS `order_item_metadata`;
+CREATE TABLE `order_item_metadata` (
+  `item_id` int(10) unsigned NOT NULL,
+  `key` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
+  `value` varchar(120) COLLATE utf8_unicode_ci NOT NULL,
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+DROP TABLE IF EXISTS `payment_methods`;
+CREATE TABLE `payment_methods` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+DROP TABLE IF EXISTS `shipping_methods`;
+CREATE TABLE `shipping_methods` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- END STORE
 
 
 -- GEO
 DROP TABLE IF EXISTS `places`;
 CREATE TABLE `places` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `type_id` int(10) unsigned NOT NULL,
   `address_id` int(10) unsigned DEFAULT NULL,
+  `description` BLOB NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `addresses`;
 CREATE TABLE `addresses` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `street` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+  `number` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
+  `address` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
   `district_id` int(10) unsigned DEFAULT NULL,
   `city_id` int(10) unsigned DEFAULT NULL,
+  `coordinate_id` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -324,6 +400,8 @@ CREATE TABLE `cities` (
 DROP TABLE IF EXISTS `provinces`;
 CREATE TABLE `provinces` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `code` varchar(5) COLLATE utf8_unicode_ci NOT NULL,
+  `region` varchar(5) COLLATE utf8_unicode_ci NOT NULL,
   `country_id` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -331,6 +409,7 @@ CREATE TABLE `provinces` (
 DROP TABLE IF EXISTS `countries`;
 CREATE TABLE `countries` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `code` varchar(5) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -341,12 +420,19 @@ CREATE TABLE `coordinates` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 -- END
 
-
 -- REAL ESTATE
-DROP TABLE IF EXISTS `real_estate_places`;
-CREATE TABLE `real_estate_places` (
+DROP TABLE IF EXISTS `estates`;
+CREATE TABLE `estates` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `place_id` int(10) unsigned NOT NULL,
+  `type_id` int(10) unsigned NOT NULL,
+  `area` int(10) unsigned NOT NULL DEFAULT 0,
+  `rooms` int(10) unsigned NOT NULL DEFAULT 0,
+  `suites` int(10) unsigned NOT NULL DEFAULT 0,
+  `parking_spots` int(10) unsigned NOT NULL DEFAULT 0,
+  `price` decimal(10,2) unsigned NOT NULL DEFAULT 0.00,
+  `charges` decimal(10,2) unsigned NOT NULL DEFAULT 0.00,
+  `taxes` decimal(10,2) unsigned NOT NULL DEFAULT 0.00,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 -- END

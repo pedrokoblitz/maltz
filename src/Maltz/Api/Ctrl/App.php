@@ -8,13 +8,15 @@ class App {
 
     public static function route($app) {
 
-        $app->get('/app/:model/:type/', function ($model, $type) use ($app) {
+        $app->view->setLayout('backend.tpl.php');
+
+        $app->get('/backend/:controller', function ($controller) use ($app) {
         	$vars = array(
         		'model' => $model,
         		'type' => $type
     		);
-            // $app->render($model . '.' . $type . '.tpl.php', $vars);
-            $app->render('app.tpl.php', $vars);
+
+            $app->render($controller . '.tpl.php', $vars);
     	});
 
     	return $app;
