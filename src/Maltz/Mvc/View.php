@@ -44,7 +44,7 @@ class View extends \Slim\View
     {
         $string = '';
         foreach ($this->meta as $name => $content) {
-            $string .= '';
+            $string .= "<meta name=\"$name\" content=\"$content\">\n";
         }
         return $string;
     }
@@ -57,8 +57,8 @@ class View extends \Slim\View
     public function renderStyles()
     {
         $string = '';
-        foreach ($this->meta as $name => $content) {
-            $string .= '';
+        foreach ($this->styles as $style) {
+            $string .= "<link href=\"/public/assets/css/$style\" rel=\"stylesheet\">\n";
         }
         return $string;
     }
@@ -66,8 +66,8 @@ class View extends \Slim\View
     public function renderScripts()
     {
         $string = '';
-        foreach ($this->meta as $name => $content) {
-            $string .= '';
+        foreach ($this->scripts as $script) {
+            $string .= "<script src=\"/public/assets/js/$script\"></script>\n";
         }
         return $string;
     }
@@ -79,7 +79,7 @@ class View extends \Slim\View
             'css' => $this->renderStyles(),
             'meta' => $this->renderPageMeta()
             );
-        $this->partial('html.header.tpl.php');
+        return $this->partial('html.header.tpl.php', $data);
     }
 
     public function renderPageFooter()
@@ -88,25 +88,6 @@ class View extends \Slim\View
             'js' => $this->renderScripts()
             );
         $this->partial('html.footer.tpl.php');
-    }
-
-    /**
-     * Overwrite the render method of Slim_View in order to include it in a layout
-     */
-    public function render($template)
-    {
-        $separator = isset($this->layout) ? '/' . $this->layout . '/' : '/';
-        $templatePath = $this->getTemplatesDirectory() . $separator . ltrim($template, '/') . 'tpl.php';
-        if (!file_exists($templatePath))
-        {
-            throw new RuntimeException('View cannot render template `' . $templatePath . '`. Template does not exist.');
-        }
-
-        extract($this->data->all());
-        ob_start();
-        require $templatePath;
-        $html = ob_get_clean();
-        return $this->_renderLayout($html);
     }
 
     public function partial($template, $data = array())
@@ -121,7 +102,6 @@ class View extends \Slim\View
         ob_start();
         require $templatePath;
         $html = ob_get_clean();
-        // echo $html?
         return $html;
     }
 
@@ -142,5 +122,21 @@ class View extends \Slim\View
             return $view;
         }
         return $content;
+    }
+
+    public function render($template)
+    {
+        $separator = isset($this->layout) ? '/' . $this->layout . '/' : '/';
+        $templatePath = $this->getTemplatesDirectory() . $separator . ltrim($template, '/') . 'tpl.php';
+        if (!file_exists($templatePath))
+        {
+            throw new RuntimeException('View cannot render template `' . $templatePath . '`. Template does not exist.');
+        }
+
+        extract($this->data->all());
+        ob_start();
+        require $templatePath;
+        $html = ob_get_clean();
+        return $this->_renderLayout($html);
     }
 }

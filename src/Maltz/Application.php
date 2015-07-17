@@ -86,6 +86,31 @@ class Application
             }
         };
        
+        $app->defaultViewInfo = function () {
+            return array(
+                'meta.properties' => array(
+                    '' => '',
+                    '' => '',
+                    '' => '',
+                    ),
+                'styles' => array(
+                    '' => '',
+                    '' => '',
+                    '' => '',
+                    ),
+                'scripts' => array(
+                    '' => '',
+                    '' => '',
+                    '' => '',
+                    ),
+                'layout.data' => array(
+                    '' => '',
+                    '' => '',
+                    '' => '',
+                    ),
+                );
+        };
+
         $app->defaultRoles = function () {
             $roles = array('admin');
         };

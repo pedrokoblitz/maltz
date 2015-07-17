@@ -7,6 +7,9 @@ use Maltz\Mvc\Record;
 
 class Handler
 {
+    protected $app;
+    protected $allowedRequestFilters;
+
     public function __construct($app)
     {
         $this->app = $app;
@@ -14,39 +17,49 @@ class Handler
 
     public function setViewInfo($info)
     {
+        if (isset($this->viewInfo['layout'])) {
+            $this->app->view->setLayout($layout);
+        }
+
+        if (isset($this->viewInfo['view.data'])) { 
+            $this->app->view->setData($this->viewInfo['view.data']);
+        }
+
+        if (isset($this->viewInfo['layout.data'])) {
+            $this->app->view->setLayoutData($this->viewInfo['layout.data']);
+        }
 
         if (isset($info['meta.properties'])) {
             foreach ($info['meta.properties'] as $name => $property) {
                 $this->app->view->setMetaProperty($name, $property);
             }
-            unset($info['meta.properties']);
         }
 
         if (isset($info['styles'])) {
             foreach ($info['styles'] as $name => $style) {
                 $this->app->view->enqueueStyle($name, $style);
             }
-            unset($info['styles']);
         }
 
         if (isset($info['scripts'])) {
             foreach ($info['scripts'] as $name => $script) {
                 $this->app->view->enqueueScript($name, $script);
             }
-            unset($info['scripts']);
         }
 
-        $this->viewInfo = $info;
+        $this->template = $info['template'];
     }
 
-    public function render($layout, $template)
+    public function setDefaultViewResources()
     {
-        $this->app->view->setLayout($layout);
-        if (isset($this->viewInfo['layout.data'])) {
-            $this->app->view->setLayoutData($this->viewInfo['layout.data']);
-        }
-        $data = isset($this->viewInfo['view.data']) ? $this->viewInfo['view.data'] : array();
-        $this->app->render($template, $data);
+        $this->app->view->enqueueScript('jquery', 'jquery.min.js');
+        $this->app->view->enqueueScript('bootstrap', 'bootstrap.min.js');
+        $this->app->view->enqueueStyle('bootstrap', 'bootstrap.min.css');
+    }
+
+    public function render()
+    {
+        $this->app->render($this->template);
     }
 
     public function isAuthorized($user = null, $roles = null)
@@ -81,7 +94,8 @@ class Handler
 
     public function handleGetRequest()
     {
-        return true;
+        $get = $app->request->get();
+        $allowed = array_intersect($get, $this->allowedRequestFilters);
     }
 
     public function authorize(array $roles = null)
@@ -104,7 +118,7 @@ class Handler
 
     public function errorNotFound()
     {
-        $this->error(404, 'You do not have permission to access this content.');
+        $this->error(404, 'The content you requested is not avaiable at this time.');
     }
 
     public function errorForbidden()
@@ -116,7 +130,7 @@ class Handler
     {
         $result = array('success' => false, 'message' => $message);
         $this->app->response->setStatus($status);
-        $app->view->setLayout('frontend.tpl.php');
+        $this->app->view->setLayout('frontend.tpl.php');
         $this->app->render('error.tpl.php', $result);
         $this->app->stop();
     }
@@ -132,8 +146,8 @@ class Handler
                     $body
                 )
                 ->sendMessage(
-                    $this->session->get('user.email'),
-                    $this->session->get('user.name')
+                    $this->app->session->get('user.email'),
+                    $this->app->session->get('user.name')
                 );
     }
 }
