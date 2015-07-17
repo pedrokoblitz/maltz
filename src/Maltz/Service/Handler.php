@@ -21,7 +21,7 @@ class Handler
             $this->app->view->setLayout($layout);
         }
 
-        if (isset($this->viewInfo['view.data'])) { 
+        if (isset($this->viewInfo['view.data'])) {
             $this->app->view->setData($this->viewInfo['view.data']);
         }
 
@@ -92,10 +92,25 @@ class Handler
         return $record;
     }
 
+    public function setModel($name)
+    {
+        $avaiable = array(
+            'content' => 'Content',
+            );
+        return new $avaiable[$name]($this->app->db);
+    }
+
     public function handleGetRequest()
     {
+        return true;
+    }
+
+    public function handleNonce()
+    {
         $get = $app->request->get();
-        $allowed = array_intersect($get, $this->allowedRequestFilters);
+        if (!isset($get['nonce']) || !$app->nonce->verify($get['nonce'])) {
+            $this->errorForbidden();
+        }
     }
 
     public function authorize(array $roles = null)

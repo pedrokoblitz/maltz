@@ -51,6 +51,7 @@ CREATE TABLE `log` (
   `action` varchar(120) COLLATE utf8_unicode_ci NOT NULL,
   `item_name` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
   `item_id` int(10) unsigned DEFAULT NULL,
+  `nonce` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
   `created` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;

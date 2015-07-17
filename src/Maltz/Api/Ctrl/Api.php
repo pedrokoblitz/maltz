@@ -14,9 +14,11 @@ use Maltz\Content\Model\Term;
 use Maltz\Content\Model\Area;
 use Maltz\Content\Model\Block;
 
-class Api {
+class Api
+{
 
-    public function route($app) {
+    public function route($app)
+    {
 
         /*
          * CONTENT
@@ -85,7 +87,7 @@ class Api {
             $record = $app->handler->handlePostRequest();
             $result = $entity->save($record);
             $id = $record->has('id') ? $record->get('id') : $result->get('last.insert.id');
-            Log::query('log', $app->session->get('user.id'), $model, $id, 'save');
+            Log::query('log', $app->session->get('user.id'), $model, $id, 'save', $app->session->get('nonce'));
             $app->handler->handleApiResponse($result);
 
         })->name('api_save')->conditions(array('model' => 'content|collection|resource|term'));
@@ -109,8 +111,9 @@ class Api {
                     break;
             }
 
+            $app->handler->handleNonce();
             $result = $entity->delete($id);
-            Log::query('log', $app->session->get('user.id'), $model, $id, 'delete');
+            Log::query('log', $app->session->get('user.id'), $model, $id, 'delete', $app->session->get('nonce'));
             $app->handler->handleApiResponse($result);
 
         })->name('api_delete')->conditions(array('model' => 'content|collection|resource|term', 'id' => '\d+'));
@@ -152,6 +155,7 @@ class Api {
             }
 
             $result = $entity->getAll($group_id, $item_name);
+            Log::query('', $app->session->get('user.id'), $model, $id, '', $app->session->get('nonce'));
             $app->handler->handleApiResponse($result);
 
         })->name('api_show_items')->conditions(array('group_name' => 'content|collection', 'group_id' => '\d+', 'item_name' => 'content|collection|resource|term'));
@@ -167,7 +171,9 @@ class Api {
                     break;
             }
 
+            $app->handler->handleNonce();
             $result = $entity->add($group_id, $item_name, $item_id, $order);
+            Log::query('', $app->session->get('user.id'), $model, $id, '', $app->session->get('nonce'));
             $app->handler->handleApiResponse($result);
 
         })->name('api_add_item')->conditions(array('group_name' => 'content|collection', 'group_id' => '\d+', 'item_name' => 'content|collection|resource|term', 'item_id' => '\d+', 'order' => '\d+'));
@@ -183,7 +189,9 @@ class Api {
                     break;
             }
 
+            $app->handler->handleNonce();
             $result = $entity->remove($group_id, $item_name, $item_id);
+            Log::query('', $app->session->get('user.id'), $model, $id, '', $app->session->get('nonce'));
             $app->handler->handleApiResponse($result);
 
         })->name('api_remove_item')->conditions(array('group_name' => 'content|collection', 'group_id' => '\d+', 'item_name' => 'content|collection|resource|term', 'item_id' => '\d+'));
@@ -208,9 +216,10 @@ class Api {
                     break;
             }
 
-            $record = 
-            $result = $entity->addMeta();
-            $app->handler->handleApiResponse($result);        
+            $app->handler->handleNonce();
+            $result = $entity->removeMeta($item_name, $item_id, $key);
+            Log::query('', $app->session->get('user.id'), $model, $id, '', $app->session->get('nonce'));
+            $app->handler->handleApiResponse($result);
 
         })->name('api_add_meta')->conditions(array('item_name' => 'content|collection|resource|user', 'item_id' => '\d+', 'key' => '\w+'));
 
@@ -231,8 +240,10 @@ class Api {
                     break;
             }
 
-            $result = $entity->removeMeta();
-            $app->handler->handleApiResponse($result);        
+            $app->handler->handleNonce();
+            $result = $entity->removeMeta($item_name, $item_id, $key, $value);
+            Log::query('', $app->session->get('user.id'), $model, $id, '', $app->session->get('nonce'));
+            $app->handler->handleApiResponse($result);
 
         })->name('api_remove_meta')->conditions(array('item_name' => 'content|collection|resource|user', 'item_id' => '\d+', 'key' => '\w+', 'value' => '\w+'));
 
@@ -240,27 +251,30 @@ class Api {
          * TYPES
          */
         
-        $app->get('/api/type(/:pg(/:key(/:order)))', function($pg = 1, $key = 'name', $order = 'asc') use ($app) {
+        $app->get('/api/type(/:pg(/:key(/:order)))', function ($pg = 1, $key = 'name', $order = 'asc') use ($app) {
 
+            $app->handler->handleNonce();
             $result = Type::query($app->db, 'display');
             $app->handler->handleApiResponse($result);
 
         })->name('api_type_list')->conditions(array('pg' => '\d+', 'key' => '\w+', 'order' => 'asc|desc'));
 
 
-        $app->get('/api/type/:id/delete', function($id) use ($app) {
+        $app->get('/api/type/:id/delete', function ($id) use ($app) {
 
+            $app->handler->handleNonce();
             $result = Type::query($app->db, 'delete', $id);
+            Log::query('', $app->session->get('user.id'), $model, $id, '', $app->session->get('nonce'));
             $app->handler->handleApiResponse($result);
 
         })->name('api_type_delete')->conditions(array('id' => '\d+'));
 
-        $app->post('/api/type/save', function() use ($app) {
+        $app->post('/api/type/save', function () use ($app) {
 
             $record = $app->handler->handlePostRequest();
             $result = Type::query($app->db, 'save', $record);
             $id = $record->has('id') ? $record->get('id') : $result->get('last.insert.id');
-            Log::query('log', $app->session->get('user.id'), $model, $id, 'save');
+            Log::query('log', $app->session->get('user.id'), $model, $id, 'save', $app->session->get('nonce'));
             $app->handler->handleApiResponse($result);
 
         })->name('api_type_save');
@@ -270,74 +284,80 @@ class Api {
          * SITE BUILDING
          */
 
-        $app->get('/api/area(/:pg(/:key(/:order)))', function($pg = 1, $key = 'name', $order = 'asc') use ($app) {
+        $app->get('/api/area(/:pg(/:key(/:order)))', function ($pg = 1, $key = 'name', $order = 'asc') use ($app) {
 
             $result = Area::query($app->db, 'find', $pg, $app->config('per_page'), $key, $order);
             $app->handler->handleApiResponse($result);
 
         })->name('api_area_list')->conditions(array('pg' => '\d+', 'key' => '\w+', 'order' => 'asc|desc'));
 
-        $app->get('/api/area/:id/show', function($id) use ($app) {
+        $app->get('/api/area/:id/show', function ($id) use ($app) {
 
             $result = Area::query($app->db, 'getBlocks', $id);
             $app->handler->handleApiResponse($result);
 
         })->name('api_area_show')->conditions(array('pg' => '\d+', 'key' => '\w+', 'order' => 'asc|desc'));
 
-        $app->get('/api/area/:group_id/block/:item_id/add', function($group_id, $item_id) use ($app) {
+        $app->get('/api/area/:group_id/block/:item_id/add', function ($group_id, $item_id) use ($app) {
 
+            $app->handler->handleNonce();
             $result = Area::query($app->db, 'show', $id);
+            Log::query('', $app->session->get('user.id'), $model, $id, '', $app->session->get('nonce'));
             $app->handler->handleApiResponse($result);
 
         })->name('api_area_block_add')->conditions(array('pg' => '\d+', 'key' => '\w+', 'order' => 'asc|desc'));
 
-        $app->get('/api/area/:group_id/block/:item_id/remove', function($group_id, $item_id) use ($app) {
+        $app->get('/api/area/:group_id/block/:item_id/remove', function ($group_id, $item_id) use ($app) {
 
+            $app->handler->handleNonce();
             $result = Area::query($app->db, 'show', $id);
+            Log::query('', $app->session->get('user.id'), $model, $id, '', $app->session->get('nonce'));
             $app->handler->handleApiResponse($result);
 
         })->name('api_area_block_remove')->conditions(array('pg' => '\d+', 'key' => '\w+', 'order' => 'asc|desc'));
 
-        $app->get('/api/area/:id/delete', function($id) use ($app) {
+        $app->get('/api/area/:id/delete', function ($id) use ($app) {
 
+            $app->handler->handleNonce();
             $result = Area::query($app->db, 'delete', $id);
-            Log::query('log', $app->session->get('user.id'), 'area', $id, 'delete');
+            Log::query('log', $app->session->get('user.id'), 'area', $id, 'delete', $app->session->get('nonce'));
             $app->handler->handleApiResponse($result);
 
         })->name('api_area_delete')->conditions(array());
 
-        $app->post('/api/area/save', function() use ($app) {
+        $app->post('/api/area/save', function () use ($app) {
 
             $record = $app->handler->handlePostRequest();
             $result = Area::query($app->db, 'save', $record);
             $id = $record->has('id') ? $record->get('id') : $result->get('last.insert.id');
-            Log::query('log', $app->session->get('user.id'), $model, $id, 'save');
+            Log::query('log', $app->session->get('user.id'), $model, $id, 'save', $app->session->get('nonce'));
             $app->handler->handleApiResponse($result);
 
         })->name('api_area_save');
 
 
-        $app->get('/api/block(/:pg(/:key(/:order)))', function($pg = 1, $key = 'modified', $order = 'desc') use ($app) {
+        $app->get('/api/block(/:pg(/:key(/:order)))', function ($pg = 1, $key = 'modified', $order = 'desc') use ($app) {
 
             $result = Block::query($app->db, 'find', $pg, $app->config('per_page'), $key, $order);
             $app->handler->handleApiResponse($result);
 
         })->name('api_block_list')->conditions(array('pg' => '\d+', 'key' => '\w+', 'order' => 'asc|desc'));
 
-        $app->get('/api/block/:id/delete', function($id) use ($app) {
+        $app->get('/api/block/:id/delete', function ($id) use ($app) {
 
+            $app->handler->handleNonce();
             $result = Block::query($app->db, 'delete', $id);
-            Log::query('log', $app->session->get('user.id'), 'block', $id, 'delete');
+            Log::query('log', $app->session->get('user.id'), 'block', $id, 'delete', $app->session->get('nonce'));
             $app->handler->handleApiResponse($result);
 
         })->name('api_block_delete')->conditions(array());
 
-        $app->post('/api/block/save', function() use ($app) {
+        $app->post('/api/block/save', function () use ($app) {
 
             $record = $app->handler->handlePostRequest();
             $result = Block::query($app->db, 'save', $record);
             $id = $record->has('id') ? $record->get('id') : $result->get('last.insert.id');
-            Log::query('log', $app->session->get('user.id'), 'block', $id, 'save');
+            Log::query('log', $app->session->get('user.id'), 'block', $id, 'save', $app->session->get('nonce'));
             $app->handler->handleApiResponse($result);
 
         })->name('api_block_save')->conditions(array());
@@ -347,43 +367,42 @@ class Api {
          * USERS
          */
         
-        $app->get('/api/user(/:pg(/:key(/:order)))', function($pg = 1, $key = 'modified', $order = 'desc') use ($app) {
+        $app->get('/api/user(/:pg(/:key(/:order)))', function ($pg = 1, $key = 'modified', $order = 'desc') use ($app) {
 
             $result = User::query($app->db, 'find', $pg, $app->config('per_page'), $key, $order);
             $app->handler->handleApiResponse($result);
 
         })->name('api_user_list')->conditions(array('pg' => '\d+', 'key' => '\w+', 'order' => 'asc|desc'));
 
-        $app->get('/api/user/:id/show', function($id) use ($app) {
+        $app->get('/api/user/:id/show', function ($id) use ($app) {
 
             $result = User::query($app->db, 'show', $id);
             $app->handler->handleApiResponse($result);
 
         })->name('api_user_show')->conditions(array());
 
-        $app->get('/api/user/profile', function($id) use ($app) {
+        $app->get('/api/user/profile', function ($id) use ($app) {
 
             $result = User::query($app->db, 'show', $app->session->get('user.id'));
             $app->handler->handleApiResponse($result);
 
         })->name('api_user_profile');
 
-        $app->get('/api/user/:id/delete', function($id) use ($app) {
+        $app->get('/api/user/:id/delete', function ($id) use ($app) {
 
+            $app->handler->handleNonce();
             $result = User::query($app->db, 'delete', $id);
-
-            Log::query('log', $app->session->get('user.id'), 'user', $id, 'delete');
-            $app->response->setStatus(200);
+            Log::query('log', $app->session->get('user.id'), 'user', $id, 'delete', $app->session->get('nonce'));
             $app->handler->handleApiResponse($result);
 
         })->name('api_user_delete')->conditions(array());
 
-        $app->post('/api/user/save', function() use ($app) {
+        $app->post('/api/user/save', function () use ($app) {
 
             $record = $app->handler->handlePostRequest();
             $result = User::query($app->db, 'save', $record);
             $id = $record->has('id') ? $record->get('id') : $result->get('last.insert.id');
-            Log::query('log', $app->session->get('user.id'), $model, $id, 'save');
+            Log::query('log', $app->session->get('user.id'), $model, $id, 'save', $app->session->get('nonce'));
             $app->handler->handleApiResponse($result);
 
         })->name('api_user_save');
@@ -393,7 +412,7 @@ class Api {
         /*
          * LANG
          */
-        $app->get('/api/lang/:lang', function($lang) use ($app) {
+        $app->get('/api/lang/:lang', function ($lang) use ($app) {
             $app->session->set('language', $lang);
         })->name('api_set_lang')->conditions(array());
 
@@ -402,27 +421,28 @@ class Api {
          * SYSTEM
          */
         
-        $app->get('/api/config', function() use ($app) {
+        $app->get('/api/config', function () use ($app) {
 
             $result = Config::query($app->db, 'display');
             $app->handler->handleApiResponse($result);
 
         })->name('api_config_list')->conditions(array());
 
-        $app->post('/api/config', function() use ($app) {
+        $app->post('/api/config', function () use ($app) {
 
             $record = $app->handler->handlePostRequest();
             $result = Config::query($app->db, 'save', $record);
             $id = $record->has('id') ? $record->get('id') : $result->get('last.insert.id');
-            Log::query('log', $app->session->get('user.id'), 'config', $id, 'save');
+            Log::query('log', $app->session->get('user.id'), 'config', $id, 'save', $app->session->get('nonce'));
             $app->handler->handleApiResponse($result);
 
         })->name('api_config_save');
 
 
-        $app->get('/api/log(/:pg)', function($pg = 1) use ($app) {
+        $app->get('/api/log(/:pg)', function ($pg = 1) use ($app) {
 
-            $result = Log::query($app->db, 'find', $pg, $app->config('per_page'));
+            $app->handler->handleNonce();
+            $result = Log::query($app->db, 'find', $pg, $app->config('per_page'), $app->session->get('nonce'));
             $app->handler->handleApiResponse($result);
 
         })->name('api_log_list')->conditions(array('pg' => '\d+'));
@@ -432,11 +452,11 @@ class Api {
          * UPLOAD
          */
         
-        $app->get('/upload', function() use ($app) {
+        $app->get('/upload', function () use ($app) {
             $app->render('upload.tpl.php');
         });
 
-        $app->post('/upload', function() use ($app) {
+        $app->post('/upload', function () use ($app) {
 
             $validator = new FileUpload\Validator\Simple(1024 * 1024 * 2, ['image/png', 'image/jpg']);
             $pathresolver = new FileUpload\PathResolver\Simple('/var/www/html/files/');
@@ -449,7 +469,7 @@ class Api {
 
             list($files, $headers) = $fileupload->processAll();
 
-            foreach($headers as $header => $value) {
+            foreach ($headers as $header => $value) {
                 header($header . ': ' . $value);
             }
 

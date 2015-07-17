@@ -148,6 +148,7 @@ class Application
         $controllers = array(
             'Maltz\Api\Ctrl\Api',
             'Maltz\Api\Ctrl\App',
+            'Maltz\Api\Ctrl\Test',
         );
 
         foreach ($controllers as $controller) {
