@@ -91,16 +91,24 @@ class Validation
         return false;
     }
 
-    /**
-     * Método que verifica se a data esta no formato dd-mm-YYYY
-     *
-     * @param $data mixed
-     *
-     * @return bool
-     */
-    public function date($data)
+    public function datetime($data)
     {
-        return $this->validate("/^[0-9]{2}\-[0-9]{2}\-[0-9]{4}$/", $data);
+        return $data;
+    }
+
+    public function slug($data)
+    {
+        return $data;
+    }
+
+    public function string($data)
+    {
+        return $data;
+    }
+
+    public function textarea($data)
+    {
+        return $data;
     }
 
     /**

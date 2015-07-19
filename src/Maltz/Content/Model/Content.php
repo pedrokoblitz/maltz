@@ -66,7 +66,8 @@ class Content extends Model
      * CRUD
      */
 
-    public function insert(Record $record) {
+    public function insert(Record $record)
+    {
         $sql = "INSERT INTO contents (type_id, date_pub, created, modified) 
             VALUES (:type_id, :date_pub, NOW(), NOW())";
         $resultado = $this->db->run($sql, array('type_id' => $record->get('type_id'), 'date_pub' => $record->get('date_pub')));
@@ -80,7 +81,8 @@ class Content extends Model
     }
 
 
-    public function update(Record $record) {
+    public function update(Record $record)
+    {
         $sql = "UPDATE contents SET modified=NOW() WHERE id=:id";
         $resultado = $this->db->run($sql, array('id' => $record->get('id')));
         $sql = "UPDATE translations 
@@ -91,7 +93,7 @@ class Content extends Model
         return $resultado;
     }
 
-    public function show($id, $lang='pt-br') 
+    public function show($id, $lang = 'pt-br')
     {
         $sql = "SELECT t1.id AS id, t1.activity AS activity, t1.date_pub AS date_pub, t1.created AS created, t1.modified AS modified, t2.slug AS slug, t2.title AS title, t2.subtitle AS subtitle, t2.excerpt AS excerpt, t2.description AS description, t2.body AS body, t3.name
             FROM contents t1
@@ -107,7 +109,7 @@ class Content extends Model
         return $resultado;
     }
 
-    public function find($page=1, $per_page=12, $key='modified', $order='asc', $lang='pt-br') 
+    public function find($page = 1, $per_page = 12, $key = 'modified', $order = 'asc', $lang = 'pt-br')
     {
         $pagination = Pagination::paginate($page, $per_page);
 
@@ -126,7 +128,7 @@ class Content extends Model
         return $resultado;
     }
 
-    public function findByType($type, $page=1, $per_page=12, $key='modified', $order='asc', $lang='pt-br') 
+    public function findByType($type, $page = 1, $per_page = 12, $key = 'modified', $order = 'asc', $lang = 'pt-br')
     {
         $pagination = Pagination::paginate($page, $per_page);
 

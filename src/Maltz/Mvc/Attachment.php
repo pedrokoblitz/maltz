@@ -4,8 +4,9 @@ namespace Maltz\Mvc;
 
 trait Attachment
 {
-    public function addAttachment(Record $record)
+    public function addAttachment($id, $item_name, $item_id)
     {
+        $bind = array('group_name' => $this->slug, 'group_id' => $id, 'item_name' => $item_name, 'item_id' => $item_id);
         $sql = "INSERT INTO attachments (group_name, group_id, item_name, item_id, order) VALUES (:group_name, :group_id, :item_name, :item_id, :order)";
         $resultado = $this->db->run($sql, $bind);
         return $resultado;
