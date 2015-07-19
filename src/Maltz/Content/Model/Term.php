@@ -77,7 +77,6 @@ class Term extends Model
     public function find($page = 1, $per_page = 12, $key = 'type', $order = 'desc', $lang = 'pt-br')
     {
         $pagination = Pagination::paginate($page, $per_page);
-
         $sql = "SELECT t1.id AS id, t1.parent_id AS parent_id, t1.name AS name, t1.value AS value, t3.name AS type 
         FROM terms t1 
             JOIN translations t2
@@ -96,7 +95,6 @@ class Term extends Model
     public function findByType($type, $page = 1, $per_page = 12, $key = 'name', $order = 'asc', $lang = 'pt-br')
     {
         $pagination = Pagination::paginate($page, $per_page);
-
         $sql = "SELECT t1.id AS id, t1.parent_id AS parent_id, t1.name AS name, t1.value AS value, t3.name AS type 
         FROM terms t1 
             JOIN translations t2

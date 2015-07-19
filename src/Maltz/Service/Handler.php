@@ -83,10 +83,10 @@ class Handler
 
     public function handlePostRequest()
     {
-        $body = $app->request->getBody();
+        $body = $this->app->request->getBody();
         $record = new Record(json_decode($body, true));
         $nonce = $record->get('nonce');
-        if (!$app->nonce->verify($nonce)) {
+        if (!$this->app->nonce->verify($nonce)) {
             $this->errorForbidden();
         }
         return $record;
@@ -110,8 +110,8 @@ class Handler
 
     public function handleNonce()
     {
-        $get = $app->request->get();
-        if (!isset($get['nonce']) || !$app->nonce->verify($get['nonce'])) {
+        $get = $this->app->request->get();
+        if (!isset($get['nonce']) || !$this->app->nonce->verify($get['nonce'])) {
             $this->errorForbidden();
         }
     }
