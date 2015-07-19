@@ -56,7 +56,8 @@ class Area extends Model
      * CRUD
      */
 
-    public function insert(Record $record) {
+    public function insert(Record $record)
+    {
         $fields = $record->getFieldsList();
         $values = $record->getInsertValueString();
         $sql = "INSERT INTO areas $fields VALUES $values";
@@ -65,14 +66,16 @@ class Area extends Model
     }
 
 
-    public function update(Record $record) {
+    public function update(Record $record)
+    {
         $values = $record->getUpdateValueString();
         $sql = "UPDATE areas SET $values WHERE id=:id";
         $resultado = $this->db->run($sql, $record->toArray());
         return $resultado;
     }
 
-    public function display($key='name', $order='asc') {
+    public function display($key = 'name', $order = 'asc')
+    {
         $sql = "SELECT id, name, activity 
         FROM areas
             ORDER BY $key $order
@@ -82,7 +85,8 @@ class Area extends Model
     }
 
 
-    public function find($page=1, $per_page=12, $key='name', $order='asc') {
+    public function find($page = 1, $per_page = 12, $key = 'name', $order = 'asc')
+    {
         $pagination = Pagination::paginate($page, $per_page);
         
         $sql = "SELECT id, name, activity 
@@ -90,11 +94,12 @@ class Area extends Model
             ORDER BY $key $order
             LIMIT $pagination->offset,$pagination->limit
         WHERE activity > 0";
-        $resultado = $this->db->run($sql, array(), 'item_name' => 'area'));
+        $resultado = $this->db->run($sql, array('item_name' => 'area'));
         return $resultado;
     }
 
-    public function show($id) {
+    public function show($id)
+    {
         $sql = "SELECT id, name, activity FROM areas
             WHERE id=:id
                 AND activity > 0";
@@ -132,9 +137,4 @@ class Area extends Model
         $resultado = $this->db->run($sql, array('item_name' => 'block', 'area_id' => $area_id));
         return $resultado;
     }
-
-    /*
-     * 
-     */
-
 }

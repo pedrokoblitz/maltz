@@ -68,7 +68,7 @@ class Application
         };
         
         $app->container->singleton('db', function () use ($app) {
-            return new DB($app->config('db.dsn'), $app->config('db.user'), $app->config('db.pass'));
+            return new DB($app->config('db.dsn'), $app->config('db.user'), $app->config('db.password'));
         });
 
         $app->postman = function () {
@@ -86,6 +86,14 @@ class Application
             }
         };
        
+        $app->allowedFileTypes = function () {
+            return array(
+                'image/png',
+                'image/gif',
+                'image/jpg'
+            );
+        };
+
         $app->defaultViewInfo = function () {
             return array(
                 'meta.properties' => array(
@@ -117,9 +125,10 @@ class Application
 
         $app->configureMode('production', function () use ($app) {
 
-            $app->config('db.dsn', 'mysql:dbname=db169616_teste;host=internal-db.s169616.gridserver.com');
-            $app->config('db.user', '');
-            $app->config('db.pass', '');
+            $credentials = json_decode(file_get_contents('db.json'));
+            $app->config('db.dsn', $credentials['dsn']);
+            $app->config('db.user', $credentials['user']);
+            $app->config('db.password', $credentials['password']);
         });
 
         $app->configureMode('development', function () use ($app) {
@@ -128,7 +137,7 @@ class Application
 
             $app->config('db.dsn', 'mysql:dbname=maltz-novo;host=localhost');
             $app->config('db.user', 'root');
-            $app->config('db.pass', 'root');
+            $app->config('db.password', 'root');
 
             $app->config(array(
                 'log.enable' => true,

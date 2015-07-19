@@ -7,99 +7,98 @@ class Test
     public function route($app)
     {
         $app->get('/test', function () {
+            $faker = \Faker\Factory::create();
+
             $headers = array('Accept' => 'application/json');
 
             $postUrls = array(
                 'http://localhost/api/content/save' => array(
-                    'id' => '1',
+                    'id' => $faker->randomDigitNotNull,
                     'lang' => 'pt-br',
-                    'date_pub' => '',
-                    'slug' => 'test-slug-0',
-                    'title' => 'test-title',
-                    'subtitle' => '',
-                    'excerpt' => '',
-                    'description' => '',
-                    'body' => '',
+                    'date_pub' => $faker->datetime('now'),
+                    'title' => $faker->sentence($nb = 3),
+                    'subtitle' => $faker->sentence($nb = 3),
+                    'excerpt' => $faker->text($maxNbChars = 200),
+                    'description' => $faker->text($maxNbChars = 500),
+                    'body' => $faker->text($maxNbChars = 1000),
                     'activity' => '1',
                     ),
                 'http://localhost/api/collection/save' => array(
-                    'id' => '1',
+                    'id' => $faker->randomDigitNotNull,
                     'lang' => 'pt-br',
-                    'slug' => 'test-slug-0',
-                    'title' => 'test-title',
-                    'description' => '',
+                    'title' => $faker->sentence($nb = 3),
+                    'description' => $faker->text($maxNbChars = 200),
                     'activity' => '1',
                     ),
                 'http://localhost/api/term/save' => array(
-                    'id' => '1',
+                    'id' => $faker->randomDigitNotNull,
                     'lang' => 'pt-br',
-                    'slug' => 'test-slug-0',
-                    'title' => 'test-title',
-                    'description' => '',
+                    'title' => $faker->sentence($nb = 3),
+                    'description' => $faker->text($maxNbChars = 200),
                     'activity' => '1',
                     ),
                 'http://localhost/api/resource/save' => array(
-                    'id' => '1',
-                    'filepath' => '/dir',
-                    'filename' => 'file',
-                    'extension' => 'txt',
-                    'mimetype' => 'text/txt',
+                    'id' => $faker->randomDigitNotNull,
+                    'filepath' => '/tmp',
+                    'filename' => '13b73edae8443990be1aa8f1a483bc27',
+                    'extension' => $faker->fileExtension,
+                    'mimetype' => $faker->mimeType,
                     'url' => 'http://google.com',
-                    'embed' => '<code>....</code>',
+                    'embed' => $faker->text($maxNbChars = 200),
                     'lang' => 'pt-br',
-                    'slug' => 'test-slug-0',
-                    'title' => 'test-title',
-                    'description' => '',
+                    'title' => $faker->sentence($nb = 3),
+                    'description' => $faker->text($maxNbChars = 200),
                     'activity' => '1',
                     ),
                 'http://localhost/api/user/save' => array(
-                    'id' => '1',
-                    'username' => 'admin',
-                    'email' => 'pedrokoblitz@gmail.com',
-                    'first_name' => 'Pedro',
-                    'middle_name' => 'O. Bello',
-                    'last_name' => 'Koblitz',
-                    'password' => '',
+                    'id' => $faker->randomDigitNotNull,
+                    'username' => $faker->userName,
+                    'email' => $faker->email,
+                    'first_name' => $faker->name,
+                    'middle_name' => $faker->name,
+                    'last_name' => $faker->name,
+                    'password' => $faker->password,
                     'activity' => '1',
                     ),
                 'http://localhost/api/config' => array(
-                    'id' => '1',
-                    'key' => 'content_per_page',
-                    'value' => '12',
-                    'format' => 'txt',
+                    'id' => $faker->randomDigitNotNull,
+                    'key' => $faker->word,
+                    'value' => $faker->sentence($nb = 1),
+                    'format' => '1',
                     'activity' => '1',
                     ),
                 'http://localhost/api/log' => array(
-                    'id' => '1',
                     'user_id' => '1',
-                    'group_name' => 'content',
+                    'group_name' => 'teste',
                     'group_id' => '1',
-                    'item_name' => 'resource',
+                    'item_name' => 'teste',
                     'item_id' => '1',
-                    'action' => 'add_attachment',
+                    'action' => 'teste',
                     ),
                 'http://localhost/api/type/save' => array(
-                    'id' => '1',
-                    'item_name' => '',
-                    'name' => '',
+                    'id' => $faker->randomDigitNotNull,
+                    'item_name' => 'term',
+                    'name' => 'section',
                     ),
                 'http://localhost/api/role/save' => array(
-                    'id' => '1',
-                    'name' => '',
+                    'id' => $faker->randomDigitNotNull,
+                    'name' => 'admin',
                     )
                 );
 
             foreach ($postUrls as $url => $data) {
                 $request = \Requests::post($url, $headers, $data);
-                echo $url . ': ' . $request->status_code . "\n";
+                echo $url . ': ' . $request->status_code . "\n\n";
                 print_r(json_decode($request->body));
+                echo "\n\n";
 
                 unset($data['id']);
 
                 $request = \Requests::post($url, $headers, $data);
-                echo $url . ' (no id this time): ' . $request->status_code . "\n";
+                echo $url . ' (no id this time): ' . $request->status_code . "\n\n";
                 echo $request->status_code;
-                print_r(json_decode($request->body));
+                var_dump($request->body);
+                echo "\n\n";
             }
 
             $getUrls = array(
@@ -137,13 +136,14 @@ class Test
                 'http://localhost/api/block/1/show',
                 'http://localhost/api/block/1/delete',
                 );
-
+/*
             foreach ($getUrls as $url) {
                 $request = \Requests::get($url, $headers);
-                echo $url . ': ' . $request->status_code . "\n";
+                echo $url . ': ' . $request->status_code . "\n\n";
                 print_r(json_decode($request->body));
+                echo "\n\n";
             }
-
+*/
         });
 
         return $app;

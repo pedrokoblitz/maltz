@@ -72,7 +72,7 @@ class Collection extends Model
      * CRUD
      */
 
-    public function insert(Record $record) 
+    public function insert(Record $record)
     {
         $sql = "INSERT INTO collections (type_id, created, modified)
             VALUES (:type_id, NOW(), NOW())";
@@ -85,7 +85,7 @@ class Collection extends Model
         return $resultado;
     }
 
-    public function update(Record $record) 
+    public function update(Record $record)
     {
         $sql = "UPDATE collections SET modified=NOW() WHERE id=:id";
         $resultado = $this->db->run($sql, array('id' => $record->get('id')));
@@ -95,7 +95,7 @@ class Collection extends Model
         return $resultado;
     }
 
-    public function display($key='title', $order='asc', $lang='pt-br') 
+    public function display($key = 'type', $order = 'desc', $lang = 'pt-br')
     {
         $sql = "SELECT t1.id AS id, t1.activity AS activity, t1.created AS created, t1.modified AS modified, t2.slug AS slug, t2.title AS title, t2.description AS description, t3.name AS type
         FROM collections t1
@@ -111,7 +111,7 @@ class Collection extends Model
         return $resultado;
     }
 
-    public function find($page=1, $per_page=12, $key='modified', $order='desc', $lang='pt-br') 
+    public function find($page = 1, $per_page = 12, $key = 'type', $order = 'desc', $lang = 'pt-br')
     {
         $pagination = Pagination::paginate($page, $per_page);
 
@@ -130,7 +130,7 @@ class Collection extends Model
         return $resultado;
     }
 
-    public function findByType($type, $page=1, $per_page=12, $key='modified', $order='desc', $lang='pt-br') 
+    public function findByType($type, $page = 1, $per_page = 12, $key = 'type', $order = 'desc', $lang = 'pt-br')
     {
         $pagination = Pagination::paginate($page, $per_page);
 
@@ -150,7 +150,7 @@ class Collection extends Model
         return $resultado;
     }
 
-    public function show($id, $lang='pt-br') 
+    public function show($id, $lang = 'pt-br')
     {
         $sql = "SELECT t1.id AS id, t1.activity AS activity, t1.created AS created, t1.modified AS modified, t2.slug AS slug, t2.title AS title, t2.description AS description, t3.name AS type
         FROM collections t1

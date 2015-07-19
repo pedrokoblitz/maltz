@@ -9,7 +9,8 @@
         "zeuxisoo/slim-whoops": "0.3.0",
         "gargron/fileupload": "1.0.*",
         "rmccue/requests": ">=1.0",
-        "willdurand/geocoder": "dev-master"
+        "willdurand/geocoder": "dev-master",
+        "fzaninotto/faker": "^1.5"
     },
     "autoload": {
         "psr-0": {

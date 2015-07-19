@@ -4,21 +4,21 @@ namespace Maltz\Api\Ctrl;
 
 use Maltz\Mvc\View;
 
-class App {
+class App
+{
 
-    public static function route($app) {
+    public static function route($app)
+    {
 
         $app->view->setLayout('backend.tpl.php');
 
         $app->get('/backend/:controller', function ($controller) use ($app) {
-        	$vars = array(
-        		'model' => $model,
-        		'type' => $type
-    		);
+            $vars = array(
+            );
 
-            $app->render($controller . '.tpl.php', $vars);
-    	});
+            $app->render($controller, $vars);
+        });
 
-    	return $app;
- 	}     
+        return $app;
+    }
 }

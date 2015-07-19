@@ -67,28 +67,23 @@ class Resource extends Model
      * CRUD
      */
 
-    public function insert(Record $record) {
-        $bind = array(
-            '' => ,
-            );
+    public function insert(Record $record)
+    {
         $sql = "INSERT INTO resources (type_id, url, filepath, filename, extension, embed, created, modified) 
             VALUES (:type_id, :url, :filepath, :filename, :extension, :embed, NOW(), NOW())";
         $resultado = $this->db->run($sql, $bind);
-        $bind = array(
-            '' => ,
-            );
+
         $sql = "INSERT INTO translations (user_id, language, item_name, item_id, slug, name, title, description) 
             VALUES (:user_id, :language, :item_name, LAST_INSERT_ID(), :slug, :name, :title, :description)";
         $resultado = $this->db->run($sql, $bind);
         return $resultado;
     }
 
-    public function update(Record $record) {
+    public function update(Record $record)
+    {
         $sql = "UPDATE resources SET modified=NOW() WHERE id=:id";
         $resultado = $this->db->run($sql, array('id' => $record->get('id')));
-        $bind = array(
-            '' => ,
-            );
+
         $sql = "UPDATE translations 
             SET user_id=:user_id, lang=:lang, slug=:slug, url=:url, extension=:extension, filename=:filename, name=:name, title=:title, description=:description
             WHERE item_id=:id 
@@ -98,7 +93,7 @@ class Resource extends Model
         return $resultado;
     }
 
-    public function display($key='title', $order='asc', $lang='pt-br') 
+    public function display($key = 'title', $order = 'asc', $lang = 'pt-br')
     {
         $sql = "SELECT t1.id AS id, t1.url AS url, t1.filepath AS filepath, t1.filename AS filename, t1.extension AS extension, t1.embed AS embed, t1.activity AS activity, t1.created AS created, t1.modified AS modified, t2.title AS title, t2.description AS description, t3.name AS type
         FROM resources t1
@@ -114,7 +109,7 @@ class Resource extends Model
         return $resultado;
     }
 
-    public function find($page=1, $per_page=12, $key='modified', $order='desc', $lang='pt-br') 
+    public function find($page = 1, $per_page = 12, $key = 'modified', $order = 'desc', $lang = 'pt-br')
     {
         $pagination = Pagination::paginate($page, $per_page);
         $sql = "SELECT t1.id AS id, t1.url AS url, t1.filepath AS filepath, t1.filename AS filename, t1.extension AS extension, t1.embed AS embed, t1.activity AS activity, t1.created AS created, t1.modified AS modified, t2.title AS title, t2.description AS description, t3.name AS type
@@ -132,7 +127,7 @@ class Resource extends Model
         return $resultado;
     }
 
-    public function findByType($type, $page=1, $per_page=12, $key='title', $order='asc', $lang='pt-br') 
+    public function findByType($type, $page = 1, $per_page = 12, $key = 'title', $order = 'asc', $lang = 'pt-br')
     {
         $pagination = Pagination::paginate($page, $per_page);
 
@@ -152,7 +147,7 @@ class Resource extends Model
         return $resultado;
     }
 
-    public function show($id, $lang='pt-br') 
+    public function show($id, $lang = 'pt-br')
     {
         $sql = "SELECT t1.id AS id, t1.url AS url, t1.filepath AS filepath, t1.filename AS filename, t1.extension AS extension, t1.embed AS embed, t1.activity AS activity, t1.created AS created, t1.modified AS modified, t2.title AS title, t2.description AS description, t3.name AS type
         FROM resources t1

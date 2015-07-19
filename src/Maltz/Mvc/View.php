@@ -2,7 +2,6 @@
 
 namespace Maltz\Mvc;
 
-
 class View extends \Slim\View
 {
     protected $layout;
@@ -11,7 +10,7 @@ class View extends \Slim\View
     protected $styles;
     protected $meta;
 
-    public function setLayout($layout = NULL, array $data = array())
+    public function setLayout($layout = null, array $data = array())
     {
         $this->layout = $layout;
         $this->layoutData = $data;
@@ -92,10 +91,9 @@ class View extends \Slim\View
 
     public function partial($template, $data = array())
     {
-        $templatePath = $this->getTemplatesDirectory() . '/partials/' . ltrim($template, '/') . 'tpl.php';
-        if (!file_exists($templatePath))
-        {
-            throw new RuntimeException('View cannot render template `' . $templatePath . '`. Template does not exist.');
+        $templatePath = $this->getTemplatesDirectory() . '/partials/' . ltrim($template, '/') . '.tpl.php';
+        if (!file_exists($templatePath)) {
+            throw new \RuntimeException('View cannot render template `' . $templatePath . '`. Template does not exist.');
         }
 
         $data !== array() ? extract($data) : null;
@@ -107,12 +105,10 @@ class View extends \Slim\View
 
     private function _renderLayout($content)
     {
-        if(isset($this->layout) && $this->layout !== NULL)
-        {
-            $layoutPath = $this->getTemplatesDirectory() . '/layouts/' . ltrim($this->layout, '/') . 'tpl.php';
-            if (!file_exists($layoutPath))
-            {
-                throw new RuntimeException('View cannot render layout `' . $layoutPath . '`. Layout does not exist.');
+        if (isset($this->layout) && $this->layout !== null) {
+            $layoutPath = $this->getTemplatesDirectory() . '/layouts/' . ltrim($this->layout, '/') . '.tpl.php';
+            if (!file_exists($layoutPath)) {
+                throw new \RuntimeException('View cannot render layout `' . $layoutPath . '`. Layout does not exist.');
             }
 
             extract($this->layoutData);
@@ -127,10 +123,9 @@ class View extends \Slim\View
     public function render($template)
     {
         $separator = isset($this->layout) ? '/' . $this->layout . '/' : '/';
-        $templatePath = $this->getTemplatesDirectory() . $separator . ltrim($template, '/') . 'tpl.php';
-        if (!file_exists($templatePath))
-        {
-            throw new RuntimeException('View cannot render template `' . $templatePath . '`. Template does not exist.');
+        $templatePath = $this->getTemplatesDirectory() . $separator . ltrim($template, '/') . '.tpl.php';
+        if (!file_exists($templatePath)) {
+            throw new \RuntimeException('View cannot render template `' . $templatePath . '`. Template does not exist.');
         }
 
         extract($this->data->all());

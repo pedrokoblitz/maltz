@@ -58,23 +58,26 @@ class Block extends Model
      * CRUD
      */
 
-    public function insert(Record $record) {
+    public function insert(Record $record)
+    {
         return $resultado;
     }
 
 
-    public function update(Record $record) {
+    public function update(Record $record)
+    {
         return $resultado;
     }
 
 
-    public function delete($id) {
+    public function delete($id)
+    {
         $sql = "DELETE FROM blocks WHERE id=:id";
         $resultado = $this->db->run($sql, array('id' => $id));
         return $resultado;
     }
 
-    public function display($key='title', $order = 'asc', $lang='pt-br') 
+    public function display($key = 'title', $order = 'asc', $lang = 'pt-br')
     {
         $sql = "SELECT t1.id, t1.area_id, t2.title, t2.description 
         FROM blocks 
@@ -88,7 +91,7 @@ class Block extends Model
         return $resultado;
     }
 
-    public function find($page=1, $per_page=12, $key='title', $order = 'asc', $lang='pt-br') 
+    public function find($page = 1, $per_page = 12, $key = 'title', $order = 'asc', $lang = 'pt-br')
     {
         $pagination = Pagination::paginate($page, $per_page);
 
@@ -105,7 +108,7 @@ class Block extends Model
         return $resultado;
     }
 
-    public function show($id, $lang='pt-br') 
+    public function show($id, $lang = 'pt-br')
     {
         $sql = "SELECT t1.id, t1.area_id, t2.title, t2.description 
         FROM blocks t1

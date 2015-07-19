@@ -92,10 +92,13 @@ class Handler
         return $record;
     }
 
-    public function setModel($name)
+    public function setEntity($name)
     {
         $avaiable = array(
-            'content' => 'Content',
+            'content' => 'Maltz\Content\Model\Content',
+            'resource' => 'Maltz\Content\Model\Resource',
+            'collection' => 'Maltz\Content\Model\Collection',
+            'term' => 'Maltz\Content\Model\Term',
             );
         return new $avaiable[$name]($this->app->db);
     }

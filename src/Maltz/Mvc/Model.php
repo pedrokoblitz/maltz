@@ -58,6 +58,7 @@ abstract class Model
             if ($record->has('id')) {
                 return $this->update($record);
             }
+            
             return $this->insert($record);
         }
         return new Result(array('success' => false, 'message' => 'Invalid record.'));

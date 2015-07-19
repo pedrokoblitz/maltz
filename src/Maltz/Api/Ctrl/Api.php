@@ -26,42 +26,15 @@ class Api
         
         $app->get('/api/:model/:type(/:pg(/:key(/:order)))', function ($model, $type, $pg = 1, $key = 'created', $order = 'asc') use ($app) {
                 
-            switch ($model) {
-                case 'content':
-                    $entity = new Content($app->db);
-                    break;
-                case 'collection':
-                    $entity = new Collection($app->db);
-                    break;
-                case 'resource':
-                    $entity = new Resource($app->db);
-                    break;
-                case 'term':
-                    $entity = new Term($app->db);
-                    break;
-            }
-
+            $entity = $app->handler->setEntity($model);
             $result = $entity->findByType($type, $pg, $app->config('per_page'), $key, $order);
             $app->handler->handleApiResponse($result);
 
         })->name('api_list')->conditions(array('model' => 'content|collection|resource|term', 'type' => '\w+', 'pg' => '\d+', 'key' => '\w+', 'order' => 'asc|desc'));
 
         $app->get('/api/:model/:id/show', function ($model, $id) use ($app) {
-            switch ($model) {
-                case 'content':
-                    $entity = new Content($app->db);
-                    break;
-                case 'collection':
-                    $entity = new Collection($app->db);
-                    break;
-                case 'resource':
-                    $entity = new Resource($app->db);
-                    break;
-                case 'term':
-                    $entity = new Term($app->db);
-                    break;
-            }
 
+            $entity = $app->handler->setEntity($model);
             $result = $entity->show($id);
             $app->handler->handleApiResponse($result);
 
@@ -69,21 +42,7 @@ class Api
 
         $app->post('/api/:model/save', function ($model) use ($app) {
 
-            switch ($model) {
-                case 'content':
-                    $entity = new Content($app->db);
-                    break;
-                case 'collection':
-                    $entity = new Collection($app->db);
-                    break;
-                case 'resource':
-                    $entity = new Resource($app->db);
-                    break;
-                case 'term':
-                    $entity = new Term($app->db);
-                    break;
-            }
-
+            $entity = $app->handler->setEntity($model);
             $record = $app->handler->handlePostRequest();
             $result = $entity->save($record);
             $id = $record->has('id') ? $record->get('id') : $result->get('last.insert.id');
@@ -93,24 +52,8 @@ class Api
         })->name('api_save')->conditions(array('model' => 'content|collection|resource|term'));
 
         $app->get('/api/:model/:id/delete', function ($model, $id) use ($app) {
-            switch ($model) {
-                case 'content':
-                    $entity = new Content($app->db);
-                    break;
-                case 'collection':
-                    $entity = new Collection($app->db);
-                    break;
-                case 'resource':
-                    $entity = new Resource($app->db);
-                    break;
-                case 'term':
-                    $entity = new Term($app->db);
-                    break;
-                default:
-                    throw new \Exception("Error Processing Request", 1);
-                    break;
-            }
 
+            $entity = $app->handler->setEntity($model);
             $app->handler->handleNonce();
             $result = $entity->delete($id);
             Log::query('log', $app->session->get('user.id'), $model, $id, 'delete', $app->session->get('nonce'));
@@ -123,18 +66,7 @@ class Api
          */
         $app->get('/api/tree/:model', function ($model) use ($app) {
 
-            switch ($model) {
-                case 'content':
-                    $entity = new Content($app->db);
-                    break;
-                case 'collection':
-                    $entity = new Collection($app->db);
-                    break;
-                case 'term':
-                    $entity = new Term($app->db);
-                    break;
-            }
-
+            $entity = $app->handler->setEntity($model);
             $result = $entity->displayTree();
             $app->handler->handleApiResponse($result);
 
@@ -145,53 +77,29 @@ class Api
          */
         $app->get('/api/:group_name/:group_id/:item_name/show', function ($group_name, $group_id, $item_name) use ($app) {
 
-            switch ($group_name) {
-                case 'content':
-                    $entity = new Content($app->db);
-                    break;
-                case 'collection':
-                    $entity = new Collection($app->db);
-                    break;
-            }
-
+            $entity = $app->handler->setEntity($model);
             $result = $entity->getAll($group_id, $item_name);
-            Log::query('', $app->session->get('user.id'), $model, $id, '', $app->session->get('nonce'));
+            Log::query('log', $app->session->get('user.id'), $model, $id, '', $app->session->get('nonce'));
             $app->handler->handleApiResponse($result);
 
         })->name('api_show_items')->conditions(array('group_name' => 'content|collection', 'group_id' => '\d+', 'item_name' => 'content|collection|resource|term'));
         
         $app->get('/api/:group_name/:group_id/:item_name/:item_id/:order/add', function ($group_name, $group_id, $item_name, $item_id, $order) use ($app) {
 
-            switch ($group_name) {
-                case 'content':
-                    $entity = new Content($app->db);
-                    break;
-                case 'collection':
-                    $entity = new Collection($app->db);
-                    break;
-            }
-
+            $entity = $app->handler->setEntity($model);
             $app->handler->handleNonce();
             $result = $entity->add($group_id, $item_name, $item_id, $order);
-            Log::query('', $app->session->get('user.id'), $model, $id, '', $app->session->get('nonce'));
+            Log::query('log', $app->session->get('user.id'), $model, $id, '', $app->session->get('nonce'));
             $app->handler->handleApiResponse($result);
 
         })->name('api_add_item')->conditions(array('group_name' => 'content|collection', 'group_id' => '\d+', 'item_name' => 'content|collection|resource|term', 'item_id' => '\d+', 'order' => '\d+'));
 
         $app->get('/api/:group_name/:group_id/:item_name/:item_id/remove', function ($group_name, $group_id, $item_name, $item_id) use ($app) {
 
-            switch ($group_name) {
-                case 'content':
-                    $entity = new Content($app->db);
-                    break;
-                case 'collection':
-                    $entity = new Collection($app->db);
-                    break;
-            }
-
+            $entity = $app->handler->setEntity($model);
             $app->handler->handleNonce();
             $result = $entity->remove($group_id, $item_name, $item_id);
-            Log::query('', $app->session->get('user.id'), $model, $id, '', $app->session->get('nonce'));
+            Log::query('log', $app->session->get('user.id'), $model, $id, '', $app->session->get('nonce'));
             $app->handler->handleApiResponse($result);
 
         })->name('api_remove_item')->conditions(array('group_name' => 'content|collection', 'group_id' => '\d+', 'item_name' => 'content|collection|resource|term', 'item_id' => '\d+'));
@@ -201,48 +109,20 @@ class Api
          */
         $app->get('/api/:item_name/:key/remove', function ($item_name, $item_id, $key) use ($app) {
 
-            switch ($group_name) {
-                case 'content':
-                    $entity = new Content($app->db);
-                    break;
-                case 'collection':
-                    $entity = new Collection($app->db);
-                    break;
-                case 'resource':
-                    $entity = new Resource($app->db);
-                    break;
-                case 'user':
-                    $entity = new User($app->db);
-                    break;
-            }
-
+            $entity = $app->handler->setEntity($model);
             $app->handler->handleNonce();
             $result = $entity->removeMeta($item_name, $item_id, $key);
-            Log::query('', $app->session->get('user.id'), $model, $id, '', $app->session->get('nonce'));
+            Log::query('log', $app->session->get('user.id'), $model, $id, '', $app->session->get('nonce'));
             $app->handler->handleApiResponse($result);
 
         })->name('api_add_meta')->conditions(array('item_name' => 'content|collection|resource|user', 'item_id' => '\d+', 'key' => '\w+'));
 
         $app->get('/api/:item_name/:key/add/:value', function ($item_name, $item_id, $key, $value) use ($app) {
 
-            switch ($group_name) {
-                case 'content':
-                    $entity = new Content($app->db);
-                    break;
-                case 'collection':
-                    $entity = new Collection($app->db);
-                    break;
-                case 'resource':
-                    $entity = new Resource($app->db);
-                    break;
-                case 'user':
-                    $entity = new User($app->db);
-                    break;
-            }
-
+            $entity = $app->handler->setEntity($model);
             $app->handler->handleNonce();
             $result = $entity->removeMeta($item_name, $item_id, $key, $value);
-            Log::query('', $app->session->get('user.id'), $model, $id, '', $app->session->get('nonce'));
+            Log::query('log', $app->session->get('user.id'), $model, $id, '', $app->session->get('nonce'));
             $app->handler->handleApiResponse($result);
 
         })->name('api_remove_meta')->conditions(array('item_name' => 'content|collection|resource|user', 'item_id' => '\d+', 'key' => '\w+', 'value' => '\w+'));
@@ -264,7 +144,7 @@ class Api
 
             $app->handler->handleNonce();
             $result = Type::query($app->db, 'delete', $id);
-            Log::query('', $app->session->get('user.id'), $model, $id, '', $app->session->get('nonce'));
+            Log::query('log', $app->session->get('user.id'), $model, $id, '', $app->session->get('nonce'));
             $app->handler->handleApiResponse($result);
 
         })->name('api_type_delete')->conditions(array('id' => '\d+'));
@@ -302,7 +182,7 @@ class Api
 
             $app->handler->handleNonce();
             $result = Area::query($app->db, 'show', $id);
-            Log::query('', $app->session->get('user.id'), $model, $id, '', $app->session->get('nonce'));
+            Log::query('log', $app->session->get('user.id'), $model, $id, '', $app->session->get('nonce'));
             $app->handler->handleApiResponse($result);
 
         })->name('api_area_block_add')->conditions(array('pg' => '\d+', 'key' => '\w+', 'order' => 'asc|desc'));
@@ -311,7 +191,7 @@ class Api
 
             $app->handler->handleNonce();
             $result = Area::query($app->db, 'show', $id);
-            Log::query('', $app->session->get('user.id'), $model, $id, '', $app->session->get('nonce'));
+            Log::query('log', $app->session->get('user.id'), $model, $id, '', $app->session->get('nonce'));
             $app->handler->handleApiResponse($result);
 
         })->name('api_area_block_remove')->conditions(array('pg' => '\d+', 'key' => '\w+', 'order' => 'asc|desc'));
@@ -413,8 +293,10 @@ class Api
          * LANG
          */
         $app->get('/api/lang/:lang', function ($lang) use ($app) {
+            
             $app->session->set('language', $lang);
-        })->name('api_set_lang')->conditions(array());
+
+        })->name('api_set_lang')->conditions(array('lang' => '\w+'));
 
 
         /*
@@ -458,7 +340,7 @@ class Api
 
         $app->post('/upload', function () use ($app) {
 
-            $validator = new FileUpload\Validator\Simple(1024 * 1024 * 2, ['image/png', 'image/jpg']);
+            $validator = new FileUpload\Validator\Simple(1024 * 1024 * 2, $app->allowedFileTypes);
             $pathresolver = new FileUpload\PathResolver\Simple('/var/www/html/files/');
             $filesystem = new FileUpload\FileSystem\Simple();
             $fileupload = new FileUpload\FileUpload($_FILES['files'], $_SERVER);
@@ -470,7 +352,7 @@ class Api
             list($files, $headers) = $fileupload->processAll();
 
             foreach ($headers as $header => $value) {
-                header($header . ': ' . $value);
+                $app->response->headers->set($header . ': ' . $value);
             }
 
             $body = json_encode(array('files' => $files));

@@ -1,10 +1,9 @@
-<?php 
+<?php
 
 namespace Maltz\Mvc;
 
 trait Activity
 {
-
     public function delete($id)
     {
         return $this->setActivity($id, 0);
