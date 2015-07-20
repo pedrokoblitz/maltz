@@ -50,4 +50,4 @@ class Pagination
         /*** return the object ***/
         return $ret;
     }
-} /*** fin ***/
+}

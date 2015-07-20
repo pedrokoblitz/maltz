@@ -32,9 +32,9 @@ class Role extends Model
         return $resultado;
     }
 
-    public function find($page=1, $per_page=12, $key='name', $order='asc')
+    public function find($page = 1, $per_page = 12, $key = 'name', $order = 'asc')
     {
-        if () {
+        if (!is_int($page) || !is_int($per_page) || !is_string($key) || !is_string($order)) {
             throw new \Exception("Error Processing Request", 1);
         }
         
@@ -46,7 +46,7 @@ class Role extends Model
 
     public function show($id)
     {
-        if () {
+        if (!is_int($id)) {
             throw new \Exception("Error Processing Request", 1);
         }
         

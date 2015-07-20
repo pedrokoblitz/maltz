@@ -28,10 +28,17 @@ INSERT INTO `users` VALUES
 (1);
 
 INSERT INTO `roles` VALUES 
-(1);
+(1, 'admin'),
+(2, 'editor'),
+(3, 'author'),
+(4, 'subscriber'),
+(5, 'developer'),
+(6, 'client'),
+(7, 'customer'),
+(8, 'seller');
 
 INSERT INTO `users_roles` VALUES 
-(1);
+(1,1);
 
 INSERT INTO `types` VALUES 
 (1,'content','page'),

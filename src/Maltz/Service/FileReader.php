@@ -1,5 +1,7 @@
 <?php
 
+namespace Maltz\Service;
+
 trait FileReader
 {
     public function setFile($path, $name)

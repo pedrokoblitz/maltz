@@ -2,7 +2,6 @@
 
 namespace Maltz\Http;
 
-
 /**
  *
  * The short description

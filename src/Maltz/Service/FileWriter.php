@@ -1,5 +1,7 @@
 <?php
 
+namespace Maltz\Service;
+
 trait FileWriter
 {
     public function setFile()

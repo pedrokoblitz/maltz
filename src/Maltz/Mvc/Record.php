@@ -35,9 +35,10 @@ class Record extends TypeArray
 
     protected function validate($rules)
     {
+        /*
         $items = array_filter($this->items);
         foreach ($rules as $key => $rule) {
-            if ($this->has($key)) {
+            if ($this->has($key) && !empty($this->get($key))) {
                 $valid = $this->validation->$rule($items[$key]);
                 if (!$valid) {
                     $this->valid = false;
@@ -45,6 +46,7 @@ class Record extends TypeArray
                 }
             }
         }
+        */
         $this->valid = true;
     }
 

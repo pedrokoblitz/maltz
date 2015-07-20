@@ -98,7 +98,7 @@ class Collection extends Model
 
     public function display($key = 'type', $order = 'desc', $lang = 'pt-br')
     {
-        if () {
+        if (!is_string($key) || !is_string($order) || !is_string($lang)) {
             throw new \Exception("Error Processing Request", 1);
         }
         

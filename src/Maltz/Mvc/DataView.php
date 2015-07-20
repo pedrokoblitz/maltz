@@ -4,10 +4,10 @@ namespace Maltz\Mvc;
 
 class DataView
 {
-	protected $db;
+    protected $db;
 
-	public function __construct(DB $db)
-	{
-		$this->db = $db;
-	}
+    public function __construct(DB $db)
+    {
+        $this->db = $db;
+    }
 }

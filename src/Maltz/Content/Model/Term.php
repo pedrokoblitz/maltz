@@ -60,7 +60,7 @@ class Term extends Model
 
     public function display($key = 'type', $order = 'asc', $lang = 'pt-br')
     {
-        if () {
+        if (!is_string($key) || !is_string($order) || !is_string($lang)) {
             throw new \Exception("Error Processing Request", 1);
         }
         
@@ -80,7 +80,7 @@ class Term extends Model
 
     public function find($page = 1, $per_page = 12, $key = 'type', $order = 'desc', $lang = 'pt-br')
     {
-        if () {
+        if (!is_int($page) || !is_int($per_page) || !is_string($key) || !is_string($order) || !is_string($lang)) {
             throw new \Exception("Error Processing Request", 1);
         }
         
@@ -102,7 +102,7 @@ class Term extends Model
 
     public function findByType($type, $page = 1, $per_page = 12, $key = 'name', $order = 'asc', $lang = 'pt-br')
     {
-        if () {
+        if (!is_string($type) || !is_int($page) || !is_int($per_page) || !is_string($key) || !is_string($order) || !is_string($lang)) {
             throw new \Exception("Error Processing Request", 1);
         }
         
@@ -125,7 +125,7 @@ class Term extends Model
 
     public function show($id, $lang = 'pt-br')
     {
-        if () {
+        if (!is_int($id) || !is_string($lang)) {
             throw new \Exception("Error Processing Request", 1);
         }
         

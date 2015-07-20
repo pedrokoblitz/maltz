@@ -24,9 +24,9 @@ class Type extends Model
      * CRUD
      */
 
-    public function display($key='name', $order='asc', $lang='pt-br')
+    public function display($key = 'name', $order = 'asc', $lang = 'pt-br')
     {
-        if () {
+        if (!is_string($key) || !is_string($order) || !is_string($lang)) {
             throw new \Exception("Error Processing Request", 1);
         }
         
@@ -41,9 +41,9 @@ class Type extends Model
         return $resultado;
     }
 
-    public function find($page=1, $per_page=12, $key='name', $order='asc', $lang='pt-br')
+    public function find($page = 1, $per_page = 12, $key = 'name', $order = 'asc', $lang = 'pt-br')
     {
-        if () {
+        if (!is_int($page) || !is_int($per_page) || !is_string($key) || !is_string($order) || !is_string($lang)) {
             throw new \Exception("Error Processing Request", 1);
         }
         
@@ -60,9 +60,9 @@ class Type extends Model
         return $resultado;
     }
 
-    public function show($id, $lang='pt-br')
+    public function show($id, $lang = 'pt-br')
     {
-        if () {
+        if (!is_int($id) || !is_string($lang)) {
             throw new \Exception("Error Processing Request", 1);
         }
         
@@ -78,7 +78,7 @@ class Type extends Model
         return $resultado;
     }
 
-    public function insert(Record $record) 
+    public function insert(Record $record)
     {
         $sql = "INSERT INTO types (name, item_name)
             VALUES (:name, :item_name)";
@@ -92,7 +92,7 @@ class Type extends Model
         return $resultado;
     }
 
-    public function update(Record $record) 
+    public function update(Record $record)
     {
         $sql = "UPDATE types SET name=:name, item_name=:item_name WHERE id=:id";
         $resultado = $this->db->run($sql, array('id' => $record->get('id')));
@@ -103,9 +103,9 @@ class Type extends Model
 
     }
 
-    public function delete($id) 
+    public function delete($id)
     {
-        if () {
+        if (!is_int($id)) {
             throw new \Exception("Error Processing Request", 1);
         }
         

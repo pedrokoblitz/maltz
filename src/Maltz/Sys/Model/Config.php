@@ -35,9 +35,8 @@ use Maltz\Service\Pagination;
 class Config extends Model
 {
     use Activity;
-    use ValueFormat;
 
-    /* 
+    /*
 	 * construtor
 	 *
 	 * @param $db DB
@@ -69,30 +68,30 @@ class Config extends Model
         return $record;
     }
 
-    public function insert(Record $record) 
+    public function insert(Record $record)
     {
         $sql = "INSERT INTO config (`key`, value, format, activity, created, modified) VALUES (:key, :value, :activity, NOW(), NOW())";
         $resultado = $this->db->run($sql, $record->toArray());
         return $resultado;
     }
 
-    public function update(Record $record) 
+    public function update(Record $record)
     {
         $sql = "UPDATE config SET value=:value, modified=NOW() WHERE key=:key";
         $resultado = $this->db->run($sql, $record->toArray());
         return $resultado;
     }
 
-    public function display() 
+    public function display()
     {
         $sql = "SELECT id, `key`, value, format, activity, modified, created FROM config";
         $resultado = $this->db->run($sql);
         return $resultado;
     }
 
-    public function find($page=1, $per_page=12, $key='key', $order='asc') 
+    public function find($page = 1, $per_page = 12, $key = 'key', $order = 'asc')
     {
-        if () {
+        if (!is_int($page) || !is_int($per_page) || !is_string($key) || !is_string($order)) {
             throw new \Exception("Error Processing Request", 1);
         }
         
@@ -102,9 +101,9 @@ class Config extends Model
         return $resultado;
     }
 
-    public function show($id) 
+    public function show($id)
     {
-        if () {
+        if (!is_int($id)) {
             throw new \Exception("Error Processing Request", 1);
         }
         
@@ -119,7 +118,7 @@ class Config extends Model
 
     public function setValue($key, $value)
     {
-        if () {
+        if (!is_string($key) || !is_string($value)) {
             throw new \Exception("Error Processing Request", 1);
         }
         
@@ -130,7 +129,7 @@ class Config extends Model
 
     public function getValue($key)
     {
-        if () {
+        if (!is_string($key)) {
             throw new \Exception("Error Processing Request", 1);
         }
         
@@ -141,7 +140,7 @@ class Config extends Model
 
     public function setRefresh($key)
     {
-        if () {
+        if (!is_string($key)) {
             throw new \Exception("Error Processing Request", 1);
         }
         
@@ -152,7 +151,7 @@ class Config extends Model
 
     public function refresh($key)
     {
-        if () {
+        if (!is_string($key)) {
             throw new \Exception("Error Processing Request", 1);
         }
         

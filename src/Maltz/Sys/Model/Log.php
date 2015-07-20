@@ -55,9 +55,9 @@ class Log extends Model
      * CRUD
      */
 
-    public function find($page=1, $per_page=12, $key='created', $order='desc') 
+    public function find($page = 1, $per_page = 12, $key = 'created', $order = 'desc')
     {
-        if () {
+        if (!is_int($page) || !is_int($per_page) || !is_string($key) || !is_string($order)) {
             throw new \Exception("Error Processing Request", 1);
         }
         
@@ -68,7 +68,7 @@ class Log extends Model
         return $resultado;
     }
 
-    public function insert(Record $record) 
+    public function insert(Record $record)
     {
         $sql = "INSERT INTO log (user_id, action, item_name, item_id, created)
             VALUES (:user_id, :action, :item_name, :item_id, NOW())";
@@ -77,9 +77,9 @@ class Log extends Model
         return $resultado;
     }
 
-    public function log($user_id, $group_name, $group_id, $action, $item_name = null, $item_id = null)
+    public function log($user_id, $group_name, $group_id, $action, $item_name = null, $item_id = null, $nonce = null)
     {
-        if () {
+        if (!is_int($user_id) || !is_string($group_name) || !is_int($group_id) || !is_string($action) || !is_string($nonce)) {
             throw new \Exception("Error Processing Request", 1);
         }
         

@@ -132,7 +132,7 @@ class Application
         });
 
         $app->configureMode('development', function () use ($app) {
-            $app->add(new \Zeuxisoo\Whoops\Provider\Slim\WhoopsMiddleware);
+            //$app->add(new \Zeuxisoo\Whoops\Provider\Slim\WhoopsMiddleware);
             $app->add(new \Slim\Middleware\DebugBar);
 
             $app->config('db.dsn', 'mysql:dbname=maltz-novo;host=localhost');

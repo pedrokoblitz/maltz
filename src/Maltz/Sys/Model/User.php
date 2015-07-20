@@ -78,9 +78,9 @@ class User extends Model
      * CRUD
      */
 
-    public function display($key='username', $order='asc')
+    public function display($key = 'username', $order = 'asc')
     {
-        if () {
+        if (!is_string($key) || !is_string($order)) {
             throw new \Exception("Error Processing Request", 1);
         }
         
@@ -90,9 +90,9 @@ class User extends Model
         return $resultado;
     }
 
-    public function find($page=1, $per_page=12, $key='username', $order='asc') 
+    public function find($page = 1, $per_page = 12, $key = 'username', $order = 'asc')
     {
-        if () {
+        if (!is_int($page) || !is_int($per_page) || !is_string($key) || !is_string($order)) {
             throw new \Exception("Error Processing Request", 1);
         }
         
@@ -105,7 +105,7 @@ class User extends Model
 
     public function findByUsernameOrEmail($user)
     {
-        if () {
+        if (!is_string($user)) {
             throw new \Exception("Error Processing Request", 1);
         }
         
@@ -115,9 +115,9 @@ class User extends Model
         return $resultado;
     }
 
-    public function show($id) 
+    public function show($id)
     {
-        if () {
+        if (!is_int($id)) {
             throw new \Exception("Error Processing Request", 1);
         }
         
@@ -216,7 +216,7 @@ class User extends Model
 
     public function remember($user_id)
     {
-        if () {
+        if (!is_int($user_id)) {
             throw new \Exception("Error Processing Request", 1);
         }
         
@@ -226,7 +226,7 @@ class User extends Model
 
     public function forgot($user_id)
     {
-        if () {
+        if (!is_int($user_id)) {
             throw new \Exception("Error Processing Request", 1);
         }
         
@@ -236,7 +236,7 @@ class User extends Model
 
     public function validate($user_token, $type)
     {
-        if () {
+        if (!is_string($user_token) || !is_string($type)) {
             throw new \Exception("Error Processing Request", 1);
         }
         

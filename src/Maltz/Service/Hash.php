@@ -15,12 +15,6 @@ namespace Maltz\Service;
  */
 class Hash
 {
-
-    public static function hash()
-    {
-        return md5(microtime());
-    }
-
     /*
 	 * this will be used to generate a hash
 	 *

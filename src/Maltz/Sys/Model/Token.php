@@ -16,7 +16,7 @@ class Token extends Model
 
     public function generate($user_id, $type)
     {
-        if () {
+        if (!is_int($user_id) || !is_string($type)) {
             throw new \Exception("Error Processing Request", 1);
         }
         
@@ -27,7 +27,7 @@ class Token extends Model
 
     public function validate($token, $type)
     {
-        if () {
+        if (!is_string($token) || !is_string($type)) {
             throw new \Exception("Error Processing Request", 1);
         }
         

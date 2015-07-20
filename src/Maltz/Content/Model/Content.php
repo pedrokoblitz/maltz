@@ -116,7 +116,7 @@ class Content extends Model
 
     public function find($page = 1, $per_page = 12, $key = 'modified', $order = 'asc', $lang = 'pt-br')
     {
-        if () {
+        if (!is_int($page) || !is_int($per_page) || !is_string($key) || !is_string($order) || !is_string($lang)) {
             throw new \Exception("Error Processing Request", 1);
         }
         
@@ -138,7 +138,7 @@ class Content extends Model
 
     public function findByType($type, $page = 1, $per_page = 12, $key = 'modified', $order = 'asc', $lang = 'pt-br')
     {
-        if () {
+        if (!is_string($type) || !is_int($page) || !is_int($per_page) || !is_string($key) || !is_string($order) || !is_string($lang)) {
             throw new \Exception("Error Processing Request", 1);
         }
         
@@ -157,5 +157,29 @@ class Content extends Model
             LIMIT $pagination->offset,$pagination->limit";
         $resultado = $this->db->run($sql, array('type' => $type, 'item_name' => 'content', 'lang' => $lang));
         return $resultado;
+    }
+
+    public function setAsDraft($id)
+    {
+        if (!is_int($id)) {
+            throw new \Exception("Error Processing Request", 1);
+        }
+        return $this->setActivity($id, 3);
+    }
+
+    public function setAsPending($id)
+    {
+        if (!is_int($id)) {
+            throw new \Exception("Error Processing Request", 1);
+        }
+        return $this->setActivity($id, 4);
+    }
+
+    public function publish($id)
+    {
+        if (!is_int($id)) {
+            throw new \Exception("Error Processing Request", 1);
+        }
+        return $this->setActivity($id, 5);
     }
 }
