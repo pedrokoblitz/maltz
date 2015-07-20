@@ -72,8 +72,6 @@ class Handler
         $this->app->response->headers->set('Content-Type', 'application/json');
         if ($result->isSuccessful()) {
             $this->app->response->setStatus(200);
-            $nonce = $this->app->nonce->generate();
-            $result->set('nonce', $nonce);
         } else {
             $this->errorNotFound();
         }
@@ -85,8 +83,8 @@ class Handler
     {
         $body = $this->app->request->getBody();
         $record = new Record(json_decode($body, true));
-        $nonce = $record->get('nonce');
-        if (!$this->app->nonce->verify($nonce)) {
+
+        if (!$record->has('nonce') || !$this->app->nonce->verify($record->get('nonce'))) {
             $this->errorForbidden();
         }
         return $record;
@@ -106,14 +104,6 @@ class Handler
     public function handleGetRequest()
     {
         return true;
-    }
-
-    public function handleNonce()
-    {
-        $get = $this->app->request->get();
-        if (!isset($get['nonce']) || !$this->app->nonce->verify($get['nonce'])) {
-            $this->errorForbidden();
-        }
     }
 
     public function authorize(array $roles = null)

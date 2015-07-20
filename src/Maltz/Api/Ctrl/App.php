@@ -13,9 +13,6 @@ class App
         $app->view->setLayout('backend');
 
         $app->get('/backend/:controller', function ($controller) use ($app) {
-            $vars = array(
-            );
-
             $app->render($controller, $vars);
         });
 

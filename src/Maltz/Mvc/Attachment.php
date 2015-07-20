@@ -4,9 +4,14 @@ namespace Maltz\Mvc;
 
 trait Attachment
 {
-    public function addAttachment($id, $item_name, $item_id)
+    public function addAttachment(Record $record)
     {
-        if (!is_int($id) || !is_int($item_id) || !is_string($item_name)) {
+        $id = $record->get('id');
+        $item_name = $record->get('item_name');
+        $item_id = $record->get('item_id');
+        $order = $record->get('order');
+
+        if (!is_int($id) || !is_int($item_id) || !is_string($item_name) || !is_int($order)) {
             throw new \Exception("Error Processing Request", 1);
         }
         
@@ -16,8 +21,12 @@ trait Attachment
         return $resultado;
     }
 
-    public function removeAttachment($id, $item_name, $item_id)
+    public function removeAttachment(Record $record)
     {
+        $id = $record->get('');
+        $item_name = $record->get('');
+        $item_id = $record->get('');
+
         if (!is_int($id) || !is_int($item_id) || !is_string($item_name)) {
             throw new \Exception("Error Processing Request", 1);
         }
@@ -28,8 +37,11 @@ trait Attachment
         return $resultado;
     }
 
-    public function removeAllAttachments($id, $item_name)
+    public function removeAllAttachments(Record $record)
     {
+        $id = $record->get('id');
+        $item_name = $record->get('item_name');
+
         if (!is_int($id) || !is_string($item_name)) {
             throw new \Exception("Error Processing Request", 1);
         }

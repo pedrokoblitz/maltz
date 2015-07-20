@@ -21,8 +21,8 @@ class Product extends Model
     public function __construct(DB $db)
     {
         
-        if (isset($app->session->get('user.id'))) {
-            $this->userId = $app->session->get('user.id');
+        if (isset($app->sessionDataStore->getUserId())) {
+            $this->userId = $app->sessionDataStore->getUserId();
         }
         
         parent::__construct($db, 'product', 'products', 'product_id');

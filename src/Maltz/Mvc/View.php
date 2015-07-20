@@ -4,19 +4,21 @@ namespace Maltz\Mvc;
 
 class View extends \Slim\View
 {
+    const VIEW_FILE_EXTENSION = '.tpl.php';
+
     protected $layout;
     protected $layoutData;
-    protected $scripts;
-    protected $styles;
-    protected $meta;
+    protected $scripts = array();
+    protected $styles = array();
+    protected $meta = array();
 
     public function setLayout($layout = null, array $data = array())
     {
+        if (!is_string($layout)) {
+            throw new \Exception("Error Processing Request", 001);
+        }
         $this->layout = $layout;
         $this->layoutData = $data;
-        $this->scripts = array();
-        $this->styles = array();
-        $this->meta = array();
     }
 
     public function setLayoutData(array $data = array())
@@ -26,16 +28,38 @@ class View extends \Slim\View
 
     public function setMetaProperty($name, $content)
     {
+        if (!is_string($name) || !is_string($content)) {
+            throw new \Exception("Error Processing Request", 002);
+        }
         $this->meta[$name] = $content;
+    }
+
+    public function setCharset($charset)
+    {
+        if (!is_string($charset)) {
+            throw new \Exception("Error Processing Request", 003);
+        }
+        $this->charset = $charset;
+    }
+
+    public function setHttpEquivMeta(bool $meta)
+    {
+        $this->httpEquivMeta = $meta;
     }
 
     public function enqueueStyle($name, $style)
     {
+        if (!is_string($name) || !is_string($style)) {
+            throw new \Exception("Error Processing Request", 004);
+        }
         $this->styles[$name] = $style;
     }
 
     public function enqueueScript($name, $script)
     {
+        if (!is_string($name) || !is_string($script)) {
+            throw new \Exception("Error Processing Request", 005);
+        }
         $this->scripts[$name] = $script;
     }
 
@@ -78,7 +102,7 @@ class View extends \Slim\View
             'css' => $this->renderStyles(),
             'meta' => $this->renderPageMeta()
             );
-        return $this->partial('html.header.tpl.php', $data);
+        return $this->partial('html.header', $data);
     }
 
     public function renderPageFooter()
@@ -86,12 +110,12 @@ class View extends \Slim\View
         $data = array(
             'js' => $this->renderScripts()
             );
-        $this->partial('html.footer.tpl.php');
+        $this->partial('html.footer');
     }
 
     public function partial($template, $data = array())
     {
-        $templatePath = $this->getTemplatesDirectory() . '/partials/' . ltrim($template, '/') . '.tpl.php';
+        $templatePath = $this->getTemplatesDirectory() . '/partials/' . ltrim($template, '/') . self::VIEW_FILE_EXTENSION;
         if (!file_exists($templatePath)) {
             throw new \RuntimeException('View cannot render template `' . $templatePath . '`. Template does not exist.');
         }
@@ -106,7 +130,7 @@ class View extends \Slim\View
     private function renderLayout($content)
     {
         if (isset($this->layout) && $this->layout !== null) {
-            $layoutPath = $this->getTemplatesDirectory() . '/layouts/' . ltrim($this->layout, '/') . '.tpl.php';
+            $layoutPath = $this->getTemplatesDirectory() . '/layouts/' . ltrim($this->layout, '/') . self::VIEW_FILE_EXTENSION;
             if (!file_exists($layoutPath)) {
                 throw new \RuntimeException('View cannot render layout `' . $layoutPath . '`. Layout does not exist.');
             }
@@ -123,7 +147,7 @@ class View extends \Slim\View
     public function render($template)
     {
         $separator = isset($this->layout) ? '/' . $this->layout . '/' : '/';
-        $templatePath = $this->getTemplatesDirectory() . $separator . ltrim($template, '/') . '.tpl.php';
+        $templatePath = $this->getTemplatesDirectory() . $separator . ltrim($template, '/') . self::VIEW_FILE_EXTENSION;
         if (!file_exists($templatePath)) {
             throw new \RuntimeException('View cannot render template `' . $templatePath . '`. Template does not exist.');
         }

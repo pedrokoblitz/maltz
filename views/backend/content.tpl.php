@@ -222,7 +222,7 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <tr class="active">
+                        <tr>
                           <td>
                             Column content
                           </td>
@@ -244,7 +244,7 @@
                             Column content
                           </td>
                         </tr>
-                        <tr class="success">
+                        <tr>
                           <td>
                             Column content
                           </td>
@@ -266,7 +266,7 @@
                             Column content
                           </td>
                         </tr>
-                        <tr class="warning">
+                        <tr>
                           <td>
                             Column content
                           </td>
@@ -288,7 +288,7 @@
                             Column content
                           </td>
                         </tr>
-                        <tr class="danger">
+                        <tr>
                           <td>
                             Column content
                           </td>

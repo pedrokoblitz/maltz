@@ -21,6 +21,7 @@ class Authentication extends Controller
 
     public function route($app)
     {
+        $app->view->setLayout('frontend');
 
         $app->get('/login', function () use ($app) {
 
@@ -52,7 +53,7 @@ class Authentication extends Controller
             $result = User::query($app->db, 'signUp', $record);
             $app->handleApiResponse($result);
 
-        })->name('user_signup_form');
+        })->name('user_signup');
 
         $app->get('/signup/confirm/:user_id/:token', function ($user_id, $token) use ($app) {
 

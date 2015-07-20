@@ -2,13 +2,17 @@
 
 namespace Maltz\Mvc;
 
-use Maltz\Mvc\Record;
-
 trait Metadata
 {
-    public function addMeta($item_name, $item_id, $key, $value)
+    public function addMeta(Record $record)
     {
-        if (!is_string($item_name) || !is_int($item_id) || !is_string($key) || !is_string($value)) {
+        $item_name = $record->get('item_name');
+        $item_id = $record->get('item_id');
+        $key = $record->get('key');
+        $value = $record->get('value');
+        $order = $record->get('order');
+        
+        if (!is_string($item_name) || !is_int($item_id) || !is_string($key) || !is_string($value) || !is_int($order)) {
             throw new \Exception("Error Processing Request", 1);
         }
 
@@ -17,19 +21,29 @@ trait Metadata
         return $result;
     }
 
-    public function updateMeta($item_name, $item_id, $key, $value)
+    public function updateMeta(Record $record)
     {
-        if (!is_string($item_name) || !is_int($item_id) || !is_string($key) || !is_string($value)) {
+        $item_name = $record->get('item_name');
+        $item_id = $record->get('item_id');
+        $key = $record->get('key');
+        $value = $record->get('value');
+        $order = $record->get('order');
+        
+        if (!is_string($item_name) || !is_int($item_id) || !is_string($key) || !is_string($value) || !is_int($order)) {
             throw new \Exception("Error Processing Request", 1);
         }
 
-        $sql = "UPDATE metadata SET value=:value WHERE item_name=:item_name AND item_id=:item_id AND key=:key";
+        $sql = "UPDATE metadata SET value=:value, order=:order WHERE item_name=:item_name AND item_id=:item_id AND key=:key";
         $result = $this->db->run($sql, array('item_name' => $item_name, 'item_id' => $item_id, 'key' => $key, 'value' => $value));
         return $result;
     }
 
-    public function removeMeta($item_name, $item_id, $key)
+    public function removeMeta(Record $record)
     {
+        $item_name = $record->get('item_name');
+        $item_id = $record->get('item_id');
+        $key = $record->get('key');
+
         if (!is_string($item_name) || !is_int($item_id) || !is_string($key)) {
             throw new \Exception("Error Processing Request", 1);
         }

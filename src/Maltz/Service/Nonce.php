@@ -15,7 +15,11 @@ class Nonce
     {
         $token = md5(microtime() . 'm4a3l2t1z');
         $this->session->set('token.nonce', $token);
-        return $token;
+    }
+
+    public function get()
+    {
+        return $this->session->get('token.nonce');
     }
 
     public function verify($token)

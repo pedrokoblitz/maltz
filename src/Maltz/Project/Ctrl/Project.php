@@ -64,7 +64,7 @@ class ProjectManagement
         
             $result = Invoice::query('delete', $id);
             $app->handler->handleApiResponse($result);
-            Log::query('log', $app->session->get('user.id'), 'invoice', $id, 'delete');
+            Log::query('log', $app->sessionDataStore->getUserId(), 'invoice', $id, 'delete');
         
         })->name('invoice_delete')->conditions(array('id' => '\d+'));
 
@@ -72,7 +72,7 @@ class ProjectManagement
         
             $result = Project::query('createInvoice', $id);
             $app->handler->handleApiResponse($result);
-            Log::query('log', $app->session->get('user.id'), 'project', $id, 'create_invoice');
+            Log::query('log', $app->sessionDataStore->getUserId(), 'project', $id, 'create_invoice');
         
         })->name('project_create_invoice')->conditions(array('id' => '\d+'));
 
@@ -94,33 +94,33 @@ class ProjectManagement
 
             $record = $app->handler->handlePostRequest();
             $result = Project::query('save', $record);
-            $app->handler->handleApiResponse($result);
             $id = $record->has('id') ? $record->get('id') : $result->get('last.insert.id');
-            Log::query('log', $app->session->get('user.id'), 'project', $id, 'save');
+            Log::query('log', $app->sessionDataStore->getUserId(), 'project', $id, 'save');
+            $app->handler->handleApiResponse($result);
         
         })->name('project_save')->conditions(array('id' => '\d+'));
 
         $app->get('/project/:id/delete', function ($id) use ($app) {
         
             $result = Project::query('delete', $id);
+            Log::query('log', $app->sessionDataStore->getUserId(), 'project', $id, 'delete');
             $app->handler->handleApiResponse($result);
-            Log::query('log', $app->session->get('user.id'), 'project', $id, 'delete');
         
         })->name('project_delete')->conditions(array('id' => '\d+'));
 
         $app->get('/track/:ticket_id/start', function ($ticket_id) use ($app) {
         
             $result = TimeTracking::query('start', $ticket_id);
+            Log::query('log', $app->sessionDataStore->getUserId(), 'ticket', $id, 'time_started');
             $app->handler->handleApiResponse($result);
-            Log::query('log', $app->session->get('user.id'), 'ticket', $id, 'time_started');
         
         })->name('track_start')->conditions(array('ticket_id' => '\d+'));
 
         $app->get('/track/:ticket_id/stop', function ($ticket_id) use ($app) {
         
             $result = TimeTracking::query('stop', $ticket_id);
+            Log::query('log', $app->sessionDataStore->getUserId(), 'ticket', $id, 'time_stoped');
             $app->handler->handleApiResponse($result);
-            Log::query('log', $app->session->get('user.id'), 'ticket', $id, 'time_stoped');
         
         })->name('track_stop')->conditions(array('ticket_id' => '\d+'));
 
@@ -142,25 +142,25 @@ class ProjectManagement
 
             $record = $app->handler->handlePostRequest();
             $result = Ticket::query($app->db, 'save', $record);
-            $app->handler->handleApiResponse($result);
             $id = $record->has('id') ? $record->get('id') : $result->get('last.insert.id');
-            Log::query('log', $app->session->get('user.id'), 'ticket', $id, 'save');
+            Log::query('log', $app->sessionDataStore->getUserId(), 'ticket', $id, 'save');
+            $app->handler->handleApiResponse($result);
 
         })->name('ticket_save');
 
         $app->get('/ticket/:id/priority/:priority/change', function ($id, $priority) use ($app) {
 
             $result = Ticket::query($app->db, 'changePriority', $id, $priority);
+            Log::query('log', $app->sessionDataStore->getUserId(), 'ticket', $id, 'change_priority');
             $app->handler->handleApiResponse($result);
-            Log::query('log', $app->session->get('user.id'), 'ticket', $id, 'change_priority');
 
         })->name('ticket_change_priority')->conditions(array('id' => '\d+', 'priority' => '\d+'));
 
         $app->get('/ticket/:id/delete', function ($id) use ($app) {
 
             $result = Ticket::query($app->db, 'delete', $id);
+            Log::query('log', $app->sessionDataStore->getUserId(), 'ticket', $id, 'delete');
             $app->handler->handleApiResponse($result);
-            Log::query('log', $app->session->get('user.id'), 'ticket', $id, 'delete');
 
         })->name('ticket_delete')->conditions(array('id' => '\d+'));
 
@@ -173,16 +173,25 @@ class ProjectManagement
         $app->get('/ticket/:id/close', function ($id) use ($app) {
 
             $closed = Ticket::query($app->db, 'close', $id);
+            Log::query('log', $app->sessionDataStore->getUserId(), 'ticket', $id, 'close');
             $app->handler->handleApiResponse($result);
-            Log::query('log', $app->session->get('user.id'), 'ticket', $id, 'close');
 
         })->name('ticket_close')->conditions(array('id' => '\d+'));
 
         $app->post('/ticket/:id/comment', function ($id) use ($app) {
 
+            $record = $app->handler->handlePostRequest();
+            $user_id = $app->sessionDataStore->getUserId();
+            $result = Ticket::query('comment', $id, $user_id, $record->get('comment'));
+            Log::query('log', $user_id, 'ticket', $id, 'close');
+            $app->handler->handleApiResponse($result);
+
         })->name('ticket_comment')->conditions(array('id' => '\d+'));
 
         $app->get('/ticket/:id/call', function ($id) use ($app) {
+
+            Log::query('log', $app->sessionDataStore->getUserId(), 'ticket', $id, 'close');
+            $app->handler->handleApiResponse($result);
 
         })->name('ticket_request_call')->conditions(array('id' => '\d+'));
 
