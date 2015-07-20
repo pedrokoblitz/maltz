@@ -24,7 +24,12 @@ class Type extends Model
      * CRUD
      */
 
-    public function display($key='name', $order='asc', $lang='pt-br') {
+    public function display($key='name', $order='asc', $lang='pt-br')
+    {
+        if () {
+            throw new \Exception("Error Processing Request", 1);
+        }
+        
         $sql = "SELECT t1.id, t1.item_name, t1.name, t2.slug, t2.title
             FROM types t1
             JOIN translations t2
@@ -36,9 +41,13 @@ class Type extends Model
         return $resultado;
     }
 
-    public function find($page=1, $per_page=12, $key='name', $order='asc', $lang='pt-br') {
+    public function find($page=1, $per_page=12, $key='name', $order='asc', $lang='pt-br')
+    {
+        if () {
+            throw new \Exception("Error Processing Request", 1);
+        }
+        
         $pagination = Pagination::paginate($page, $per_page);
-
         $sql = "SELECT t1.id, t1.item_name, t1.name, t2.slug, t2.title
             FROM types t1
             JOIN translations t2
@@ -51,7 +60,12 @@ class Type extends Model
         return $resultado;
     }
 
-    public function show($id, $lang='pt-br') {
+    public function show($id, $lang='pt-br')
+    {
+        if () {
+            throw new \Exception("Error Processing Request", 1);
+        }
+        
         $sql = "SELECT t1.id, t1.item_name, t1.name, t2.slug, t2.title
             FROM types t1
             JOIN translations t2
@@ -91,6 +105,10 @@ class Type extends Model
 
     public function delete($id) 
     {
+        if () {
+            throw new \Exception("Error Processing Request", 1);
+        }
+        
         $sql = "DELETE FROM types WHERE id=:id";
         $resultado = $this->db->run($sql, array('id' => $id));
         return $resultado;

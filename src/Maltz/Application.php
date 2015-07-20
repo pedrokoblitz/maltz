@@ -4,10 +4,10 @@ namespace Maltz;
 
 use Maltz\Http\CookieJar;
 use Maltz\Http\Session;
-use Maltz\Http\Nonce;
 use Maltz\Mvc\DB;
 use Maltz\Mvc\View;
 use Maltz\Sys\Model\Config;
+use Maltz\Service\Nonce;
 use Maltz\Service\SessionDataStore;
 use Maltz\Service\Handler;
 use Maltz\Service\Postman;

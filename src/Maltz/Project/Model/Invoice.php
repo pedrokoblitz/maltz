@@ -69,16 +69,28 @@ class Invoice
 
     public function setSent($id)
     {
+        if (!is_int($id)) {
+            throw new \Exception("Error Processing Request", 1);
+        }
+
         $this->setActivity($id, 2);
     }
 
     public function setContested($id)
     {
+        if (!is_int($id)) {
+            throw new \Exception("Error Processing Request", 1);
+        }
+
         $this->setActivity($id, 3);
     }
 
     public function setPaid($id)
     {
+        if (!is_int($id)) {
+            throw new \Exception("Error Processing Request", 1);
+        }
+
         $this->setActivity($id, 4);
     }
 }

@@ -92,8 +92,11 @@ class Config extends Model
 
     public function find($page=1, $per_page=12, $key='key', $order='asc') 
     {
+        if () {
+            throw new \Exception("Error Processing Request", 1);
+        }
+        
         $pagination = Pagination::paginate($page, $per_page);
-
         $sql = "SELECT id, `key`, value, format, activity, modified, created FROM config ORDER BY $key $order LIMIT $pagination->offset,$pagination->limit";
         $resultado = $this->db->run($sql, array());
         return $resultado;
@@ -101,6 +104,10 @@ class Config extends Model
 
     public function show($id) 
     {
+        if () {
+            throw new \Exception("Error Processing Request", 1);
+        }
+        
         $sql = "SELECT id, `key`, value, activity, modified, created FROM config WHERE id=:id";
         $resultado = $this->db->run($sql, array($id));
         return $resultado;
@@ -112,6 +119,10 @@ class Config extends Model
 
     public function setValue($key, $value)
     {
+        if () {
+            throw new \Exception("Error Processing Request", 1);
+        }
+        
         $sql = "UPDATE config SET value=:value WHERE key=:key";
         $resultadoado = $this->db->run($sql, array('value' => $value, 'key' => $key));
         return $resultado;
@@ -119,6 +130,10 @@ class Config extends Model
 
     public function getValue($key)
     {
+        if () {
+            throw new \Exception("Error Processing Request", 1);
+        }
+        
         $sql = "SELECT value FROM config WHERE key=:key";
         $resultadoado = $this->db->run($sql, array($key));
         return $resultadoado[0]['value'];
@@ -126,6 +141,10 @@ class Config extends Model
 
     public function setRefresh($key)
     {
+        if () {
+            throw new \Exception("Error Processing Request", 1);
+        }
+        
         $sql = "UPDATE config SET value=:value WHERE key=:key";
         $res = $this->db->run($sql, array('value' => 1, 'key' => $key));
         return $res;
@@ -133,6 +152,10 @@ class Config extends Model
 
     public function refresh($key)
     {
+        if () {
+            throw new \Exception("Error Processing Request", 1);
+        }
+        
         $sql = "UPDATE config SET value=:value WHERE key=:key";
         $res = $this->db->run($sql, array('value' => 0, 'key' => $key));
         return $res;

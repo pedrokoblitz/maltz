@@ -76,6 +76,10 @@ class Area extends Model
 
     public function display($key = 'name', $order = 'asc')
     {
+        if (!is_string($key) || !is_string($order)) {
+            throw new \Exception("Error Processing Request", 1);
+        }
+
         $sql = "SELECT id, name, activity 
         FROM areas
             ORDER BY $key $order
@@ -87,8 +91,11 @@ class Area extends Model
 
     public function find($page = 1, $per_page = 12, $key = 'name', $order = 'asc')
     {
+        if (!is_int($page) || is_int($per_page) || !is_string($key) || !is_string($order)) {
+            throw new \Exception("Error Processing Request", 1);
+        }
+
         $pagination = Pagination::paginate($page, $per_page);
-        
         $sql = "SELECT id, name, activity 
         FROM areas
             ORDER BY $key $order
@@ -100,6 +107,10 @@ class Area extends Model
 
     public function show($id)
     {
+        if (!is_int($id)) {
+            throw new \Exception("Error Processing Request", 1);
+        }
+
         $sql = "SELECT id, name, activity FROM areas
             WHERE id=:id
                 AND activity > 0";
@@ -113,6 +124,10 @@ class Area extends Model
 
     public function addBlock($area_id, $block_id)
     {
+        if (!is_int($area_id) || !is_int($block_id)) {
+            throw new \Exception("Error Processing Request", 1);
+        }
+
         $sql = "UPDATE blocks SET area_id=:area_id WHERE id=:block_id";
         $resultado = $this->db->run($sql, array('area_id' => $area_id, 'block_id' => $block_id));
         return $resultado;
@@ -120,6 +135,10 @@ class Area extends Model
 
     public function removeBlock($block_id)
     {
+        if (!is_int($block_id)) {
+            throw new \Exception("Error Processing Request", 1);
+        }
+
         $sql = "UPDATE blocks SET area_id=:area_id WHERE id=:block_id";
         $resultado = $this->db->run($sql, array('area_id' => 0, 'block_id' => $block_id));
         return $resultado;
@@ -127,6 +146,10 @@ class Area extends Model
 
     public function getBlocks($area_id)
     {
+        if (!is_int($area_id)) {
+            throw new \Exception("Error Processing Request", 1);
+        }
+
         $sql = "SELECT t1.id AS id, t1.area_id AS area_id, t1.activity AS activity, t2.slug AS slug, t2.title AS title, t2.description AS description
         FROM blocks t1
             JOIN translations t2

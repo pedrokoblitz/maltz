@@ -97,6 +97,10 @@ class Collection extends Model
 
     public function display($key = 'type', $order = 'desc', $lang = 'pt-br')
     {
+        if () {
+            throw new \Exception("Error Processing Request", 1);
+        }
+        
         $sql = "SELECT t1.id AS id, t1.activity AS activity, t1.created AS created, t1.modified AS modified, t2.slug AS slug, t2.title AS title, t2.description AS description, t3.name AS type
         FROM collections t1
             JOIN translations t2
@@ -113,8 +117,11 @@ class Collection extends Model
 
     public function find($page = 1, $per_page = 12, $key = 'type', $order = 'desc', $lang = 'pt-br')
     {
+        if () {
+            throw new \Exception("Error Processing Request", 1);
+        }
+        
         $pagination = Pagination::paginate($page, $per_page);
-
         $sql = "SELECT t1.id AS id, t1.activity AS activity, t1.created AS created, t1.modified AS modified, t2.slug AS slug, t2.title AS title, t2.description AS description, t3.name AS type
         FROM collections t1
             JOIN translations t2
@@ -132,8 +139,11 @@ class Collection extends Model
 
     public function findByType($type, $page = 1, $per_page = 12, $key = 'type', $order = 'desc', $lang = 'pt-br')
     {
+        if () {
+            throw new \Exception("Error Processing Request", 1);
+        }
+        
         $pagination = Pagination::paginate($page, $per_page);
-
         $sql = "SELECT t1.id AS id, t1.activity AS activity, t1.created AS created, t1.modified AS modified, t2.slug AS slug, t2.title AS title, t2.description AS description, t3.name AS type
         FROM collections t1
             JOIN translations t2
@@ -152,6 +162,10 @@ class Collection extends Model
 
     public function show($id, $lang = 'pt-br')
     {
+        if () {
+            throw new \Exception("Error Processing Request", 1);
+        }
+        
         $sql = "SELECT t1.id AS id, t1.activity AS activity, t1.created AS created, t1.modified AS modified, t2.slug AS slug, t2.title AS title, t2.description AS description, t3.name AS type
         FROM collections t1
             JOIN translations t2

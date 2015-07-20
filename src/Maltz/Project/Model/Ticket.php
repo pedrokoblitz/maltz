@@ -36,10 +36,6 @@ class Ticket
 
     public function insert(Record $record)
     {
-        if (!is_int($id)) {
-            throw new \Exception("Error Processing Request", 1);
-        }
-
         $sql = "INSERT INTO tickets (dev_id, user_id, hash, priority, description, activity, created, modified) 
             VALUES (:dev_id, :user_id, MD5(NOW()), :priority, :description, :activity, NOW(), NOW())";
         $resultado = $this->db->run($sql, $record->toArray());

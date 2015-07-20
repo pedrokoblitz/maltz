@@ -60,12 +60,20 @@ trait ValueFormat
 
     public function setFormat($format, $id)
     {
+        if () {
+            throw new \Exception("Error Processing Request", 1);
+        }
+        
         $sql = "UPDATE $this->table SET format=:format WHERE id=:id";
         $result = $this->db->run($sql, array('format' => $this->formatToInt($format), 'id' => $id));
     }
 
     public function getFormat($id)
     {
+        if () {
+            throw new \Exception("Error Processing Request", 1);
+        }
+        
         $sql = "SELECT format FROM $this->table WHERE id=:id";
         $result = $this->db->run($sql, array('id' => $id));
         $format = $result->getFirstRecord()->get('format');

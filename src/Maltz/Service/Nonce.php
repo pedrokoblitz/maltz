@@ -1,6 +1,6 @@
 <?php
 
-namespace Maltz\Http;
+namespace Maltz\Service;
 
 class Nonce
 {

@@ -95,6 +95,10 @@ class Content extends Model
 
     public function show($id, $lang = 'pt-br')
     {
+        if (!is_int($id) || !is_string($lang)) {
+            throw new \Exception("Error Processing Request", 1);
+        }
+
         $sql = "SELECT t1.id AS id, t1.activity AS activity, t1.date_pub AS date_pub, t1.created AS created, t1.modified AS modified, t2.slug AS slug, t2.title AS title, t2.subtitle AS subtitle, t2.excerpt AS excerpt, t2.description AS description, t2.body AS body, t3.name
             FROM contents t1
             JOIN translations t2
@@ -111,8 +115,11 @@ class Content extends Model
 
     public function find($page = 1, $per_page = 12, $key = 'modified', $order = 'asc', $lang = 'pt-br')
     {
+        if () {
+            throw new \Exception("Error Processing Request", 1);
+        }
+        
         $pagination = Pagination::paginate($page, $per_page);
-
         $sql = "SELECT t1.id AS id, t1.activity AS activity, t1.date_pub AS date_pub, t1.created AS created, t1.modified AS modified, t2.slug AS slug, t2.title AS title, t2.subtitle AS subtitle, t2.excerpt AS excerpt, t2.description AS description, t2.body AS body, t3.name AS type
             FROM contents t1
             JOIN translations t2
@@ -130,8 +137,11 @@ class Content extends Model
 
     public function findByType($type, $page = 1, $per_page = 12, $key = 'modified', $order = 'asc', $lang = 'pt-br')
     {
+        if () {
+            throw new \Exception("Error Processing Request", 1);
+        }
+        
         $pagination = Pagination::paginate($page, $per_page);
-
         $sql = "SELECT t1.id, t1.activity, t1.date_pub, t1.created, t1.modified, t2.slug, t2.title, t2.subtitle, t2.excerpt, t2.description, t2.body, t3.name
             FROM contents t1
             JOIN translations t2

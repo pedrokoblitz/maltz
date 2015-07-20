@@ -80,6 +80,10 @@ class User extends Model
 
     public function display($key='username', $order='asc')
     {
+        if () {
+            throw new \Exception("Error Processing Request", 1);
+        }
+        
         $sql = "SELECT id, username, name, email, cpf, cnpj, cellphone, phone, zipcode, address, address2, district, city, province, password, activity, created
             FROM users ORDER BY $key $order";
         $resultado = $this->db->run($sql);
@@ -88,8 +92,11 @@ class User extends Model
 
     public function find($page=1, $per_page=12, $key='username', $order='asc') 
     {
+        if () {
+            throw new \Exception("Error Processing Request", 1);
+        }
+        
         $pagination = Pagination::paginate($page, $per_page);
-
         $sql = "SELECT id, username, name, email, cpf, cnpj, cellphone, phone, zipcode, address, address2, district, city, province, password, activity, created
             FROM users ORDER BY $key $order LIMIT $pagination->offset,$pagination->limit";
         $resultado = $this->db->run($sql);
@@ -98,6 +105,10 @@ class User extends Model
 
     public function findByUsernameOrEmail($user)
     {
+        if () {
+            throw new \Exception("Error Processing Request", 1);
+        }
+        
         $sql = "SELECT id, username, name, email, cpf, cnpj, cellphone, phone, zipcode, address, address2, district, city, province, password, activity, created
             FROM users WHERE username=:user OR email=:user";
         $resultado = $this->db->run($sql, array('user' => $user));
@@ -106,6 +117,10 @@ class User extends Model
 
     public function show($id) 
     {
+        if () {
+            throw new \Exception("Error Processing Request", 1);
+        }
+        
         $sql = "SELECT id, username, name, email, cpf, cnpj, cellphone, phone, zipcode, address, address2, district, city, province, password, activity, created
             FROM users 
             WHERE id=:id";
@@ -201,18 +216,30 @@ class User extends Model
 
     public function remember($user_id)
     {
+        if () {
+            throw new \Exception("Error Processing Request", 1);
+        }
+        
         $data = Token::query($this->db, 'generate', $user_id, 'remember');
         return $data;
     }
 
     public function forgot($user_id)
     {
+        if () {
+            throw new \Exception("Error Processing Request", 1);
+        }
+        
         $data = Token::query($this->db, 'generate', $user_id, 'forgot');
         return $data;
     }
 
     public function validate($user_token, $type)
     {
+        if () {
+            throw new \Exception("Error Processing Request", 1);
+        }
+        
         $data = Token::query($this->db, 'validate', $user_token, $type);
         return $data;
     }

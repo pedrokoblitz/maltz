@@ -140,11 +140,19 @@ class Project
 
     public function createReport($id)
     {
+        if (!is_int($id)) {
+            throw new \Exception("Error Processing Request", 1);
+        }
+
 
     }
 
     public function createInvoice($id)
     {
+        if (!is_int($id)) {
+            throw new \Exception("Error Processing Request", 1);
+        }
+
         $record = $this->getBillableHours($id)->getFirstRecord('id');
         $record->set('activity', 1);
         return Invoice::query('save', $record);

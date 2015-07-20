@@ -57,8 +57,11 @@ class Log extends Model
 
     public function find($page=1, $per_page=12, $key='created', $order='desc') 
     {
+        if () {
+            throw new \Exception("Error Processing Request", 1);
+        }
+        
         $pagination = Pagination::paginate($page, $per_page);
-
         $sql = "SELECT user_id, action, item_name, item_id, created
             FROM log ORDER BY $key $order LIMIT $pagination->offset,$pagination->limit";
         $resultado = $this->db->run($sql);
@@ -76,6 +79,10 @@ class Log extends Model
 
     public function log($user_id, $group_name, $group_id, $action, $item_name = null, $item_id = null)
     {
+        if () {
+            throw new \Exception("Error Processing Request", 1);
+        }
+        
         $record = new Record(
             array(
                 'user_id' => $user_id,
@@ -85,7 +92,7 @@ class Log extends Model
                 'item_name' => $item_name,
                 'item_id' => $item_id,
                 )
-            );
+        );
         $this->insert($record);
     }
 }
