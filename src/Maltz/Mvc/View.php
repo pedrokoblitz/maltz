@@ -103,7 +103,7 @@ class View extends \Slim\View
         return $html;
     }
 
-    private function _renderLayout($content)
+    private function renderLayout($content)
     {
         if (isset($this->layout) && $this->layout !== null) {
             $layoutPath = $this->getTemplatesDirectory() . '/layouts/' . ltrim($this->layout, '/') . '.tpl.php';
@@ -129,9 +129,16 @@ class View extends \Slim\View
         }
 
         extract($this->data->all());
+        // reserved variables
+        $title = $this->renderPageTitle();
+        $meta = $this->renderPageMeta();
+        $styles = $this->renderStyles();
+        $header = $this->renderPageHeader();
+        $scripts = $this->renderScripts();
+        $footer = $this->renderPageFooter();
         ob_start();
         require $templatePath;
         $html = ob_get_clean();
-        return $this->_renderLayout($html);
+        return $this->renderLayout($html);
     }
 }

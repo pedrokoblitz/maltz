@@ -8,7 +8,7 @@ use Maltz\Service\Pagination;
 class Token extends Model
 {
 
-    public function __construct($db)
+    public function __construct(DB $db)
     {
         $rules = array();
         parent::__construct($db, 'token', 'tokens', $rules);

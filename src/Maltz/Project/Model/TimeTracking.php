@@ -4,7 +4,7 @@ namespace Maltz\Project\Model;
 
 class TimeTracking extends Model
 {
-    public function __construct($db)
+    public function __construct(DB $db)
     {
         parent::__construct($db, 'time_tracking', 'ticket_time_tracking', array('id' => 'int'));
     }

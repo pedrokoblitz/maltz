@@ -2,6 +2,7 @@
 
 namespace Maltz\Content\Model;
 
+use Maltz\Mvc\DB;
 use Maltz\Mvc\Model;
 use Maltz\Mvc\Record;
 use Maltz\Mvc\Activity;
@@ -52,7 +53,7 @@ class Collection extends Model
      * return void
      */
 
-    public function __construct($db)
+    public function __construct(DB $db)
     {
         $rules = array(
             'id' => 'int',
@@ -165,7 +166,7 @@ class Collection extends Model
         if () {
             throw new \Exception("Error Processing Request", 1);
         }
-        
+
         $sql = "SELECT t1.id AS id, t1.activity AS activity, t1.created AS created, t1.modified AS modified, t2.slug AS slug, t2.title AS title, t2.description AS description, t3.name AS type
         FROM collections t1
             JOIN translations t2

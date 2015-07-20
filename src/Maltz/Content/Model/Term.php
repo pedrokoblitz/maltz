@@ -15,7 +15,7 @@ class Term extends Model
     use Translatable;
     use Tree;
 
-    public function __construct($db)
+    public function __construct(DB $db)
     {
         $rules = array(
             'id' => 'int',

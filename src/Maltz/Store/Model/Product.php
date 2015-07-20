@@ -18,7 +18,7 @@ class Product extends Model
 
     protected $userId;
 
-    public function __construct($db)
+    public function __construct(DB $db)
     {
         
         if (isset($app->session->get('user.id'))) {

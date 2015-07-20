@@ -15,7 +15,7 @@ use Maltz\Mvc\Model;
 
 class OrderItemOrder extends Model {
 
-    public function __construct($db) {
+    public function __construct(DB $db) {
         parent::__construct($db, 'order_item', 'order_items', 'order_items_id');
     }
 

@@ -11,7 +11,7 @@ class Role extends Model
 {
     use Activity;
 
-    public function __construct($db)
+    public function __construct(DB $db)
     {
         $rules = array(
             'id' => 'int',

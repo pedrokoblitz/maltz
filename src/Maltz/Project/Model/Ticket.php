@@ -7,7 +7,7 @@ use Maltz\Service\Pagination;
 
 class Ticket
 {
-    public function __construct($db)
+    public function __construct(DB $db)
     {
         $rules = array(
             'id' => 'int',

@@ -45,7 +45,7 @@ class Config extends Model
 	 * return void
 	 *
 	 */
-    public function __construct($db)
+    public function __construct(DB $db)
     {
         $rules = array(
             'id' => 'int',

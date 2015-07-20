@@ -14,7 +14,7 @@ class Store extends Model {
      * [__construct description]
      * @param [type] $db
      */
-    public function __construct($db) {
+    public function __construct(DB $db) {
         $this->db = $db;
     }
 

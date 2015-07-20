@@ -37,7 +37,7 @@ class Log extends Model
 	 * @param db objeto DB
 	 *
 	 */
-    public function __construct($db)
+    public function __construct(DB $db)
     {
         $rules = array(
             'id' => 'int',
