@@ -22,59 +22,60 @@ class Authentication extends Controller
     public function route($app)
     {
 
-        $app->get('/login', function() use ($app) {
+        $app->get('/login', function () use ($app) {
 
-        	$app->render('login.tpl.php');
+            $app->render('login');
 
         })->name('user_login_form');
 
-        $app->post('/login', function() use ($app) {
+        $app->post('/login', function () use ($app) {
 
-        	$credentials = $app->request->post();
-        	$authenticated = $app->doorman->login($credentials['username'], $credentials['password'], $credentials['remember']);
-        	if ($authenticated) {
-        		$app->redirect('admin_panel');
-        	} else {
-        		$app->redirect('user_login_form');
-        	}
+            $credentials = $app->handler->handlePostRequest();
+            $app->doorman->login($credentials);
+            if ($app->doorman->isUserAuthenticated()) {
+                $app->redirect('admin_panel');
+            } else {
+                $app->redirect('user_login_form');
+            }
 
         })->name('user_login');
 
-        $app->get('/signup', function() use ($app) {
+        $app->get('/signup', function () use ($app) {
 
-        	$app->render('signup.tpl.php');
+            $app->render('signup');
 
         })->name('user_signup_form');
 
-        $app->post('/signup', function() use ($app) {
+        $app->post('/signup', function () use ($app) {
 
-        	$record = new Record($app->request->post());
+            $record = new Record($app->request->post());
             $result = User::query($app->db, 'signUp', $record);
+            $app->handleApiResponse($result);
 
         })->name('user_signup_form');
 
-        $app->get('/signup/confirm/:user_id/:token', function($user_id, $token) use ($app) {
+        $app->get('/signup/confirm/:user_id/:token', function ($user_id, $token) use ($app) {
 
             $result = User::query($app->db, 'validate', $token, 'activation');
             if ((int) $result->getFirstRecord()->get('id') === (int) $user_id) {
-            	$app->redirect('user_login');
+                $app->redirect('user_login');
             }
             $app->errorForbidden();
 
-        })->name('confirm_signup')->conditions('user_id' => '\d+', 'token' => '\w+');
+        })->name('confirm_signup')->conditions(array('user_id' => '\d+', 'token' => '\w+'));
 
-        $app->get('/password/forgot', function() use ($app) {
+        $app->get('/password/forgot', function () use ($app) {
 
-        	$app->render('password.forgot.tpl.php');
+            $app->render('password.forgot');
 
-        })->name('forgot_password')->conditions();
+        })->name('forgot_password');
 
-        $app->get('/password/new/:user_id/:token', function($user_id, $token) use ($app) {
+        $app->get('/password/new/:user_id/:token', function ($user_id, $token) use ($app) {
 
             $result = User::query($app->db, 'validate', $token, 'forgot');
-        	$app->render('password.new.tpl.php');
+            $app->render('password.new');
 
-        })->name('new_password')->conditions('user_id' => '\d+', 'token' => '\w+');
+        })->name('new_password')->conditions(array('user_id' => '\d+', 'token' => '\w+'));
 
         return $app;
     }

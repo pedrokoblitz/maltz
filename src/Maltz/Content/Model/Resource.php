@@ -95,6 +95,10 @@ class Resource extends Model
 
     public function display($key = 'title', $order = 'asc', $lang = 'pt-br')
     {
+        if (!is_string($key) || !is_string($order) || !is_string($lang)) {
+            throw new \Exception("Error Processing Request", 1);
+        }
+
         $sql = "SELECT t1.id AS id, t1.url AS url, t1.filepath AS filepath, t1.filename AS filename, t1.extension AS extension, t1.embed AS embed, t1.activity AS activity, t1.created AS created, t1.modified AS modified, t2.title AS title, t2.description AS description, t3.name AS type
         FROM resources t1
             JOIN translations t2
@@ -111,6 +115,10 @@ class Resource extends Model
 
     public function find($page = 1, $per_page = 12, $key = 'modified', $order = 'desc', $lang = 'pt-br')
     {
+        if (!is_int($pg) || !is_int($per_page) || !is_string($key) || !is_string($order) || !is_string($lang)) {
+            throw new \Exception("Error Processing Request", 1);
+        }
+
         $pagination = Pagination::paginate($page, $per_page);
         $sql = "SELECT t1.id AS id, t1.url AS url, t1.filepath AS filepath, t1.filename AS filename, t1.extension AS extension, t1.embed AS embed, t1.activity AS activity, t1.created AS created, t1.modified AS modified, t2.title AS title, t2.description AS description, t3.name AS type
         FROM resources t1
@@ -129,8 +137,11 @@ class Resource extends Model
 
     public function findByType($type, $page = 1, $per_page = 12, $key = 'title', $order = 'asc', $lang = 'pt-br')
     {
-        $pagination = Pagination::paginate($page, $per_page);
+        if (!is_string($type) || !is_int($pg) || !is_int($per_page) || !is_string($key) || !is_string($order) || !is_string($lang)) {
+            throw new \Exception("Error Processing Request", 1);
+        }
 
+        $pagination = Pagination::paginate($page, $per_page);
         $sql = "SELECT t1.id AS id, t1.url AS url, t1.filepath AS filepath, t1.filename AS filename, t1.extension AS extension, t1.embed AS embed, t1.activity AS activity, t1.created AS created, t1.modified AS modified, t2.title AS title, t2.description AS description, t3.name AS type
         FROM resources t1
             JOIN translations t2
@@ -149,6 +160,10 @@ class Resource extends Model
 
     public function show($id, $lang = 'pt-br')
     {
+        if (!is_int($id) || !is_string($lang)) {
+            throw new \Exception("Error Processing Request", 1);
+        }
+
         $sql = "SELECT t1.id AS id, t1.url AS url, t1.filepath AS filepath, t1.filename AS filename, t1.extension AS extension, t1.embed AS embed, t1.activity AS activity, t1.created AS created, t1.modified AS modified, t2.title AS title, t2.description AS description, t3.name AS type
         FROM resources t1
             JOIN translations t2

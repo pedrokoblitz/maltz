@@ -3,4 +3,4 @@
 /logs/*
 /public/media/*
 /config/db.json
-composer.lock
+/composer.lock

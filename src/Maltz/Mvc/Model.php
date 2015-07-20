@@ -46,6 +46,7 @@ abstract class Model
     {
         $record->validate($this->rules);
         return $record->isValid();
+        // return true;
     }
 
     public function save(Record $record)
@@ -54,11 +55,9 @@ abstract class Model
             if (method_exists($this, 'processRecord')) {
                 $record = $this->processRecord($record);
             }
-
             if ($record->has('id')) {
                 return $this->update($record);
             }
-            
             return $this->insert($record);
         }
         return new Result(array('success' => false, 'message' => 'Invalid record.'));

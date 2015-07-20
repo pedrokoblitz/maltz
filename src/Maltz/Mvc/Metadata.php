@@ -8,6 +8,10 @@ trait Metadata
 {
     public function addMeta($item_name, $item_id, $key, $value)
     {
+        if (!is_string($item_name) || !is_int($item_id) || !is_string($key) || !is_string($value)) {
+            throw new \Exception("Error Processing Request", 1);
+        }
+
         $sql = "INSERT INTO metadata (item_name, item_id, key, value) VALUES (:item_name, :item_id, :key, :value)";
         $result = $this->db->run($sql, array('item_name' => $item_name, 'item_id' => $item_id, 'key' => $key, 'value' => $value));
         return $result;
@@ -15,6 +19,10 @@ trait Metadata
 
     public function updateMeta($item_name, $item_id, $key, $value)
     {
+        if (!is_string($item_name) || !is_int($item_id) || !is_string($key) || !is_string($value)) {
+            throw new \Exception("Error Processing Request", 1);
+        }
+
         $sql = "UPDATE metadata SET value=:value WHERE item_name=:item_name AND item_id=:item_id AND key=:key";
         $result = $this->db->run($sql, array('item_name' => $item_name, 'item_id' => $item_id, 'key' => $key, 'value' => $value));
         return $result;

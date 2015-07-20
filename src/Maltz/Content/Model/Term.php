@@ -51,7 +51,7 @@ class Term extends Model
     public function update(Record $record)
     {
         $sql = "UPDATE terms SET modified=NOW() WHERE id=:id";
-        $resultado = $this->db->run($sql, array('id' => $record->get('id')));
+        $resultado = $this->db->run($sql, array('id' => $id));
         $sql = "UPDATE translations SET user_id=:user_id, lang=:lang, slug=:slug, title=:title
             WHERE item_id=:id AND item_name=:item_name";
         $resultado = $this->db->run($sql, $record->toArray());

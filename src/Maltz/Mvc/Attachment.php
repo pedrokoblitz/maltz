@@ -6,6 +6,10 @@ trait Attachment
 {
     public function addAttachment($id, $item_name, $item_id)
     {
+        if (!is_int($id) || !is_int($item_id) || !is_string($item_name)) {
+            throw new \Exception("Error Processing Request", 1);
+        }
+        
         $bind = array('group_name' => $this->slug, 'group_id' => $id, 'item_name' => $item_name, 'item_id' => $item_id);
         $sql = "INSERT INTO attachments (group_name, group_id, item_name, item_id, order) VALUES (:group_name, :group_id, :item_name, :item_id, :order)";
         $resultado = $this->db->run($sql, $bind);
@@ -14,6 +18,10 @@ trait Attachment
 
     public function removeAttachment($id, $item_name, $item_id)
     {
+        if (!is_int($id) || !is_int($item_id) || !is_string($item_name)) {
+            throw new \Exception("Error Processing Request", 1);
+        }
+        
         $bind = array('group_name' => $this->slug, 'group_id' => $id, 'item_name' => $item_name, 'item_id' => $item_id);
         $sql = "DELETE FROM attachments WHERE group_name=:group_name, group_id=:group_id, item_name=:item_name, item_id=:item_id";
         $resultado = $this->db->run($sql, $bind);
@@ -22,6 +30,10 @@ trait Attachment
 
     public function removeAllAttachments($id, $item_name)
     {
+        if (!is_int($id) || !is_string($item_name)) {
+            throw new \Exception("Error Processing Request", 1);
+        }
+        
         $bind = array('group_name' => $this->slug, 'group_id' => $id, 'item_name' => $item_name);
         $sql = "DELETE FROM attachments WHERE group_name=:group_name, group_id=:group_id, item_name=:item_name";
         $resultado = $this->db->run($sql, $bind);
@@ -30,6 +42,10 @@ trait Attachment
 
     public function getAllAttachments($id, $item_name)
     {
+        if (!is_int($id) || !is_string($item_name)) {
+            throw new \Exception("Error Processing Request", 1);
+        }
+
         $fields = 't2.id AS id, t3.slug AS slug, ';
         switch ($item_name) {
             case 'content':

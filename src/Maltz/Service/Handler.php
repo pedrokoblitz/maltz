@@ -148,8 +148,8 @@ class Handler
     {
         $result = array('success' => false, 'message' => $message);
         $this->app->response->setStatus($status);
-        $this->app->view->setLayout('frontend.tpl.php');
-        $this->app->render('error.tpl.php', $result);
+        $this->app->view->setLayout('frontend');
+        $this->app->render('error', $result);
         $this->app->stop();
     }
 

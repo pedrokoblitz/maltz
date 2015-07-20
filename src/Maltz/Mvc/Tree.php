@@ -4,8 +4,6 @@ namespace Maltz\Mvc;
 
 trait Tree
 {
-    use Display;
-
     public function displayTree()
     {
         if (!method_exists($this, 'display')) {

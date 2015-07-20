@@ -10,7 +10,7 @@ class App
     public static function route($app)
     {
 
-        $app->view->setLayout('backend.tpl.php');
+        $app->view->setLayout('backend');
 
         $app->get('/backend/:controller', function ($controller) use ($app) {
             $vars = array(

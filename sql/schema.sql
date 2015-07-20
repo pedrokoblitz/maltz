@@ -374,6 +374,7 @@ CREATE TABLE `places` (
 DROP TABLE IF EXISTS `addresses`;
 CREATE TABLE `addresses` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(120) COLLATE utf8_unicode_ci NOT NULL,
   `street` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
   `number` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
   `address` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
@@ -386,6 +387,7 @@ CREATE TABLE `addresses` (
 DROP TABLE IF EXISTS `districts`;
 CREATE TABLE `districts` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(120) COLLATE utf8_unicode_ci NOT NULL,
   `city_id` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -393,6 +395,7 @@ CREATE TABLE `districts` (
 DROP TABLE IF EXISTS `cities`;
 CREATE TABLE `cities` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(120) COLLATE utf8_unicode_ci NOT NULL,
   `country_id` int(10) unsigned DEFAULT NULL,
   `province_id` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -402,6 +405,7 @@ DROP TABLE IF EXISTS `provinces`;
 CREATE TABLE `provinces` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `code` varchar(5) COLLATE utf8_unicode_ci NOT NULL,
+  `name` varchar(120) COLLATE utf8_unicode_ci NOT NULL,
   `region` varchar(5) COLLATE utf8_unicode_ci NOT NULL,
   `country_id` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -411,12 +415,15 @@ DROP TABLE IF EXISTS `countries`;
 CREATE TABLE `countries` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `code` varchar(5) COLLATE utf8_unicode_ci NOT NULL,
+  `name` varchar(120) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `coordinates`;
 CREATE TABLE `coordinates` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `lat` decimal(10,2) unsigned NOT NULL DEFAULT 0.00,
+  `lon` decimal(10,2) unsigned NOT NULL DEFAULT 0.00,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 -- END
