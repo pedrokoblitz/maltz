@@ -8,58 +8,64 @@ class Asset extends Controller
 {
     public function route($app)
     {
-        $app->get('/asset/:name/:extension', function ($name, $extension) use ($app) {
+        $app->get(
+            '/asset/:name/:extension', function ($name, $extension) use ($app) {
 
-            if (in_array($extension, array('css','js', 'gif', 'jpg', 'jpeg', 'png'))) {
-                switch ($extension) {
+                if (in_array($extension, array('css','js', 'gif', 'jpg', 'jpeg', 'png'))) {
+                    switch ($extension) {
                     case 'css':
                         $type = 'text/css';
-                        break;
+                    break;
                     case 'js':
                         $type = 'application/javascript';
-                        break;
+                    break;
                     case 'jpg':
                         $type = 'image/jpeg';
-                        break;
+                    break;
                     case 'jpeg':
                         $type = 'image/jpeg';
-                        break;
+                    break;
                     case 'gif':
                         $type = 'image/gif';
-                        break;
+                    break;
                     case 'png':
                         $type = 'image/png';
-                        break;
+                    break;
+                    }
+
+                    $body = file_get_contents('/public/assets/' . $extension . '/' . $name . '.' . $extension);
+                    $app->response->headers->set('Content-Type', $type);
+                    $app->response->setBody($body);
                 }
-
-                $body = file_get_contents('/public/assets/' . $extension . '/' . $name . '.' . $extension);
-                $app->response->headers->set('Content-Type', $type);
-                $app->response->setBody($body);
+                $app->stop();
             }
-            $app->stop();
-        });
+        );
 
-        $app->get('/media/:name/:extension', function ($name, $extension) use ($app) {
+        $app->get(
+            '/media/:name/:extension', function ($name, $extension) use ($app) {
 
-            $body = file_get_contents('/public/media/' . $name . '.' . $extension);
-            $mimes = $app->config('mimetypes.image');
-            if (isset($mimes[$extension])) {
-                $app->response->headers->set('Content-Type', $mimes[$extension]);
-                $app->response->setBody($body);
+                $body = file_get_contents('/public/media/' . $name . '.' . $extension);
+                $mimes = $app->config('mimetypes.image');
+                if (isset($mimes[$extension])) {
+                    $app->response->headers->set('Content-Type', $mimes[$extension]);
+                    $app->response->setBody($body);
+                }
+                $app->stop();
             }
-            $app->stop();
-        });
+        );
 
-        $app->get('/download/:name/:extension', function ($name, $extension) use ($app) {
+        $app->get(
+            '/download/:name/:extension', function ($name, $extension) use ($app) {
 
-            $body = file_get_contents('/public/media/' . $name . '.' . $extension);
-            $mimes = $app->config('mimetypes.download');
-            if (isset($mimes[$extension])) {
-                $app->response->headers->set('Content-Type', $mimes[$extension]);
-                $app->response->setBody($body);
+                $body = file_get_contents('/public/media/' . $name . '.' . $extension);
+                $mimes = $app->config('mimetypes.download');
+                if (isset($mimes[$extension])) {
+                    $app->response->headers->set('Content-Type', $mimes[$extension]);
+                    $app->response->setBody($body);
+                }
+                $app->stop();
             }
-            $app->stop();
-        });
+        );
 
         return $app;
     }

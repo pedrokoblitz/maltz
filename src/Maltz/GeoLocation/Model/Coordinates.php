@@ -7,8 +7,8 @@ use Maltz\Mvc\Model;
 
 class Coordinates
 {
-	public function __construct(DB $db)
-	{
-		parent::__construct($db);
-	}
+    public function __construct(DB $db)
+    {
+        parent::__construct($db);
+    }
 }

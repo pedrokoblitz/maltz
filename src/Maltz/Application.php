@@ -20,28 +20,32 @@ class Application
 {
 
     /*
-	 *
-	 * app config
-	 *
-	 */
+    *
+    * app config
+    *
+    */
     public static function initialize()
     {
         $app = new Slim();
         
-        $logger = new \Flynsarmy\SlimMonolog\Log\MonologWriter(array(
+        $logger = new \Flynsarmy\SlimMonolog\Log\MonologWriter(
+            array(
             'handlers' => array(
                 new \Monolog\Handler\StreamHandler('./logs/dev.log'),
             ),
-        ));
+            )
+        );
 
-        $app->config(array(
+        $app->config(
+            array(
             'log.writer' => $logger,
             'view' => new View(),
             'mode' => 'development',
             'templates.path' => './views',
             'base.uri' => '/',
             'per_page' => '12'
-        ));
+            )
+        );
 
         $app->session = function () {
             return new Session();
@@ -67,9 +71,11 @@ class Application
             return new Doorman($app->db, $app->sessionDataStore, $app->cookie);
         };
         
-        $app->container->singleton('db', function () use ($app) {
-            return new DB($app->config('db.dsn'), $app->config('db.user'), $app->config('db.password'));
-        });
+        $app->container->singleton(
+            'db', function () use ($app) {
+                return new DB($app->config('db.dsn'), $app->config('db.user'), $app->config('db.password'));
+            }
+        );
 
         $app->postman = function () {
             return new Postman();
@@ -123,29 +129,35 @@ class Application
             $roles = array('admin');
         };
 
-        $app->configureMode('production', function () use ($app) {
+        $app->configureMode(
+            'production', function () use ($app) {
 
-            $credentials = json_decode(file_get_contents('db.json'));
-            $app->config('db.dsn', $credentials['dsn']);
-            $app->config('db.user', $credentials['user']);
-            $app->config('db.password', $credentials['password']);
-        });
+                $credentials = json_decode(file_get_contents('db.json'));
+                $app->config('db.dsn', $credentials['dsn']);
+                $app->config('db.user', $credentials['user']);
+                $app->config('db.password', $credentials['password']);
+            }
+        );
 
-        $app->configureMode('development', function () use ($app) {
-            //$app->add(new \Zeuxisoo\Whoops\Provider\Slim\WhoopsMiddleware);
-            $app->add(new \Slim\Middleware\DebugBar);
+        $app->configureMode(
+            'development', function () use ($app) {
+                //$app->add(new \Zeuxisoo\Whoops\Provider\Slim\WhoopsMiddleware);
+                $app->add(new \Slim\Middleware\DebugBar);
 
-            $app->config('db.dsn', 'mysql:dbname=maltz-novo;host=localhost');
-            $app->config('db.user', 'root');
-            $app->config('db.password', 'root');
+                $app->config('db.dsn', 'mysql:dbname=maltz-novo;host=localhost');
+                $app->config('db.user', 'root');
+                $app->config('db.password', 'root');
 
-            $app->config(array(
-                'log.enable' => true,
-                'debug' => true,
-                'per_page' => 12
-            ));
-            $app->session->set('user.id', 1);
-        });
+                $app->config(
+                    array(
+                    'log.enable' => true,
+                    'debug' => true,
+                    'per_page' => 12
+                    )
+            );
+                $app->session->set('user.id', 1);
+            }
+        );
 
         $config = Config::query($app->db, 'display');
         if ($config->has('records')) {

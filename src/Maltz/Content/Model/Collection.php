@@ -19,13 +19,13 @@ use Maltz\Service\Pagination;
  *
  * http://ideiasinsolitas.com.br/
  *
- * @copyright  Copyright (c) 2012-2013 Pedro Koblitz
- * @author      Pedro Koblitz pedrokoblitz@gmail.com
- * @license    GPL v2
+ * @copyright Copyright (c) 2012-2013 Pedro Koblitz
+ * @author    Pedro Koblitz pedrokoblitz@gmail.com
+ * @license   GPL v2
  *
- * @package    Maltz
+ * @package Maltz
  *
- * @version    0.1 alpha
+ * @version 0.1 alpha
  */
 
 /*

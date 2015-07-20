@@ -3,7 +3,6 @@
 namespace Maltz\Http;
 
 /**
- *
  * The short description
  *
  * As many lines of extendend description as you want {@link element}
@@ -11,9 +10,8 @@ namespace Maltz\Http;
  * {@link http://www.example.com Example hyperlink inline link} links to
  * a website. The inline
  *
- * @package      package name
- * @author       Pedro Koblitz
- *
+ * @package package name
+ * @author  Pedro Koblitz
  */
 class Collection
 {
@@ -24,13 +22,11 @@ class Collection
     protected $items = array();
 
     /**
-     *
      * Sort model array
      *
-     * @access       public
-     * @param        type [$varname] description
-     * @return       type description
-     *
+     * @access public
+     * @param  type [ $varname] description
+     * @return type description
      */
     public function sort(\Closure $sorter)
     {
@@ -38,13 +34,11 @@ class Collection
     }
 
     /**
-     *
      * add groups of models
      *
-     * @access       public
-     * @param        type [$varname] description
-     * @return       type description
-     *
+     * @access public
+     * @param  type [ $varname] description
+     * @return type description
      */
     public function map(array $items)
     {
@@ -52,13 +46,11 @@ class Collection
     }
 
     /**
-     *
      * Adds model from array and sets key based on model id
      *
-     * @access       public
-     * @param        type [$varname] description
-     * @return       type description
-     *
+     * @access public
+     * @param  type [ $varname] description
+     * @return type description
      */
     public function set($id, $item)
     {
@@ -84,13 +76,11 @@ class Collection
     }
 
     /**
-     *
      * Gets model from array based on id/key
      *
-     * @access       public
-     * @param        type [$varname] description
-     * @return       type description
-     *
+     * @access public
+     * @param  type [ $varname] description
+     * @return type description
      */
     public function get($id)
     {
@@ -106,13 +96,11 @@ class Collection
     }
 
     /**
-     *
      * Remove model from array based on id/key
      *
-     * @access       public
-     * @param        type [$varname] description
-     * @return       type description
-     *
+     * @access public
+     * @param  type [ $varname] description
+     * @return type description
      */
     public function remove($id)
     {

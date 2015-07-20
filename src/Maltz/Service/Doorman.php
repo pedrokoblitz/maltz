@@ -8,13 +8,13 @@ use Maltz\Sys\Model\User;
 /**
  * http://ideiasinsolitas.com.br/
  *
- * @copyright  Copyright (c) 2012-2013 Pedro Koblitz
- * @author      Pedro Koblitz pedrokoblitz@gmail.com
- * @license    GPL v2
+ * @copyright Copyright (c) 2012-2013 Pedro Koblitz
+ * @author    Pedro Koblitz pedrokoblitz@gmail.com
+ * @license   GPL v2
  *
- * @package    Maltz
+ * @package Maltz
  *
- * @version    0.1 alpha
+ * @version 0.1 alpha
  */
 
 class Doorman
@@ -42,14 +42,14 @@ class Doorman
     }
 
     /*
-	 * realiza autenticaction
-	 *
-	 *
-	 * @param $username string
-	 * @param $password string
-	 *
-	 * return string / void
-	 */
+    * realiza autenticaction
+    *
+    *
+    * @param $username string
+    * @param $password string
+    *
+    * return string / void
+    */
     public function login(Record $credentials)
     {
         $login = User::query('findByUsernameOrEmail', $credentials->get('username'));
@@ -66,13 +66,13 @@ class Doorman
     }
 
     /*
-	 * encerra sessao
-	 *
-	 *
-	 * @param
-	 *
-	 * return void
-	 */
+    * encerra sessao
+    *
+    *
+    * @param
+    *
+    * return void
+    */
     public function logout()
     {
         $this->sessionDataStore->destroy();
@@ -82,13 +82,13 @@ class Doorman
     }
 
     /*
-	 *
-	 * checa se user esta autenticado
-	 *
-	 * @param
-	 *
-	 * return bool
-	 */
+    *
+    * checa se user esta autenticado
+    *
+    * @param
+    *
+    * return bool
+    */
     public function isUserAuthenticated()
     {
         $authenticated = false;

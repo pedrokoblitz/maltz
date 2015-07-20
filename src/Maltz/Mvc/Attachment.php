@@ -60,18 +60,18 @@ trait Attachment
 
         $fields = 't2.id AS id, t3.slug AS slug, ';
         switch ($item_name) {
-            case 'content':
-                $fields .= 't3.title AS title, t3.subtitle AS subtitle, t3.description AS description, t3.excerpt AS excerpt, t3.body AS body ';
-                break;
-            case 'collection':
-                $fields .= 't3.title AS title, t3.description AS description ';
-                break;
-            case 'resource':
-                $fields .= 't2.filename AS filename, t2.filepath AS filepath, t2.url AS url, t2.embed AS embed, t3.title AS title, t3.description AS description ';
-                break;
-            case 'term':
-                $fields .= 't3.title AS title, t3.description AS description ';
-                break;
+        case 'content':
+            $fields .= 't3.title AS title, t3.subtitle AS subtitle, t3.description AS description, t3.excerpt AS excerpt, t3.body AS body ';
+            break;
+        case 'collection':
+            $fields .= 't3.title AS title, t3.description AS description ';
+            break;
+        case 'resource':
+            $fields .= 't2.filename AS filename, t2.filepath AS filepath, t2.url AS url, t2.embed AS embed, t3.title AS title, t3.description AS description ';
+            break;
+        case 'term':
+            $fields .= 't3.title AS title, t3.description AS description ';
+            break;
         }
         $fields .= 't4.name AS type';
 

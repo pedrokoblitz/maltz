@@ -12,9 +12,11 @@ class App
 
         $app->view->setLayout('backend');
 
-        $app->get('/backend/:controller', function ($controller) use ($app) {
-            $app->render($controller, $vars);
-        });
+        $app->get(
+            '/backend/:controller', function ($controller) use ($app) {
+                $app->render($controller, $vars);
+            }
+        );
 
         return $app;
     }

@@ -147,15 +147,15 @@ class Handler
     {
         $this->app
             ->postman
-                ->createMessage(
-                    $this->app->config('system.email'),
-                    $this->app->config('site.title'),
-                    $subject,
-                    $body
-                )
-                ->sendMessage(
-                    $this->app->session->get('user.email'),
-                    $this->app->session->get('user.name')
-                );
+            ->createMessage(
+                $this->app->config('system.email'),
+                $this->app->config('site.title'),
+                $subject,
+                $body
+            )
+            ->sendMessage(
+                $this->app->session->get('user.email'),
+                $this->app->session->get('user.name')
+            );
     }
 }

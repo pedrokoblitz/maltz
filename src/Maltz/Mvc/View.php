@@ -122,7 +122,7 @@ class View extends \Slim\View
 
         $data !== array() ? extract($data) : null;
         ob_start();
-        require $templatePath;
+        include $templatePath;
         $html = ob_get_clean();
         return $html;
     }
@@ -137,7 +137,7 @@ class View extends \Slim\View
 
             extract($this->layoutData);
             ob_start();
-            require $layoutPath;
+            include $layoutPath;
             $view = ob_get_clean();
             return $view;
         }
@@ -161,7 +161,7 @@ class View extends \Slim\View
         $scripts = $this->renderScripts();
         $footer = $this->renderPageFooter();
         ob_start();
-        require $templatePath;
+        include $templatePath;
         $html = ob_get_clean();
         return $this->renderLayout($html);
     }

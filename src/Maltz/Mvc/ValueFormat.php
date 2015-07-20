@@ -7,26 +7,26 @@ trait ValueFormat
     protected function formatToInt($format)
     {
         switch ($format) {
-            case 'text':
-                $bind['format'] = 0;
-                break;
-            case 'serialized':
-                $bind['format'] = 1;
-                break;
-            case 'json':
-                $bind['format'] = 2;
-                break;
-            case 'xml':
-                $bind['format'] = 3;
-                break;
-            case 'csv':
-                $bind['format'] = 4;
-                break;
-            case 'binary':
-                $bind['format'] = 5;
-                break;
-            default:
-                throw new \Exception("Error Processing Request", 1);
+        case 'text':
+            $bind['format'] = 0;
+            break;
+        case 'serialized':
+            $bind['format'] = 1;
+            break;
+        case 'json':
+            $bind['format'] = 2;
+            break;
+        case 'xml':
+            $bind['format'] = 3;
+            break;
+        case 'csv':
+            $bind['format'] = 4;
+            break;
+        case 'binary':
+            $bind['format'] = 5;
+            break;
+        default:
+            throw new \Exception("Error Processing Request", 1);
                 break;
         }
     }
@@ -34,26 +34,26 @@ trait ValueFormat
     protected function intToFormat($format)
     {
         switch ($format) {
-            case 0:
-                $bind['format'] = 'text';
-                break;
-            case 1:
-                $bind['format'] = 'serialized';
-                break;
-            case 2:
-                $bind['format'] = 'json';
-                break;
-            case 3:
-                $bind['format'] = 'xml';
-                break;
-            case 4:
-                $bind['format'] = 'csv';
-                break;
-            case 5:
-                $bind['format'] = 'binary';
-                break;
-            default:
-                throw new \Exception("Error Processing Request", 1);
+        case 0:
+            $bind['format'] = 'text';
+            break;
+        case 1:
+            $bind['format'] = 'serialized';
+            break;
+        case 2:
+            $bind['format'] = 'json';
+            break;
+        case 3:
+            $bind['format'] = 'xml';
+            break;
+        case 4:
+            $bind['format'] = 'csv';
+            break;
+        case 5:
+            $bind['format'] = 'binary';
+            break;
+        default:
+            throw new \Exception("Error Processing Request", 1);
                 break;
         }
     }

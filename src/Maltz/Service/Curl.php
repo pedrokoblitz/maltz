@@ -5,13 +5,13 @@ namespace Maltz\Service;
 /**
  * http://ideiasinsolitas.com.br/
  *
- * @copyright  Copyright (c) 2012-2013 Pedro Koblitz
- * @author      Pedro Koblitz pedrokoblitz@gmail.com
- * @license    GPL v2
+ * @copyright Copyright (c) 2012-2013 Pedro Koblitz
+ * @author    Pedro Koblitz pedrokoblitz@gmail.com
+ * @license   GPL v2
  *
- * @package    Maltz
+ * @package Maltz
  *
- * @version    0.1 alpha
+ * @version 0.1 alpha
  */
 
 /**
@@ -20,7 +20,7 @@ namespace Maltz\Service;
  * See the README for documentation/examples or http://php.net/curl for more information about the libcurl extension for PHP
  *
  * @package curl
- * @author Sean Huber <shuber@huberry.com>
+ * @author  Sean Huber <shuber@huberry.com>
  **/
 class Curl
 {
@@ -70,7 +70,7 @@ class Curl
     /**
      * Stores an error string for the last request if one occurred
      *
-     * @var string
+     * @var    string
      * @access protected
      **/
     protected $error = '';
@@ -78,7 +78,7 @@ class Curl
     /**
      * Stores resource handle for the current CURL request
      *
-     * @var resource
+     * @var    resource
      * @access protected
      **/
     protected $request;
@@ -100,8 +100,8 @@ class Curl
      *
      * Returns a CurlResponse object if the request was successful, false otherwise
      *
-     * @param string $url
-     * @param array|string $vars
+     * @param  string       $url
+     * @param  array|string $vars
      * @return CurlResponse object
      **/
     public function delete($url, $vars = array())
@@ -124,8 +124,8 @@ class Curl
      *
      * Returns a CurlResponse object if the request was successful, false otherwise
      *
-     * @param string $url
-     * @param array|string $vars
+     * @param  string       $url
+     * @param  array|string $vars
      * @return CurlResponse
      **/
     public function get($url, $vars = array())
@@ -142,8 +142,8 @@ class Curl
      *
      * Returns a CurlResponse object if the request was successful, false otherwise
      *
-     * @param string $url
-     * @param array|string $vars
+     * @param  string       $url
+     * @param  array|string $vars
      * @return CurlResponse
      **/
     public function head($url, $vars = array())
@@ -154,8 +154,8 @@ class Curl
     /**
      * Makes an HTTP POST request to the specified $url with an optional array or string of $vars
      *
-     * @param string $url
-     * @param array|string $vars
+     * @param  string       $url
+     * @param  array|string $vars
      * @return CurlResponse|boolean
      **/
     public function post($url, $vars = array())
@@ -168,8 +168,8 @@ class Curl
      *
      * Returns a CurlResponse object if the request was successful, false otherwise
      *
-     * @param string $url
-     * @param array|string $vars
+     * @param  string       $url
+     * @param  array|string $vars
      * @return CurlResponse|boolean
      **/
     public function put($url, $vars = array())
@@ -182,9 +182,9 @@ class Curl
      *
      * Returns a CurlResponse object if the request was successful, false otherwise
      *
-     * @param string $method
-     * @param string $url
-     * @param array|string $vars
+     * @param  string       $method
+     * @param  string       $url
+     * @param  array|string $vars
      * @return CurlResponse|boolean
      **/
     public function request($method, $url, $vars = array())
@@ -230,32 +230,32 @@ class Curl
     /**
      * Set the associated CURL options for a request method
      *
-     * @param string $method
+     * @param  string $method
      * @return void
      * @access protected
      **/
     protected function set_request_method($method)
     {
         switch (strtoupper($method)) {
-            case 'HEAD':
-                curl_setopt($this->request, CURLOPT_NOBODY, true);
-                break;
-            case 'GET':
-                curl_setopt($this->request, CURLOPT_HTTPGET, true);
-                break;
-            case 'POST':
-                curl_setopt($this->request, CURLOPT_POST, true);
-                break;
-            default:
-                curl_setopt($this->request, CURLOPT_CUSTOMREQUEST, $method);
+        case 'HEAD':
+            curl_setopt($this->request, CURLOPT_NOBODY, true);
+            break;
+        case 'GET':
+            curl_setopt($this->request, CURLOPT_HTTPGET, true);
+            break;
+        case 'POST':
+            curl_setopt($this->request, CURLOPT_POST, true);
+            break;
+        default:
+            curl_setopt($this->request, CURLOPT_CUSTOMREQUEST, $method);
         }
     }
 
     /**
      * Sets the CURLOPT options for the current request
      *
-     * @param string $url
-     * @param string $vars
+     * @param  string $url
+     * @param  string $vars
      * @return void
      * @access protected
      **/
@@ -266,7 +266,7 @@ class Curl
             curl_setopt($this->request, CURLOPT_POSTFIELDS, $vars);
         }
 
-        # Set some default CURL options
+        // Set some default CURL options
         curl_setopt($this->request, CURLOPT_HEADER, true);
         curl_setopt($this->request, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($this->request, CURLOPT_USERAGENT, $this->user_agent);
@@ -282,7 +282,7 @@ class Curl
             curl_setopt($this->request, CURLOPT_REFERER, $this->referer);
         }
 
-        # Set any custom CURL options
+        // Set any custom CURL options
         foreach ($this->options as $option => $value) {
             curl_setopt($this->request, constant('CURLOPT_' . str_replace('CURLOPT_', '', strtoupper($option))), $value);
         }

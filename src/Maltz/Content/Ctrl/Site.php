@@ -17,13 +17,13 @@ use Maltz\Utils\Carteiro;
  *
  * http://ideiasinsolitas.com.br/
  *
- * @copyright  Copyright (c) 2012-2013 Pedro Koblitz
- * @author     Pedro Koblitz pedrokoblitz@gmail.com
- * @license    GPL v2
+ * @copyright Copyright (c) 2012-2013 Pedro Koblitz
+ * @author    Pedro Koblitz pedrokoblitz@gmail.com
+ * @license   GPL v2
  *
- * @package    Meu CMS ainda não tem name
+ * @package Meu CMS ainda não tem name
  *
- * @version    0.1 alpha
+ * @version 0.1 alpha
  */
 
 class Site extends Controller

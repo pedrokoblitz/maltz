@@ -4,7 +4,8 @@ namespace Maltz\Store\Model;
 
 use Maltz\Mvc\Model;
 
-class Store extends Model {
+class Store extends Model
+{
 
     private $product;
     private $content;
@@ -14,7 +15,8 @@ class Store extends Model {
      * [__construct description]
      * @param [type] $db
      */
-    public function __construct(DB $db) {
+    public function __construct(DB $db) 
+    {
         $this->db = $db;
     }
 
@@ -22,7 +24,8 @@ class Store extends Model {
      * [setDestaques description]
      * @param [type] $num
      */
-    public function setDestaques($num) {
+    public function setDestaques($num) 
+    {
         $sql = "SELECT * FROM products WHERE activity = 1 ORDER BY created DESC LIMIT 0,{$num}";
         $products = $this->db->run($sql);
         $data = array();
@@ -39,7 +42,8 @@ class Store extends Model {
      * [setEspeciais description]
      * @param [type] $num
      */
-    public function setEspeciais($num) {
+    public function setEspeciais($num) 
+    {
         $sql = "SELECT * FROM products WHERE activity = 1 ORDER BY created DESC LIMIT 0,{$num}";
         $products = $this->db->run($sql);
         $data = array();
@@ -56,7 +60,8 @@ class Store extends Model {
      * [setNovos description]
      * @param [type] $num
      */
-    public function setNovos($num) {
+    public function setNovos($num) 
+    {
         $sql = "SELECT * FROM products WHERE activity = 1 ORDER BY created DESC LIMIT 0,$num";
         $products = $this->db->run($sql);
         $data = array();

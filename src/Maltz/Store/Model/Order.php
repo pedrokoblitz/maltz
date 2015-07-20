@@ -11,9 +11,11 @@ namespace Maltz\Store\Model;
  * return void
  */
 
-class Order extends Model {
+class Order extends Model
+{
 
-    public function __construct($db, $cep) {
+    public function __construct($db, $cep) 
+    {
         parent::__construct($db, 'order', 'orders', 'order_id');
         $this->cepLocal = $cep;
     }
@@ -27,7 +29,8 @@ class Order extends Model {
      * return void
      */
 
-    public function insert($post) {
+    public function insert($post) 
+    {
         $data = $this->db->insert($this->table, $post);
         return $data;
     }
@@ -41,7 +44,8 @@ class Order extends Model {
      * 
      */
 
-    public function orderDetail($order_id) {
+    public function orderDetail($order_id) 
+    {
         $sql = "SELECT * FROM itens INNER JOIN products ON products.product_id=itens.product_id WHERE itens.order_id=:order_id";
         $itens = $this->db->run($sql, array('order_id' => $order_id));
         $this->setDado('itens', $itens);
@@ -56,7 +60,8 @@ class Order extends Model {
         return $data;
     }
 
-    public function getProducts($order_id) {
+    public function getProducts($order_id) 
+    {
         $sql = "SELECT product_id FROM itens WHERE order_id=:order_id";
 
         $itens = $this->db->run($sql, array('order_id' => $order_id));
