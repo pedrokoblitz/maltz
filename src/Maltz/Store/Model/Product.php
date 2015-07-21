@@ -165,16 +165,16 @@ class Product extends Model
 
         $data = $this->db->run($sql);
 
-        $resultadoados = array();
+        $resultados = array();
         
         foreach ($data as $data) {
             $sql = "SELECT * FROM photos WHERE product_id = :id";
             $bind = array('id' => $data['product_id']);
             $photos = $this->db->run($sql, $bind);
             $data['photos'] = $photos;
-            $resultadoados[] = $data;
+            $resultados[] = $data;
         }
         
-        return $resultadoados;
+        return $resultados;
     }
 }

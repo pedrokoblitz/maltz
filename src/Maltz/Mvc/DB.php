@@ -87,6 +87,7 @@ class DB extends \PDO
                     
                     if (empty($data)) {
                         $result = $settings['return.value'];
+                        $result->set('success', false);
                         $result->set('message', DbMessage::NOT_FOUND);
                         return $result;
                     }

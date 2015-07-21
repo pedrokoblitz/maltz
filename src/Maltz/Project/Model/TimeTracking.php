@@ -11,7 +11,7 @@ class TimeTracking extends Model
 
     public function start($ticket_id, $user_id)
     {
-        if (!is_int($ticket_id)) {
+        if (!(int) $ticket_id) {
             throw new \Exception("Error Processing Request", 1);
         }
 
@@ -25,7 +25,7 @@ class TimeTracking extends Model
 
     public function getCurrentId($user_id)
     {
-        if (!is_int($user_id)) {
+        if (!(int) $user_id) {
             throw new \Exception("Error Processing Request", 1);
         }
 
@@ -42,7 +42,7 @@ class TimeTracking extends Model
 
     public function stop($user_id)
     {
-        if (!is_int($user_id)) {
+        if (!(int) $user_id) {
             throw new \Exception("Error Processing Request", 1);
         }
 

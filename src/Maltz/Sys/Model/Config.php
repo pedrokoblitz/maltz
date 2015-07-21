@@ -2,6 +2,7 @@
 
 namespace Maltz\Sys\Model;
 
+use Maltz\Mvc\DB;
 use Maltz\Mvc\Model;
 use Maltz\Mvc\Record;
 use Maltz\Mvc\Activity;
@@ -71,45 +72,45 @@ class Config extends Model
     public function insert(Record $record)
     {
         $sql = "INSERT INTO config (`key`, value, format, activity, created, modified) VALUES (:key, :value, :activity, NOW(), NOW())";
-        $resultado = $this->db->run($sql, $record->toArray());
-        return $resultado;
+        $result = $this->db->run($sql, $record->toArray());
+        return $result;
     }
 
     public function update(Record $record)
     {
         $sql = "UPDATE config SET value=:value, modified=NOW() WHERE key=:key";
-        $resultado = $this->db->run($sql, $record->toArray());
-        return $resultado;
+        $result = $this->db->run($sql, $record->toArray());
+        return $result;
     }
 
     public function display()
     {
         $sql = "SELECT id, `key`, value, format, activity, modified, created FROM config";
-        $resultado = $this->db->run($sql);
-        return $resultado;
+        $result = $this->db->run($sql);
+        return $result;
     }
 
     public function find($page = 1, $per_page = 12, $key = 'key', $order = 'asc')
     {
-        if (!is_int($page) || !is_int($per_page) || !is_string($key) || !is_string($order)) {
+        if (!(int) $page || !(int) $per_page || !is_string($key) || !is_string($order)) {
             throw new \Exception("Error Processing Request", 1);
         }
         
         $pagination = Pagination::paginate($page, $per_page);
         $sql = "SELECT id, `key`, value, format, activity, modified, created FROM config ORDER BY $key $order LIMIT $pagination->offset,$pagination->limit";
-        $resultado = $this->db->run($sql, array());
-        return $resultado;
+        $result = $this->db->run($sql, array());
+        return $result;
     }
 
     public function show($id)
     {
-        if (!is_int($id)) {
+        if (!(int) $id) {
             throw new \Exception("Error Processing Request", 1);
         }
         
         $sql = "SELECT id, `key`, value, activity, modified, created FROM config WHERE id=:id";
-        $resultado = $this->db->run($sql, array($id));
-        return $resultado;
+        $result = $this->db->run($sql, array($id));
+        return $result;
     }
 
     /*
@@ -123,8 +124,8 @@ class Config extends Model
         }
         
         $sql = "UPDATE config SET value=:value WHERE key=:key";
-        $resultadoado = $this->db->run($sql, array('value' => $value, 'key' => $key));
-        return $resultado;
+        $resultado = $this->db->run($sql, array('value' => $value, 'key' => $key));
+        return $result;
     }
 
     public function getValue($key)
@@ -134,8 +135,8 @@ class Config extends Model
         }
         
         $sql = "SELECT value FROM config WHERE key=:key";
-        $resultadoado = $this->db->run($sql, array($key));
-        return $resultadoado[0]['value'];
+        $resultado = $this->db->run($sql, array($key));
+        return $resultado[0]['value'];
     }
 
     public function setRefresh($key)

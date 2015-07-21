@@ -6,7 +6,7 @@ trait Activity
 {
     public function delete($id)
     {
-        if (!is_int($id)) {
+        if (!(int) $id) {
             throw new \Exception("Error Processing Request", 1);
         }
         return $this->setActivity($id, 0);
@@ -14,7 +14,7 @@ trait Activity
 
     public function deactivate($id)
     {
-        if (!is_int($id)) {
+        if (!(int) $id) {
             throw new \Exception("Error Processing Request", 1);
         }
         return $this->setActivity($id, 1);
@@ -22,7 +22,7 @@ trait Activity
 
     public function activate($id)
     {
-        if (!is_int($id)) {
+        if (!(int) $id) {
             throw new \Exception("Error Processing Request", 1);
         }
         return $this->setActivity($id, 2);
@@ -30,7 +30,7 @@ trait Activity
 
     public function promote($id)
     {
-        if (!is_int($id)) {
+        if (!(int) $id) {
             throw new \Exception("Error Processing Request", 1);
         }
         $res = $this->getActivity($id);
@@ -41,7 +41,7 @@ trait Activity
 
     public function demote($id)
     {
-        if (!is_int($id)) {
+        if (!(int) $id) {
             throw new \Exception("Error Processing Request", 1);
         }
         $res = $this->getActivity($id);
@@ -54,7 +54,7 @@ trait Activity
 
     public function setActivity($id, $activity)
     {
-        if (!is_int($id) || !is_int($activity)) {
+        if (!(int) $id || !(int) $activity) {
             throw new \Exception("Error Processing Request", 1);
         }
         $sql = "UPDATE $this->table SET activity=:activity WHERE id=:id";
@@ -63,7 +63,7 @@ trait Activity
 
     public function getActivity($id)
     {
-        if (!is_int($id)) {
+        if (!(int) $id) {
             throw new \Exception("Error Processing Request", 1);
         }
         $sql = "SELECT activity FROM $this->table WHERE id=:id";

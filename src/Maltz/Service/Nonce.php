@@ -2,6 +2,8 @@
 
 namespace Maltz\Service;
 
+use Maltz\Http\Session;
+
 class Nonce
 {
     protected $session;

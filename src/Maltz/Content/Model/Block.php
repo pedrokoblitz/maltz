@@ -61,21 +61,21 @@ class Block extends Model
 
     public function insert(Record $record)
     {
-        return $resultado;
+        return $result;
     }
 
 
     public function update(Record $record)
     {
-        return $resultado;
+        return $result;
     }
 
 
     public function delete($id)
     {
         $sql = "DELETE FROM blocks WHERE id=:id";
-        $resultado = $this->db->run($sql, array('id' => $id));
-        return $resultado;
+        $result = $this->db->run($sql, array('id' => $id));
+        return $result;
     }
 
     public function display($key = 'title', $order = 'asc', $lang = 'pt-br')
@@ -88,8 +88,8 @@ class Block extends Model
             WHERE t2.language=:lang
             AND t1.activity > 0
             ORDER BY $key $order";
-        $resultado = $this->db->run($sql, array('item_name' => 'block', 'lang' => $lang));
-        return $resultado;
+        $result = $this->db->run($sql, array('item_name' => 'block', 'lang' => $lang));
+        return $result;
     }
 
     public function find($page = 1, $per_page = 12, $key = 'title', $order = 'asc', $lang = 'pt-br')
@@ -105,8 +105,8 @@ class Block extends Model
             AND t1.activity > 0
             ORDER BY $key $order 
             LIMIT $pagination->offset,$pagination->limit";
-        $resultado = $this->db->run($sql, array('item_name' => 'block', 'lang' => $lang));
-        return $resultado;
+        $result = $this->db->run($sql, array('item_name' => 'block', 'lang' => $lang));
+        return $result;
     }
 
     public function show($id, $lang = 'pt-br')
@@ -119,7 +119,7 @@ class Block extends Model
             WHERE id=:id
             AND t2.language=:lang
             AND t1.activity > 0";
-        $resultado = $this->db->run($sql, array('item_name' => 'block', 'id' => $id, 'lang' => $lang));
-        return $resultado;
+        $result = $this->db->run($sql, array('item_name' => 'block', 'id' => $id, 'lang' => $lang));
+        return $result;
     }
 }

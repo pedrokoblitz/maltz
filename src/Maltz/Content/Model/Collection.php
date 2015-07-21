@@ -75,25 +75,43 @@ class Collection extends Model
 
     public function insert(Record $record)
     {
-        $sql = "INSERT INTO collections (type_id, created, modified)
-            VALUES (:type_id, NOW(), NOW())";
-        $resultado = $this->db->run($sql, array('type_id' => $record->get('type_id')));
+        $sql = "INSERT INTO collections (type_id, parent_id, created, modified)
+            VALUES (:type_id, :parent_id, NOW(), NOW())";
+        $result = $this->db->run($sql, array('type_id' => $record->get('type_id'), 'parent_id' => $record->get('parent_id')));
+        $record->remove('parent_id');
         $record->remove('type_id');
-
-        $sql = "INSERT INTO translations (user_id, language, item_name, item_id, slug, name, title, description)
-            VALUES (:user_id, :language, :item_name, LAST_INSERT_ID(), :slug, :name, :title, :description)";
-        $resultado = $this->db->run($sql, $record->toArray());
-        return $resultado;
+        $record->set('item_name', 'collection');
+        $record->set('item_id', $result->getLastInsertId());
+        $slug = $this->generateSlug($record->get('title'));
+        $record->set('slug', $slug);
+        $fields = $record->getFieldsList();
+        $values = $record->getInsertValueString();
+        $sql = "INSERT INTO translations $fields 
+            VALUES $values";
+        $result = $this->db->run($sql, $record->toArray());
+        return $result;
     }
 
     public function update(Record $record)
     {
-        $sql = "UPDATE collections SET modified=NOW() WHERE id=:id";
-        $resultado = $this->db->run($sql, array('id' => $record->get('id')));
-        $sql = "UPDATE translations SET user_id=:user_id, lang=:lang, slug=:slug, name=:name, title=:title, description=:description
-            WHERE item_id=:id AND item_name=:item_name";
-        $resultado = $this->db->run($sql, $record->toArray());
-        return $resultado;
+        $id = $record->get('id');
+        $record->remove('id');
+        $language = $record->get('language');
+        $record->remove('language');
+        $sql = "UPDATE collections SET parent_id=:parent_id, modified=NOW() WHERE id=:id";
+        $result = $this->db->run($sql, array('id' => $id, 'parent_id' => $record->get('parent_id')));
+        $record->remove('parent_id');
+        $record->remove('type_id');
+        $values = $record->getUpdateValueString();
+        $sql = "UPDATE translations SET $values
+            WHERE item_id=:id 
+                AND language=:language
+                AND item_name=:item_name";
+        $record->set('language', $language);
+        $record->set('item_name', 'collection');
+        $record->set('id', $id);
+        $result = $this->db->run($sql, $record->toArray());
+        return $result;
     }
 
     public function display($key = 'type', $order = 'desc', $lang = 'pt-br')
@@ -110,15 +128,15 @@ class Collection extends Model
             JOIN types t3
                 ON t1.type_id=t3.id
             WHERE t1.activity > 0
-            AND t2.language=:lang
+            AND t2.language=:language
             ORDER BY $key $order";
-        $resultado = $this->db->run($sql, array('item_name' => 'collection', 'lang' => $lang));
-        return $resultado;
+        $result = $this->db->run($sql, array('item_name' => 'collection', 'language' => $lang));
+        return $result;
     }
 
     public function find($page = 1, $per_page = 12, $key = 'type', $order = 'desc', $lang = 'pt-br')
     {
-        if () {
+        if (!(int) $page || !(int) $per_page || !is_string($key) || !is_string($order) || !is_string($lang)) {
             throw new \Exception("Error Processing Request", 1);
         }
         
@@ -131,16 +149,16 @@ class Collection extends Model
             JOIN types t3
                 ON t1.type_id=t3.id
             WHERE t1.activity > 0
-            AND t2.language=:lang
+            AND t2.language=:language
             ORDER BY $key $order
             LIMIT $pagination->offset,$pagination->limit";
-        $resultado = $this->db->run($sql, array('item_name' => 'collection', 'lang' => $lang));
-        return $resultado;
+        $result = $this->db->run($sql, array('item_name' => 'collection', 'language' => $lang));
+        return $result;
     }
 
     public function findByType($type, $page = 1, $per_page = 12, $key = 'type', $order = 'desc', $lang = 'pt-br')
     {
-        if () {
+        if (!is_string($type) || !(int) $page || !(int) $per_page || !is_string($key) || !is_string($order) || !is_string($lang)) {
             throw new \Exception("Error Processing Request", 1);
         }
         
@@ -154,16 +172,16 @@ class Collection extends Model
                 ON t1.type_id=t3.id
             WHERE t3.name=:type
             AND t1.activity > 0
-            AND t2.language=:lang
+            AND t2.language=:language
             ORDER BY $key $order
             LIMIT $pagination->offset,$pagination->limit";
-        $resultado = $this->db->run($sql, array('item_name' => 'collection', 'type' => $type, 'lang' => $lang));
-        return $resultado;
+        $result = $this->db->run($sql, array('item_name' => 'collection', 'type' => $type, 'language' => $lang));
+        return $result;
     }
 
     public function show($id, $lang = 'pt-br')
     {
-        if () {
+        if (!is_int($id) || !is_string($lang)) {
             throw new \Exception("Error Processing Request", 1);
         }
 
@@ -175,9 +193,9 @@ class Collection extends Model
             JOIN types t3
                 ON t1.type_id=t3.id
             WHERE t1.id=:id
-            AND t2.language=:lang
+            AND t2.language=:language
             AND t1.activity > 0";
-        $resultado = $this->db->run($sql, array('item_name' => 'collection', 'id' => $id, 'lang' => $lang));
-        return $resultado;
+        $result = $this->db->run($sql, array('item_name' => 'collection', 'id' => $id, 'language' => $lang));
+        return $result;
     }
 }

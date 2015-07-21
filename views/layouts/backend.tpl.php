@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <?php $this->partial('head.html.tpl.php'); ?>
+    <?php $this->partial('head.html'); ?>
     <link href="/public/assets/css/sheet.css" rel="stylesheet">
   </head>
   <body>

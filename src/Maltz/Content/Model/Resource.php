@@ -2,6 +2,7 @@
 
 namespace Maltz\Content\Model;
 
+use Maltz\Mvc\DB;
 use Maltz\Mvc\Model;
 use Maltz\Mvc\Record;
 use Maltz\Mvc\Activity;
@@ -59,6 +60,7 @@ class Resource extends Model
             'title' => 'string',
             'description' => 'textarea',
             'language' => 'string',
+            'mimetype' => 'string',
             );
         parent::__construct($db, 'resource', 'resources', $rules);
     }
@@ -69,28 +71,64 @@ class Resource extends Model
 
     public function insert(Record $record)
     {
-        $sql = "INSERT INTO resources (type_id, url, filepath, filename, extension, embed, created, modified) 
-            VALUES (:type_id, :url, :filepath, :filename, :extension, :embed, NOW(), NOW())";
-        $resultado = $this->db->run($sql, $bind);
+        $sql = "INSERT INTO resources (type_id, url, filepath, filename, extension, embed, mimetype, created, modified) 
+            VALUES (:type_id, :url, :filepath, :filename, :extension, :embed, :mimetype, NOW(), NOW())";
+        $result = $this->db->run($sql, array(
+            'type_id' => $record->get('type_id'),
+            'url' => $record->get('url'),
+            'filepath' => $record->get('filepath'),
+            'filename' => $record->get('filename'),
+            'extension' => $record->get('extension'),
+            'embed' => $record->get('embed'),
+            'mimetype' => $record->get('mimetype')
+            )
+        );
+        $record->remove('type_id');
+        $record->remove('url');
+        $record->remove('filepath');
+        $record->remove('filename');
+        $record->remove('extension');
+        $record->remove('embed');
+        $record->remove('mimetype');
+        $record->set('item_name', 'resource');
+        $record->set('item_id', $result->getLastInsertId());
+        $slug = $this->generateSlug($record->get('title'));
+        $record->set('slug', $slug);
+        $fields = $record->getFieldsList();
+        $values = $record->getInsertValueString();
 
-        $sql = "INSERT INTO translations (user_id, language, item_name, item_id, slug, name, title, description) 
-            VALUES (:user_id, :language, :item_name, LAST_INSERT_ID(), :slug, :name, :title, :description)";
-        $resultado = $this->db->run($sql, $bind);
-        return $resultado;
+        $sql = "INSERT INTO translations $fields 
+            VALUES $values";
+        $result = $this->db->run($sql, $record->toArray());
+        return $result;
     }
 
     public function update(Record $record)
     {
+        $id = $record->get('id');
+        $record->remove('id');
+        $language = $record->get('language');
+        $record->remove('language');
         $sql = "UPDATE resources SET modified=NOW() WHERE id=:id";
-        $resultado = $this->db->run($sql, array('id' => $record->get('id')));
-
+        $result = $this->db->run($sql, array('id' => $id));
+        $record->remove('type_id');
+        $record->remove('url');
+        $record->remove('filepath');
+        $record->remove('filename');
+        $record->remove('extension');
+        $record->remove('embed');
+        $record->remove('mimetype');
+        $values = $record->getUpdateValueString();
         $sql = "UPDATE translations 
-            SET user_id=:user_id, lang=:lang, slug=:slug, url=:url, extension=:extension, filename=:filename, name=:name, title=:title, description=:description
+            SET $values 
             WHERE item_id=:id 
-                AND t2.language=:lang
+                AND language=:language
                 AND item_name=:item_name";
-        $resultado = $this->db->run($sql, $bind);
-        return $resultado;
+        $record->set('language', $language);
+        $record->set('item_name', 'term');
+        $record->set('id', $id);
+        $result = $this->db->run($sql, $record->toArray());
+        return $result;
     }
 
     public function display($key = 'title', $order = 'asc', $lang = 'pt-br')
@@ -109,13 +147,13 @@ class Resource extends Model
         WHERE t2.language=:lang
         AND t1.activity > 0
         ORDER BY $key $order";
-        $resultado = $this->db->run($sql, array('item_name' => 'resource', 'lang' => $lang));
-        return $resultado;
+        $result = $this->db->run($sql, array('item_name' => 'resource', 'lang' => $lang));
+        return $result;
     }
 
     public function find($page = 1, $per_page = 12, $key = 'modified', $order = 'desc', $lang = 'pt-br')
     {
-        if (!is_int($pg) || !is_int($per_page) || !is_string($key) || !is_string($order) || !is_string($lang)) {
+        if (!(int) $pg || !(int) $per_page || !is_string($key) || !is_string($order) || !is_string($lang)) {
             throw new \Exception("Error Processing Request", 1);
         }
 
@@ -131,13 +169,13 @@ class Resource extends Model
         AND t1.activity > 0
         ORDER BY $key $order
         LIMIT $pagination->offset,$pagination->limit";
-        $resultado = $this->db->run($sql, array('item_name' => 'resource', 'lang' => $lang));
-        return $resultado;
+        $result = $this->db->run($sql, array('item_name' => 'resource', 'lang' => $lang));
+        return $result;
     }
 
     public function findByType($type, $page = 1, $per_page = 12, $key = 'title', $order = 'asc', $lang = 'pt-br')
     {
-        if (!is_string($type) || !is_int($pg) || !is_int($per_page) || !is_string($key) || !is_string($order) || !is_string($lang)) {
+        if (!is_string($type) || !(int) $pg || !(int) $per_page || !is_string($key) || !is_string($order) || !is_string($lang)) {
             throw new \Exception("Error Processing Request", 1);
         }
 
@@ -154,13 +192,13 @@ class Resource extends Model
             AND t1.activity > 0
         ORDER BY $key $order
         LIMIT $pagination->offset,$pagination->limit";
-        $resultado = $this->db->run($sql, array('type' => $type, 'item_name' => 'resource', 'lang' => $lang));
-        return $resultado;
+        $result = $this->db->run($sql, array('type' => $type, 'item_name' => 'resource', 'lang' => $lang));
+        return $result;
     }
 
     public function show($id, $lang = 'pt-br')
     {
-        if (!is_int($id) || !is_string($lang)) {
+        if (!(int) $id || !is_string($lang)) {
             throw new \Exception("Error Processing Request", 1);
         }
 
@@ -174,7 +212,7 @@ class Resource extends Model
         WHERE t1.id=:id
         AND t2.language=:lang
         AND t1.activity > 0";
-        $resultado = $this->db->run($sql, array('item_id' => $id, 'item_name' => 'resource', 'lang' => $lang));
-        return $resultado;
+        $result = $this->db->run($sql, array('item_id' => $id, 'item_name' => 'resource', 'lang' => $lang));
+        return $result;
     }
 }

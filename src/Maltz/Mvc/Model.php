@@ -46,7 +46,6 @@ abstract class Model
     {
         $record->validate($this->rules);
         return $record->isValid();
-        // return true;
     }
 
     public function save(Record $record)

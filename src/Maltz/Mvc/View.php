@@ -74,7 +74,7 @@ class View extends \Slim\View
 
     public function renderPageTitle()
     {
-        $pageTitle = $this->app->config('site_title') . ' - ' . $this->app->config('site_tagline');
+        return 'teste';
     }
 
     public function renderStyles()
@@ -100,17 +100,24 @@ class View extends \Slim\View
         $data = array(
             'title' => $this->renderPageTitle(),
             'css' => $this->renderStyles(),
-            'meta' => $this->renderPageMeta()
+            'meta' => $this->renderPageMeta(),
+            'meta' => $this->renderPageMeta(),
+            'styles' => $this->renderStyles(),
             );
-        return $this->partial('html.header', $data);
+        return $this->partial('html.head', $data);
     }
 
     public function renderPageFooter()
     {
         $data = array(
-            'js' => $this->renderScripts()
+            'scripts' => $this->renderScripts()
             );
-        $this->partial('html.footer');
+        $this->partial('html.footer', $data);
+    }
+
+    public function decodeTextarea($string)
+    {
+        return html_entity_decode($string);
     }
 
     public function partial($template, $data = array())
@@ -120,7 +127,7 @@ class View extends \Slim\View
             throw new \RuntimeException('View cannot render template `' . $templatePath . '`. Template does not exist.');
         }
 
-        $data !== array() ? extract($data) : null;
+        extract($data);
         ob_start();
         include $templatePath;
         $html = ob_get_clean();
@@ -136,6 +143,8 @@ class View extends \Slim\View
             }
 
             extract($this->layoutData);
+            $header = $this->renderPageHeader();
+            $footer = $this->renderPageFooter();
             ob_start();
             include $layoutPath;
             $view = ob_get_clean();
@@ -153,13 +162,6 @@ class View extends \Slim\View
         }
 
         extract($this->data->all());
-        // reserved variables
-        $title = $this->renderPageTitle();
-        $meta = $this->renderPageMeta();
-        $styles = $this->renderStyles();
-        $header = $this->renderPageHeader();
-        $scripts = $this->renderScripts();
-        $footer = $this->renderPageFooter();
         ob_start();
         include $templatePath;
         $html = ob_get_clean();

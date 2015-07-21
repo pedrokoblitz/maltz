@@ -43,7 +43,6 @@ class CookieJar extends Collection
 
         $newId = str_replace('.', '_', $id);
         setcookie($newId, '', time() - 3600);
-        unset($_COOKIE[$newId]);
         parent::remove($newId);
     }
 

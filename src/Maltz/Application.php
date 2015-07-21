@@ -80,10 +80,6 @@ class Application
         $app->postman = function () {
             return new Postman();
         };
-
-        $app->correios = function () {
-            return new Correios();
-        };
         
         $app->lang = function () use ($app) {
             $get = $app->request->get();
@@ -141,7 +137,7 @@ class Application
 
         $app->configureMode(
             'development', function () use ($app) {
-                //$app->add(new \Zeuxisoo\Whoops\Provider\Slim\WhoopsMiddleware);
+                $app->add(new \Zeuxisoo\Whoops\Provider\Slim\WhoopsMiddleware);
                 $app->add(new \Slim\Middleware\DebugBar);
 
                 $app->config('db.dsn', 'mysql:dbname=maltz-novo;host=localhost');
@@ -158,13 +154,6 @@ class Application
                 $app->session->set('user.id', 1);
             }
         );
-
-        $config = Config::query($app->db, 'display');
-        if ($config->has('records')) {
-            foreach ($config->getRecords() as $key => $value) {
-                $app->config($key, $value);
-            }
-        }
 
         $controllers = array(
             'Maltz\Api\Ctrl\Api',

@@ -26,8 +26,8 @@ class Invoice
     {
         $sql = "INSERT INTO invoices (project_id, hours, rate, total, activity, created) 
             VALUES (:project_id, :totalhours, :rate, :total, 1, NOW())";
-        $resultado = $this->db->run($sql, $record->toArray());
-        return $resultado;
+        $result = $this->db->run($sql, $record->toArray());
+        return $result;
     }
 
     public function processRecord(Record $record)
@@ -39,7 +39,7 @@ class Invoice
 
     public function show($id)
     {
-        if (!is_int($id)) {
+        if (!(int) $id) {
             throw new \Exception("Error Processing Request", 1);
         }
 
@@ -47,13 +47,13 @@ class Invoice
           JOIN projects t2
             ON t1.project_id=t2.id
           WHERE t1.id=:id";
-        $resultado = $this->db->run($sql, array('id' => $id));
-        return $resultado;
+        $result = $this->db->run($sql, array('id' => $id));
+        return $result;
     }
 
     public function find($pg = 1, $per_page = 12, $key = 'title', $order = 'asc')
     {
-        if (!is_int($pg) || !is_int($per_page) || !is_string($key) || !is_string($order)) {
+        if (!(int) $pg || !(int) $per_page || !is_string($key) || !is_string($order)) {
             throw new \Exception("Error Processing Request", 1);
         }
 
@@ -63,13 +63,13 @@ class Invoice
             ON t1.project_id=t2.id
           ORDER BY $key $order
           LIMIT $pagination->offset, $pagination->limit";
-        $resultado = $this->db->run($sql);
-        return $resultado;
+        $result = $this->db->run($sql);
+        return $result;
     }
 
     public function setSent($id)
     {
-        if (!is_int($id)) {
+        if (!(int) $id) {
             throw new \Exception("Error Processing Request", 1);
         }
 
@@ -78,7 +78,7 @@ class Invoice
 
     public function setContested($id)
     {
-        if (!is_int($id)) {
+        if (!(int) $id) {
             throw new \Exception("Error Processing Request", 1);
         }
 
@@ -87,7 +87,7 @@ class Invoice
 
     public function setPaid($id)
     {
-        if (!is_int($id)) {
+        if (!(int) $id) {
             throw new \Exception("Error Processing Request", 1);
         }
 

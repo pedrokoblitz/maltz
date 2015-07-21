@@ -12,7 +12,7 @@ trait Metadata
         $value = $record->get('value');
         $order = $record->get('order');
         
-        if (!is_string($item_name) || !is_int($item_id) || !is_string($key) || !is_string($value) || !is_int($order)) {
+        if (!is_string($item_name) || !(int) $item_id || !is_string($key) || !is_string($value) || !(int) $order) {
             throw new \Exception("Error Processing Request", 1);
         }
 
@@ -29,7 +29,7 @@ trait Metadata
         $value = $record->get('value');
         $order = $record->get('order');
         
-        if (!is_string($item_name) || !is_int($item_id) || !is_string($key) || !is_string($value) || !is_int($order)) {
+        if (!is_string($item_name) || !(int) $item_id || !is_string($key) || !is_string($value) || !(int) $order) {
             throw new \Exception("Error Processing Request", 1);
         }
 
@@ -44,7 +44,7 @@ trait Metadata
         $item_id = $record->get('item_id');
         $key = $record->get('key');
 
-        if (!is_string($item_name) || !is_int($item_id) || !is_string($key)) {
+        if (!is_string($item_name) || !(int) $item_id || !is_string($key)) {
             throw new \Exception("Error Processing Request", 1);
         }
 
@@ -55,7 +55,7 @@ trait Metadata
 
     public function getMeta($item_name, $item_id, $key)
     {
-        if (!is_string($item_name) || !is_int($item_id) || !is_string($key)) {
+        if (!is_string($item_name) || !(int) $item_id || !is_string($key)) {
             throw new \Exception("Error Processing Request", 1);
         }
 
@@ -66,7 +66,7 @@ trait Metadata
 
     public function getAllMeta($item_name, $item_id)
     {
-        if (!is_string($item_name) || !is_int($item_id)) {
+        if (!is_string($item_name) || !(int) $item_id) {
             throw new \Exception("Error Processing Request", 1);
         }
 

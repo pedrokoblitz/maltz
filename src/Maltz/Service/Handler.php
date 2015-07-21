@@ -54,7 +54,9 @@ class Handler
     {
         $this->app->view->enqueueScript('jquery', 'jquery.min.js');
         $this->app->view->enqueueScript('bootstrap', 'bootstrap.min.js');
-        $this->app->view->enqueueStyle('bootstrap', 'bootstrap.min.css');
+        $this->app->view->enqueueScript('init', 'init.js');
+        $this->app->view->enqueueStyle('sheet', 'style.css');
+        $this->app->view->enqueueStyle('sheet', 'sheet.css');
     }
 
     public function render()
@@ -81,12 +83,13 @@ class Handler
 
     public function handlePostRequest()
     {
-        $body = $this->app->request->getBody();
-        $record = new Record(json_decode($body, true));
+        $body = $this->app->request->post();
+        $record = new Record($body);
 
-        if (!$record->has('nonce') || !$this->app->nonce->verify($record->get('nonce'))) {
-            $this->errorForbidden();
-        }
+        //if (!$record->has('nonce') || !$this->app->nonce->verify($record->get('nonce'))) {
+        //    $this->errorForbidden();
+        //}
+        $record->remove('nonce');
         return $record;
     }
 
@@ -134,10 +137,22 @@ class Handler
         $this->error(403, 'You do not have permission to access this content.');
     }
 
+    public function handleError()
+    {
+        $this->app->response->headers->set('Content-Type', 'text/html');                
+    }
+
+    public function handleApiError()
+    {
+        $this->app->response->headers->set('Content-Type', 'application/json');                
+    }
+
     public function error($status, $message)
     {
+        $this->app->response->headers->set('Content-Type', 'text/html');
         $result = array('success' => false, 'message' => $message);
         $this->app->response->setStatus($status);
+        $this->setDefaultViewResources();
         $this->app->view->setLayout('frontend');
         $this->app->render('error', $result);
         $this->app->stop();

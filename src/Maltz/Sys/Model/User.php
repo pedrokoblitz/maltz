@@ -86,21 +86,21 @@ class User extends Model
         
         $sql = "SELECT id, username, name, email, cpf, cnpj, cellphone, phone, zipcode, address, address2, district, city, province, password, activity, created
             FROM users ORDER BY $key $order";
-        $resultado = $this->db->run($sql);
-        return $resultado;
+        $result = $this->db->run($sql);
+        return $result;
     }
 
     public function find($page = 1, $per_page = 12, $key = 'username', $order = 'asc')
     {
-        if (!is_int($page) || !is_int($per_page) || !is_string($key) || !is_string($order)) {
+        if (!(int) $page || !(int) $per_page || !is_string($key) || !is_string($order)) {
             throw new \Exception("Error Processing Request", 1);
         }
         
         $pagination = Pagination::paginate($page, $per_page);
         $sql = "SELECT id, username, name, email, cpf, cnpj, cellphone, phone, zipcode, address, address2, district, city, province, password, activity, created
             FROM users ORDER BY $key $order LIMIT $pagination->offset,$pagination->limit";
-        $resultado = $this->db->run($sql);
-        return $resultado;
+        $result = $this->db->run($sql);
+        return $result;
     }
 
     public function findByUsernameOrEmail($user)
@@ -111,21 +111,21 @@ class User extends Model
         
         $sql = "SELECT id, username, name, email, cpf, cnpj, cellphone, phone, zipcode, address, address2, district, city, province, password, activity, created
             FROM users WHERE username=:user OR email=:user";
-        $resultado = $this->db->run($sql, array('user' => $user));
-        return $resultado;
+        $result = $this->db->run($sql, array('user' => $user));
+        return $result;
     }
 
     public function show($id)
     {
-        if (!is_int($id)) {
+        if (!(int) $id) {
             throw new \Exception("Error Processing Request", 1);
         }
         
         $sql = "SELECT id, username, name, email, cpf, cnpj, cellphone, phone, zipcode, address, address2, district, city, province, password, activity, created
             FROM users 
             WHERE id=:id";
-        $resultado = $this->db->run($sql);
-        return $resultado;
+        $result = $this->db->run($sql);
+        return $result;
     }
 
     public function insert(Record $post)
@@ -135,8 +135,8 @@ class User extends Model
         $bind = $record->toArray();
         $sql = "INSERT INTO users $fields, created, modified
             VALUES $values, NOW(), NOW()";
-        $resultado = $this->db->run($sql, $bind);
-        return $resultado;
+        $result = $this->db->run($sql, $bind);
+        return $result;
     }
 
     public function update(Record $post, $id)
@@ -145,8 +145,8 @@ class User extends Model
         $bind = $record->toArray();
         $sql = "UPDATE users 
             SET $updateValues, modified=NOW()";
-        $resultado = $this->db->run($sql, $bind);
-        return $resultado;
+        $result = $this->db->run($sql, $bind);
+        return $result;
     }
 
     /*
@@ -160,8 +160,8 @@ class User extends Model
             JOIN users_roles t2
             ON t1.id=t2.role_id
         WHERE t2.user_id=:id";
-        $resultado = $this->db->run($sql, array('id' => $user_id));
-        return $resultado;
+        $result = $this->db->run($sql, array('id' => $user_id));
+        return $result;
     }
 
     protected function parseUser($user)
@@ -191,15 +191,15 @@ class User extends Model
     public function addRole($user, $role)
     {
         $sql = "INSERT INTO users_roles (user_id, role_id) VALUES (:user_id,role_id=:role_id)";
-        $resultado = $this->db->run($sql, array('user_id' => $this->parseUser($user), 'role_id' => $this->parseRole($role)));
-        return $resultado;
+        $result = $this->db->run($sql, array('user_id' => $this->parseUser($user), 'role_id' => $this->parseRole($role)));
+        return $result;
     }
 
     public function removeRole($user, $role)
     {
         $sql = "DELETE FROM users_roles WHERE user_id=:user_id AND role_id=:role_id";
-        $resultado = $this->db->run($sql, array('user_id' => $this->parseUser($user), 'role_id' => $this->parseRole($role)));
-        return $resultado;
+        $result = $this->db->run($sql, array('user_id' => $this->parseUser($user), 'role_id' => $this->parseRole($role)));
+        return $result;
     }
 
     /*
@@ -210,13 +210,13 @@ class User extends Model
     {
         $res = $this->insert($record);
         $id = $res->get('last.insert.id');
-        $resultado = Token::query($this->db, 'generate', $id, 'activation');
-        return $resultado;
+        $result = Token::query($this->db, 'generate', $id, 'activation');
+        return $result;
     }
 
     public function remember($user_id)
     {
-        if (!is_int($user_id)) {
+        if (!(int) $user_id) {
             throw new \Exception("Error Processing Request", 1);
         }
         
@@ -226,7 +226,7 @@ class User extends Model
 
     public function forgot($user_id)
     {
-        if (!is_int($user_id)) {
+        if (!(int) $user_id) {
             throw new \Exception("Error Processing Request", 1);
         }
         

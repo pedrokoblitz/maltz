@@ -3,6 +3,7 @@
 namespace Maltz\Api\Ctrl;
 
 use Maltz\Mvc\Record;
+use Maltz\Mvc\Result;
 use Maltz\Sys\Model\Type;
 use Maltz\Sys\Model\Config;
 use Maltz\Sys\Model\User;
@@ -45,7 +46,7 @@ class Api
                 $entity = $app->handler->setEntity($model);
                 $record = $app->handler->handlePostRequest();
                 $result = $entity->save($record);
-                $id = $record->has('id') ? $record->get('id') : $result->get('last.insert.id');
+                //$id = $record->has('id') ? $record->get('id') : $result->getLastInsertId();
                 //Log::query('log', $app->sessionDataStore->getUserId(), $model, $id, 'save', '', '', $app->nonce->get());
                 $app->handler->handleApiResponse($result);
 
@@ -59,7 +60,7 @@ class Api
                 $record = $app->handler->handlePostRequest();
                 $id = $record->get('id');
                 $result = $entity->delete($id);
-                Log::query('log', $app->sessionDataStore->getUserId(), $model, $record->get('id'), 'delete', '', '', $app->nonce->get());
+                //Log::query('log', $app->sessionDataStore->getUserId(), $model, $record->get('id'), 'delete', '', '', $app->nonce->get());
                 $app->handler->handleApiResponse($result);
 
             }
@@ -86,9 +87,9 @@ class Api
          * ATTACHMENTS
          */
         $app->get(
-            '/api/:group_name/:group_id/:item_name/show', function ($group_name, $group_id, $item_name) use ($app) {
+            '/api/attachment/:group_name/:group_id/show(/:item_name)', function ($group_name, $group_id, $item_name = null) use ($app) {
 
-                $entity = $app->handler->setEntity($model);
+                $entity = $app->handler->setEntity($group_name);
                 $result = $entity->getAllAttachments($group_id, $item_name);
                 //Log::query('log', $app->sessionDataStore->getUserId(), '', '', '', '', '', $app->nonce->get());
                 $app->handler->handleApiResponse($result);
@@ -100,8 +101,8 @@ class Api
             '/api/attachment/add', function () use ($app) {
 
                 $record = $app->handler->handlePostRequest();
+                $entity = $app->handler->setEntity($record->get('group_name'));
                 $result = $entity->addAttachment($record);
-                $entity = $app->handler->setEntity($model);
                 //Log::query('log', $app->sessionDataStore->getUserId(), '', '', '', '', '', $app->nonce->get());
                 $app->handler->handleApiResponse($result);
 
@@ -111,7 +112,7 @@ class Api
         $app->post(
             '/api/attachment/remove', function () use ($app) {
 
-                $entity = $app->handler->setEntity($model);
+                $entity = $app->handler->setEntity($record->get('group_name'));
                 $record = $app->handler->handlePostRequest();
                 $result = $entity->removeAttachment($record);
                 //Log::query('log', $app->sessionDataStore->getUserId(), '', '', '', '', '', $app->nonce->get());
@@ -126,7 +127,7 @@ class Api
         $app->post(
             '/api/metadata/add', function () use ($app) {
 
-                $entity = $app->handler->setEntity($model);
+                $entity = $app->handler->setEntity($record->get('item_name'));
                 $record = $app->handler->handlePostRequest();
                 $result = $entity->addMeta($record);
                 //Log::query('log', $app->sessionDataStore->getUserId(), '', '', '', '', '', $app->nonce->get());
@@ -138,7 +139,7 @@ class Api
         $app->post(
             '/api/metadata/remove', function () use ($app) {
 
-                $entity = $app->handler->setEntity($model);
+                $entity = $app->handler->setEntity($record->get('item_name'));
                 $record = $app->handler->handlePostRequest();
                 $result = $entity->removeMeta($record);
                 //Log::query('log', $app->sessionDataStore->getUserId(), '', '', '', '', '', $app->nonce->get());
@@ -408,7 +409,7 @@ class Api
         
         $app->get(
             '/upload', function () use ($app) {
-                $app->render('upload.tpl.php');
+                $app->render('upload');
             }
         );
 

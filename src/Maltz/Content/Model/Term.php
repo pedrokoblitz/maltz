@@ -2,6 +2,7 @@
 
 namespace Maltz\Content\Model;
 
+use Maltz\Mvc\DB;
 use Maltz\Mvc\Model;
 use Maltz\Mvc\Record;
 use Maltz\Mvc\Activity;
@@ -36,26 +37,43 @@ class Term extends Model
 
     public function insert(Record $record)
     {
-        $sql = "INSERT INTO terms (type_id, name, created, modified)
-            VALUES (:type_id, :name, NOW(), NOW())";
-        $resultado = $this->db->run($sql, array('type_id' => $record->get('type_id'), 'name' => $record->get('name')));
+        $sql = "INSERT INTO terms (type_id, parent_id)
+            VALUES (:type_id, :parent_id)";
+        $result = $this->db->run($sql, array('type_id' => $record->get('type_id'), 'parent_id' => $record->get('parent_id')));
         $record->remove('type_id');
-        $record->remove('name');
-
-        $sql = "INSERT INTO translations (user_id, language, item_name, item_id, slug, title)
-            VALUES (:user_id, :language, :item_name, LAST_INSERT_ID(), :slug, :title)";
-        $resultado = $this->db->run($sql, $record->toArray());
-        return $resultado;
+        $record->remove('parent_id');
+        $record->set('item_name', 'term');
+        $record->set('item_id', $result->getLastInsertId());
+        $slug = $this->generateSlug($record->get('title'));
+        $record->set('slug', $slug);
+        $fields = $record->getFieldsList();
+        $values = $record->getInsertValueString();
+        $sql = "INSERT INTO translations $fields 
+            VALUES $values";
+        $result = $this->db->run($sql, $record->toArray());
+        return $result;
     }
 
     public function update(Record $record)
     {
-        $sql = "UPDATE terms SET modified=NOW() WHERE id=:id";
-        $resultado = $this->db->run($sql, array('id' => $id));
-        $sql = "UPDATE translations SET user_id=:user_id, lang=:lang, slug=:slug, title=:title
-            WHERE item_id=:id AND item_name=:item_name";
-        $resultado = $this->db->run($sql, $record->toArray());
-        return $resultado;
+        $id = $record->get('id');
+        $record->remove('id');
+        $language = $record->get('language');
+        $record->remove('language');
+        $sql = "UPDATE terms SET parent_id=:parent_id WHERE id=:id";
+        $result = $this->db->run($sql, array('id' => $id, 'parent_id' => $record->get('parent_id')));
+        $record->remove('type_id');
+        $record->remove('parent_id');
+        $values = $record->getUpdateValueString();
+        $sql = "UPDATE translations SET $values
+            WHERE item_id=:id 
+                AND language=:language
+                AND item_name=:item_name";
+        $record->set('language', $language);
+        $record->set('item_name', 'term');
+        $record->set('id', $id);
+        $result = $this->db->run($sql, $record->toArray());
+        return $result;
     }
 
     public function display($key = 'type', $order = 'asc', $lang = 'pt-br')
@@ -74,13 +92,13 @@ class Term extends Model
             WHERE t1.activity > 0
             AND t2.language=:lang
             ORDER BY $key $order";
-        $resultado = $this->db->run($sql, array('item_name' => $item_name, 'lang' => $lang));
-        return $resultado;
+        $result = $this->db->run($sql, array('item_name' => $item_name, 'lang' => $lang));
+        return $result;
     }
 
     public function find($page = 1, $per_page = 12, $key = 'type', $order = 'desc', $lang = 'pt-br')
     {
-        if (!is_int($page) || !is_int($per_page) || !is_string($key) || !is_string($order) || !is_string($lang)) {
+        if (!(int) $page || !(int) $per_page || !is_string($key) || !is_string($order) || !is_string($lang)) {
             throw new \Exception("Error Processing Request", 1);
         }
         
@@ -93,16 +111,16 @@ class Term extends Model
             JOIN types t3 
                 ON t1.type_id=t3.id 
             WHERE t1.activity > 0
-            AND t2.language=:lang
+            AND t2.language=:language
             ORDER BY $key $order
             LIMIT $pagination->offset,$pagination->limit";
-        $resultado = $this->db->run($sql, array('item_name' => $item_name, 'lang' => $lang));
-        return $resultado;
+        $result = $this->db->run($sql, array('item_name' => $item_name, 'language' => $lang));
+        return $result;
     }
 
     public function findByType($type, $page = 1, $per_page = 12, $key = 'name', $order = 'asc', $lang = 'pt-br')
     {
-        if (!is_string($type) || !is_int($page) || !is_int($per_page) || !is_string($key) || !is_string($order) || !is_string($lang)) {
+        if (!is_string($type) || !(int) $page || !(int) $per_page || !is_string($key) || !is_string($order) || !is_string($lang)) {
             throw new \Exception("Error Processing Request", 1);
         }
         
@@ -119,13 +137,13 @@ class Term extends Model
             AND t2.language=:lang
             ORDER BY $key $order
             LIMIT $pagination->offset,$pagination->limit";
-        $resultado = $this->db->run($sql, array('type' => $type, 'lang' => $lang));
-        return $resultado;
+        $result = $this->db->run($sql, array('type' => $type, 'lang' => $lang));
+        return $result;
     }
 
     public function show($id, $lang = 'pt-br')
     {
-        if (!is_int($id) || !is_string($lang)) {
+        if (!(int) $id || !is_string($lang)) {
             throw new \Exception("Error Processing Request", 1);
         }
         
@@ -139,7 +157,7 @@ class Term extends Model
             WHERE t1.id=:id
         AND t2.language=:lang
         AND t1.activity > 0";
-        $resultado = $this->db->run($sql, array('id' => $id, 'item_name' => 'term', 'lang' => $lang));
-        return $resultado;
+        $result = $this->db->run($sql, array('id' => $id, 'item_name' => 'term', 'lang' => $lang));
+        return $result;
     }
 }

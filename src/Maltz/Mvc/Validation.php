@@ -102,12 +102,12 @@ class Validation
 
     public function string($data)
     {
-        return $data;
+        return filter_var($data, FILTER_SANITIZE_STRING);
     }
 
     public function textarea($data)
     {
-        return $data;
+        return htmlentities($data);
     }
 
     /**

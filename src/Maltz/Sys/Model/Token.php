@@ -16,7 +16,7 @@ class Token extends Model
 
     public function generate($user_id, $type)
     {
-        if (!is_int($user_id) || !is_string($type)) {
+        if (!(int) $user_id || !is_string($type)) {
             throw new \Exception("Error Processing Request", 1);
         }
         

@@ -57,15 +57,15 @@ class Log extends Model
 
     public function find($page = 1, $per_page = 12, $key = 'created', $order = 'desc')
     {
-        if (!is_int($page) || !is_int($per_page) || !is_string($key) || !is_string($order)) {
+        if (!(int) $page || !(int) $per_page || !is_string($key) || !is_string($order)) {
             throw new \Exception("Error Processing Request", 1);
         }
         
         $pagination = Pagination::paginate($page, $per_page);
         $sql = "SELECT user_id, action, item_name, item_id, created
             FROM log ORDER BY $key $order LIMIT $pagination->offset,$pagination->limit";
-        $resultado = $this->db->run($sql);
-        return $resultado;
+        $result = $this->db->run($sql);
+        return $result;
     }
 
     public function insert(Record $record)
@@ -73,13 +73,13 @@ class Log extends Model
         $sql = "INSERT INTO log (user_id, action, item_name, item_id, created)
             VALUES (:user_id, :action, :item_name, :item_id, NOW())";
         $values = $record->toArray();
-        $resultado = $this->db->run($sql, $values);
-        return $resultado;
+        $result = $this->db->run($sql, $values);
+        return $result;
     }
 
     public function log($user_id, $group_name, $group_id, $action, $item_name = null, $item_id = null, $nonce = null)
     {
-        if (!is_int($user_id) || !is_string($group_name) || !is_int($group_id) || !is_string($action) || !is_string($nonce)) {
+        if (!(int) $user_id || !is_string($group_name) || !(int) $group_id || !is_string($action) || !is_string($nonce)) {
             throw new \Exception("Error Processing Request", 1);
         }
         

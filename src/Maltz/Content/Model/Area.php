@@ -62,8 +62,8 @@ class Area extends Model
         $fields = $record->getFieldsList();
         $values = $record->getInsertValueString();
         $sql = "INSERT INTO areas $fields VALUES $values";
-        $resultado = $this->db->run($sql, $record->toArray());
-        return $resultado;
+        $result = $this->db->run($sql, $record->toArray());
+        return $result;
     }
 
 
@@ -71,8 +71,8 @@ class Area extends Model
     {
         $values = $record->getUpdateValueString();
         $sql = "UPDATE areas SET $values WHERE id=:id";
-        $resultado = $this->db->run($sql, $record->toArray());
-        return $resultado;
+        $result = $this->db->run($sql, $record->toArray());
+        return $result;
     }
 
     public function display($key = 'name', $order = 'asc')
@@ -85,14 +85,14 @@ class Area extends Model
         FROM areas
             ORDER BY $key $order
             WHERE activity > 0";
-        $resultado = $this->db->run($sql);
-        return $resultado;
+        $result = $this->db->run($sql);
+        return $result;
     }
 
 
     public function find($page = 1, $per_page = 12, $key = 'name', $order = 'asc')
     {
-        if (!is_int($page) || is_int($per_page) || !is_string($key) || !is_string($order)) {
+        if (!(int) $page || is_int($per_page) || !is_string($key) || !is_string($order)) {
             throw new \Exception("Error Processing Request", 1);
         }
 
@@ -102,21 +102,21 @@ class Area extends Model
             ORDER BY $key $order
             LIMIT $pagination->offset,$pagination->limit
         WHERE activity > 0";
-        $resultado = $this->db->run($sql, array('item_name' => 'area'));
-        return $resultado;
+        $result = $this->db->run($sql, array('item_name' => 'area'));
+        return $result;
     }
 
     public function show($id)
     {
-        if (!is_int($id)) {
+        if (!(int) $id) {
             throw new \Exception("Error Processing Request", 1);
         }
 
         $sql = "SELECT id, name, activity FROM areas
             WHERE id=:id
                 AND activity > 0";
-        $resultado = $this->db->run($sql, array('id' => $id));
-        return $resultado;
+        $result = $this->db->run($sql, array('id' => $id));
+        return $result;
     }
 
     /*
@@ -125,29 +125,29 @@ class Area extends Model
 
     public function addBlock($area_id, $block_id)
     {
-        if (!is_int($area_id) || !is_int($block_id)) {
+        if (!(int) $area_id || !(int) $block_id) {
             throw new \Exception("Error Processing Request", 1);
         }
 
         $sql = "UPDATE blocks SET area_id=:area_id WHERE id=:block_id";
-        $resultado = $this->db->run($sql, array('area_id' => $area_id, 'block_id' => $block_id));
-        return $resultado;
+        $result = $this->db->run($sql, array('area_id' => $area_id, 'block_id' => $block_id));
+        return $result;
     }
 
     public function removeBlock($block_id)
     {
-        if (!is_int($block_id)) {
+        if (!(int) $block_id) {
             throw new \Exception("Error Processing Request", 1);
         }
 
         $sql = "UPDATE blocks SET area_id=:area_id WHERE id=:block_id";
-        $resultado = $this->db->run($sql, array('area_id' => 0, 'block_id' => $block_id));
-        return $resultado;
+        $result = $this->db->run($sql, array('area_id' => 0, 'block_id' => $block_id));
+        return $result;
     }
 
     public function getBlocks($area_id)
     {
-        if (!is_int($area_id)) {
+        if (!(int) $area_id) {
             throw new \Exception("Error Processing Request", 1);
         }
 
@@ -158,7 +158,7 @@ class Area extends Model
                 AND t2.item_id=t1.id
             WHERE t1.area_id=:area_id
                 AND t1.activity > 0";
-        $resultado = $this->db->run($sql, array('item_name' => 'block', 'area_id' => $area_id));
-        return $resultado;
+        $result = $this->db->run($sql, array('item_name' => 'block', 'area_id' => $area_id));
+        return $result;
     }
 }

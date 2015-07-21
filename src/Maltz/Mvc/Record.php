@@ -30,23 +30,21 @@ class Record extends TypeArray
 
     protected function filterByKeys($allowed)
     {
-        return array_intersect_key($my_array, array_flip($allowed));
+        $this->items = array_intersect_key($this->items, array_flip($allowed));
     }
 
-    protected function validate($rules)
+    public function validate($rules)
     {
-        /*
-        $items = array_filter($this->items);
+        $this->filterByKeys(array_keys($rules));
         foreach ($rules as $key => $rule) {
             if ($this->has($key) && !empty($this->get($key))) {
-                $valid = $this->validation->$rule($items[$key]);
+                $valid = $this->validation->$rule($this->items[$key]);
                 if (!$valid) {
                     $this->valid = false;
                     return;
                 }
             }
         }
-        */
         $this->valid = true;
     }
 
@@ -85,18 +83,18 @@ class Record extends TypeArray
 
     public function getFieldsList()
     {
-        return '(' . implode(',', array_filter($this->items)) . ')';
+        return '(' . implode(',', $this->keys()) . ')';
     }
 
     public function getInsertValueString()
     {
-        return '(:' . implode(',:', array_filter($this->items)) . ')';
+        return '(:' . implode(',:', $this->keys()) . ')';
     }
 
     public function getUpdateValueString()
     {
         $str = '';
-        foreach (array_filter($this->items) as $key => $value) {
+        foreach ($this->keys() as $key) {
             $str .= $key . '=:' . $key . ',';
         }
         return rtrim($str, ',');

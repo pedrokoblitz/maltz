@@ -6,19 +6,19 @@ trait Attachment
 {
     public function addAttachment(Record $record)
     {
-        $id = $record->get('id');
+        $id = $record->get('group_id');
         $item_name = $record->get('item_name');
         $item_id = $record->get('item_id');
         $order = $record->get('order');
 
-        if (!is_int($id) || !is_int($item_id) || !is_string($item_name) || !is_int($order)) {
+        if (!(int) $id || !(int) $item_id || !is_string($item_name) || !(int) $order) {
             throw new \Exception("Error Processing Request", 1);
         }
         
-        $bind = array('group_name' => $this->slug, 'group_id' => $id, 'item_name' => $item_name, 'item_id' => $item_id);
-        $sql = "INSERT INTO attachments (group_name, group_id, item_name, item_id, order) VALUES (:group_name, :group_id, :item_name, :item_id, :order)";
-        $resultado = $this->db->run($sql, $bind);
-        return $resultado;
+        $bind = array('group_name' => $this->slug, 'group_id' => $id, 'item_name' => $item_name, 'item_id' => $item_id, 'order' => $order);
+        $sql = "INSERT INTO attachments (group_name, group_id, item_name, item_id, `order`) VALUES (:group_name, :group_id, :item_name, :item_id, :order)";
+        $result = $this->db->run($sql, $bind);
+        return $result;
     }
 
     public function removeAttachment(Record $record)
@@ -27,14 +27,14 @@ trait Attachment
         $item_name = $record->get('');
         $item_id = $record->get('');
 
-        if (!is_int($id) || !is_int($item_id) || !is_string($item_name)) {
+        if (!(int) $id || !(int) $item_id || !is_string($item_name)) {
             throw new \Exception("Error Processing Request", 1);
         }
         
         $bind = array('group_name' => $this->slug, 'group_id' => $id, 'item_name' => $item_name, 'item_id' => $item_id);
         $sql = "DELETE FROM attachments WHERE group_name=:group_name, group_id=:group_id, item_name=:item_name, item_id=:item_id";
-        $resultado = $this->db->run($sql, $bind);
-        return $resultado;
+        $result = $this->db->run($sql, $bind);
+        return $result;
     }
 
     public function removeAllAttachments(Record $record)
@@ -42,19 +42,19 @@ trait Attachment
         $id = $record->get('id');
         $item_name = $record->get('item_name');
 
-        if (!is_int($id) || !is_string($item_name)) {
+        if (!(int) $id || !is_string($item_name)) {
             throw new \Exception("Error Processing Request", 1);
         }
         
         $bind = array('group_name' => $this->slug, 'group_id' => $id, 'item_name' => $item_name);
         $sql = "DELETE FROM attachments WHERE group_name=:group_name, group_id=:group_id, item_name=:item_name";
-        $resultado = $this->db->run($sql, $bind);
-        return $resultado;
+        $result = $this->db->run($sql, $bind);
+        return $result;
     }
 
     public function getAllAttachments($id, $item_name)
     {
-        if (!is_int($id) || !is_string($item_name)) {
+        if (!(int) $id || !is_string($item_name)) {
             throw new \Exception("Error Processing Request", 1);
         }
 
@@ -90,7 +90,7 @@ trait Attachment
         WHERE t1.group_name=:group_name
             AND t1.group_id=:group_id
         ORDER BY t1.order";
-        $resultado = $this->db->run($sql, $bind);
-        return $resultado;
+        $result = $this->db->run($sql, $bind);
+        return $result;
     }
 }

@@ -6,9 +6,10 @@ use Maltz\Mvc\DB;
 use Maltz\Mvc\Model;
 use Maltz\Mvc\Record;
 use Maltz\Mvc\Activity;
-use Maltz\Mvc\Tree;
+use Maltz\Mvc\Attachment;
+use Maltz\Mvc\Display;
 use Maltz\Mvc\Translatable;
-use Maltz\Mvc\ItemRelationships;
+use Maltz\Mvc\Tree;
 use Maltz\Service\Pagination;
 
 /**
@@ -31,9 +32,11 @@ use Maltz\Service\Pagination;
 class Content extends Model
 {
     use Activity;
+    use Attachment;
+    use Display;
     use Translatable;
-    use ItemRelationships;
     use Tree;
+
     /*
     * construtor
     *
@@ -69,34 +72,57 @@ class Content extends Model
 
     public function insert(Record $record)
     {
-        $sql = "INSERT INTO contents (type_id, date_pub, created, modified) 
-            VALUES (:type_id, :date_pub, NOW(), NOW())";
-        $resultado = $this->db->run($sql, array('type_id' => $record->get('type_id'), 'date_pub' => $record->get('date_pub')));
+        $sql = "INSERT INTO contents (type_id, parent_id, date_pub, created, modified) 
+            VALUES (:type_id, :parent_id, :date_pub, NOW(), NOW())";
+        $result = $this->db->run($sql, 
+            array(
+                'type_id' => $record->get('type_id'), 
+                'parent_id' => $record->get('parent_id'), 
+                'date_pub' => $record->get('date_pub')
+                )
+            );
         $record->remove('type_id');
+        $record->remove('parent_id');
         $record->remove('date_pub');
-
-        $sql = "INSERT INTO translations (user_id, language, item_name, item_id, slug, name, title, subtitle, excerpt, description, body) 
-            VALUES (:user_id, :language, :item_name, LAST_INSERT_ID(), :slug, :name, :title, :subtitle, :excerpt, :description, :body)";
-        $resultado = $this->db->run($sql, $record->toArray());
-        return $resultado;
+        $record->set('item_name', 'content');
+        $record->set('item_id', $result->getLastInsertId());
+        $slug = $this->generateSlug($record->get('title'));
+        $record->set('slug', $slug);
+        $fields = $record->getFieldsList();
+        $values = $record->getInsertValueString();
+        $sql = "INSERT INTO translations $fields 
+            VALUES $values";
+        $result = $this->db->run($sql, $record->toArray());
+        return $result;
     }
 
 
     public function update(Record $record)
     {
-        $sql = "UPDATE contents SET modified=NOW() WHERE id=:id";
-        $resultado = $this->db->run($sql, array('id' => $record->get('id')));
+        $id = $record->get('id');
+        $record->remove('id');
+        $language = $record->get('language');
+        $record->remove('language');
+        $sql = "UPDATE contents SET date_pub=:date_pub, parent_id=:parent_id, modified=NOW() WHERE id=:id";
+        $result = $this->db->run($sql, array('id' => $id, 'parent_id' => $record->get('parent_id')));
+        $record->remove('date_pub');
+        $record->remove('parent_id');
+        $values = $record->getUpdateValueString();
         $sql = "UPDATE translations 
-        SET user_id=:user_id, lang=:lang, slug=:slug, name=:name, title=:title, subtitle=:subtitle, excerpt=:excerpt, description=:description, body=:body
+        SET $values
         WHERE item_id=:id 
+          AND language=:language
           AND item_name=:item_name";
-        $resultado = $this->db->run($sql, $record->toArray());
-        return $resultado;
+        $record->set('language', $language);
+        $record->set('id', $id);
+        $record->set('item_name', 'content');
+        $result = $this->db->run($sql, $record->toArray());
+        return $result;
     }
 
     public function show($id, $lang = 'pt-br')
     {
-        if (!is_int($id) || !is_string($lang)) {
+        if (!(int) $id || !is_string($lang)) {
             throw new \Exception("Error Processing Request", 1);
         }
 
@@ -110,16 +136,16 @@ class Content extends Model
             WHERE t1.id=:id
             AND t2.language=:lang
             AND t1.activity > 0";
-        $resultado = $this->db->run($sql, array('id' => $id, 'item_name' => 'content', 'lang' => $lang));
-        return $resultado;
+        $result = $this->db->run($sql, array('id' => $id, 'item_name' => 'content', 'lang' => $lang));
+        return $result;
     }
 
     public function find($page = 1, $per_page = 12, $key = 'modified', $order = 'asc', $lang = 'pt-br')
     {
-        if (!is_int($page) || !is_int($per_page) || !is_string($key) || !is_string($order) || !is_string($lang)) {
+        if (!(int) $page || !(int) $per_page || !is_string($key) || !is_string($order) || !is_string($lang)) {
             throw new \Exception("Error Processing Request", 1);
         }
-        
+
         $pagination = Pagination::paginate($page, $per_page);
         $sql = "SELECT t1.id AS id, t1.activity AS activity, t1.date_pub AS date_pub, t1.created AS created, t1.modified AS modified, t2.slug AS slug, t2.title AS title, t2.subtitle AS subtitle, t2.excerpt AS excerpt, t2.description AS description, t2.body AS body, t3.name AS type
             FROM contents t1
@@ -132,16 +158,16 @@ class Content extends Model
             AND t2.language=:lang
             ORDER BY $key $order
             LIMIT $pagination->offset,$pagination->limit";
-        $resultado = $this->db->run($sql, array('item_name' => 'content', 'lang' => $lang));
-        return $resultado;
+        $result = $this->db->run($sql, array('item_name' => 'content', 'lang' => $lang));
+        return $result;
     }
 
     public function findByType($type, $page = 1, $per_page = 12, $key = 'modified', $order = 'asc', $lang = 'pt-br')
     {
-        if (!is_string($type) || !is_int($page) || !is_int($per_page) || !is_string($key) || !is_string($order) || !is_string($lang)) {
+        if (!is_string($type) || !(int) $page || !(int) $per_page || !is_string($key) || !is_string($order) || !is_string($lang)) {
             throw new \Exception("Error Processing Request", 1);
         }
-        
+
         $pagination = Pagination::paginate($page, $per_page);
         $sql = "SELECT t1.id, t1.activity, t1.date_pub, t1.created, t1.modified, t2.slug, t2.title, t2.subtitle, t2.excerpt, t2.description, t2.body, t3.name
             FROM contents t1
@@ -155,13 +181,13 @@ class Content extends Model
             AND t1.activity > 0
             ORDER BY $key $order
             LIMIT $pagination->offset,$pagination->limit";
-        $resultado = $this->db->run($sql, array('type' => $type, 'item_name' => 'content', 'lang' => $lang));
-        return $resultado;
+        $result = $this->db->run($sql, array('type' => $type, 'item_name' => 'content', 'lang' => $lang));
+        return $result;
     }
 
     public function setAsDraft($id)
     {
-        if (!is_int($id)) {
+        if (!(int) $id) {
             throw new \Exception("Error Processing Request", 1);
         }
         return $this->setActivity($id, 3);
@@ -169,7 +195,7 @@ class Content extends Model
 
     public function setAsPending($id)
     {
-        if (!is_int($id)) {
+        if (!(int) $id) {
             throw new \Exception("Error Processing Request", 1);
         }
         return $this->setActivity($id, 4);
@@ -177,7 +203,7 @@ class Content extends Model
 
     public function publish($id)
     {
-        if (!is_int($id)) {
+        if (!(int) $id) {
             throw new \Exception("Error Processing Request", 1);
         }
         return $this->setActivity($id, 5);

@@ -60,7 +60,7 @@ trait ValueFormat
 
     public function setFormat($format, $id)
     {
-        if (!is_string($format) || !is_int($id)) {
+        if (!is_string($format) || !(int) $id) {
             throw new \Exception("Error Processing Request", 1);
         }
         
@@ -70,7 +70,7 @@ trait ValueFormat
 
     public function getFormat($id)
     {
-        if (!is_int($id)) {
+        if (!(int) $id) {
             throw new \Exception("Error Processing Request", 1);
         }
         

@@ -31,7 +31,7 @@ class Doorman
 
     public function remember($user_id)
     {
-        if (!is_int($user_id)) {
+        if (!(int) $user_id) {
             throw new \Exception("Must be integer", 001);
         }
 

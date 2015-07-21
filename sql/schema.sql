@@ -27,7 +27,8 @@ CREATE TABLE `attachments` (
   `item_name` enum('content', 'collection', 'resource', 'term') COLLATE utf8_unicode_ci NOT NULL,
   `item_id` int(10) unsigned NOT NULL,
   `order` int(10) unsigned NOT NULL,
-  UNIQUE(`group_name`, `group_id`, `item_name`, `item_id`)
+  UNIQUE(`group_name`, `group_id`, `item_name`, `item_id`),
+  UNIQUE(`group_name`, `group_id`, `order`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `config`;
@@ -76,17 +77,25 @@ CREATE TABLE `users` (
   UNIQUE(`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+DROP TABLE IF EXISTS `ownership`;
+CREATE TABLE `ownership` (
+  `user_id` int(10) unsigned NOT NULL,
+  `item_name` enum('content', 'collection', 'resource', 'project') COLLATE utf8_unicode_ci NOT NULL,
+  `item_id` int(10) unsigned NOT NULL,
+  UNIQUE(`item_name`, `item_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 DROP TABLE IF EXISTS `collaborations`;
 CREATE TABLE `collaborations` (
   `user_id` int(10) unsigned NOT NULL,
-  `item_name` enum('content', 'collection') COLLATE utf8_unicode_ci NOT NULL,
+  `item_name` enum('content', 'collection', 'project') COLLATE utf8_unicode_ci NOT NULL,
   `item_id` int(10) unsigned NOT NULL,
-  UNIQUE(`username`)
+  UNIQUE(`user_id`, `item_name`, `item_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
-DROP TABLE IF EXISTS `contacts`;
-CREATE TABLE `contacts` (
+DROP TABLE IF EXISTS `user_contacts`;
+CREATE TABLE `user_contacts` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned NOT NULL,
   `type` enum('phone', 'cell', 'fax', 'email') COLLATE utf8_unicode_ci NOT NULL,
@@ -95,8 +104,8 @@ CREATE TABLE `contacts` (
   UNIQUE(`value`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-DROP TABLE IF EXISTS `identifications`;
-CREATE TABLE `identifications` (
+DROP TABLE IF EXISTS `user_identifications`;
+CREATE TABLE `user_identifications` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned NOT NULL,
   `type` enum('cpf', 'dnh', 'rg', 'cnpj', 'inscricao') COLLATE utf8_unicode_ci NOT NULL,
@@ -153,14 +162,14 @@ CREATE TABLE `commenting` (
   `user_id` int(10) unsigned DEFAULT NULL,
   `item_name` enum('content', 'project', 'place') COLLATE utf8_unicode_ci DEFAULT NULL,
   `item_id` int(10) unsigned DEFAULT NULL,
-  UNIQUE(`term_id`,`user_id`,`item_name`,`item_id`)
+  UNIQUE(`comment_id`,`user_id`,`item_name`,`item_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `folksonomy`;
 CREATE TABLE `folksonomy` (
   `term_id` int(10) unsigned DEFAULT NULL,
   `user_id` int(10) unsigned DEFAULT NULL,
-  `item_name` enum('content', 'collection', 'resource', 'place') COLLATE utf8_unicode_ci DEFAULT NULL,
+  `item_name` enum('content', 'collection', 'project', 'resource', 'place') COLLATE utf8_unicode_ci DEFAULT NULL,
   `item_id` int(10) unsigned DEFAULT NULL,
   UNIQUE(`term_id`,`user_id`,`item_name`,`item_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -190,7 +199,7 @@ CREATE TABLE `contents` (
   `parent_id` int(10) unsigned NOT NULL,
   `type_id` int(10) unsigned NOT NULL,
   `activity` tinyint(1) unsigned NOT NULL DEFAULT 1, -- 0 = trash, 1 = ...
-  `date_pub` datetime NOT NULL,
+  `date_pub` datetime DEFAULT NULL,
   `modified` datetime NOT NULL,
   `created` datetime NOT NULL,
   PRIMARY KEY (`id`)
@@ -345,10 +354,10 @@ CREATE TABLE `products` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `product_metadata`;
-CREATE TABLE `order_item_metadata` (
+CREATE TABLE `product_metadata` (
   `item_id` int(10) unsigned NOT NULL,
   `key` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
-  `value` varchar(120) COLLATE utf8_unicode_ci NOT NULL,
+  `value` varchar(120) COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `cart`;
@@ -382,7 +391,7 @@ DROP TABLE IF EXISTS `order_item_metadata`;
 CREATE TABLE `order_item_metadata` (
   `item_id` int(10) unsigned NOT NULL,
   `key` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
-  `value` varchar(120) COLLATE utf8_unicode_ci NOT NULL,
+  `value` varchar(120) COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `payment_methods`;

@@ -9738,6 +9738,7 @@ INSERT INTO `cities` VALUES (9714, 27, 'TO', 'Xambioa');
 
 CREATE TABLE `provinces` (
   `id` int(2) unsigned zerofill NOT NULL auto_increment,
+  `country_id` int(5) unsigned zerofill NOT NULL,
   `code` varchar(10) NOT NULL default '',
   `nome` varchar(20) NOT NULL default '',
   PRIMARY KEY  (`id`)

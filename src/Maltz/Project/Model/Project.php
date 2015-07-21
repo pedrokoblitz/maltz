@@ -20,31 +20,31 @@ class Project
     public function insert(Record $record)
     {
         $sql = "INSERT INTO projects (title, description, activity) VALUES (:title, :description, :activity)";
-        $resultado = $this->db->run($sql, $record->toArray());
-        return $resultado;
+        $result = $this->db->run($sql, $record->toArray());
+        return $result;
     }
 
     public function update(Record $record)
     {
         $sql = "UPDATE projects SET title=:title, description=:description, activity=:activity";
-        $resultado = $this->db->run($sql, $record->toArray());
-        return $resultado;
+        $result = $this->db->run($sql, $record->toArray());
+        return $result;
     }
 
     public function show($id)
     {
-        if (!is_int($id)) {
+        if (!(int) $id) {
             throw new \Exception("Error Processing Request", 1);
         }
 
         $sql = "SELECT title, description, activity FROM projects WHEERE id=:id";
-        $resultado = $this->db->run($sql, array('id' => $id));
-        return $resultado;
+        $result = $this->db->run($sql, array('id' => $id));
+        return $result;
     }
 
     public function find($pg = 1, $per_page = 12, $key = 'title', $order = 'asc')
     {
-        if (!is_int($pg) || !is_int($per_page) || !is_string($key) || !is_string($order)) {
+        if (!(int) $pg || !(int) $per_page || !is_string($key) || !is_string($order)) {
             throw new \Exception("Error Processing Request", 1);
         }
 
@@ -53,13 +53,13 @@ class Project
         ORDER BY $key $order
         LIMIT $pagination->offset, $pagination->limit
         WHERE activity > :activity";
-        $resultado = $this->db->run($sql, array('activity' => 0));
-        return $resultado;
+        $result = $this->db->run($sql, array('activity' => 0));
+        return $result;
     }
 
     public function getDevs($id)
     {
-        if (!is_int($id)) {
+        if (!(int) $id) {
             throw new \Exception("Error Processing Request", 1);
         }
 
@@ -68,13 +68,13 @@ class Project
         JOIN tickets t2
             ON t1.id=t2.dev_id
         WHERE t2.project_id=:project_id";
-        $resultado = $this->db->run($sql, array('project_id' => $id));
-        return $resultado;
+        $result = $this->db->run($sql, array('project_id' => $id));
+        return $result;
     }
 
     public function getUsers($id)
     {
-        if (!is_int($id)) {
+        if (!(int) $id) {
             throw new \Exception("Error Processing Request", 1);
         }
 
@@ -85,13 +85,13 @@ class Project
             AND t2.item_name=:item_name
         WHERE t2.group_id=:project_id
             AND t2.group_name=:group_name";
-        $resultado = $this->db->run($sql, array('group_name' => 'project', 'group_id' => $id, 'item_name' => 'user'));
-        return $resultado;
+        $result = $this->db->run($sql, array('group_name' => 'project', 'group_id' => $id, 'item_name' => 'user'));
+        return $result;
     }
 
     public function getTickets($id)
     {
-        if (!is_int($id)) {
+        if (!(int) $id) {
             throw new \Exception("Error Processing Request", 1);
         }
 
@@ -99,13 +99,13 @@ class Project
         JOIN users t2
             ON t1.dev_id=t2.id
         WHERE project_id=:project_id";
-        $resultado = $this->db->run($sql, array('project_id' => $project_id));
-        return $resultado;
+        $result = $this->db->run($sql, array('project_id' => $project_id));
+        return $result;
     }
 
     public function getInvoices($id)
     {
-        if (!is_int($id)) {
+        if (!(int) $id) {
             throw new \Exception("Error Processing Request", 1);
         }
 
@@ -114,7 +114,7 @@ class Project
 
     public function getBillableHours($id)
     {
-        if (!is_int($id)) {
+        if (!(int) $id) {
             throw new \Exception("Error Processing Request", 1);
         }
 
@@ -134,13 +134,13 @@ class Project
                 AND t4.key=:meta_key
               WHERE t2.project_id=:project_id -- (remove for total report)
                 AND t2.activity = :activity";
-        $resultado = $this->db->run($sql, array('activity' => 4, 'project_id' => $id, 'user_item' => 'user', 'meta_key' => 'hourly_rate'));
-        return $resultado;
+        $result = $this->db->run($sql, array('activity' => 4, 'project_id' => $id, 'user_item' => 'user', 'meta_key' => 'hourly_rate'));
+        return $result;
     }
 
     public function createReport($id)
     {
-        if (!is_int($id)) {
+        if (!(int) $id) {
             throw new \Exception("Error Processing Request", 1);
         }
 
@@ -149,7 +149,7 @@ class Project
 
     public function createInvoice($id)
     {
-        if (!is_int($id)) {
+        if (!(int) $id) {
             throw new \Exception("Error Processing Request", 1);
         }
 

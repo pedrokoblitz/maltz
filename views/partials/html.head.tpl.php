@@ -17,3 +17,4 @@
     <![endif]-->
     <link rel="apple-touch-icon" href="/public/assets/img/apple-touch-icon.png">
     <link rel="icon" href="/favicon.ico">
+    <?php echo $styles; ?>

@@ -45,56 +45,56 @@ trait Tree
 
     public function setParent($child_id, $parent_id = 0)
     {
-        if (!is_int($parent_id) || !is_int($child_id)) {
+        if (!(int) $parent_id || !(int) $child_id) {
             throw new \Exception("Error Processing Request", 1);
         }
 
         $sql = "UPDATE $this->table SET parent_id=:parent_id WHERE id=:child_id";
-        $resultado = $this->db->run($sql, array('parent_id' => $parent_id, 'child_id' => $child_id));
-        return $resultado;
+        $result = $this->db->run($sql, array('parent_id' => $parent_id, 'child_id' => $child_id));
+        return $result;
     }
 
     public function getParent($child_id)
     {
-        if (!is_int($child_id)) {
+        if (!(int) $child_id) {
             throw new \Exception("Error Processing Request", 1);
         }
 
         $sql = "SELECT * FROM $this->table WHERE id=(SELECT parent_id FROM $this->table WHERE id=:child_id)";
-        $resultado = $this->db->run($sql, array('child_id' => $child_id));
-        return $resultado;
+        $result = $this->db->run($sql, array('child_id' => $child_id));
+        return $result;
     }
 
     public function getChildren($parent_id)
     {
-        if (!is_int($parent_id)) {
+        if (!(int) $parent_id) {
             throw new \Exception("Error Processing Request", 1);
         }
 
         $sql = "SELECT * FROM $this->table WHERE id=:parent_id";
-        $resultado = $this->db->run($sql, array('parent_id' => $parent_id));
-        return $resultado;
+        $result = $this->db->run($sql, array('parent_id' => $parent_id));
+        return $result;
     }
 
     public function addChild($parent_id, $child_id)
     {
-        if (!is_int($parent_id) || !is_int($child_id)) {
+        if (!(int) $parent_id || !(int) $child_id) {
             throw new \Exception("Error Processing Request", 1);
         }
 
         $sql = "UPDATE $this->table SET parent_id=:parent_id WHERE id=:child_id";
-        $resultado = $this->db->run($sql, array('parent_id' => $parent_id, 'child_id' => $child_id));
-        return $resultado;
+        $result = $this->db->run($sql, array('parent_id' => $parent_id, 'child_id' => $child_id));
+        return $result;
     }
 
     public function removeChild($child_id)
     {
-        if (!is_int($child_id)) {
+        if (!(int) $child_id) {
             throw new \Exception("Error Processing Request", 1);
         }
 
         $sql = "UPDATE $this->table SET parent_id=:parent_id WHERE id=:child_id";
-        $resultado = $this->db->run($sql, array('parent_id' => 0, 'child_id' => $child_id));
-        return $resultado;
+        $result = $this->db->run($sql, array('parent_id' => 0, 'child_id' => $child_id));
+        return $result;
     }
 }
