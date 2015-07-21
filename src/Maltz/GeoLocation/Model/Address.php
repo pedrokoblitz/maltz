@@ -11,4 +11,14 @@ class Address
     {
         parent::__construct($db);
     }
+
+    public function insert(Record $record)
+    {
+        
+    }
+
+    public function update(Record $record)
+    {
+        
+    }
 }

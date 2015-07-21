@@ -78,7 +78,7 @@ class Config extends Model
 
     public function update(Record $record)
     {
-        $sql = "UPDATE config SET value=:value, modified=NOW() WHERE key=:key";
+        $sql = "UPDATE config SET activity=:activity, value=:value, modified=NOW() WHERE key=:key";
         $result = $this->db->run($sql, $record->toArray());
         return $result;
     }

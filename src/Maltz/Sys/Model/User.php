@@ -47,16 +47,6 @@ class User extends Model
             'id' => 'int',
             'username' => 'username',
             'email' => 'email',
-            'cpf' => 'cpf',
-            'cnpj' => 'cnpj',
-            'cellphone' => 'cellphone',
-            'phone' => 'phone',
-            'zipcode' => 'cep',
-            'address' => 'string',
-            'address2' => 'string',
-            'district' => 'string',
-            'city' => 'string',
-            'province' => 'string',
             'password' => 'password',
             'activity' => 'int',
             );
@@ -84,7 +74,7 @@ class User extends Model
             throw new \Exception("Error Processing Request", 1);
         }
         
-        $sql = "SELECT id, username, name, email, cpf, cnpj, cellphone, phone, zipcode, address, address2, district, city, province, password, activity, created
+        $sql = "SELECT id, username, email, password, activity, created
             FROM users ORDER BY $key $order";
         $result = $this->db->run($sql);
         return $result;
@@ -97,7 +87,7 @@ class User extends Model
         }
         
         $pagination = Pagination::paginate($page, $per_page);
-        $sql = "SELECT id, username, name, email, cpf, cnpj, cellphone, phone, zipcode, address, address2, district, city, province, password, activity, created
+        $sql = "SELECT id, username, email, password, activity, created
             FROM users ORDER BY $key $order LIMIT $pagination->offset,$pagination->limit";
         $result = $this->db->run($sql);
         return $result;
@@ -109,7 +99,7 @@ class User extends Model
             throw new \Exception("Error Processing Request", 1);
         }
         
-        $sql = "SELECT id, username, name, email, cpf, cnpj, cellphone, phone, zipcode, address, address2, district, city, province, password, activity, created
+        $sql = "SELECT id, username, email, password, activity, created
             FROM users WHERE username=:user OR email=:user";
         $result = $this->db->run($sql, array('user' => $user));
         return $result;
@@ -121,31 +111,32 @@ class User extends Model
             throw new \Exception("Error Processing Request", 1);
         }
         
-        $sql = "SELECT id, username, name, email, cpf, cnpj, cellphone, phone, zipcode, address, address2, district, city, province, password, activity, created
+        $sql = "SELECT id, username, email, password, activity, created
             FROM users 
             WHERE id=:id";
         $result = $this->db->run($sql);
         return $result;
     }
 
-    public function insert(Record $post)
+    public function insert(Record $record)
     {
         $fields = $record->getFieldsList();
         $values = $record->getInsertValueString();
-        $bind = $record->toArray();
         $sql = "INSERT INTO users $fields, created, modified
             VALUES $values, NOW(), NOW()";
-        $result = $this->db->run($sql, $bind);
+        $result = $this->db->run($sql, $record->toArray());
         return $result;
     }
 
-    public function update(Record $post, $id)
+    public function update(Record $record)
     {
-        $updateValues = $record->getUpdateValueString();
-        $bind = $record->toArray();
+        $id = $record->get('id');
+        $record->remove('id');
+        $values = $record->getUpdateValueString();
         $sql = "UPDATE users 
-            SET $updateValues, modified=NOW()";
-        $result = $this->db->run($sql, $bind);
+            SET $values, modified=NOW() WHERE id=:id";
+        $record->set('id', $id);
+        $result = $this->db->run($sql, $record->toArray());
         return $result;
     }
 

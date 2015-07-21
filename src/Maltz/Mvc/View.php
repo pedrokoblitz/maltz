@@ -115,11 +115,6 @@ class View extends \Slim\View
         $this->partial('html.footer', $data);
     }
 
-    public function decodeTextarea($string)
-    {
-        return html_entity_decode($string);
-    }
-
     public function partial($template, $data = array())
     {
         $templatePath = $this->getTemplatesDirectory() . '/partials/' . ltrim($template, '/') . self::VIEW_FILE_EXTENSION;

@@ -80,7 +80,7 @@ CREATE TABLE `users` (
 DROP TABLE IF EXISTS `ownership`;
 CREATE TABLE `ownership` (
   `user_id` int(10) unsigned NOT NULL,
-  `item_name` enum('content', 'collection', 'resource', 'project') COLLATE utf8_unicode_ci NOT NULL,
+  `item_name` enum('content', 'collection', 'resource', 'project', 'store') COLLATE utf8_unicode_ci NOT NULL,
   `item_id` int(10) unsigned NOT NULL,
   UNIQUE(`item_name`, `item_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -88,7 +88,7 @@ CREATE TABLE `ownership` (
 DROP TABLE IF EXISTS `collaborations`;
 CREATE TABLE `collaborations` (
   `user_id` int(10) unsigned NOT NULL,
-  `item_name` enum('content', 'collection', 'project') COLLATE utf8_unicode_ci NOT NULL,
+  `item_name` enum('content', 'collection', 'project', 'store') COLLATE utf8_unicode_ci NOT NULL,
   `item_id` int(10) unsigned NOT NULL,
   UNIQUE(`user_id`, `item_name`, `item_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -394,27 +394,11 @@ CREATE TABLE `order_item_metadata` (
   `value` varchar(120) COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-DROP TABLE IF EXISTS `payment_methods`;
-CREATE TABLE `payment_methods` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `code` int(10) unsigned NOT NULL,
-  `name` varchar(120) COLLATE utf8_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-DROP TABLE IF EXISTS `shipping_methods`;
-CREATE TABLE `shipping_methods` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `code` int(10) unsigned NOT NULL,
-  `name` varchar(120) COLLATE utf8_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
 DROP TABLE IF EXISTS `payments`;
 CREATE TABLE `payments` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `order_id` int(10) unsigned NOT NULL,
-  `method_id` int(10) unsigned NOT NULL,
+  `type_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -422,7 +406,7 @@ DROP TABLE IF EXISTS `shipments`;
 CREATE TABLE `shipments` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `order_id` int(10) unsigned NOT NULL,
-  `method_id` int(10) unsigned NOT NULL,
+  `type_id` int(10) unsigned NOT NULL,
   `tracking_ref` varchar(120) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;

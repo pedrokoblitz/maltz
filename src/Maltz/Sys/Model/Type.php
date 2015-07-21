@@ -95,8 +95,10 @@ class Type extends Model
     public function update(Record $record)
     {
         $sql = "UPDATE types SET name=:name, item_name=:item_name WHERE id=:id";
-        $result = $this->db->run($sql, array('id' => $record->get('id')));
-        $sql = "UPDATE translations SET user_id=:user_id, lang=:lang, slug=:slug, title=:title
+        $result = $this->db->run($sql, array('item_name' => $record->get('item_name'), 'name' => $record->get('name'), 'id' => $record->get('id')));
+        $record->remove('name');
+
+        $sql = "UPDATE translations SET user_id=:user_id, language=:language, slug=:slug, title=:title
             WHERE item_id=:id AND item_name=:item_name";
         $result = $this->db->run($sql, $record->toArray());
         return $result;

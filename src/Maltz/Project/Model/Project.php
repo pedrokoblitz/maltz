@@ -72,6 +72,26 @@ class Project
         return $result;
     }
 
+    public function addUser($id, $user_id)
+    {
+        if (!(int) $id || !(int) $user_id) {
+            throw new \Exception("Error Processing Request", 1);
+        }
+
+        $result = $this->db->run($sql, array('id' => $id, 'user_id' => $user_id));
+        return $result;
+    }
+
+    public function removeUser($id, $user_id)
+    {
+        if (!(int) $id || !(int) $user_id) {
+            throw new \Exception("Error Processing Request", 1);
+        }
+
+        $result = $this->db->run($sql, array('id' => $id, 'user_id' => $user_id));
+        return $result;
+    }
+
     public function getUsers($id)
     {
         if (!(int) $id) {
@@ -80,7 +100,7 @@ class Project
 
         $sql = "SELECT t1.id, t1.username, t1.name, t1.email
         FROM users t1
-        JOIN items_groups_relationships t2
+        JOIN attachments t2
             ON t1.id=t2.item_id
             AND t2.item_name=:item_name
         WHERE t2.group_id=:project_id
@@ -109,7 +129,9 @@ class Project
             throw new \Exception("Error Processing Request", 1);
         }
 
-        $sql = "SELECT (dev_id, user_id, hash, priority, description, activity, created, modified) FROM tickets WHERE";
+        $sql = "SELECT (dev_id, user_id, hash, priority, description, activity, created, modified) FROM tickets WHERE project_id=:id";
+        $result = $this->db->run($sql, array('id' => $id));
+        return $result;
     }
 
     public function getBillableHours($id)

@@ -11,4 +11,9 @@ class Coordinates
     {
         parent::__construct($db);
     }
+
+    public function insert(Record $record)
+    {
+        
+    }
 }

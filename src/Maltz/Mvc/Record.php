@@ -13,6 +13,11 @@ class Record extends TypeArray
         $this->validation = new Validation();
     }
 
+    public function new(array $keys)
+    {
+        return array_intersect_key($this->items, array_flip($keys));
+    }
+
     public function fromArray(array $items)
     {
         $this->items = $items;

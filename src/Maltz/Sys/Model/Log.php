@@ -91,6 +91,7 @@ class Log extends Model
                 'action' => $action,
                 'item_name' => $item_name,
                 'item_id' => $item_id,
+                'nonce' => $nonce
                 )
         );
         $this->insert($record);

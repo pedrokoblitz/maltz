@@ -50,10 +50,11 @@ abstract class Model
 
     public function save(Record $record)
     {
+        if (method_exists($this, 'processRecord')) {
+            $record = $this->processRecord($record);
+        }
+
         if ($this->checkRecord($record)) {
-            if (method_exists($this, 'processRecord')) {
-                $record = $this->processRecord($record);
-            }
             if ($record->has('id')) {
                 return $this->update($record);
             }

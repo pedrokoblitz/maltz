@@ -16,16 +16,12 @@ use Maltz\Mvc\Model;
 class Product extends Model
 {
 
-    protected $userId;
-
     public function __construct(DB $db)
     {
         
-        if (isset($app->sessionDataStore->getUserId())) {
-            $this->userId = $app->sessionDataStore->getUserId();
-        }
-        
-        parent::__construct($db, 'product', 'products', 'product_id');
+        $rules = array();
+
+        parent::__construct($db, 'product', 'products', $rules);
     }
 
     /*
@@ -37,11 +33,9 @@ class Product extends Model
      * return void
      */
 
-    public function insert($estrutura)
+    public function insert(Record $record)
     {
         
-        $data = $this->db->insert($this->table, $this->estrutura);
-        return $data;
     }
 
     /*
@@ -55,7 +49,7 @@ class Product extends Model
      * return void
      */
 
-    public function update($post, $id)
+    public function update(Record $record)
     {
         
         $photos = $post['urls'];

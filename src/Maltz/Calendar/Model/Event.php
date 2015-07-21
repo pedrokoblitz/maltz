@@ -11,4 +11,29 @@ class Event extends Model
     {
         parent::__construct($db);
     }
+
+    public function insert(Record $record)
+    {
+        
+    }
+
+    public function update(Record $record)
+    {
+        
+    }
+
+    public function display()
+    {
+        
+    }
+
+    public function find()
+    {
+        
+    }
+
+    public function findByType(Record $record)
+    {
+        
+    }
 }

@@ -28,7 +28,7 @@ class TypeArray
 
     public function get($key)
     {
-        return $this->items[$key];
+        return isset($this->items[$key]) ? $this->items[$key] : null;
     }
 
     public function remove($key)
