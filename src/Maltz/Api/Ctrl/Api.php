@@ -210,7 +210,7 @@ class Api
         )->name('api_area_show')->conditions(array('pg' => '\d+', 'key' => '\w+', 'order' => 'asc|desc'));
 
         $app->post(
-            '/api/area/add/block', function () use ($app) {
+            '/api/area/block/add', function () use ($app) {
 
                 $record = $app->handler->handlePostRequest();
                 $result = Area::query($app->db, 'show', $id);
@@ -221,7 +221,7 @@ class Api
         )->name('api_area_block_add');
 
         $app->post(
-            '/api/area/remove/block', function () use ($app) {
+            '/api/area/block/remove', function () use ($app) {
 
                 $record = $app->handler->handlePostRequest();
                 $result = Area::query($app->db, 'removeBlock', $id);

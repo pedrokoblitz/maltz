@@ -12,7 +12,7 @@ class ProjectManagement
     public function route($app)
     {
         $app->get(
-            '/project/:id/devs', function () use ($app) {
+            '/api/project/:id/devs', function () use ($app) {
             
                 $result = Project::query('getDevs', $id);
                 $app->handler->handleApiResponse($result);
@@ -21,7 +21,7 @@ class ProjectManagement
         )->name('project_devs')->conditions(array('id' => '\d+'));
 
         $app->get(
-            'project/:id/users', function () use ($app) {
+            '/api/project/:id/users', function () use ($app) {
             
                 $result = Project::query('getUsers', $id);
                 $app->handler->handleApiResponse($result);
@@ -30,7 +30,7 @@ class ProjectManagement
         )->name('project_users')->conditions(array('id' => '\d+'));
 
         $app->get(
-            'project/:id/tickets', function () use ($app) {
+            '/api/project/:id/tickets', function () use ($app) {
         
                 $result = Project::query('getTickets', $id);
                 $app->handler->handleApiResponse($result);
@@ -39,7 +39,7 @@ class ProjectManagement
         )->name('project_tickets')->conditions(array('id' => '\d+'));
 
         $app->get(
-            'project/:id/invoices', function () use ($app) {
+            '/api/project/:id/invoices', function () use ($app) {
         
                 $result = Project::query('getInvoices', $id);
                 $app->handler->handleApiResponse($result);
@@ -48,7 +48,7 @@ class ProjectManagement
         )->name('project_invoices')->conditions(array('id' => '\d+'));
 
         $app->get(
-            'project/:id/hours', function () use ($app) {
+            '/api/project/:id/hours', function () use ($app) {
         
                 $result = Project::query('getBillableHours', $id);
                 $app->handler->handleApiResponse($result);
@@ -57,7 +57,7 @@ class ProjectManagement
         )->name('project_hours')->conditions(array('id' => '\d+'));
 
         $app->get(
-            '/invoice(/:pg(/:key(/:order)))', function ($pg = 1, $key = 'title', $order = 'asc') use ($app) {
+            '/api/invoice(/:pg(/:key(/:order)))', function ($pg = 1, $key = 'title', $order = 'asc') use ($app) {
         
                 $result = Invoice::query('find', $pg, $app->config('per_page'), $key, $order);
                 $app->handler->handleApiResponse($result);
@@ -66,7 +66,7 @@ class ProjectManagement
         )->name('invoice_list')->conditions(array('pg' => '\d+', 'key' => '\w+', 'order' => '\w+'));
 
         $app->get(
-            '/invoice/:id/show', function ($id) use ($app) {
+            '/api/invoice/:id/show', function ($id) use ($app) {
         
                 $result = Invoice::query('show', $id);
                 $app->handler->handleApiResponse($result);
@@ -75,7 +75,7 @@ class ProjectManagement
         )->name('invoice_show')->conditions(array('id' => '\d+'));
 
         $app->post(
-            '/invoice/delete', function () use ($app) {
+            '/api/invoice/delete', function () use ($app) {
         
                 $record = $app->handler->handlePostRequest();
                 $result = Invoice::query('delete', $id);
@@ -86,7 +86,7 @@ class ProjectManagement
         )->name('invoice_delete');
 
         $app->get(
-            '/project/:id/invoice/create', function ($id) use ($app) {
+            '/api/project/:id/invoice/create', function ($id) use ($app) {
         
                 $result = Project::query('createInvoice', $id);
                 $app->handler->handleApiResponse($result);
@@ -96,7 +96,7 @@ class ProjectManagement
         )->name('project_create_invoice')->conditions(array('id' => '\d+'));
 
         $app->get(
-            '/project(/:pg(/:key(/:order)))', function ($pg = 1, $key = 'title', $order = 'asc') use ($app) {
+            '/api/project(/:pg(/:key(/:order)))', function ($pg = 1, $key = 'title', $order = 'asc') use ($app) {
         
                 $result = Project::query('find', $pg, $app->config('per_page'), $key, $order);
                 $app->handler->handleApiResponse($result);
@@ -105,7 +105,7 @@ class ProjectManagement
         )->name('project_list')->conditions(array('pg' => '\d+', 'key' => '\w+', 'order' => '\w+'));
 
         $app->get(
-            '/project/:id/show', function ($id) use ($app) {
+            '/api/project/:id/show', function ($id) use ($app) {
         
                 $result = Project::query('show', $id);
                 $app->handler->handleApiResponse($result);
@@ -114,7 +114,7 @@ class ProjectManagement
         )->name('project_show')->conditions(array('id' => '\d+'));
 
         $app->post(
-            '/project/save', function () use ($app) {
+            '/api/project/save', function () use ($app) {
 
                 $record = $app->handler->handlePostRequest();
                 $result = Project::query('save', $record);
@@ -126,7 +126,7 @@ class ProjectManagement
         )->name('project_save');
 
         $app->post(
-            '/project/delete', function () use ($app) {
+            '/api/project/delete', function () use ($app) {
         
                 $record = $app->handler->handlePostRequest();
                 $result = Project::query('delete', $id);
@@ -137,7 +137,7 @@ class ProjectManagement
         )->name('project_delete');
 
         $app->get(
-            '/track/:ticket_id/start', function ($ticket_id) use ($app) {
+            '/api/track/:ticket_id/start', function ($ticket_id) use ($app) {
         
                 $result = TimeTracking::query('start', $ticket_id);
                 // Log::query('log', $app->sessionDataStore->getUserId(), 'ticket', $id, 'time_started', '', '', $app->nonce->get());
@@ -147,7 +147,7 @@ class ProjectManagement
         )->name('track_start')->conditions(array('ticket_id' => '\d+'));
 
         $app->get(
-            '/track/:ticket_id/stop', function ($ticket_id) use ($app) {
+            '/api/track/:ticket_id/stop', function ($ticket_id) use ($app) {
         
                 $result = TimeTracking::query('stop', $ticket_id);
                 // Log::query('log', $app->sessionDataStore->getUserId(), 'ticket', $id, 'time_stoped', '', '', $app->nonce->get());
@@ -157,7 +157,7 @@ class ProjectManagement
         )->name('track_stop')->conditions(array('ticket_id' => '\d+'));
 
         $app->get(
-            '/ticket/latest', function () use ($app) {
+            '/api/ticket/latest', function () use ($app) {
 
                 $result = Ticket::query($app->db, 'find', 'modified');
                 $app->handler->handleApiResponse($result);
@@ -166,7 +166,7 @@ class ProjectManagement
         )->name('ticket_latest');
 
         $app->get(
-            '/ticket/list(/:pg', function ($pg = 1) use ($app) {
+            '/api/ticket/list(/:pg', function ($pg = 1) use ($app) {
 
                 $result = Ticket::query($app->db, 'findAll', $pg, $per_page);
                 $app->handler->handleApiResponse($result);
@@ -175,7 +175,7 @@ class ProjectManagement
         )->name('ticket_list');
 
         $app->post(
-            '/ticket/save', function () use ($app) {
+            '/api/ticket/save', function () use ($app) {
 
                 $record = $app->handler->handlePostRequest();
                 $result = Ticket::query($app->db, 'save', $record);
@@ -187,7 +187,7 @@ class ProjectManagement
         )->name('ticket_save');
 
         $app->post(
-            '/ticket/priority', function () use ($app) {
+            '/api/ticket/priority', function () use ($app) {
 
                 $record = $app->handler->handlePostRequest();
                 $result = Ticket::query($app->db, 'changePriority', $id, $priority);
@@ -198,7 +198,7 @@ class ProjectManagement
         )->name('ticket_change_priority');
 
         $app->post(
-            '/ticket/delete', function () use ($app) {
+            '/api/ticket/delete', function () use ($app) {
 
                 $record = $app->handler->handlePostRequest();
                 $result = Ticket::query($app->db, 'delete', $id);
@@ -209,7 +209,7 @@ class ProjectManagement
         )->name('ticket_delete');
 
         $app->get(
-            '/ticket/:id/dev', function ($id) use ($app) {
+            '/api/ticket/:id/dev', function ($id) use ($app) {
 
                 $app->handler->handleApiResponse($result);
 
@@ -217,7 +217,7 @@ class ProjectManagement
         )->name('ticket_dev')->conditions(array('id' => '\d+'));
 
         $app->post(
-            '/ticket/close', function () use ($app) {
+            '/api/ticket/close', function () use ($app) {
 
                 $record = $app->handler->handlePostRequest();
                 $closed = Ticket::query($app->db, 'close', $id);
@@ -228,7 +228,7 @@ class ProjectManagement
         )->name('ticket_close');
 
         $app->post(
-            '/ticket/comment', function () use ($app) {
+            '/api/ticket/comment', function () use ($app) {
 
                 $record = $app->handler->handlePostRequest();
                 $user_id = $app->sessionDataStore->getUserId();
@@ -240,7 +240,7 @@ class ProjectManagement
         )->name('ticket_comment');
 
         $app->post(
-            '/ticket/call', function () use ($app) {
+            '/api/ticket/call', function () use ($app) {
 
                 $record = $app->handler->handlePostRequest();
                 // Log::query('log', $app->sessionDataStore->getUserId(), 'ticket', $id, 'close', '', '', $app->nonce->get());
