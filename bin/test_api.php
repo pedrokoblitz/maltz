@@ -9,7 +9,6 @@ $res = json_decode($response->body, true);
 
 // CONTENT SAVE
 $data = array(
-    'id' => 1,
     'title' => 'testado teste',
     'subtitle' => 'teacsstando',
     'excerpt' => 'testando',
@@ -21,16 +20,12 @@ $data = array(
     'language' => 'pt-br',
     'nonce' => $res['nonce'],
     );
-$options = array(
-    'timeout' => 20,
-);
-$response = \Requests::post($base . 'content/save', array(), $data, $options);
+$response = \Requests::post($base . 'content/save', array(), $data);
 
 echo $response->body;
 
 // COLLECTION SAVE
 $data = array(
-    'id' => 1,
     'title' => 'testado teste',
     'description' => 'testando',
     'parent_id' => 0,
@@ -38,16 +33,12 @@ $data = array(
     'language' => 'pt-br',
     'nonce' => $res['nonce'],
     );
-$options = array(
-    'timeout' => 20,
-);
-$response = \Requests::post($base . 'collection/save', array(), $data, $options);
+$response = \Requests::post($base . 'collection/save', array(), $data);
 
 echo $response->body;
 
 // RESOURCE SAVE
 $data = array(
-    'id' => 1,
     'title' => 'testado teste',
     'description' => 'testando',
     'type_id' => 1,
@@ -60,26 +51,19 @@ $data = array(
     'mimetype' => 'image/jpg',
     'nonce' => $res['nonce'],
     );
-$options = array(
-    'timeout' => 20,
-);
-$response = \Requests::post($base . 'resource/save', array(), $data, $options);
+$response = \Requests::post($base . 'resource/save', array(), $data);
 
 echo $response->body;
 
 // TERM SAVE
 $data = array(
-    'id' => 1,
     'title' => 'testado teste',
     'parent_id' => 0,
     'type_id' => 1,
     'language' => 'pt-br',
     'nonce' => $res['nonce'],
     );
-$options = array(
-    'timeout' => 20,
-);
-$response = \Requests::post($base . 'term/save', array(), $data, $options);
+$response = \Requests::post($base . 'term/save', array(), $data);
 
 echo $response->body;
 
@@ -110,7 +94,6 @@ echo $response->body;
 
 // AREA SAVE
 $data = array(
-    'id' => 1,
     'title' => 'testado teste',
     );
 $response = \Requests::post($base . 'area/save', $data);
@@ -119,7 +102,6 @@ echo $response->body;
 
 // BLOCK SAVE
 $data = array(
-    'id' => 1,
     'title' => 'testado teste',
     );
 $response = \Requests::post($base . 'block/save', $data);
@@ -136,7 +118,6 @@ echo $response->body;
 
 // TYPE SAVE
 $data = array(
-    'id' => 1,
     'title' => 'testado teste',
     );
 $response = \Requests::post($base . 'type/save', $data);
@@ -145,7 +126,6 @@ echo $response->body;
 
 // USER SAVE
 $data = array(
-    'id' => 1,
     'title' => 'testado teste',
     );
 $response = \Requests::post($base . 'user/save', $data);
@@ -154,7 +134,6 @@ echo $response->body;
 
 // CONFIG SAVE
 $data = array(
-    'id' => 1,
     'title' => 'testado teste',
     );
 $response = \Requests::post($base . 'config', $data);
@@ -163,7 +142,6 @@ echo $response->body;
 
 // NEW TICKET
 $data = array(
-    'id' => 1,
     'title' => 'testado teste',
     );
 $response = \Requests::post($base . '', $data);
@@ -172,7 +150,6 @@ echo $response->body;
 
 // CHANGE TICKET PRIORITY
 $data = array(
-    'id' => 1,
     'title' => 'testado teste',
     );
 $response = \Requests::post($base . '', $data);
@@ -181,7 +158,6 @@ echo $response->body;
 
 // CLOSE TICKET
 $data = array(
-    'id' => 1,
     'title' => 'testado teste',
     );
 $response = \Requests::post($base . '', $data);
@@ -190,7 +166,6 @@ echo $response->body;
 
 // REQUEST TICKET CALL
 $data = array(
-    'id' => 1,
     'title' => 'testado teste',
     );
 $response = \Requests::post($base . '', $data);
@@ -199,7 +174,6 @@ echo $response->body;
 
 // PROJECT SAVE
 $data = array(
-    'id' => 1,
     'title' => 'testado teste',
     );
 $response = \Requests::post($base . '', $data);
