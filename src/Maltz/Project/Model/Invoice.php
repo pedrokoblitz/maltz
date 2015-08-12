@@ -2,11 +2,16 @@
 
 namespace Maltz\Project\Model;
 
+use Maltz\Mvc\DB;
+use Maltz\Mvc\Model;
 use Maltz\Mvc\Record;
+use Maltz\Mvc\Activity;
 use Maltz\Service\Pagination;
 
-class Invoice
+class Invoice extends Model
 {
+    use Activity;
+
     public function __construct(DB $db)
     {
         $rules = array(
@@ -30,6 +35,10 @@ class Invoice
         return $result;
     }
 
+    public function update(Record $record) {
+        throw new \Exception("Invoices cannot be updated. Delete and create a new one.", 001);        
+    }
+
     public function processRecord(Record $record)
     {
         $total = (int) $record->get('totalhours') * (int) $record->get('rate');
@@ -40,7 +49,7 @@ class Invoice
     public function show($id)
     {
         if (!(int) $id) {
-            throw new \Exception("Error Processing Request", 1);
+            throw new \Exception("Id must be integer.", 002);
         }
 
         $sql = "SELECT t1.id, t2.title AS project, t1.hours, t1.rate, t1.total, t1.activity, t1.created FROM invoices
@@ -54,7 +63,7 @@ class Invoice
     public function find($pg = 1, $per_page = 12, $key = 'title', $order = 'asc')
     {
         if (!(int) $pg || !(int) $per_page || !is_string($key) || !is_string($order)) {
-            throw new \Exception("Error Processing Request", 1);
+            throw new \Exception("Page and per_page must be integers, key and order must be strings.", 006);
         }
 
         $pagination = Pagination::paginate($pg, $per_page);
@@ -70,7 +79,7 @@ class Invoice
     public function setSent($id)
     {
         if (!(int) $id) {
-            throw new \Exception("Error Processing Request", 1);
+            throw new \Exception("Id must be integer.", 003);
         }
 
         $this->setActivity($id, 2);
@@ -79,7 +88,7 @@ class Invoice
     public function setContested($id)
     {
         if (!(int) $id) {
-            throw new \Exception("Error Processing Request", 1);
+            throw new \Exception("Id must be integer.", 004);
         }
 
         $this->setActivity($id, 3);
@@ -88,7 +97,7 @@ class Invoice
     public function setPaid($id)
     {
         if (!(int) $id) {
-            throw new \Exception("Error Processing Request", 1);
+            throw new \Exception("Id must be integer.", 005);
         }
 
         $this->setActivity($id, 4);

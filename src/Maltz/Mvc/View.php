@@ -15,7 +15,7 @@ class View extends \Slim\View
     public function setLayout($layout = null, array $data = array())
     {
         if (!is_string($layout)) {
-            throw new \Exception("Error Processing Request", 001);
+            throw new \Exception("Layout must be string.", 001);
         }
         $this->layout = $layout;
         $this->layoutData = $data;
@@ -29,7 +29,7 @@ class View extends \Slim\View
     public function setMetaProperty($name, $content)
     {
         if (!is_string($name) || !is_string($content)) {
-            throw new \Exception("Error Processing Request", 002);
+            throw new \Exception("Name and content must be strings.", 002);
         }
         $this->meta[$name] = $content;
     }
@@ -37,7 +37,7 @@ class View extends \Slim\View
     public function setCharset($charset)
     {
         if (!is_string($charset)) {
-            throw new \Exception("Error Processing Request", 003);
+            throw new \Exception("Charset must be string.", 003);
         }
         $this->charset = $charset;
     }
@@ -50,7 +50,7 @@ class View extends \Slim\View
     public function enqueueStyle($name, $style)
     {
         if (!is_string($name) || !is_string($style)) {
-            throw new \Exception("Error Processing Request", 004);
+            throw new \Exception("Name and style must be strings.", 004);
         }
         $this->styles[$name] = $style;
     }
@@ -58,7 +58,7 @@ class View extends \Slim\View
     public function enqueueScript($name, $script)
     {
         if (!is_string($name) || !is_string($script)) {
-            throw new \Exception("Error Processing Request", 005);
+            throw new \Exception("Name and script must be strings.", 005);
         }
         $this->scripts[$name] = $script;
     }
@@ -119,7 +119,7 @@ class View extends \Slim\View
     {
         $templatePath = $this->getTemplatesDirectory() . '/partials/' . ltrim($template, '/') . self::VIEW_FILE_EXTENSION;
         if (!file_exists($templatePath)) {
-            throw new \RuntimeException('View cannot render template `' . $templatePath . '`. Template does not exist.');
+            throw new \RuntimeException('View cannot render template `' . $templatePath . '`. Template does not exist.', 006);
         }
 
         extract($data);
@@ -134,7 +134,7 @@ class View extends \Slim\View
         if (isset($this->layout) && $this->layout !== null) {
             $layoutPath = $this->getTemplatesDirectory() . '/layouts/' . ltrim($this->layout, '/') . self::VIEW_FILE_EXTENSION;
             if (!file_exists($layoutPath)) {
-                throw new \RuntimeException('View cannot render layout `' . $layoutPath . '`. Layout does not exist.');
+                throw new \RuntimeException('View cannot render layout `' . $layoutPath . '`. Layout does not exist.', 007);
             }
 
             extract($this->layoutData);
@@ -153,7 +153,7 @@ class View extends \Slim\View
         $separator = isset($this->layout) ? '/' . $this->layout . '/' : '/';
         $templatePath = $this->getTemplatesDirectory() . $separator . ltrim($template, '/') . self::VIEW_FILE_EXTENSION;
         if (!file_exists($templatePath)) {
-            throw new \RuntimeException('View cannot render template `' . $templatePath . '`. Template does not exist.');
+            throw new \RuntimeException('View cannot render template `' . $templatePath . '`. Template does not exist.', 008);
         }
 
         extract($this->data->all());

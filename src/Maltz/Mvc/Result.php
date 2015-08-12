@@ -5,23 +5,24 @@ namespace Maltz\Mvc;
 class Result extends TypeArray
 {
 
-    protected function restoreRecords($items)
+    protected function __wakeup()
     {
-        foreach ($items['records'] as $key => $value) {
+        $items = array();
+        foreach ($this->items['records'] as $key => $value) {
             $items['records'][$key] = new Record($value);
         }
-        return $items;
+        $this->items = $items;
     }
 
-    protected function getRecordsAsArray()
+    protected function __sleep()
     {
-        $result = array();
+        $items = array();
         if (isset($this->items['records'])) {
             foreach ($this->items['records'] as $record) {
-                $result[] = $record->toArray();
+                $items[] = $record->toArray();
             }
         }
-        return $result;
+        $this->items = $items;
     }
 
     protected function itemsToArray($items)
@@ -32,9 +33,7 @@ class Result extends TypeArray
                 $newItems[$key] = $this->itemsToArray($value);
             } elseif ($value instanceof Record) {
                 $newItems[$key] = $value->toArray();
-            } elseif (is_int($value)) {
-                $newItems[$key] = $value;
-            } elseif (is_string($value)) {
+            } else {
                 $newItems[$key] = $value;
             }
         }

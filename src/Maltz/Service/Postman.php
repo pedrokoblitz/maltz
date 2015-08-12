@@ -2,9 +2,7 @@
 
 namespace Maltz\Service;
 
-use Swift\Swift_Mailer;
-use Swift\Swift_Message;
-use Swift\Swift_SendmailTransport;
+use Maltz\Mvc\View;
 
 /*
  * http://ideiasinsolitas.com.br/
@@ -20,10 +18,11 @@ use Swift\Swift_SendmailTransport;
 
 class Postman
 {
+    protected $view;
     protected $message;
     protected $mailer;
 
-    public function __construct()
+    public function __construct($view)
     {
         $transport = \Swift_SendmailTransport::newInstance('/usr/sbin/sendmail -bs');
         $this->mailer = \Swift_Mailer::newInstance($transport);
@@ -42,7 +41,6 @@ class Postman
     public function send($recipientEmail, $recipientName)
     {
         $this->message->setTo(array($recipientEmail => $recipientName));
-        $this->mailer->send($this->message);
-        return $this;
+        return $this->mailer->send($this->message);
     }
 }

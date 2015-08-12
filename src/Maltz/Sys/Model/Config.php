@@ -26,11 +26,8 @@ use Maltz\Service\Pagination;
 
 /*
  *
- *
- *
  * @param objeto DB
  *
- * return void
  */
 
 class Config extends Model
@@ -78,14 +75,16 @@ class Config extends Model
 
     public function update(Record $record)
     {
-        $sql = "UPDATE config SET activity=:activity, value=:value, modified=NOW() WHERE key=:key";
+        $sql = "UPDATE config SET activity=:activity, value=:value, modified=NOW() 
+            WHERE key=:key";
         $result = $this->db->run($sql, $record->toArray());
         return $result;
     }
 
     public function display()
     {
-        $sql = "SELECT id, `key`, value, format, activity, modified, created FROM config";
+        $sql = "SELECT id, `key`, value, format, activity, modified, created 
+            FROM config";
         $result = $this->db->run($sql);
         return $result;
     }
@@ -93,11 +92,14 @@ class Config extends Model
     public function find($page = 1, $per_page = 12, $key = 'key', $order = 'asc')
     {
         if (!(int) $page || !(int) $per_page || !is_string($key) || !is_string($order)) {
-            throw new \Exception("Error Processing Request", 1);
+            throw new \Exception("Page and per_page must be integers, key and order must be strings.", 001);
         }
         
         $pagination = Pagination::paginate($page, $per_page);
-        $sql = "SELECT id, `key`, value, format, activity, modified, created FROM config ORDER BY $key $order LIMIT $pagination->offset,$pagination->limit";
+        $sql = "SELECT id, `key`, value, format, activity, modified, created 
+            FROM config 
+            ORDER BY $key $order 
+            LIMIT $pagination->offset,$pagination->limit";
         $result = $this->db->run($sql, array());
         return $result;
     }
@@ -105,10 +107,12 @@ class Config extends Model
     public function show($id)
     {
         if (!(int) $id) {
-            throw new \Exception("Error Processing Request", 1);
+            throw new \Exception("Id must be integer.", 002);
         }
         
-        $sql = "SELECT id, `key`, value, activity, modified, created FROM config WHERE id=:id";
+        $sql = "SELECT id, `key`, value, activity, modified, created 
+            FROM config 
+            WHERE id=:id";
         $result = $this->db->run($sql, array($id));
         return $result;
     }
@@ -120,44 +124,48 @@ class Config extends Model
     public function setValue($key, $value)
     {
         if (!is_string($key) || !is_string($value)) {
-            throw new \Exception("Error Processing Request", 1);
+            throw new \Exception("Key and value must be strings", 003);
         }
         
-        $sql = "UPDATE config SET value=:value WHERE key=:key";
-        $resultado = $this->db->run($sql, array('value' => $value, 'key' => $key));
+        $sql = "UPDATE config SET value=:value 
+            WHERE key=:key";
+        $result = $this->db->run($sql, array('value' => $value, 'key' => $key));
         return $result;
     }
 
     public function getValue($key)
     {
         if (!is_string($key)) {
-            throw new \Exception("Error Processing Request", 1);
+            throw new \Exception("Key must be string.", 004);
         }
         
-        $sql = "SELECT value FROM config WHERE key=:key";
-        $resultado = $this->db->run($sql, array($key));
-        return $resultado[0]['value'];
+        $sql = "SELECT value FROM config 
+            WHERE key=:key";
+        $result = $this->db->run($sql, array($key));
+        return $result[0]['value'];
     }
 
     public function setRefresh($key)
     {
         if (!is_string($key)) {
-            throw new \Exception("Error Processing Request", 1);
+            throw new \Exception("Key must be string.", 005);
         }
         
-        $sql = "UPDATE config SET value=:value WHERE key=:key";
-        $res = $this->db->run($sql, array('value' => 1, 'key' => $key));
-        return $res;
+        $sql = "UPDATE config SET value=:value 
+            WHERE key=:key";
+        $result = $this->db->run($sql, array('value' => 1, 'key' => $key));
+        return $result;
     }
 
     public function refresh($key)
     {
         if (!is_string($key)) {
-            throw new \Exception("Error Processing Request", 1);
+            throw new \Exception("Key must be string.", 006);
         }
         
-        $sql = "UPDATE config SET value=:value WHERE key=:key";
-        $res = $this->db->run($sql, array('value' => 0, 'key' => $key));
-        return $res;
+        $sql = "UPDATE config SET value=:value 
+            WHERE key=:key";
+        $result = $this->db->run($sql, array('value' => 0, 'key' => $key));
+        return $result;
     }
 }

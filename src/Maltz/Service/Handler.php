@@ -4,10 +4,12 @@ namespace Maltz\Service;
 
 use Maltz\Mvc\Result;
 use Maltz\Mvc\Record;
+use Maltz\Sys\Model\User;
 
 class Handler
 {
     protected $app;
+    protected $template;
     protected $allowedRequestFilters;
 
     public function __construct($app)
@@ -64,9 +66,37 @@ class Handler
         $this->app->render($this->template);
     }
 
-    public function isAuthorized($user = null, $roles = null)
+    public function isAuthorized($user_id, $roles)
     {
-        return true;
+        $result = User::query('getRoles', $user_id);
+        $userRoles = $result->asArray();
+        foreach ($userRoles as $role) {
+            if (in_array($role, $roles)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function sendSignUpConfirmation(Record $record, $token)
+    {
+        $siteTitle = $this->app->config('site.title');
+        $subject = 'Activate your account';
+        $body = "Welcome to $siteTitle. \n To activate your account, click on the link:\n<a>";
+        $body .= $this->app->urlFor('confirm_signup', array('token' => $token, 'user_id' => $record->get('id')));
+        $body .= '</a>';
+        $this->app->postman->createMessage($this->app->config('system.email'), $siteTitle, $subject, $body);
+        return $this->app->postman->sendMessage($record->get('email'), $record->get('name'));
+    }
+
+    public function sendPasswordReset(Record $record, $token)
+    {
+        $subject = 'Password Reset';
+        $body = "Welcome to $siteTitle. \n To reset your password, click on the link:\n<a>";
+        $body .= $this->app->urlFor('new_password', array('token' => $token, 'user_id' => $record->get('id')));
+        $body .= '</a>';
+        $this->app->postman->createMessage($app->config('system.email'), $app->config('site.title'), $subject, $body);
+        return $this->app->postman->sendMessage($record->get('email'), $record->get('name'));
     }
 
     public function handleApiResponse(Result $result)
@@ -83,12 +113,19 @@ class Handler
 
     public function handlePostRequest()
     {
+        // try to get $_POST
         $body = $this->app->request->post();
-        $record = new Record($body);
+        // if $_POST is empty, try to get json request body instead
+        if (empty($body)) {
+            $json = $app->request->getBody();
+            $body = json_decode($json, true);
+        }
 
-        //if (!$record->has('nonce') || !$this->app->nonce->verify($record->get('nonce'))) {
-        //    $this->errorForbidden();
-        //}
+        $record = new Record($body);
+        if (!$record->has('nonce') || !$this->app->nonce->verify($record->get('nonce'))) {
+            $this->errorForbidden();
+        }
+        
         $record->remove('nonce');
         return $record;
     }
@@ -104,26 +141,18 @@ class Handler
         return new $avaiable[$name]($this->app->db);
     }
 
-    public function handleGetRequest()
-    {
-        return true;
-    }
-
     public function authorize(array $roles = null)
     {
-        if (!$roles) {
-            $roles = $this->app->defaultRoles;
-        }
-
-        $this->app->response->headers->set('Content-Type', 'application/json');
         $authenticated = $this->doorman->isUserAuthenticated();
         if (!$authenticated) {
             $this->app->redirect('user_login');
         }
 
-        $allowed = $this->app->doorman->isUserAllowed($roles);
-        if (!$authenticated) {
-            $this->errorForbidden();
+        if ($roles) {
+            $allowed = $this->app->doorman->isUserAllowed($roles);
+            if (!$authenticated) {
+                $this->errorForbidden();
+            }
         }
     }
 
@@ -137,40 +166,20 @@ class Handler
         $this->error(403, 'You do not have permission to access this content.');
     }
 
-    public function handleError()
-    {
-        $this->app->response->headers->set('Content-Type', 'text/html');                
-    }
-
-    public function handleApiError()
-    {
-        $this->app->response->headers->set('Content-Type', 'application/json');                
-    }
-
     public function error($status, $message)
     {
-        $this->app->response->headers->set('Content-Type', 'text/html');
-        $result = array('success' => false, 'message' => $message);
         $this->app->response->setStatus($status);
-        $this->setDefaultViewResources();
-        $this->app->view->setLayout('frontend');
-        $this->app->render('error', $result);
-        $this->app->stop();
-    }
+        $result = array('success' => false, 'message' => $message);
 
-    public function sendEmail($subject, $body)
-    {
-        $this->app
-            ->postman
-            ->createMessage(
-                $this->app->config('system.email'),
-                $this->app->config('site.title'),
-                $subject,
-                $body
-            )
-            ->sendMessage(
-                $this->app->session->get('user.email'),
-                $this->app->session->get('user.name')
-            );
+        if ($this->app->request->isAjax()) {
+            $this->app->response->headers->set('Content-Type', 'application/json');
+            $this->response->setBody($result->toJson());
+        } else {
+            $this->app->response->headers->set('Content-Type', 'text/html');
+            $this->setDefaultViewResources();
+            $this->app->view->setLayout('frontend');
+            $this->app->render('error', $result);
+        }
+        $this->app->stop();
     }
 }

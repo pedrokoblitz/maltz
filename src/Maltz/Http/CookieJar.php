@@ -13,7 +13,7 @@ class CookieJar extends Collection
     public function set($id, array $cookie)
     {
         if (!is_string($id)) {
-            throw new \Exception("Error Processing Request");
+            throw new \Exception("Cookie index must be string", 001);
         }
 
         $newId = str_replace('.', '_', $id);
@@ -38,7 +38,7 @@ class CookieJar extends Collection
     public function remove($id)
     {
         if (!is_string($id)) {
-            throw new \Exception("Error Processing Request");
+            throw new \Exception("Cookie index must be string", 002);
         }
 
         $newId = str_replace('.', '_', $id);
@@ -49,7 +49,7 @@ class CookieJar extends Collection
     public function get($id)
     {
         if (!is_string($id)) {
-            throw new \Exception("Error Processing Request");
+            throw new \Exception("Cookie index must be string", 003);
         }
 
         $newId = str_replace('.', '_', $id);

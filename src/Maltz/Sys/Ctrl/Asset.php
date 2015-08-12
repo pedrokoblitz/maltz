@@ -8,29 +8,19 @@ class Asset extends Controller
 {
     public function route($app)
     {
-        $app->get(
-            '/asset/:name/:extension', function ($name, $extension) use ($app) {
+        $app->get('/asset/:name/:extension', function ($name, $extension) use ($app) {
 
                 if (in_array($extension, array('css','js', 'gif', 'jpg', 'jpeg', 'png'))) {
                     switch ($extension) {
-                    case 'css':
-                        $type = 'text/css';
-                    break;
-                    case 'js':
-                        $type = 'application/javascript';
-                    break;
-                    case 'jpg':
-                        $type = 'image/jpeg';
-                    break;
-                    case 'jpeg':
-                        $type = 'image/jpeg';
-                    break;
-                    case 'gif':
-                        $type = 'image/gif';
-                    break;
-                    case 'png':
-                        $type = 'image/png';
-                    break;
+                        case 'css':
+                            $type = 'text/css';
+                        break;
+                        case 'js':
+                            $type = 'application/javascript';
+                        break;
+                        default:
+                            throw new \Exception("Unrecognized asset mimetype.", 001);
+                        break;                            
                     }
 
                     $body = file_get_contents('/public/assets/' . $extension . '/' . $name . '.' . $extension);
@@ -41,21 +31,36 @@ class Asset extends Controller
             }
         );
 
-        $app->get(
-            '/media/:name/:extension', function ($name, $extension) use ($app) {
+        $app->get('/media/:name/:extension', function ($name, $extension) use ($app) {
 
-                $body = file_get_contents('/public/media/' . $name . '.' . $extension);
-                $mimes = $app->config('mimetypes.image');
-                if (isset($mimes[$extension])) {
-                    $app->response->headers->set('Content-Type', $mimes[$extension]);
+                if (in_array($extension, array('gif', 'jpg', 'jpeg', 'png'))) {
+                    switch ($extension) {
+                        case 'jpg':
+                            $type = 'image/jpeg';
+                        break;
+                        case 'jpeg':
+                            $type = 'image/jpeg';
+                        break;
+                        case 'gif':
+                            $type = 'image/gif';
+                        break;
+                        case 'png':
+                            $type = 'image/png';
+                        break;
+                        default:
+                            throw new \Exception("Unrecognized media mimetype.", 001);
+                        break;
+                    }
+                    
+                    $app->response->headers->set('Content-Type', $type);
+                    $body = file_get_contents('/public/media/' . $name . '.' . $extension);
                     $app->response->setBody($body);
                 }
                 $app->stop();
             }
         );
 
-        $app->get(
-            '/download/:name/:extension', function ($name, $extension) use ($app) {
+        $app->get('/download/:name/:extension', function ($name, $extension) use ($app) {
 
                 $body = file_get_contents('/public/media/' . $name . '.' . $extension);
                 $mimes = $app->config('mimetypes.download');

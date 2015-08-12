@@ -59,7 +59,7 @@ class Collection
         }
 
         if (!$this->isValidItem($item)) {
-            throw new \InvalidArgumentException("Error Processing Request");
+            throw new \InvalidArgumentException("Invalid item", 001);
         }
 
         $this->items[$id] = $item;
@@ -85,7 +85,7 @@ class Collection
     public function get($id)
     {
         if (!is_scalar($id)) {
-            throw new \InvalidArgumentException('$id must be scalar');
+            throw new \InvalidArgumentException('$id must be scalar', 002);
         }
 
         if (isset($this->items[$id])) {
@@ -105,7 +105,7 @@ class Collection
     public function remove($id)
     {
         if (!is_scalar($id)) {
-            throw new \InvalidArgumentException('$id must be scalar');
+            throw new \InvalidArgumentException('$id must be scalar', 003);
         }
 
         if (isset($this->items[$id])) {

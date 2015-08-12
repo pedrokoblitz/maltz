@@ -12,7 +12,6 @@ use Maltz\Service\SessionDataStore;
 use Maltz\Service\Handler;
 use Maltz\Service\Postman;
 use Maltz\Service\Doorman;
-use Maltz\Service\Correios;
 use Maltz\Service\Pagination;
 use Slim\Slim;
 
@@ -128,7 +127,7 @@ class Application
         $app->configureMode(
             'production', function () use ($app) {
 
-                $credentials = json_decode(file_get_contents('db.json'));
+                $credentials = json_decode(file_get_contents('db.json'), true);
                 $app->config('db.dsn', $credentials['dsn']);
                 $app->config('db.user', $credentials['user']);
                 $app->config('db.password', $credentials['password']);
@@ -147,18 +146,18 @@ class Application
                 $app->config(
                     array(
                     'log.enable' => true,
+                    'log.level' => \Slim\Log::DEBUG,
                     'debug' => true,
                     'per_page' => 12
-                    )
-            );
+                        )
+                    );
                 $app->session->set('user.id', 1);
             }
         );
 
         $controllers = array(
-            'Maltz\Api\Ctrl\Api',
-            'Maltz\Api\Ctrl\App',
-            'Maltz\Api\Ctrl\Test',
+            'Maltz\Api\Ctrl\Project',
+            'Maltz\Api\Ctrl\Sys',
         );
 
         foreach ($controllers as $controller) {

@@ -39,7 +39,10 @@ class Role extends Model
         }
         
         $pagination = Pagination::paginate($page, $per_page);
-        $sql = "SELECT id, name, activity FROM roles ORDER BY $key $order LIMIT $pagination->offset,$pagination->limit";
+        $sql = "SELECT id, name, activity 
+            FROM roles 
+            ORDER BY $key $order 
+            LIMIT $pagination->offset,$pagination->limit";
         $result = $this->db->run($sql, array());
         return $result;
     }
@@ -47,10 +50,12 @@ class Role extends Model
     public function show($id)
     {
         if (!(int) $id) {
-            throw new \Exception("Error Processing Request", 1);
+            throw new \Exception("Id must be integer.", 001);
         }
         
-        $sql = "SELECT id, name, activity FROM roles WHERE id=:id";
+        $sql = "SELECT id, name, activity 
+            FROM roles 
+            WHERE id=:id";
         $result = $this->db->run($sql, array('id' => $id));
         return $result;
     }
@@ -65,7 +70,8 @@ class Role extends Model
     
     public function update(Record $record)
     {
-        $sql = "UPDATE roles SET name=:name, activity=:activity WHERE id=:id";
+        $sql = "UPDATE roles SET name=:name, activity=:activity 
+            WHERE id=:id";
         $result = $this->db->run($sql, $record->toArray());
         return $result;
     }

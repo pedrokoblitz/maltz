@@ -2,10 +2,13 @@
 
 namespace Maltz\Tickets\Model;
 
+use Maltz\Mvc\DB;
+use Maltz\Mvc\Model;
 use Maltz\Mvc\Record;
+use Maltz\Mvc\Activity;
 use Maltz\Service\Pagination;
 
-class Ticket
+class Ticket extends Model
 {
     public function __construct(DB $db)
     {
@@ -24,7 +27,7 @@ class Ticket
     public function show($id)
     {
         if (!(int) $id) {
-            throw new \Exception("Error Processing Request", 1);
+            throw new \Exception("Id must be string", 001);
         }
 
         $sql = "SELECT (id, dev_id, user_id, hash, priority, description, activity, created, modified) 
@@ -37,15 +40,15 @@ class Ticket
     public function insert(Record $record)
     {
         $sql = "INSERT INTO tickets (dev_id, user_id, hash, priority, description, activity, created, modified) 
-            VALUES (:dev_id, :user_id, MD5(NOW()), :priority, :description, :activity, NOW(), NOW())";
+            VALUES (:dev_id, :user_id, UUID(), :priority, :description, :activity, NOW(), NOW())";
         $result = $this->db->run($sql, $record->toArray());
         return $result;
     }
 
     public function find($key = 'modified')
     {
-        if (!(int) $id) {
-            throw new \Exception("Error Processing Request", 1);
+        if (!is_string($key) ) {
+            throw new \Exception("Key must be string.", 002);
         }
 
         $sql = "SELECT (dev_id, user_id, hash, priority, description, activity, created, modified) FROM tickets
@@ -58,7 +61,7 @@ class Ticket
     public function findAll($pg = 1, $per_page = 20)
     {
         if (!(int) $pg || !(int) $per_page) {
-            throw new \Exception("Error Processing Request", 1);
+            throw new \Exception("Page and per_page must be integers.", 003);
         }
 
         $pagination = Pagination::paginate($pg, $per_page);
@@ -72,7 +75,7 @@ class Ticket
     public function changePriority($id, $priority)
     {
         if (!(int) $id || !is_string($priority)) {
-            throw new \Exception("Error Processing Request", 1);
+            throw new \Exception("Id must be integer and priority must be string.", 004);
         }
 
         $sql = "UPDATE SET priority=:priority, modified=NOW() WHERE id=:id";
@@ -83,7 +86,7 @@ class Ticket
     public function close($id)
     {
         if (!(int) $id) {
-            throw new \Exception("Error Processing Request", 1);
+            throw new \Exception("Id must be integer.", 005);
         }
 
         $sql = "UPDATE SET activity=:activity, modified=NOW() WHERE id=:id";
@@ -94,7 +97,7 @@ class Ticket
     public function getDev($id)
     {
         if (!(int) $id) {
-            throw new \Exception("Error Processing Request", 1);
+            throw new \Exception("Id must be integer.", 006);
         }
 
         $sql = "SELECT t2.id, t2.username, t2.name, t2.email FROM tickets t1

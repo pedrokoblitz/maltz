@@ -20,7 +20,7 @@ trait Display
     public function displayByType($type)
     {
         if (!is_string($type)) {
-            throw new \Exception("Error Processing Request", 1);
+            throw new \Exception("Type name must be string", 001);
         }
 
         $sql = "SELECT t1.id, t1.parent_id, t2.slug, t2.title, t2.subtitle, t2.excerpt, t2.description, t2.body, t3.name AS type

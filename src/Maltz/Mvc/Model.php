@@ -42,19 +42,16 @@ abstract class Model
         $this->rules = $rules;
     }
 
-    protected function checkRecord(Record $record)
-    {
-        $record->validate($this->rules);
-        return $record->isValid();
-    }
-
     public function save(Record $record)
     {
         if (method_exists($this, 'processRecord')) {
             $record = $this->processRecord($record);
         }
 
-        if ($this->checkRecord($record)) {
+        $record->validate($this->rules);
+        
+        if ($record->isValid()) {
+
             if ($record->has('id')) {
                 return $this->update($record);
             }
@@ -77,6 +74,11 @@ abstract class Model
             $result = call_user_func_array($call, $params);
             return $result;
         }
-        return new Result(array('success' => false, 'message' => 'Such method does not exists.'));
+        return new Result(
+            array(
+                'success' => false, 
+                'message' => "Method $method does not exists."
+                )
+            );
     }
 }

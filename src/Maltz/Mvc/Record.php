@@ -6,11 +6,15 @@ class Record extends TypeArray
 {
     protected $dirty = false;
     protected $valid = true;
+    protected $validation = null;
 
-    public function __construct(array $items)
+    public function __construct(array $items, $validation = null)
     {
         $this->items = $items;
-        $this->validation = new Validation();
+
+        if ($validation && $validation instanceof Validation) {
+            $this->validation = $validation;
+        }
     }
 
     public function new(array $keys)
@@ -40,6 +44,10 @@ class Record extends TypeArray
 
     public function validate($rules)
     {
+        if (!$this->validation) {
+            throw new \Exception("Validation object is not set.", 001);
+        }
+
         $this->filterByKeys(array_keys($rules));
         foreach ($rules as $key => $rule) {
             if ($this->has($key) && !empty($this->get($key))) {

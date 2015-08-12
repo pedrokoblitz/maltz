@@ -18,21 +18,18 @@ namespace Maltz\Sys\Ctrl;
 
 class Authentication extends Controller
 {
-
     public function route($app)
     {
         $app->view->setLayout('frontend');
 
-        $app->get(
-            '/login', function () use ($app) {
+        $app->get('/login', function () use ($app) {
 
                 $app->render('login');
 
             }
         )->name('user_login_form');
 
-        $app->post(
-            '/login', function () use ($app) {
+        $app->post('/login', function () use ($app) {
 
                 $credentials = $app->handler->handlePostRequest();
                 $app->doorman->login($credentials);
@@ -41,56 +38,64 @@ class Authentication extends Controller
                 } else {
                     $app->redirect('user_login_form');
                 }
-
             }
         )->name('user_login');
 
-        $app->get(
-            '/signup', function () use ($app) {
+        $app->get('/signup', function () use ($app) {
 
                 $app->render('signup');
-
             }
         )->name('user_signup_form');
 
-        $app->post(
-            '/signup', function () use ($app) {
+        $app->post('/signup', function () use ($app) {
 
                 $record = new Record($app->request->post());
-                $result = User::query($app->db, 'signUp', $record);
-                $app->handleApiResponse($result);
-
+                $token = User::query($app->db, 'signUp', $record);
+                $sent = $app->handler->sendSignUpConfirmation($record, $token);
+                $app->redirect('login');
             }
         )->name('user_signup');
 
-        $app->get(
-            '/signup/confirm/:user_id/:token', function ($user_id, $token) use ($app) {
+        $app->get('/signup/confirm/:token', function ($user_id, $token) use ($app) {
 
                 $result = User::query($app->db, 'validate', $token, 'activation');
-                if ((int) $result->getFirstRecord()->get('id') === (int) $user_id) {
+                if ((int) $result->isSuccessful()) {
                     $app->redirect('user_login');
                 }
                 $app->errorForbidden();
-
             }
-        )->name('confirm_signup')->conditions(array('user_id' => '\d+', 'token' => '\w+'));
+        )->name('confirm_signup')->conditions(array('token' => '\w+'));
 
-        $app->get(
-            '/password/forgot', function () use ($app) {
+        $app->get('/password/forgot', function () use ($app) {
 
                 $app->render('password.forgot');
+            }
+        )->name('forgot_password_form');
+
+        $app->post('/password/forgot', function () use ($app) {
+                $record = new Record($app->request->post());
+                $token = User::query($app->db, 'forgot', $record->get('user_id'));
+                $sent = $app->handler->sendPasswordReset($record, $token);
 
             }
         )->name('forgot_password');
 
-        $app->get(
-            '/password/new/:user_id/:token', function ($user_id, $token) use ($app) {
+        $app->get('/password/new/:token', function ($token) use ($app) {
 
                 $result = User::query($app->db, 'validate', $token, 'forgot');
-                $app->render('password.new');
+                if ($result->isSuccessful()) {
+                    $app->render('password.new');
+                    $app->stop();
+                } else {
+                    $app->handler->errorForbidden();
+                }
+            }
+        )->name('new_password_form')->conditions(array('token' => '\w+'));
+
+        $app->post('/password/new', function () use ($app) {
 
             }
-        )->name('new_password')->conditions(array('user_id' => '\d+', 'token' => '\w+'));
+        )->name('new_password');
 
         return $app;
     }

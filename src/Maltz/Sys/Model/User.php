@@ -71,7 +71,7 @@ class User extends Model
     public function display($key = 'username', $order = 'asc')
     {
         if (!is_string($key) || !is_string($order)) {
-            throw new \Exception("Error Processing Request", 1);
+            throw new \Exception("Key and order must be strings.", 001);
         }
         
         $sql = "SELECT id, username, email, password, activity, created
@@ -83,7 +83,7 @@ class User extends Model
     public function find($page = 1, $per_page = 12, $key = 'username', $order = 'asc')
     {
         if (!(int) $page || !(int) $per_page || !is_string($key) || !is_string($order)) {
-            throw new \Exception("Error Processing Request", 1);
+            throw new \Exception("Page and per_page must be integers, key and order must be strings.", 002);
         }
         
         $pagination = Pagination::paginate($page, $per_page);
@@ -96,7 +96,7 @@ class User extends Model
     public function findByUsernameOrEmail($user)
     {
         if (!is_string($user)) {
-            throw new \Exception("Error Processing Request", 1);
+            throw new \Exception("Username or email must be string.", 003);
         }
         
         $sql = "SELECT id, username, email, password, activity, created
@@ -108,7 +108,7 @@ class User extends Model
     public function show($id)
     {
         if (!(int) $id) {
-            throw new \Exception("Error Processing Request", 1);
+            throw new \Exception("Id must be integer.", 004);
         }
         
         $sql = "SELECT id, username, email, password, activity, created
@@ -158,7 +158,9 @@ class User extends Model
     protected function parseUser($user)
     {
         if (is_string($user)) {
-            $sql = "SELECT id FROM users WHERE username=:user OR email=:user";
+            $sql = "SELECT id FROM users 
+                WHERE username=:user 
+                OR email=:user";
             $res = $this->db->run($sql, array('user' => $user));
             $user_id = $res->getFirstRecord()->get('id');
         } elseif (is_int($user)) {
@@ -170,7 +172,8 @@ class User extends Model
     protected function parseRole($role)
     {
         if (is_string($role)) {
-            $sql = "SELECT id FROM roles WHERE name=:name";
+            $sql = "SELECT id FROM roles 
+                WHERE name=:name";
             $res = $this->db->run($sql, array('name' => $role));
             $role_id = $res->getFirstRecord()->get('id');
         } elseif (is_int($role)) {
@@ -181,14 +184,17 @@ class User extends Model
 
     public function addRole($user, $role)
     {
-        $sql = "INSERT INTO users_roles (user_id, role_id) VALUES (:user_id,role_id=:role_id)";
+        $sql = "INSERT INTO users_roles (user_id, role_id) 
+            VALUES (:user_id,role_id=:role_id)";
         $result = $this->db->run($sql, array('user_id' => $this->parseUser($user), 'role_id' => $this->parseRole($role)));
         return $result;
     }
 
     public function removeRole($user, $role)
     {
-        $sql = "DELETE FROM users_roles WHERE user_id=:user_id AND role_id=:role_id";
+        $sql = "DELETE FROM users_roles 
+            WHERE user_id=:user_id 
+            AND role_id=:role_id";
         $result = $this->db->run($sql, array('user_id' => $this->parseUser($user), 'role_id' => $this->parseRole($role)));
         return $result;
     }
@@ -200,38 +206,49 @@ class User extends Model
     public function signUp(Record $record)
     {
         $res = $this->insert($record);
-        $id = $res->get('last.insert.id');
-        $result = Token::query($this->db, 'generate', $id, 'activation');
-        return $result;
+        $id = $res->getLastInsertId();
+        $token = Token::query($this->db, 'generate', $id, 'activation');
+        return $token;
     }
 
     public function remember($user_id)
     {
         if (!(int) $user_id) {
-            throw new \Exception("Error Processing Request", 1);
+            throw new \Exception("User_id must be integer.", 005);
         }
         
-        $data = Token::query($this->db, 'generate', $user_id, 'remember');
-        return $data;
+        $token = Token::query($this->db, 'generate', $user_id, 'remember');
+        return $token;
     }
 
     public function forgot($user_id)
     {
         if (!(int) $user_id) {
-            throw new \Exception("Error Processing Request", 1);
+            throw new \Exception("User_id must be integer.", 006);
         }
         
-        $data = Token::query($this->db, 'generate', $user_id, 'forgot');
-        return $data;
+        $token = Token::query($this->db, 'generate', $user_id, 'forgot');
+        return $token;
     }
 
     public function validate($user_token, $type)
     {
         if (!is_string($user_token) || !is_string($type)) {
-            throw new \Exception("Error Processing Request", 1);
+            throw new \Exception("Token and type must be strings", 007);
         }
         
-        $data = Token::query($this->db, 'validate', $user_token, $type);
-        return $data;
+        $token = Token::query($this->db, 'validate', $user_token, $type);
+        if ($token === $user_token) {
+            $sql = "UPDATE tokens SET used=NOW() 
+                WHERE type=:type 
+                AND token=:token";
+            $this->db->run($sql, array('type' => $type, 'token' => $token));
+            $sql = "SELECT id, username, email, password, activity, created 
+                FROM users 
+                WHERE id=:id";
+            $user = $this->db->run($sql, array('id' => $record->get('user_id')));
+            return $user->getFirstRecord();
+        }
+        return false;
     }
 }

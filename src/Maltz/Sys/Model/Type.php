@@ -27,7 +27,7 @@ class Type extends Model
     public function display($key = 'name', $order = 'asc', $lang = 'pt-br')
     {
         if (!is_string($key) || !is_string($order) || !is_string($lang)) {
-            throw new \Exception("Error Processing Request", 1);
+            throw new \Exception("Name, order and lang must be strings.", 001);
         }
         
         $sql = "SELECT t1.id, t1.item_name, t1.name, t2.slug, t2.title
@@ -44,7 +44,7 @@ class Type extends Model
     public function find($page = 1, $per_page = 12, $key = 'name', $order = 'asc', $lang = 'pt-br')
     {
         if (!(int) $page || !(int) $per_page || !is_string($key) || !is_string($order) || !is_string($lang)) {
-            throw new \Exception("Error Processing Request", 1);
+            throw new \Exception("Page and per_page must be integers, key and order must be strings.", 002);
         }
         
         $pagination = Pagination::paginate($page, $per_page);
@@ -63,7 +63,7 @@ class Type extends Model
     public function show($id, $lang = 'pt-br')
     {
         if (!(int) $id || !is_string($lang)) {
-            throw new \Exception("Error Processing Request", 1);
+            throw new \Exception("Id must be integer and lang must be string.", 003);
         }
         
         $sql = "SELECT t1.id, t1.item_name, t1.name, t2.slug, t2.title
@@ -108,7 +108,7 @@ class Type extends Model
     public function delete($id)
     {
         if (!(int) $id) {
-            throw new \Exception("Error Processing Request", 1);
+            throw new \Exception("Id must be integer.", 004);
         }
         
         $sql = "DELETE FROM types WHERE id=:id";

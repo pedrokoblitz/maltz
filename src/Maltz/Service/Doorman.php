@@ -32,7 +32,7 @@ class Doorman
     public function remember($user_id)
     {
         if (!(int) $user_id) {
-            throw new \Exception("Must be integer", 001);
+            throw new \Exception("User_id must be integer", 001);
         }
 
         $cookie['value'] = $this->user->remember($user_id);
