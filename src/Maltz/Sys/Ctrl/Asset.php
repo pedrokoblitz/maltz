@@ -12,8 +12,13 @@ class Asset extends Controller
          * MUSTACHE TEMPLATES
          */
         $app->get('/template/:name', function ($name) use ($app) {
-                $body = file_get_contents('/public/assets/mustache/' . $name . '.mustache');
 
+                $file = '/public/assets/mustache/' . $name . '.mustache';
+                if (!is_file($file) || !is_readable($file)) {
+                    throw new \Exception("Error Processing Request", 1);                    
+                }
+
+                $body = file_get_contents($file);
                 if (!$body) {
                     throw new \Exception("Error Processing Request", 1);                    
                 }
@@ -42,8 +47,12 @@ class Asset extends Controller
                         break;                            
                     }
 
-                    $body = file_get_contents('/public/assets/' . $extension . '/' . $name . '.' . $extension);
+                    $file = '/public/assets/' . $extension . '/' . $name . '.' . $extension;
+                    if (!is_file($file) || !is_readable($file)) {
+                        throw new \Exception("Error Processing Request", 1);                    
+                    }
 
+                    $body = file_get_contents($file);
                     if (!$body) {
                         throw new \Exception("Error Processing Request", 1);                    
                     }
@@ -81,8 +90,13 @@ class Asset extends Controller
                     }
                     
                     $app->response->headers->set('Content-Type', $type);
-                    $body = file_get_contents('/public/media/' . $name . '.' . $extension);
 
+                    $file = '/public/media/' . $name . '.' . $extension;
+                    if (!is_file($file) || !is_readable($file)) {
+                        throw new \Exception("Error Processing Request", 1);                    
+                    }
+
+                    $body = file_get_contents($file);
                     if (!$body) {
                         throw new \Exception("Error Processing Request", 1);                    
                     }
@@ -99,10 +113,14 @@ class Asset extends Controller
          */
         $app->get('/download/:name/:extension', function ($name, $extension) use ($app) {
 
-                $body = file_get_contents('/public/media/' . $name . '.' . $extension);
+                $file = '/public/media/' . $name . '.' . $extension;
+                if (!is_file($file) || !is_readable($file)) {
+                    throw new \Exception("Error Processing Request", 1);
+                }
 
+                $body = file_get_contents('/public/media/' . $name . '.' . $extension);
                 if (!$body) {
-                    throw new \Exception("Error Processing Request", 1);                    
+                    throw new \Exception("Error Processing Request", 1);
                 }
 
                 $mimes = $app->config('mimetypes.download');

@@ -1,28 +1,3 @@
-INSERT INTO `config` (`key`, `value`, `activity`, `created`, `modified`) VALUES 
-("site.title", "12", 2, NOW(), NOW()),
-("site.tagline", "12", 2, NOW(), NOW()),
-("system.email", "pedrokoblitz@gmail.com", 2, NOW(), NOW()),
-("per.page", "12", 2, NOW(), NOW()),
-("upload.dir", "/public/media", 2, NOW(), NOW()),
-("app.web.root", "/", 2, NOW(), NOW()),
-("app.abs.path", "/var/www/html/", 2, NOW(), NOW()),
-("panel.log.quantity", "15", 2, NOW(), NOW()),
-("panel.content.quantity", "10", 2, NOW(), NOW()),
-("panel.collection.quantity", "5", 2, NOW(), NOW()),
-("panel.resource.quantity", "5", 2, NOW(), NOW()),
-("panel.term.quantity", "5", 2, NOW(), NOW()),
-("facebook.app.id", "", 2, NOW(), NOW()),
-("facebook.auth.key", "", 2, NOW(), NOW()),
-("facebook.auth.secret", "", 2, NOW(), NOW()),
-("twitter.app.id", "", 2, NOW(), NOW()),
-("twitter.app.key", "", 2, NOW(), NOW()),
-("twitter.app.secret", "", 2, NOW(), NOW()),
-("flickr.profile.url", "http://flickr.com.br/photos/pedrokoblitz", 2, NOW(), NOW()),
-("tumblr.profile.url", "http://pedrokoblitz.tumblr.com", 2, NOW(), NOW()),
-("facebook.profile.url", "https://facebook.com/pedrokoblitz", 2, NOW(), NOW()),
-("twitter.profile.url", "http://twitter.com/pedrokoblitz", 2, NOW(), NOW()),
-("linkedin.profile.url", "http://br.linkedin.com/pedrokoblitz", 2, NOW(), NOW()),
-("pinterest.profile.url", "http://pinterest.com/pedrokoblitz", 2, NOW(), NOW());
 
 INSERT INTO `users` VALUES 
 (1);

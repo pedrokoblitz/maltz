@@ -4,6 +4,7 @@ namespace Maltz\Geo\Model;
 
 use Maltz\Mvc\DB;
 use Maltz\Mvc\Model;
+use Maltz\Mvc\Record;
 
 class Address
 {

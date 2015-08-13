@@ -77,6 +77,33 @@ CREATE TABLE `config` (
   UNIQUE(`key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+INSERT INTO `config` (`key`, `value`, `activity`, `created`, `modified`) VALUES 
+("site.title", "bla bla bla", 2, NOW(), NOW()),
+("site.tagline", "bla bla bla bla bla", 2, NOW(), NOW()),
+("system.email", "pedrokoblitz@gmail.com", 2, NOW(), NOW()),
+("per.page", "12", 2, NOW(), NOW()),
+-- ("upload.dir", "/public/media", 2, NOW(), NOW()),
+-- ("app.web.root", "/", 2, NOW(), NOW()),
+-- ("app.abs.path", "/var/www/html/", 2, NOW(), NOW()),
+("panel.log.quantity", "15", 2, NOW(), NOW()),
+("panel.content.quantity", "10", 2, NOW(), NOW()),
+("panel.collection.quantity", "5", 2, NOW(), NOW()),
+("panel.resource.quantity", "5", 2, NOW(), NOW()),
+("panel.term.quantity", "5", 2, NOW(), NOW()),
+("facebook.app.id", "", 2, NOW(), NOW()),
+("facebook.app.key", "", 2, NOW(), NOW()),
+("facebook.app.secret", "", 2, NOW(), NOW()),
+("twitter.app.id", "", 2, NOW(), NOW()),
+("twitter.app.key", "", 2, NOW(), NOW()),
+("twitter.app.secret", "", 2, NOW(), NOW()),
+("flickr.profile.url", "http://flickr.com.br/photos/pedrokoblitz", 2, NOW(), NOW()),
+("tumblr.profile.url", "http://pedrokoblitz.tumblr.com", 2, NOW(), NOW()),
+("facebook.profile.url", "https://facebook.com/pedrokoblitz", 2, NOW(), NOW()),
+("facebook.page.url", "https://facebook.com/ideiasinsolitas", 2, NOW(), NOW()),
+("twitter.profile.url", "http://twitter.com/pedrokoblitz", 2, NOW(), NOW()),
+("linkedin.profile.url", "http://br.linkedin.com/pedrokoblitz", 2, NOW(), NOW()),
+("pinterest.profile.url", "http://pinterest.com/pedrokoblitz", 2, NOW(), NOW());
+
 DROP TABLE IF EXISTS `log`;
 CREATE TABLE `log` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -435,6 +462,7 @@ CREATE TABLE `payments` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `order_id` int(10) unsigned NOT NULL,
   `type_id` int(10) unsigned NOT NULL,
+  `amount` decimal(10,2) unsigned NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
