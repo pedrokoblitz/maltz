@@ -42,6 +42,10 @@ abstract class Model
         $this->rules = $rules;
     }
 
+    abstract public function insert(Record $record);
+
+    abstract public function update(Record $record);
+
     public function save(Record $record)
     {
         if (method_exists($this, 'processRecord')) {
@@ -51,7 +55,6 @@ abstract class Model
         $record->validate($this->rules);
         
         if ($record->isValid()) {
-
             if ($record->has('id')) {
                 return $this->update($record);
             }
@@ -76,7 +79,7 @@ abstract class Model
         }
         return new Result(
             array(
-                'success' => false, 
+                'success' => false,
                 'message' => "Method $method does not exists."
                 )
             );
