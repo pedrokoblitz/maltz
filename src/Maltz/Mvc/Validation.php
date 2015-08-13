@@ -84,20 +84,26 @@ class Validation
      */
     public function email($data)
     {
-        if (filter_var($data, FILTER_VALIDATE_EMAIL)) {
-            return true;
-        }
-        return false;
+        return filter_var($data, FILTER_VALIDATE_EMAIL);
     }
 
     public function datetime($data)
     {
-        return $data;
+        return new \DateTime($data);
     }
 
-    public function slug($data)
+    public function slug($text)
     {
-        return $data;
+        $text = preg_replace('~[^\\pL\d]+~u', '-', $text);
+        $text = trim($text, '-');
+        $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
+        $text = strtolower($text);
+        $text = preg_replace('~[^-\w]+~', '', $text);
+        if (empty($text))
+        {
+            return 'n-a';
+        }
+        return $text;
     }
 
     public function string($data)
@@ -105,9 +111,11 @@ class Validation
         return filter_var($data, FILTER_SANITIZE_STRING);
     }
 
-    public function textarea($data)
+    public function textarea($html)
     {
-        return htmlentities($data);
+        $html = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $html);
+        $html = preg_replace("/<img[^>]+\>/i", "", $html);
+        return htmlentities($html);
     }
 
     /**

@@ -2,20 +2,6 @@
 
 namespace Maltz\Mvc;
 
-/**
- * Adaptador do \PDO
- *
- * http://ideiasinsolitas.com.br/
- *
- * @copyright Copyright (c) 2012-2013 Pedro Koblitz
- * @author    Pedro Koblitz pedrokoblitz@gmail.com
- * @license   GPL v2
- *
- * @package Maltz
- *
- * @version 0.1 alpha
- */
-
 class DB extends \PDO
 {
 
@@ -94,11 +80,12 @@ class DB extends \PDO
 
                     $records = array();
                     $ids = array();
+                    $validation = new Validation();
                     foreach ($data as $value) {
                         if (isset($value['id'])) {
                             $ids[] = $value['id'];
                         }
-                        $records[] = new Record($value);
+                        $records[] = new Record($value, $validation);
                     }
                     $result = $settings['return.value'];
                     $result->set('success', true);

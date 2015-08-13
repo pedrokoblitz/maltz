@@ -346,15 +346,6 @@ SELECT t1.id FROM users t1
   AND t1.id=?;
 
 
-
-
-
-
-
-
-
-
-
 --projects
 
 INSERT INTO projects (title, description) VALUES (:title, :description);

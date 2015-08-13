@@ -6,7 +6,10 @@
         "gargron/fileupload": "1.0.*",
         "willdurand/geocoder": "dev-master",
         "monolog/monolog": "dev-master",
-        "flynsarmy/slim-monolog": "dev-master",
+        "flynsarmy/slim-monolog": "dev-master"
+    },
+    "require-dev": {
+        "phpunit/phpunit" : "dev-master",
         "yusukezzz/slim-debugbar": "1.*",
         "zeuxisoo/slim-whoops": "0.3.0",
         "fzaninotto/faker": "^1.5",

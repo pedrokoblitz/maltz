@@ -2,6 +2,9 @@
 
 namespace Maltz\Sys\Ctrl;
 
+use Maltz\Mvc\Record;
+use Maltz\Sys\User;
+
 /**
  * Ações da administraction do sistema
  *
@@ -25,7 +28,6 @@ class Authentication extends Controller
         $app->get('/login', function () use ($app) {
 
                 $app->render('login');
-
             }
         )->name('user_login_form');
 
@@ -52,7 +54,7 @@ class Authentication extends Controller
                 $record = new Record($app->request->post());
                 $token = User::query($app->db, 'signUp', $record);
                 $sent = $app->handler->sendSignUpConfirmation($record, $token);
-                $app->redirect('login');
+                $app->redirect('user_login_form');
             }
         )->name('user_signup');
 
@@ -76,7 +78,7 @@ class Authentication extends Controller
                 $record = new Record($app->request->post());
                 $token = User::query($app->db, 'forgot', $record->get('user_id'));
                 $sent = $app->handler->sendPasswordReset($record, $token);
-
+                $app->redirect('user_login_form');
             }
         )->name('forgot_password');
 
@@ -93,7 +95,9 @@ class Authentication extends Controller
         )->name('new_password_form')->conditions(array('token' => '\w+'));
 
         $app->post('/password/new', function () use ($app) {
-
+                $record = new Record($app->request->post());
+                $result = User::query($app->db, 'resetPassword', $record->get('new_password'));
+                $app->redirect($app->urlFor('user_login_form'));
             }
         )->name('new_password');
 

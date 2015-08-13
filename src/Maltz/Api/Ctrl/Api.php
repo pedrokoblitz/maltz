@@ -4,7 +4,6 @@ namespace Maltz\Api\Ctrl;
 
 use Maltz\Mvc\Record;
 use Maltz\Mvc\Result;
-use Maltz\Sys\Model\Type;
 use Maltz\Sys\Model\Config;
 use Maltz\Sys\Model\User;
 use Maltz\Sys\Model\Log;
@@ -32,7 +31,6 @@ class Api
                 $entity = $app->handler->setEntity($model);
                 $result = $entity->show($id);
                 $app->handler->handleApiResponse($result);
-
             }
         )->name('api_show')->conditions(array('model' => 'content|collection|resource|term', 'id' => '\d+'));
 
@@ -80,7 +78,6 @@ class Api
 
                 $entity = $app->handler->setEntity($group_name);
                 $result = $entity->getAllAttachments($group_id, $item_name);
-                Log::query('log', $app->sessionDataStore->getUserId(), '', '', '', '', '', $app->nonce->get());
                 $app->handler->handleApiResponse($result);
             }
         )->name('api_show_items')->conditions(array('group_name' => 'content|collection', 'group_id' => '\d+', 'item_name' => 'content|collection|resource|term'));
@@ -90,7 +87,7 @@ class Api
                 $record = $app->handler->handlePostRequest();
                 $entity = $app->handler->setEntity($record->get('group_name'));
                 $result = $entity->addAttachment($record);
-                Log::query('log', $app->sessionDataStore->getUserId(), '', '', '', '', '', $app->nonce->get());
+                Log::query('log', $app->sessionDataStore->getUserId(), $record->get(''), $record->get(''), 'add_attachment', $record->get(''), $record->get(''), $app->nonce->get());
                 $app->handler->handleApiResponse($result);
             }
         )->name('api_add_item');
@@ -129,42 +126,8 @@ class Api
         )->name('api_remove_meta');
 
         /*
-         * TYPES
-         */
-        
-        $app->get('/api/type(/:pg(/:key(/:order)))', function ($pg = 1, $key = 'name', $order = 'asc') use ($app) {
-
-                $result = Type::query($app->db, 'display');
-                $app->handler->handleApiResponse($result);
-            }
-        )->name('api_type_list')->conditions(array('pg' => '\d+', 'key' => '\w+', 'order' => 'asc|desc'));
-
-
-        $app->post('/api/type/delete', function () use ($app) {
-
-                $record = $app->handler->handlePostRequest();
-                $id = $record->get('id');
-                $result = Type::query($app->db, 'delete', $id);
-                Log::query('log', $app->sessionDataStore->getUserId(), '', '', '', '', '', $app->nonce->get());
-                $app->handler->handleApiResponse($result);
-            }
-        )->name('api_type_delete');
-
-        $app->post('/api/type/save', function () use ($app) {
-
-                $record = $app->handler->handlePostRequest();
-                $result = Type::query($app->db, 'save', $record);
-                $id = $record->has('id') ? $record->get('id') : $result->get('last.insert.id');
-                Log::query('log', $app->sessionDataStore->getUserId(), $model, $id, 'save', '', '', $app->nonce->get());
-                $app->handler->handleApiResponse($result);
-            }
-        )->name('api_type_save');
-
-
-        /*
          * SITE BUILDING
          */
-
         $app->get('/api/area(/:pg(/:key(/:order)))', function ($pg = 1, $key = 'name', $order = 'asc') use ($app) {
 
                 $result = Area::query($app->db, 'find', $pg, $app->config('per_page'), $key, $order);
@@ -216,7 +179,6 @@ class Api
             }
         )->name('api_area_save');
 
-
         $app->get('/api/block(/:pg(/:key(/:order)))', function ($pg = 1, $key = 'modified', $order = 'desc') use ($app) {
 
                 $result = Block::query($app->db, 'find', $pg, $app->config('per_page'), $key, $order);
@@ -243,11 +205,9 @@ class Api
             }
         )->name('api_block_save');
 
-
         /*
          * USERS
-         */
-        
+         */        
         $app->get('/api/user(/:pg(/:key(/:order)))', function ($pg = 1, $key = 'modified', $order = 'desc') use ($app) {
 
                 $result = User::query($app->db, 'find', $pg, $app->config('per_page'), $key, $order);
@@ -289,28 +249,22 @@ class Api
             }
         )->name('api_user_save');
 
-
-
         /*
          * LANG
          */
         $app->get('/api/lang/:lang', function ($lang) use ($app) {
             
                 $app->session->set('language', $lang);
-
             }
         )->name('api_set_lang')->conditions(array('lang' => '\w+'));
 
-
         /*
          * SYSTEM
-         */
-        
+         */        
         $app->get('/api/config', function () use ($app) {
 
                 $result = Config::query($app->db, 'display');
                 $app->handler->handleApiResponse($result);
-
             }
         )->name('api_config_list')->conditions(array());
 
@@ -321,16 +275,13 @@ class Api
                 $id = $record->has('id') ? $record->get('id') : $result->get('last.insert.id');
                 Log::query('log', $app->sessionDataStore->getUserId(), 'config', $id, 'save', '', '', $app->nonce->get());
                 $app->handler->handleApiResponse($result);
-
             }
         )->name('api_config_save');
-
 
         $app->get('/api/log(/:pg)', function ($pg = 1) use ($app) {
 
                 $result = Log::query($app->db, 'find', $pg, $app->config('per_page'));
                 $app->handler->handleApiResponse($result);
-
             }
         )->name('api_log_list')->conditions(array('pg' => '\d+'));
 
@@ -346,8 +297,7 @@ class Api
 
         /*
          * UPLOAD
-         */
-        
+         */        
         $app->get('/upload', function () use ($app) {
                 $app->render('upload');
             }

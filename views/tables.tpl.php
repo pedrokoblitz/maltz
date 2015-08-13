@@ -32,6 +32,9 @@
     <td class="checkbox"><input type="checkbox" class="checkthis" /></td>
     <td class="key"></td>
     <td class="value"></td>
+    <td class="item_name"></td>
+    <td class="item_id"></td>
+    <td class="order"></td>
     <td class="edit">
         <p data-placement="top" data-toggle="tooltip" title="Edit">
             <button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" >
@@ -53,8 +56,12 @@
 
 <tr id="record-1" class="record">
     <td class="checkbox"><input type="checkbox" class="checkthis" /></td>
-    <td class="key"></td>
-    <td class="value"></td>
+    <td class="username"></td>
+    <td class="first_name"></td>
+    <td class="middle_name"></td>
+    <td class="last_name"></td>
+    <td class="email"></td>
+    <td class="activity"></td>
     <td class="edit">
         <p data-placement="top" data-toggle="tooltip" title="Edit">
             <button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" >
@@ -77,6 +84,8 @@
     <td class="checkbox"><input type="checkbox" class="checkthis" /></td>
     <td class="key"></td>
     <td class="value"></td>
+    <td class="format"></td>
+    <td class="activity"></td>
     <td class="edit">
         <p data-placement="top" data-toggle="tooltip" title="Edit">
             <button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" >
@@ -97,8 +106,7 @@
 
 <tr id="record-1" class="record">
     <td class="checkbox"><input type="checkbox" class="checkthis" /></td>
-    <td class="key"></td>
-    <td class="value"></td>
+    <td class="name"></td>
     <td class="edit">
         <p data-placement="top" data-toggle="tooltip" title="Edit">
             <button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" >
@@ -120,8 +128,9 @@
 
 <tr id="record-1" class="record">
     <td class="checkbox"><input type="checkbox" class="checkthis" /></td>
-    <td class="key"></td>
-    <td class="value"></td>
+    <td class="title"></td>
+    <td class="description"></td>
+    <td class="activity"></td>
     <td class="edit">
         <p data-placement="top" data-toggle="tooltip" title="Edit">
             <button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" >
@@ -142,8 +151,13 @@
 
 <tr id="record-1" class="record">
     <td class="checkbox"><input type="checkbox" class="checkthis" /></td>
-    <td class="key"></td>
-    <td class="value"></td>
+    <td class="dev"></td>
+    <td class="project"></td>
+    <td class="problem_url"></td>
+    <td class="description"></td>
+    <td class="activity"></td>
+    <td class="created"></td>
+    <td class="modified"></td>
     <td class="edit">
         <p data-placement="top" data-toggle="tooltip" title="Edit">
             <button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" >
@@ -164,8 +178,12 @@
 
 <tr id="record-1" class="record">
     <td class="checkbox"><input type="checkbox" class="checkthis" /></td>
-    <td class="key"></td>
-    <td class="value"></td>
+    <td class="project"></td>
+    <td class="hours"></td>
+    <td class="rate"></td>
+    <td class="total"></td>
+    <td class="activity"></td>
+    <td class="created"></td>
     <td class="edit">
         <p data-placement="top" data-toggle="tooltip" title="Edit">
             <button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" >
@@ -212,8 +230,9 @@
 
 <tr id="record-1" class="record">
     <td class="checkbox"><input type="checkbox" class="checkthis" /></td>
-    <td class="key"></td>
-    <td class="value"></td>
+    <td class="type"></td>
+    <td class="address"></td>
+    <td class="description"></td>
     <td class="edit">
         <p data-placement="top" data-toggle="tooltip" title="Edit">
             <button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" >
@@ -234,8 +253,15 @@
 
 <tr id="record-1" class="record">
     <td class="checkbox"><input type="checkbox" class="checkthis" /></td>
-    <td class="key"></td>
-    <td class="value"></td>
+    <td class="name"></td>
+    <td class="street"></td>
+    <td class="number"></td>
+    <td class="address"></td>
+    <td class="district"></td>
+    <td class="city"></td>
+    <td class="province"></td>
+    <td class="country"></td>
+    <td class="coordinates"></td>
     <td class="edit">
         <p data-placement="top" data-toggle="tooltip" title="Edit">
             <button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" >
@@ -258,8 +284,16 @@
 
 <tr id="record-1" class="record">
     <td class="checkbox"><input type="checkbox" class="checkthis" /></td>
-    <td class="key"></td>
-    <td class="value"></td>
+    <td class="place"></td>
+    <td class="type"></td>
+    <td class="area"></td>
+    <td class="rooms"></td>
+    <td class="suites"></td>
+    <td class="parking_spots"></td>
+    <td class="price"></td>
+    <td class="charges"></td>
+    <td class="taxes"></td>
+    <td class="created"></td>
     <td class="edit">
         <p data-placement="top" data-toggle="tooltip" title="Edit">
             <button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" >
@@ -282,8 +316,8 @@
 
 <tr id="record-1" class="record">
     <td class="checkbox"><input type="checkbox" class="checkthis" /></td>
-    <td class="key"></td>
-    <td class="value"></td>
+    <td class="name"></td>
+    <td class="seller"></td>
     <td class="edit">
         <p data-placement="top" data-toggle="tooltip" title="Edit">
             <button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" >
@@ -304,8 +338,13 @@
 
 <tr id="record-1" class="record">
     <td class="checkbox"><input type="checkbox" class="checkthis" /></td>
-    <td class="key"></td>
-    <td class="value"></td>
+    <td class="name"></td>
+    <td class="store"></td>
+    <td class="in_stock"></td>
+    <td class="price"></td>
+    <td class="weigth"></td>
+    <td class="width"></td>
+    <td class="depth"></td>
     <td class="edit">
         <p data-placement="top" data-toggle="tooltip" title="Edit">
             <button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" >
@@ -326,8 +365,9 @@
 
 <tr id="record-1" class="record">
     <td class="checkbox"><input type="checkbox" class="checkthis" /></td>
-    <td class="key"></td>
-    <td class="value"></td>
+    <td class="customer"></td>
+    <td class="payment_method"></td>
+    <td class="shipping_method"></td>
     <td class="edit">
         <p data-placement="top" data-toggle="tooltip" title="Edit">
             <button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" >
@@ -348,8 +388,8 @@
 
 <tr id="record-1" class="record">
     <td class="checkbox"><input type="checkbox" class="checkthis" /></td>
-    <td class="key"></td>
-    <td class="value"></td>
+    <td class="order"></td>
+    <td class="type"></td>
     <td class="edit">
         <p data-placement="top" data-toggle="tooltip" title="Edit">
             <button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" >
@@ -370,8 +410,9 @@
 
 <tr id="record-1" class="record">
     <td class="checkbox"><input type="checkbox" class="checkthis" /></td>
-    <td class="key"></td>
-    <td class="value"></td>
+    <td class="order"></td>
+    <td class="type"></td>
+    <td class="tracking_ref"></td>
     <td class="edit">
         <p data-placement="top" data-toggle="tooltip" title="Edit">
             <button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" >

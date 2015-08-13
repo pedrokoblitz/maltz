@@ -14,13 +14,21 @@ class Template
 
     }
 
-    public static function renderMenu($menu)
+    public static function renderMenu($menu, $level = 0)
     {
-
+        $html = '';
+        foreach ($menu as $key => $value) {
+            if (is_array($value)) {
+                $level++;
+                $this->renderMenu($value, $level);
+            }
+            $html .= $value;
+        }
+        return $html;
     }
 
     public static function formatDate($date)
     {
-
+        return new \DateTime($date);
     }
 }

@@ -3,31 +3,6 @@ namespace Maltz\Mvc;
 
 use Maltz\Utils\Pagination;
 
-/**
- * CONVENCOES DO Ctrl
- * as funcoes set(), js(), json() e css() sao parte da biblioteca limonade-php
- * http://limonade-php.net (ver pÃ¡gina do README para detalhes)
- *
- * http://ideiasinsolitas.com.br/
- *
- * @copyright Copyright (c) 2012-2013 Pedro Koblitz
- * @author    Pedro Koblitz pedrokoblitz@gmail.com
- * @license   GPL v2
- *
- * @package Maltz
- *
- * @version 0.1 alpha
- */
-
-/*
- *
- *
- *
- * @param objeto DB
- *
- *
- */
-
 abstract class Model
 {
     protected $db;
@@ -42,10 +17,6 @@ abstract class Model
         $this->rules = $rules;
     }
 
-    abstract public function insert(Record $record);
-
-    abstract public function update(Record $record);
-
     public function save(Record $record)
     {
         if (method_exists($this, 'processRecord')) {
@@ -56,7 +27,13 @@ abstract class Model
         
         if ($record->isValid()) {
             if ($record->has('id')) {
+                if (!method_exists($this, 'update')) {
+                    throw new \Exception("Error Processing Request", 1);                    
+                }
                 return $this->update($record);
+            }
+            if (!method_exists($this, 'insert')) {
+                throw new \Exception("Error Processing Request", 1);                    
             }
             return $this->insert($record);
         }

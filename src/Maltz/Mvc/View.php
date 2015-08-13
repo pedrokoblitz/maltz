@@ -101,7 +101,6 @@ class View extends \Slim\View
             'title' => $this->renderPageTitle(),
             'css' => $this->renderStyles(),
             'meta' => $this->renderPageMeta(),
-            'meta' => $this->renderPageMeta(),
             'styles' => $this->renderStyles(),
             );
         return $this->partial('html.head', $data);

@@ -528,6 +528,7 @@ CREATE TABLE `estates` (
   `price` decimal(10,2) unsigned NOT NULL DEFAULT 0.00,
   `charges` decimal(10,2) unsigned NOT NULL DEFAULT 0.00,
   `taxes` decimal(10,2) unsigned NOT NULL DEFAULT 0.00,
+  `created` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 -- END REAL ESTATE

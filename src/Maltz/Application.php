@@ -6,14 +6,13 @@ use Maltz\Http\CookieJar;
 use Maltz\Http\Session;
 use Maltz\Mvc\DB;
 use Maltz\Mvc\View;
-use Maltz\Sys\Model\Config;
 use Maltz\Service\Nonce;
 use Maltz\Service\SessionDataStore;
 use Maltz\Service\Handler;
-use Maltz\Service\Postman;
-use Maltz\Service\Doorman;
 use Maltz\Service\Pagination;
-use Slim\Slim;
+use Maltz\Sys\Model\Config;
+use Maltz\Sys\Service\Postman;
+use Maltz\Sys\Service\Doorman;
 
 class Application implements Config
 {
@@ -25,7 +24,7 @@ class Application implements Config
     */
     public static function initialize()
     {
-        $app = new Slim();
+        $app = new \Slim\Slim();
         
         $logger = new \Flynsarmy\SlimMonolog\Log\MonologWriter(
             array(
