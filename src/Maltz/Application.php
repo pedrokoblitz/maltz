@@ -15,7 +15,7 @@ use Maltz\Service\Doorman;
 use Maltz\Service\Pagination;
 use Slim\Slim;
 
-class Application
+class Application implements Config
 {
 
     /*
@@ -41,8 +41,7 @@ class Application
             'view' => new View(),
             'mode' => 'development',
             'templates.path' => './views',
-            'base.uri' => '/',
-            'per_page' => '12'
+            'base.uri' => '/'
             )
         );
 
@@ -156,6 +155,10 @@ class Application
         );
 
         $controllers = array(
+            'Maltz\Api\Ctrl\Content',
+            'Maltz\Api\Ctrl\Calendar',
+            'Maltz\Api\Ctrl\GeoLocation',
+            'Maltz\Api\Ctrl\Store',
             'Maltz\Api\Ctrl\Project',
             'Maltz\Api\Ctrl\Sys',
         );
