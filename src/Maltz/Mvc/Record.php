@@ -17,9 +17,14 @@ class Record extends TypeArray
         }
     }
 
-    public function new(array $keys)
+    public function newInstance(array $keys = null)
     {
-        return array_intersect_key($this->items, array_flip($keys));
+        if ($keys) {
+            $items = array_intersect_key($this->items, array_flip($keys));
+        } else {
+            $items = $this->items;
+        }
+        return new Record($items);
     }
 
     public function fromArray(array $items)

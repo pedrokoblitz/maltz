@@ -92,7 +92,7 @@ class Area extends Model
 
     public function find($page = 1, $per_page = 12, $key = 'name', $order = 'asc')
     {
-        if (!(int) $page || is_int($per_page) || !is_string($key) || !is_string($order)) {
+        if (!(int) $page || !(int) $per_page || !is_string($key) || !is_string($order)) {
             throw new \Exception("Error Processing Request", 1);
         }
 
@@ -151,7 +151,7 @@ class Area extends Model
             throw new \Exception("Error Processing Request", 1);
         }
 
-        $sql = "SELECT t1.id AS id, t1.area_id AS area_id, t1.activity AS activity, t2.slug AS slug, t2.title AS title, t2.description AS description
+        $sql = "SELECT t1.id, t1.area_id, t1.activity, t2.slug, t2.title, t2.description
         FROM blocks t1
             JOIN translations t2
                 ON t2.item_name=:item_name

@@ -61,12 +61,19 @@ class Block extends Model
 
     public function insert(Record $record)
     {
+        $fields = $record->getFieldsList();
+        $values = $record->getInsertValueString();
+        $sql = "INSERT INTO blocks $fields VALUES $values";
+        $result = $this->db->run($sql, $record->toArray());
         return $result;
     }
 
 
     public function update(Record $record)
     {
+        $values = $record->getUpdateValueString();
+        $sql = "UPDATE blocks SET $values WHERE id=:id";
+        $result = $this->db->run($sql, $record->toArray());
         return $result;
     }
 

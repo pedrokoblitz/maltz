@@ -6,6 +6,8 @@ trait Tree
 {
     public function displayTree()
     {
+        protected $elements;
+        
         if (!method_exists($this, 'display')) {
             throw new \Exception("Error Processing Request", 1);
         }

@@ -4,27 +4,6 @@ namespace Maltz\Mvc;
 
 class Result extends TypeArray
 {
-
-    protected function __wakeup()
-    {
-        $items = array();
-        foreach ($this->items['records'] as $key => $value) {
-            $items['records'][$key] = new Record($value);
-        }
-        $this->items = $items;
-    }
-
-    protected function __sleep()
-    {
-        $items = array();
-        if (isset($this->items['records'])) {
-            foreach ($this->items['records'] as $record) {
-                $items[] = $record->toArray();
-            }
-        }
-        $this->items = $items;
-    }
-
     protected function itemsToArray($items)
     {
         $newItems = array();

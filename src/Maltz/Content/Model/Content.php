@@ -134,8 +134,7 @@ class Content extends Model
             JOIN types t3
                 ON t1.type_id=t3.id
             WHERE t1.id=:id
-            AND t2.language=:lang
-            AND t1.activity > 0";
+            AND t2.language=:lang";
         $result = $this->db->run($sql, array('id' => $id, 'item_name' => 'content', 'lang' => $lang));
         return $result;
     }

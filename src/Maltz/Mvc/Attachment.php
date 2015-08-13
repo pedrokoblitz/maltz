@@ -23,9 +23,9 @@ trait Attachment
 
     public function removeAttachment(Record $record)
     {
-        $id = $record->get('');
-        $item_name = $record->get('');
-        $item_id = $record->get('');
+        $id = $record->get('id');
+        $item_name = $record->get('item_name');
+        $item_id = $record->get('item_id');
 
         if (!(int) $id || !(int) $item_id || !is_string($item_name)) {
             throw new \Exception("Error Processing Request", 1);
@@ -58,22 +58,22 @@ trait Attachment
             throw new \Exception("Error Processing Request", 1);
         }
 
-        $fields = 't2.id AS id, t3.slug AS slug, ';
+        $fields = 't2.id, t3.slug, ';
         switch ($item_name) {
         case 'content':
-            $fields .= 't3.title AS title, t3.subtitle AS subtitle, t3.description AS description, t3.excerpt AS excerpt, t3.body AS body ';
+            $fields .= 't3.title, t3.subtitle, t3.description, t3.excerpt, t3.body ';
             break;
         case 'collection':
-            $fields .= 't3.title AS title, t3.description AS description ';
+            $fields .= 't3.title, t3.description ';
             break;
         case 'resource':
-            $fields .= 't2.filename AS filename, t2.filepath AS filepath, t2.url AS url, t2.embed AS embed, t3.title AS title, t3.description AS description ';
+            $fields .= 't2.filename, t2.filepath, t2.url, t2.embed, t3.title, t3.description ';
             break;
         case 'term':
-            $fields .= 't3.title AS title, t3.description AS description ';
+            $fields .= 't3.title, t3.description ';
             break;
         }
-        $fields .= 't4.name AS type';
+        $fields .= 't4.name';
 
         $item_table = $item_name . 's';
         $bind = array('group_name' => $this->slug, 'group_id' => $id, 'item_name' => $item_name);

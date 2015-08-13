@@ -25,6 +25,7 @@ class Doorman
 
     public function __construct($db, $sessionDataStore, $cookieJar)
     {
+        $this->user = new User($db);
         $this->sessionDataStore = $sessionDataStore;
         $this->cookieJar = $cookieJar;
     }
@@ -52,7 +53,7 @@ class Doorman
     */
     public function login(Record $credentials)
     {
-        $login = User::query('findByUsernameOrEmail', $credentials->get('username'));
+        $login = $this->user->findByUsernameOrEmail($credentials->get('username'));
         $record = $login->getFirstRecord();
     
         if ($record->get('password') === sha1($credentials->get('password'))) {
@@ -137,7 +138,7 @@ class Doorman
     private function getRoles()
     {
         $userId = $this->sessionDataStore->getUserId();
-        $roles = User::query('getRoles', $userId);
+        $roles = $this->user->getRoles($userId);
         return $roles;
     }
 }

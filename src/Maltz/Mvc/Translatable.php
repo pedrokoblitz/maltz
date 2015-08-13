@@ -10,7 +10,7 @@ trait Translatable
             throw new \Exception("Error Processing Request", 1);
         }
 
-        $sql = "SELECT slug, title, subtitle, excerpt, description, body FROM translations WHERE item_name=:item_name AND item_id=item_id";
+        $sql = "SELECT slug, title, subtitle, excerpt, description, body, language FROM translations WHERE item_name=:item_name AND item_id=item_id";
         $result = $this->db->run($sql, array('item_name' => $this->slug, 'item_id' => $item_id));
         return $result;
     }
