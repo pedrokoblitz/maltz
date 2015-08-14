@@ -1,0 +1,54 @@
+<!--ADDRESSES-->
+
+<table>
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>nome</th>
+            <th>rua</th>
+            <th>numero</th>
+            <th>complemento</th>
+            <th>bairro</th>
+            <th>cidade</th>
+            <th>estado</th>
+            <th>pais</th>
+            <th>coordenadas</th>
+            <th>edit</th>
+            <th>delete</th>
+        </tr>
+    </thead>
+    <tbody>
+
+{{#addresses}}
+
+<tr id="record-1" class="record">
+    <td class="checkbox"><input type="checkbox" class="checkthis" /></td>
+    <td class="name">{{name}}</td>
+    <td class="street">{{street}}</td>
+    <td class="number">{{number}}</td>
+    <td class="address">{{address}}</td>
+    <td class="district">{{district}}</td>
+    <td class="city">{{city}}</td>
+    <td class="province">{{province}}</td>
+    <td class="country">{{country}}</td>
+    <td class="coordinates">lat: {{coordinates.lat}}, lon: {{coordinates.lon}}</td>
+    <td class="edit">
+        <p data-placement="top" data-toggle="tooltip" title="Edit">
+            <button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" >
+                <span class="glyphicon glyphicon-pencil"></span>
+            </button>
+        </p>
+    </td>
+    <td class="delete">
+        <p data-placement="top" data-toggle="tooltip" title="Delete">
+            <button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" >
+                <span class="glyphicon glyphicon-trash"></span>
+            </button>
+        </p>
+    </td>
+</tr>
+
+{{/addresses}}
+
+    </tbody>
+</table>
