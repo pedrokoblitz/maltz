@@ -78,42 +78,9 @@
             
             <div id="attachmentList" class="attachmentList">
               <div id="attachmentListItems" class="attachmentListItems">
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th>
-                        #
-                      </th>
-                      <th>
-                        title
-                      </th>
-                      <th>
-                        type
-                      </th>
-                      <th>
-                        actions
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>
-                        <input type='checkbox'>
-                      </td>
-                      <td>
-                        {{attachment.title}}
-                      </td>
-                      <td>
-                        {{attachment.type}}
-                      </td>
-                      <td>
-                        <a id="" class="" href="#">add</a>
-                        <a id="" class="" href="#">edit</a>
-                        <a id="" class="" href="#">delete</a>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+               
+               <!--table here-->
+
               </div>
             </div>
           </div>
