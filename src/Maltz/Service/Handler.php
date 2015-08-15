@@ -19,6 +19,8 @@ class Handler
 
     public function setViewInfo($info)
     {
+        $this->setDefaultViewResources();
+        
         if (isset($this->viewInfo['layout'])) {
             $this->app->view->setLayout($layout);
         }
@@ -137,7 +139,7 @@ class Handler
             'resource' => 'Maltz\Content\Model\Resource',
             'collection' => 'Maltz\Content\Model\Collection',
             'term' => 'Maltz\Content\Model\Term',
-            );
+        );
         return new $avaiable[$name]($this->app->db);
     }
 

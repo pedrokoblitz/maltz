@@ -1,3 +1,12 @@
+UPDATE table1,table2 SET table1.col=a,table2.col2=b
+WHERE items.id=month.id;
+
+UPDATE Books, Orders
+SET Orders.Quantity=Orders.Quantity+2,
+Books.InStock=Books.InStock-2
+WHERE Books.BookID=Orders.BookID
+ AND Orders.OrderID = 1002;
+
 SELECT id, name, type, date_pub, url, filepath, filename, extension, slug, title, subtitle, excerpt, description, body, activity, created, modified FROM
   (
     (
@@ -114,10 +123,6 @@ SELECT id, name, type, date_pub, url, filepath, filename, extension, slug, title
   ) master
 ORDER BY master.type ASC, master.activity DESC, master.modified DESC;
 
-
-
-
-
 SELECT id, item_name, name FROM types WHERE item_name="content";
 SELECT id, item_name, name FROM types WHERE item_name="resource";
 SELECT id, item_name, name FROM types WHERE item_name="term";
@@ -128,7 +133,6 @@ SELECT id, user_id, action, item_name, item_id, created FROM log;
 
 INSERT INTO log (user_id, action, item_name, item_id, created)
   VALUES (user_id, "insert", "config", LAST_INSERT_ID(), NOW());
-
 
 --config
 SELECT id, key, value, activity, modified, created FROM config;
@@ -202,9 +206,6 @@ INSERT INTO types (item_name, name)
 
 UPDATE types SET item_name=?, name=?;
 
-
-
-
 --avaiable translations
 SELECT item_id, language, slug, name, title FROM translations WHERE item_name=? AND item_id=?;
 
@@ -217,10 +218,6 @@ SELECT * FROM translations
     SELECT id FROM contents ORDER BY modified DESC LIMIT ?,?;
   )
   AND item_name="content";
-
-
-
-
 
 --select by slug
 SELECT FROM translations t1
@@ -276,7 +273,8 @@ SELECT FROM translations t1
   ORDER BY t2.modified
   LIMIT :offset,:num;
 
-SELECT t1.name AS area_name, t3.user_id, t3.language, t3.item_name, t3.item_id, t3.slug, t3.name, t3.title, t3.subtitle, t3.excerpt, t3.description, t3.body FROM areas t1, blocks t2
+SELECT t1.name AS area_name, t3.user_id, t3.language, t3.item_name, t3.item_id, t3.slug, t3.name, t3.title, t3.subtitle, t3.excerpt, t3.description, t3.body 
+  FROM areas t1, blocks t2
   LEFT JOIN translations t3
     ON t2.id=t3.item_id
     AND t3.item_name="block"
