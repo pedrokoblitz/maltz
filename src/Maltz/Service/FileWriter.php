@@ -4,15 +4,17 @@ namespace Maltz\Service;
 
 trait FileWriter
 {
-    public function setFile()
+    public function setFile($name, $patj)
     {
-        $this->name = $name;
-        $this->path = rtrim($path, '/');
         $this->file = rtrim($path, '/') . '/' . $name;
     }
 
     public function write($contents)
     {
+        if (!isset($this->file)) {
+            throw new \Exception("Error Processing Request", 1);
+        }
+
         $fh = fopen($this->file, 'w');
         fwrite($fh, $contents);
         fclose($fh);
@@ -20,6 +22,10 @@ trait FileWriter
 
     public function append($contents)
     {
+        if (!isset($this->file)) {
+            throw new \Exception("Error Processing Request", 1);
+        }
+        
         $fh = fopen($this->file, 'a');
         fwrite($fh, $contents);
         fclose($fh);
@@ -27,6 +33,10 @@ trait FileWriter
 
     public function prepend($contents)
     {
+        if (!isset($this->file)) {
+            throw new \Exception("Error Processing Request", 1);
+        }
+        
         $fh = fopen($this->file, 'wr');
         $oldContents = fread($fh, filesize($this->file));
         fwrite($fh, $contents . "\n" . $oldContents);

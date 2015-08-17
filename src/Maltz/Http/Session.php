@@ -9,7 +9,6 @@ class Session extends Collection
 
     public function __construct()
     {
-
         if (!$this->started()) {
             session_start();
         }

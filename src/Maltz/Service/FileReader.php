@@ -6,18 +6,24 @@ trait FileReader
 {
     public function setFile($path, $name)
     {
-        $this->path = $path;
-        $this->name = $name;
         $this->file = $path . '/' . $name;
     }
 
     public function getFile()
     {
+        if (isset($this->file)) {
+            throw new \Exception("Error Processing Request", 1);
+        }
+        
         return file_get_contents($this->file);
     }
 
     public function readFile()
     {
+        if (isset($this->file)) {
+            throw new \Exception("Error Processing Request", 1);
+        }
+        
         $fh = fopen($this->file, 'r');
         $contents = fread($fh, filesize($this->file));
         fclose($fh);

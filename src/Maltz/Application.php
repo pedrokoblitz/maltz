@@ -154,12 +154,17 @@ class Application implements Config
         );
 
         $controllers = array(
-            'Maltz\Api\Ctrl\Content',
-            'Maltz\Api\Ctrl\Calendar',
-            'Maltz\Api\Ctrl\GeoLocation',
-            'Maltz\Api\Ctrl\Store',
-            'Maltz\Api\Ctrl\Project',
-            'Maltz\Api\Ctrl\Sys',
+            'Maltz\Packages\Sys\Ctrl\Sys',
+            'Maltz\Packages\Calendar\Ctrl\Upload',
+            'Maltz\Packages\Content\Ctrl\Content',
+            'Maltz\Packages\Calendar\Ctrl\Calendar',
+            'Maltz\Packages\GeoLocation\Ctrl\GeoLocation',
+            'Maltz\Packages\Store\Ctrl\Store',
+            'Maltz\Packages\Project\Ctrl\Project',
+            'Maltz\Packages\SiteBuilding\Ctrl\SiteBuilding',
+            'Maltz\Packages\Radar\Ctrl\Radar',
+            'Maltz\Packages\Secult\Ctrl\Secult',
+            'Maltz\Packages\Portfolio\Ctrl\Portfolio',
         );
 
         foreach ($controllers as $controller) {

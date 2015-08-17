@@ -186,7 +186,7 @@ DROP TABLE IF EXISTS `user_contacts`;
 CREATE TABLE `user_contacts` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned NOT NULL,
-  `type` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+  `name` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
   `value` varchar(60) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE(`value`)
@@ -210,7 +210,7 @@ DROP TABLE IF EXISTS `user_identifications`;
 CREATE TABLE `user_identifications` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned NOT NULL,
-  `type` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+  `name` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
   `value` varchar(120) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE(`value`)
@@ -245,7 +245,7 @@ CREATE TABLE `tokens` (
   `user_id` int(10) unsigned NOT NULL,
   `ip` varchar(16) COLLATE utf8_unicode_ci NOT NULL DEFAULT '0.0.0.0',
   `token` varchar(120) COLLATE utf8_unicode_ci NOT NULL,
-  `type` tinyint(1) unsigned NOT NULL,
+  `name` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
   `created` datetime NOT NULL,
   `used` datetime NOT NULL,
   PRIMARY KEY (`id`),
@@ -347,6 +347,8 @@ CREATE TABLE `resources` (
   `mimetype` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
   `extension` varchar(6) COLLATE utf8_unicode_ci DEFAULT NULL,
   `embed` BLOB DEFAULT NULL,
+  `width` int(10) unsigned DEFAULT NULL,
+  `height` int(10) unsigned DEFAULT NULL,
   `activity` tinyint(1) unsigned NOT NULL DEFAULT 1, -- 0 = trash, 1 = ...
   `modified` datetime NOT NULL,
   `created` datetime NOT NULL,
