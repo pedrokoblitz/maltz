@@ -2,7 +2,7 @@
 
 namespace Maltz\App\Model;
 
-class DataView
+class Binder
 {
 
 }

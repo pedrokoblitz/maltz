@@ -2,9 +2,9 @@
 
 namespace Maltz\App\Model;
 
-use Maltz\Mvc\DataView;
+use Maltz\Mvc\Binder;
 
-class FrontEndDataView extends DataView
+class FrontEndBinder extends Binder
 {
     
 }

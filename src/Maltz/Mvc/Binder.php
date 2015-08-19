@@ -7,7 +7,7 @@ use Maltz\Sys\Config;
 use Maltz\SiteBuilding\Area;
 use Maltz\Content\Term;
 
-abstract class DataView
+abstract class Binder
 {
     protected $db;
     protected $config;

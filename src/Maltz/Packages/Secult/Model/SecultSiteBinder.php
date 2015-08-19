@@ -3,7 +3,7 @@
 namespace Maltz\Secult\Model;
 
 
-class SecultSiteDataView
+class SecultSiteBinder
 {
 
     public function showHome()
