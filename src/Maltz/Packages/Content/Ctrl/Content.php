@@ -14,7 +14,6 @@ class Content
 {
     public function route($app)
     {
-
         /*
          * CONTENT
          */        
