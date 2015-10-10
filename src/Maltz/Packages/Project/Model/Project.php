@@ -198,6 +198,6 @@ class Project extends Model
 
         $record = $this->getBillableHours($id)->getFirstRecord('id');
         $record->set('activity', 1);
-        return Invoice::query('save', $record);
+        return Invoice::query($this->db, 'save', $record);
     }
 }

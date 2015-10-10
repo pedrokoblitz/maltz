@@ -70,7 +70,7 @@ class Handler
 
     public function isAuthorized($user_id, $roles)
     {
-        $result = User::query('getRoles', $user_id);
+        $result = User::query($this->app->db, 'getRoles', $user_id);
         $userRoles = $result->asArray();
         foreach ($userRoles as $role) {
             if (in_array($role, $roles)) {

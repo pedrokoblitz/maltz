@@ -42,7 +42,7 @@ class Sys
                 $record = $app->handler->handlePostRequest();
                 $id = $record->get('id');
                 $result = User::query($app->db, 'delete', $id);
-                Log::query('log', $app->sessionDataStore->getUserId(), 'user', $id, 'delete', '', '', $app->nonce->get());
+                $result = Log::query($app->db, 'log', $app->sessionDataStore->getUserId(), 'user', $id, 'delete', '', '', $app->nonce->get());
                 $app->handler->handleApiResponse($result);
 
             }
@@ -53,7 +53,7 @@ class Sys
                 $record = $app->handler->handlePostRequest();
                 $result = User::query($app->db, 'save', $record);
                 $id = $record->has('id') ? $record->get('id') : $result->getLastInsertId();
-                Log::query('log', $app->sessionDataStore->getUserId(), $model, $id, 'save', '', '', $app->nonce->get());
+                $result = Log::query($app->db, 'log', $app->sessionDataStore->getUserId(), $model, $id, 'save', '', '', $app->nonce->get());
                 $app->handler->handleApiResponse($result);
             }
         )->via('POST','PUT')->name('api_user_save');
@@ -73,7 +73,7 @@ class Sys
                 $record = $app->handler->handlePostRequest();
                 $id = $record->get('id');
                 $result = Type::query($app->db, 'delete', $id);
-                Log::query('log', $app->sessionDataStore->getUserId(), 'type', $id, 'delete', '', '', $app->nonce->get());
+                $result = Log::query($app->db, 'log', $app->sessionDataStore->getUserId(), 'type', $id, 'delete', '', '', $app->nonce->get());
                 $app->handler->handleApiResponse($result);
             }
         )->name('api_type_delete');
@@ -83,7 +83,7 @@ class Sys
                 $record = $app->handler->handlePostRequest();
                 $result = Type::query($app->db, 'save', $record);
                 $id = $record->has('id') ? $record->get('id') : $result->get('last.insert.id');
-                Log::query('log', $app->sessionDataStore->getUserId(), $model, $id, 'save', '', '', $app->nonce->get());
+                $result = Log::query($app->db, 'log', $app->sessionDataStore->getUserId(), $model, $id, 'save', '', '', $app->nonce->get());
                 $app->handler->handleApiResponse($result);
             }
         )->name('api_type_save');
@@ -103,7 +103,7 @@ class Sys
                 $record = $app->handler->handlePostRequest();
                 $result = Config::query($app->db, 'save', $record);
                 $id = $record->has('id') ? $record->get('id') : $result->getLastInsertId();
-                Log::query('log', $app->sessionDataStore->getUserId(), 'config', $id, 'save', '', '', $app->nonce->get());
+                $result = Log::query($app->db, 'log', $app->sessionDataStore->getUserId(), 'config', $id, 'save', '', '', $app->nonce->get());
                 $app->handler->handleApiResponse($result);
             }
         )->via('POST','PUT')->name('api_config_save');

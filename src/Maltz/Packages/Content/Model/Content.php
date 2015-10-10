@@ -74,10 +74,10 @@ class Content extends Model
     {
         $sql = "INSERT INTO contents (type_id, parent_id, date_pub, created, modified) 
             VALUES (:type_id, :parent_id, :date_pub, NOW(), NOW())";
-        $result = $this->db->run($sql, 
+        $result = $this->db->run($sql,
             array(
-                'type_id' => $record->get('type_id'), 
-                'parent_id' => $record->get('parent_id'), 
+                'type_id' => $record->get('type_id'),
+                'parent_id' => $record->get('parent_id'),
                 'date_pub' => $record->get('date_pub')
                 )
             );

@@ -8,13 +8,7 @@ use Maltz\Mvc\Result;
 use Maltz\Sys\Model\Role;
 
 class RoleTest extends ModelTestCase
-{
-    public function __construct()
-    {
-        parent::__construct();
-        $this->model = new Role($this->db);
-    }
-    
+{    
     public function testDisplay()
     {
         $result = Role::query($this->db, 'display');

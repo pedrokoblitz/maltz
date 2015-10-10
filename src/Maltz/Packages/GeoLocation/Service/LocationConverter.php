@@ -6,28 +6,23 @@ use Maltz\Service\Curl;
 
 class LocationConverter
 {
-	public function __construct()
-	{
-		$this->curl = new Curl();
-	}
+    public function __construct()
+    {
+        $this->curl = new Curl();
+    }
 
-	public function zipCodeToCoordinates($zip)
-	{
+    public function zipCodeToCoordinates($zip)
+    {
 
-	}
+    }
 
-	public function coordinatesToZipCode($coordinates)
-	{
+    public function addressToCoordinates($address)
+    {
 
-	}
+    }
 
-	public function addressToCoordinates($address)
-	{
+    public function coordinatesToAdresss($coordinates)
+    {
 
-	}
-
-	public function coordinatesToAdresss($coordinates)
-	{
-
-	}
+    }
 }

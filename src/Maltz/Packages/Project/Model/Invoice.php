@@ -36,7 +36,7 @@ class Invoice extends Model
     }
 
     public function update(Record $record) {
-        throw new \Exception("Invoices cannot be updated. Delete and create a new one.", 001);        
+        throw new \Exception("Invoices cannot be updated. Delete and create a new one.", 001);
     }
 
     public function processRecord(Record $record)
