@@ -5,20 +5,21 @@ namespace Test\Model;
 use Test\ModelTestCase;
 use Maltz\Mvc\Record;
 use Maltz\Mvc\Result;
-use Maltz\Sys\Model\Token;
+use Maltz\Package\Sys\Model\Token;
 
 class TokenTest extends ModelTestCase
 {
     public function testGenerate()
     {
-        $userId = 1;
-        $result = Token::query($this->db, 'generate');
+        $type = '';
+        $result = Token::query($this->db, 'generate', $type);
         $this->runResultInsertTests($result);
     }
 
     public function testValidate()
     {
         $token = '';
-        $result = Token::query($this->db, 'validate', $token);
+        $type = '';
+        $result = Token::query($this->db, 'validate', $token, $type);
     }
 }

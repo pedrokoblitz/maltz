@@ -9,7 +9,7 @@ trait Tree
     public function displayTree()
     {
         if (!method_exists($this, 'display')) {
-            throw new \Exception("Error Processing Request", 1);
+            throw new \Exception("Invalid input type", 1);
         }
 
         $result = $this->display()->toArray();
@@ -47,8 +47,8 @@ trait Tree
 
     public function setParent($child_id, $parent_id = 0)
     {
-        if (!(int) $parent_id || !(int) $child_id) {
-            throw new \Exception("Error Processing Request", 1);
+        if (!is_int($parent_id) || !is_int($child_id)) {
+            throw new \Exception("Invalid input type", 1);
         }
 
         $sql = "UPDATE $this->table SET parent_id=:parent_id WHERE id=:child_id";
@@ -58,8 +58,8 @@ trait Tree
 
     public function getParent($child_id)
     {
-        if (!(int) $child_id) {
-            throw new \Exception("Error Processing Request", 1);
+        if (!is_int($child_id)) {
+            throw new \Exception("Invalid input type", 1);
         }
 
         $sql = "SELECT * FROM $this->table WHERE id=(SELECT parent_id FROM $this->table WHERE id=:child_id)";
@@ -69,8 +69,8 @@ trait Tree
 
     public function getChildren($parent_id)
     {
-        if (!(int) $parent_id) {
-            throw new \Exception("Error Processing Request", 1);
+        if (!is_int($parent_id)) {
+            throw new \Exception("Invalid input type", 1);
         }
 
         $sql = "SELECT * FROM $this->table WHERE id=:parent_id";
@@ -80,8 +80,8 @@ trait Tree
 
     public function addChild($parent_id, $child_id)
     {
-        if (!(int) $parent_id || !(int) $child_id) {
-            throw new \Exception("Error Processing Request", 1);
+        if (!is_int($parent_id) || !is_int($child_id)) {
+            throw new \Exception("Invalid input type", 1);
         }
 
         $sql = "UPDATE $this->table SET parent_id=:parent_id WHERE id=:child_id";
@@ -91,8 +91,8 @@ trait Tree
 
     public function removeChild($child_id)
     {
-        if (!(int) $child_id) {
-            throw new \Exception("Error Processing Request", 1);
+        if (!is_int($child_id)) {
+            throw new \Exception("Invalid input type", 1);
         }
 
         $sql = "UPDATE $this->table SET parent_id=:parent_id WHERE id=:child_id";

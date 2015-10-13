@@ -28,12 +28,12 @@ abstract class Model
         if ($record->isValid()) {
             if ($record->has('id')) {
                 if (!method_exists($this, 'update')) {
-                    throw new \Exception("Error Processing Request", 1);                    
+                    throw new \Exception("Update method is not set", 1);
                 }
                 return $this->update($record);
             }
             if (!method_exists($this, 'insert')) {
-                throw new \Exception("Error Processing Request", 1);                    
+                throw new \Exception("Insert method is not set", 1);
             }
             return $this->insert($record);
         }
@@ -50,15 +50,14 @@ abstract class Model
         $params = array_values($args);
         $model = new static($db);
         if (method_exists($model, $method)) {
-            $call = array($model, $method);
-            $result = call_user_func_array($call, $params);
+            $result = call_user_method_array($method, $model, $params);
             return $result;
         }
         return new Result(
             array(
                 'success' => false,
-                'message' => "Method $method does not exists."
-                )
-            );
+                'message' => "Method $method does not exist."
+            )
+        );
     }
 }

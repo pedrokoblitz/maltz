@@ -1,6 +1,6 @@
 <?php
 
-namespace Test\Model;
+namespace Test;
 
 class CtrlTestCase extends \PHPUnit_Framework_TestCase
 {

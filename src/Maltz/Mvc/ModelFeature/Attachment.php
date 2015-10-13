@@ -11,8 +11,8 @@ trait Attachment
         $item_id = $record->get('item_id');
         $order = $record->get('order');
 
-        if (!(int) $id || !(int) $item_id || !is_string($item_name) || !(int) $order) {
-            throw new \Exception("Error Processing Request", 1);
+        if (!is_int($id) || !is_int($item_id) || !is_string($item_name) || !is_int($order)) {
+            throw new \Exception("Invalid input type", 1);
         }
         
         $bind = array('group_name' => $this->slug, 'group_id' => $id, 'item_name' => $item_name, 'item_id' => $item_id, 'order' => $order);
@@ -27,8 +27,8 @@ trait Attachment
         $item_name = $record->get('item_name');
         $item_id = $record->get('item_id');
 
-        if (!(int) $id || !(int) $item_id || !is_string($item_name)) {
-            throw new \Exception("Error Processing Request", 1);
+        if (!is_int($id) || !is_int($item_id) || !is_string($item_name)) {
+            throw new \Exception("Invalid input type", 1);
         }
         
         $bind = array('group_name' => $this->slug, 'group_id' => $id, 'item_name' => $item_name, 'item_id' => $item_id);
@@ -42,8 +42,8 @@ trait Attachment
         $id = $record->get('id');
         $item_name = $record->get('item_name');
 
-        if (!(int) $id || !is_string($item_name)) {
-            throw new \Exception("Error Processing Request", 1);
+        if (!is_int($id) || !is_string($item_name)) {
+            throw new \Exception("Invalid input type", 1);
         }
         
         $bind = array('group_name' => $this->slug, 'group_id' => $id, 'item_name' => $item_name);
@@ -54,8 +54,8 @@ trait Attachment
 
     public function getAllAttachments($id, $item_name)
     {
-        if (!(int) $id || !is_string($item_name)) {
-            throw new \Exception("Error Processing Request", 1);
+        if (!is_int($id) || !is_string($item_name)) {
+            throw new \Exception("Invalid input type", 1);
         }
 
         $fields = 't2.id, t3.slug, ';

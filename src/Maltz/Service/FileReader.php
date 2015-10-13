@@ -12,7 +12,7 @@ trait FileReader
     public function getFile()
     {
         if (isset($this->file)) {
-            throw new \Exception("Error Processing Request", 1);
+            throw new \Exception("File property not set", 1);
         }
         
         return file_get_contents($this->file);
@@ -21,7 +21,7 @@ trait FileReader
     public function readFile()
     {
         if (isset($this->file)) {
-            throw new \Exception("Error Processing Request", 1);
+            throw new \Exception("File property not set", 1);
         }
         
         $fh = fopen($this->file, 'r');

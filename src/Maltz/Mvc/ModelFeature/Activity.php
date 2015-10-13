@@ -6,7 +6,7 @@ trait Activity
 {
     public function delete($id)
     {
-        if (!(int) $id) {
+        if (!is_int($id)) {
             throw new \Exception("Id must be integer", 001);
         }
         return $this->setActivity($id, 0);
@@ -14,7 +14,7 @@ trait Activity
 
     public function deactivate($id)
     {
-        if (!(int) $id) {
+        if (!is_int($id)) {
             throw new \Exception("Id must be integer.", 002);
         }
         return $this->setActivity($id, 1);
@@ -22,7 +22,7 @@ trait Activity
 
     public function activate($id)
     {
-        if (!(int) $id) {
+        if (!is_int($id)) {
             throw new \Exception("Id must be integer.", 003);
         }
         return $this->setActivity($id, 2);
@@ -30,7 +30,7 @@ trait Activity
 
     public function promote($id)
     {
-        if (!(int) $id) {
+        if (!is_int($id)) {
             throw new \Exception("Id must be integer.", 004);
         }
         $res = $this->getActivity($id);
@@ -41,7 +41,7 @@ trait Activity
 
     public function demote($id)
     {
-        if (!(int) $id) {
+        if (!is_int($id)) {
             throw new \Exception("Id must be integer.", 005);
         }
         $res = $this->getActivity($id);
@@ -54,7 +54,7 @@ trait Activity
 
     public function setActivity($id, $activity)
     {
-        if (!(int) $id || !(int) $activity) {
+        if (!is_int($id) || !is_int($activity)) {
             throw new \Exception("Id must be integer.", 006);
         }
         $sql = "UPDATE $this->table SET activity=:activity WHERE id=:id";
@@ -63,7 +63,7 @@ trait Activity
 
     public function getActivity($id)
     {
-        if (!(int) $id) {
+        if (!is_int($id)) {
             throw new \Exception("Id must be integer.", 007);
         }
         $sql = "SELECT activity FROM $this->table WHERE id=:id";

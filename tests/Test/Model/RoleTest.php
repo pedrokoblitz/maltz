@@ -5,7 +5,7 @@ namespace Test\Model;
 use Test\ModelTestCase;
 use Maltz\Mvc\Record;
 use Maltz\Mvc\Result;
-use Maltz\Sys\Model\Role;
+use Maltz\Package\Sys\Model\Role;
 
 class RoleTest extends ModelTestCase
 {    
@@ -30,7 +30,7 @@ class RoleTest extends ModelTestCase
 
     public function testInsert()
     {
-        $faker = \Faker\Factory::create();
+        $faker = \Faker\Factory::create('pt_BR');
         $record = new Record(
             array(
                 'name' => 'admin',
@@ -42,7 +42,7 @@ class RoleTest extends ModelTestCase
 
     public function testUpdate()
     {
-        $faker = \Faker\Factory::create();
+        $faker = \Faker\Factory::create('pt_BR');
         $record = new Record(
             array(
                 'id' => 1,

@@ -5,14 +5,13 @@ namespace Test\Model;
 use Test\ModelTestCase;
 use Maltz\Mvc\Record;
 use Maltz\Mvc\Result;
-<<<<<<< HEAD
-use Maltz\Project\Model\Project;
+use Maltz\Package\Project\Model\Project;
 
 class ProjectTest extends ModelTestCase
 {
     public function testInsert()
     {
-        $faker = \Faker\Factory::create();
+        $faker = \Faker\Factory::create('pt_BR');
         $record = new Record(
             array(
                 '' => '',
@@ -24,30 +23,34 @@ class ProjectTest extends ModelTestCase
 
     public function testUpdate()
     {
-        $faker = \Faker\Factory::create();
+        $faker = \Faker\Factory::create('pt_BR');
         $record = new Record(
             array(
                 '' => '',
             )
         );
         $result = Project::query($this->db, 'update', $record);
+        $this->runResultUpdateTests($result);
     }
 
     public function testShow()
     {
         $id = 1;
         $result = Project::query($this->db, 'show', $id);
+        $this->runResultSelectTests($result);
     }
 
     public function testFind()
     {
         $result = Project::query($this->db, 'find');
+        $this->runResultSelectTests($result);
     }
 
     public function testGetDevs()
     {
         $id = 1;
         $result = Project::query($this->db, 'getDevs', $id);
+        $this->runResultSelectTests($result);
     }
 
     public function testAddUser()
@@ -55,6 +58,7 @@ class ProjectTest extends ModelTestCase
         $id = 1;
         $userId = 1;
         $result = Project::query($this->db, 'addUser', $id, $userId);
+        $this->runResultUpdateTests($result);
     }
 
     public function testRemoveUser()
@@ -62,48 +66,48 @@ class ProjectTest extends ModelTestCase
         $id = 1;
         $userId = 1;
         $result = Project::query($this->db, 'removeUser', $id, $userId);
+        $this->runResultUpdateTests($result);
     }
 
     public function testGetUsers()
     {
         $id = 1;
         $result = Project::query($this->db, 'getUsers', $id);
+        $this->runResultSelectTests($result);
     }
 
     public function testGetTickets()
     {
         $id = 1;
         $result = Project::query($this->db, 'getTickets', $id);
+        $this->runResultSelectTests($result);
     }
 
     public function testGetInvoices()
     {
         $id = 1;
         $result = Project::query($this->db, 'getInvoices', $id);
+        $this->runResultSelectTests($result);
     }
 
     public function testGetBillableHours()
     {
         $id = 1;
         $result = Project::query($this->db, 'getBillableHours', $id);
+        $this->runResultSelectTests($result);
     }
 
     public function testCreateReport()
     {
         $id = 1;
         $result = Project::query($this->db, 'createReport', $id);
+        $this->runResultSelectTests($result);
     }
 
     public function testCreateInvoice()
     {
         $id = 1;
         $result = Project::query($this->db, 'createInvoice', $id);
+        $this->runResultInsertTests($result);
     }
-=======
-use Maltz\Sys\Model\User;
-
-class ProjectTest extends ModelTestCase
-{
-
->>>>>>> 581057e42a9309b414205b42da284398c82a35a0
 }

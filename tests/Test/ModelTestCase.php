@@ -18,7 +18,7 @@ class ModelTestCase extends \PHPUnit_Framework_TestCase
 
     public function runResultTests($result)
     {
-        $this->assertInstanceOf('Result', $result);
+        $this->assertInstanceOf('\Maltz\Mvc\Result', $result);
         $resultArray = $result->toArray();
         $this->assertTrue(is_array($resultArray));
         $this->assertArrayHasKey('success', $resultArray);
@@ -33,7 +33,7 @@ class ModelTestCase extends \PHPUnit_Framework_TestCase
         $resultArray = $result->toArray();
         $this->assertArrayHasKey('records', $resultArray);
         $this->assertTrue(is_array($result->getRecords()));
-        $this->assertContainsOnlyInstancesOf('Record', $result->getRecords());
+        $this->assertContainsOnlyInstancesOf('\Maltz\Mvc\Record', $result->getRecords());
     }
 
     public function runResultInsertTests($result)

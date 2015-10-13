@@ -5,7 +5,7 @@ namespace Test\Model;
 use Test\ModelTestCase;
 use Maltz\Mvc\Record;
 use Maltz\Mvc\Result;
-use Maltz\Project\Model\Ticket;
+use Maltz\Package\Project\Model\Ticket;
 
 class TicketTest extends ModelTestCase
 {
@@ -13,6 +13,7 @@ class TicketTest extends ModelTestCase
     {
         $id = 1;
         $result = Ticket::query($this->db, 'show', $id);
+        $this->runResultSelectTests($result);
     }
 
     public function testInsert()
@@ -29,11 +30,13 @@ class TicketTest extends ModelTestCase
     public function testFind()
     {
         $result = Ticket::query($this->db, 'find');
+        $this->runResultSelectTests($result);
     }
 
     public function testFindAll()
     {
         $result = Ticket::query($this->db, 'findAll');
+        $this->runResultSelectTests($result);
     }
 
     public function testChangePriority()
@@ -41,17 +44,20 @@ class TicketTest extends ModelTestCase
         $id = 1;
         $priority = '';
         $result = Ticket::query($this->db, 'changePriority', $id, $priority);
+        $this->runResultUpdateTests($result);
     }
 
     public function testClose()
     {
         $id = 1;
         $result = Ticket::query($this->db, 'close', $id);
+        $this->runResultUpdateTests($result);
     }
 
     public function testGetDev()
     {
         $id = 1;
         $result = Ticket::query($this->db, 'getDev', $id);
+        $this->runResultSelectTests($result);
     }
 }

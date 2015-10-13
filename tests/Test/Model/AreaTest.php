@@ -5,17 +5,17 @@ namespace Test\Model;
 use Test\ModelTestCase;
 use Maltz\Mvc\Record;
 use Maltz\Mvc\Result;
-<<<<<<< HEAD
-use Maltz\SiteBuilding\Model\Area;
+use Maltz\Package\SiteBuilding\Model\Area;
 
 class AreaTest extends ModelTestCase
 {
     public function testInsert()
     {
-        $faker = \Faker\Factory::create();
+        $faker = \Faker\Factory::create('pt_BR');
         $record = new Record(
             array(
-                '' => '',
+                'name' => $faker->word,
+                'activity' => 1
             )
         );
         $result = Area::query($this->db, 'insert', $record);
@@ -24,50 +24,56 @@ class AreaTest extends ModelTestCase
 
     public function testUpdate()
     {
-        $faker = \Faker\Factory::create();
+        $faker = \Faker\Factory::create('pt_BR');
         $record = new Record(
             array(
-                '' => '',
+                'id' => 1,
+                'name' => $faker->word,
+                'activity' => 1
             )
         );
         $result = Area::query($this->db, 'update', $record);
+        $this->runResultUpdateTests($result);
     }
 
     public function testDisplay()
     {
         $result = Area::query($this->db, 'display');
+        $this->runResultSelectTests($result);
     }
 
     public function testFind()
     {
         $result = Area::query($this->db, 'find');
+        $this->runResultSelectTests($result);
     }
 
     public function testShow()
     {
         $id = 1;
         $result = Area::query($this->db, 'show', $id);
+        $this->runResultSelectTests($result);
     }
 
     public function testAddBlock()
     {
-        $result = Area::query($this->db, 'addBlock');
+        $id = 1;
+        $block_id = 1;
+        $result = Area::query($this->db, 'addBlock', $id, $block_id);
+        $this->runResultUpdateTests($result);
     }
 
     public function testRemoveBlock()
     {
-        $result = Area::query($this->db, 'removeBlock');
+        $block_id = 1;
+        $result = Area::query($this->db, 'removeBlock', $block_id);
+        $this->runResultUpdateTests($result);
     }
 
     public function testGetBlocks()
     {
-        $result = Area::query($this->db, 'getBlock');
+        $id = 1;
+        $result = Area::query($this->db, 'getBlock', $id);
+        $this->runResultSelectTests($result);
     }
-=======
-use Maltz\Sys\Model\User;
-
-class AreaTest extends ModelTestCase
-{
-
->>>>>>> 581057e42a9309b414205b42da284398c82a35a0
 }

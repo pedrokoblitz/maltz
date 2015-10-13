@@ -65,14 +65,33 @@ Relationships between entities
  */
 DROP TABLE IF EXISTS `attachments`;
 CREATE TABLE `attachments` (
-  `group_name` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+  `group_name` varchar(64) COLLATE utf8_unicode_ci NOT NULL, -- ex: content
   `group_id` int(10) unsigned NOT NULL,
-  `item_name` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+  `item_name` varchar(64) COLLATE utf8_unicode_ci NOT NULL, -- ex: resource
   `item_id` int(10) unsigned NOT NULL,
   `order` int(10) unsigned NOT NULL,
   UNIQUE(`group_name`, `group_id`, `item_name`, `item_id`),
   UNIQUE(`group_name`, `group_id`, `order`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+INSERT INTO `attachments` (`group_name`, `group_id`, `item_name`, `item_id`, `order`) VALUES 
+(),
+(),
+(),
+(),
+(),
+(),
+(),
+(),
+(),
+(),
+(),
+(),
+(),
+(),
+(),
+();
+
 
 /*
 App config with default values
@@ -95,9 +114,9 @@ INSERT INTO `config` (`key`, `value`, `activity`, `created`, `modified`) VALUES
 ("site.tagline", "bla bla bla bla bla", 2, NOW(), NOW()),
 ("system.email", "pedrokoblitz@gmail.com", 2, NOW(), NOW()),
 ("per.page", "12", 2, NOW(), NOW()),
--- ("upload.dir", "/public/media", 2, NOW(), NOW()),
--- ("app.web.root", "/", 2, NOW(), NOW()),
--- ("app.abs.path", "/var/www/html/", 2, NOW(), NOW()),
+("upload.dir", "/public/media", 2, NOW(), NOW()),
+("app.web.root", "/", 2, NOW(), NOW()),
+("app.abs.path", "/var/www/html/", 2, NOW(), NOW()),
 ("panel.log.quantity", "15", 2, NOW(), NOW()),
 ("panel.content.quantity", "10", 2, NOW(), NOW()),
 ("panel.collection.quantity", "5", 2, NOW(), NOW()),
@@ -133,6 +152,9 @@ CREATE TABLE `log` (
   `created` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+INSERT INTO `` (``, ) VALUES ;
+
 -- END SYS
 
 -- BEGIN USERS
@@ -156,6 +178,9 @@ CREATE TABLE `users` (
   UNIQUE(`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+INSERT INTO `users` (`id`,`username`,`email`,`first_name`,`last_name`,`display_name`,`password`,`activity`,`created`,`modified`) VALUES
+(1, 'pedrokoblitz', 'pedrokoblitz@gmail.com', 'Pedro', 'Koblitz', 'Pedro Koblitz', '', 1, NOW(), NOW());
+
 /*
 user owns entity
  */
@@ -167,6 +192,13 @@ CREATE TABLE `ownership` (
   UNIQUE(`item_name`, `item_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+INSERT INTO `ownership` (`user_id`, `item_name`, `item_id`) VALUES
+(1, '', 1),
+(1, '', 1),
+(1, '', 1),
+(1, '', 1);
+
+
 /*
 user collaborates in entity
  */
@@ -177,6 +209,13 @@ CREATE TABLE `collaborations` (
   `item_id` int(10) unsigned NOT NULL,
   UNIQUE(`user_id`, `item_name`, `item_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+INSERT INTO `collaborations` (`user_id`, `item_name`, `item_id`) VALUES
+(1, '', 1),
+(1, '', 1),
+(1, '', 1),
+(1, '', 1),
+(1, '', 1);
 
 /*
 user contact information
@@ -192,6 +231,9 @@ CREATE TABLE `user_contacts` (
   UNIQUE(`value`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+INSERT INTO `user_contacts` (`ud`, `user_id`, `name`, `value`) VALUES
+();
+
 /*
 facebook info log
  */
@@ -201,6 +243,9 @@ CREATE TABLE `user_facebook_info` (
   `user_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+INSERT INTO `user_facebook_info` (`id`, `user_id`) VALUES
+(1, 1);
 
 /*
 user legally issued identification
@@ -216,6 +261,11 @@ CREATE TABLE `user_identifications` (
   UNIQUE(`value`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+INSERT INTO `user_identifications` (`id`, `user_id`, `name`, `value`) VALUES
+(),
+(),
+();
+
 /*
 user roles
  */
@@ -227,6 +277,17 @@ CREATE TABLE `roles` (
   UNIQUE(`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+INSERT INTO `roles` (`id`, `name`) VALUES
+(1, 'superadmin'),
+(2, 'admin'),
+(3, 'editor'),
+(4, 'buyer'),
+(5, 'shopowner'),
+(6, 'author'),
+(7, 'developer'),
+(8, 'registered'),
+(9, 'contributor');
+
 /*
 many2many relationship between user and roles
  */
@@ -235,6 +296,10 @@ CREATE TABLE `users_roles` (
   `user_id` int(10) unsigned NOT NULL,
   `role_id` int(10) unsigned NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+INSERT INTO `users_roles` (`user_id`, `role_id`) VALUES
+(1, 1),
+(1, 8);
 
 /*
 authentication tokens
@@ -262,13 +327,18 @@ CREATE TABLE `comments` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `parent_id` int(10) unsigned NOT NULL DEFAULT 0,
   `user_id` int(10) unsigned DEFAULT NULL,
-  `name` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `email` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `url` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
   `comment` BLOB NOT NULL,
   `created` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+INSERT INTO `comments` (`id`, `parent_id`, `user_id`, `comment`, `created`) VALUES 
+(1, 0, 1, "bla bla 1", NOW()),
+(2, 1, 1, "bla bla 2", NOW()),
+(3, 2, 1, "bla bla 3", NOW()),
+(4, 1, 1, "bla bla 4", NOW()),
+(5, 0, 1, "bla bla 5", NOW()),
+(6, 0, 1, "bla bla 6", NOW());
 
 /*
 one2many relationship between comments and entities
@@ -283,6 +353,11 @@ CREATE TABLE `commenting` (
   UNIQUE(`comment_id`,`user_id`,`item_name`,`item_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+INSERT INTO `commenting` (`comment_id`, `user_id`, `item_name`, `item_id`) VALUES
+(1, 1, '', 1),
+(2, 1, '', 1);
+
+
 /*
 many2many relationships between user, term and other entities 
  */
@@ -294,6 +369,10 @@ CREATE TABLE `folksonomy` (
   `item_id` int(10) unsigned DEFAULT NULL,
   UNIQUE(`term_id`,`user_id`,`item_name`,`item_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+INSERT INTO `folksonomy` (`term_id`, `user_id`, `item_name`, `item_id`) VALUES
+(1, 1, '', 1);
+
 -- END USER INTERACTION
 
 -- BEGIN CONTENT
@@ -317,6 +396,20 @@ CREATE TABLE `translations` (
   UNIQUE(`slug`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+INSERT INTO `translations` (`id`, `language`, `item_name`, `item_id`, `slug`, `title`, `subtitle`, `excerpt`, `description`, `body`) VALUES
+(),
+(),
+(),
+(),
+(),
+(),
+(),
+(),
+(),
+(),
+(),
+();
+
 /*
 content nodes
 (articles,pages)
@@ -332,6 +425,12 @@ CREATE TABLE `contents` (
   `created` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+INSERT INTO `contents` (`id`, `parent_id`, `type_id`, `activity`, `date_pub`, `created`, `modified`) VALUES
+(),
+(),
+(),
+();
 
 /*
 resource nodes
@@ -356,6 +455,15 @@ CREATE TABLE `resources` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 -- END CONTENT
 
+INSERT INTO `resources` (`id`, `type_id`, `url`, `filepath`, `filename`, `mimetype`, `extension`, `embed`, `width`, `height`, `activity`, `created`, `modified`) VALUES
+(),
+(),
+(),
+(),
+(),
+(),
+();
+
 -- BEGIN ATTRIBUTES
 /*
 collection nodes
@@ -372,6 +480,12 @@ CREATE TABLE `collections` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+INSERT INTO `collections` (`id`, `parent_id`, `type_id`, `activity`, `created`, `modified`) VALUES
+(),
+(),
+(),
+();
+
 /*
 term nodes
 (tag, section, menu)
@@ -386,6 +500,16 @@ CREATE TABLE `terms` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 -- END ATTRIBUTES
 
+INSERT INTO `terms` (`id`, `parent_id`, `type_id`, `activity`) VALUES
+(),
+(),
+(),
+(),
+(),
+(),
+(),
+();
+
 -- BEGIN SITE BUILDING
 /*
 areas contain and ordered list of blocks
@@ -399,6 +523,8 @@ CREATE TABLE `areas` (
   UNIQUE(`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+INSERT INTO `areas` (`id`, `name`, `activity`) VALUES ;
+
 /*
 blocks contain a dropdown with widgets?
  */
@@ -409,6 +535,10 @@ CREATE TABLE `blocks` (
   `area_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+INSERT INTO `blocks` (`id`, `name`, `area_id`) VALUES ;
+
+
 -- END SITE BUILDING
 
 -- PROJECT MANAGEMENT
@@ -423,6 +553,9 @@ CREATE TABLE `projects` (
   `activity` tinyint(1) unsigned NOT NULL DEFAULT 1, -- 0 = trash, 1 = ...
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+INSERT INTO `projects` (`id`, `title`, `description`, `activity`) VALUES ;
+
 
 /*
 each task of the project
@@ -440,6 +573,8 @@ CREATE TABLE `tickets` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+INSERT INTO `tickets` (`id`, `dev_id`, `project_id`, `problem_url`, `description`, `activity`, `created`, `modified`) VALUES ;
+
 /*
 tracks worked hours
  */
@@ -451,6 +586,8 @@ CREATE TABLE `ticket_time_tracking` (
   `stop` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+INSERT INTO `ticket_time_tracking` (`id`, `ticket_id`, `start`, `stop`) VALUES ;
 
 /*
 how much the work is worth
@@ -466,20 +603,13 @@ CREATE TABLE `invoices` (
   `created` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+INSERT INTO `invoices` (`id`, `project_id`, `hours`, `rate`, `total`, `activity`, `created`) VALUES ;
+
 -- END PROJECT MANAGEMENT
 
 
 -- CALENDAR
-/*
-event management
- */
-DROP TABLE IF EXISTS `calendar`;
-CREATE TABLE `calendar` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `entry` datetime NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
 /*
 each event
  */
@@ -491,6 +621,9 @@ CREATE TABLE `events` (
   `end` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+INSERT INTO `events` (`id`, `place_id`, `start`, `end`) VALUES ;
+
 -- END CALENDAR
 
 
@@ -505,6 +638,8 @@ CREATE TABLE `stores` (
   `seller_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+INSERT INTO `stores` (`id`, `seller_id`) VALUES ;
 
 /*
 stock and properties
@@ -523,6 +658,8 @@ CREATE TABLE `products` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+INSERT INTO `` (`id`, `store_id`, `in_stock`, `price`, `weigth`, `height`, `width`, `depth`) VALUES ;
+
 /*
 save cart if user is logged in
  */
@@ -535,6 +672,8 @@ CREATE TABLE `cart` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+INSERT INTO `cart` (`id`, `customer_id`, `product_id`, `quantity`) VALUES ;
+
 /*
 track orders
  */
@@ -546,6 +685,8 @@ CREATE TABLE `orders` (
   `shipping_method_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+INSERT INTO `orders` (`id`, `customer_id`, `payment_method_id`, `shipping_method_id`) VALUES ;
 
 /*
 relationship orders, stores and product
@@ -560,6 +701,8 @@ CREATE TABLE `order_items` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+INSERT INTO `order_items` (`id`, `store_id`, `order_id`, `product_id`, `quantity`) VALUES ;
+
 /*
 track payments
  */
@@ -572,6 +715,8 @@ CREATE TABLE `payments` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+INSERT INTO `payments` (`id`, `order_id`, `type_id`, `amount`) VALUES ;
+
 /*
 
  */
@@ -583,6 +728,9 @@ CREATE TABLE `shipments` (
   `tracking_ref` varchar(120) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+INSERT INTO `shipments` (`id`, `order_id`, `type_id`, `tracking_ref`) VALUES ;
+
 -- END E-COMMERCE
 
 -- GEOLOCATION
@@ -599,6 +747,8 @@ CREATE TABLE `places` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+INSERT INTO `places` (`id`, `type_id`, `address_line`, `description`) VALUES ;
+
 /*
 adresses have coordinates
  */
@@ -614,6 +764,8 @@ CREATE TABLE `addresses` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+INSERT INTO `addresses` (`id`, `name`, `street`, `number`, `district_id`, `city_id`, `coordinate_id`) VALUES ;
+
 /*
 
  */
@@ -624,6 +776,8 @@ CREATE TABLE `districts` (
   `city_id` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+INSERT INTO `districts` (`id`, `name`, `city_id`) VALUES ;
 
 /*
 
@@ -636,6 +790,8 @@ CREATE TABLE `cities` (
   `province_id` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+INSERT INTO `cities` (`id`, `name`, `country_id`, `province_id`) VALUES ;
 
 /*
 
@@ -650,6 +806,8 @@ CREATE TABLE `provinces` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+INSERT INTO `provinces` (`id`, `code`, `name`, `region`, `country_id`) VALUES ;
+
 /*
 
  */
@@ -661,6 +819,8 @@ CREATE TABLE `countries` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+INSERT INTO `countries` (`id`, `code`, `name`) VALUES ;
+
 /*
 
  */
@@ -671,6 +831,9 @@ CREATE TABLE `coordinates` (
   `lon` decimal(10,2) unsigned NOT NULL DEFAULT 0.00,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+INSERT INTO `coordinates` (`id`, `lat`, `lon`) VALUES ;
+
 -- END GEOLOCATION
 
 -- APPLICATION SPECIFIC
@@ -693,171 +856,10 @@ CREATE TABLE `estates` (
   `charges` decimal(10,2) unsigned NOT NULL DEFAULT 0.00,
   `taxes` decimal(10,2) unsigned NOT NULL DEFAULT 0.00,
   `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+INSERT INTO `` (`id`, `place_id`, `type_id`, `area`, `rooms`, `suites`, `parking_spots`, `price`, `charges`, `taxes`, `create`, `modified`) VALUES ;
+
 -- END REAL ESTATE RADAR DO ALUGUEL
-
-
-DROP TABLE IF EXISTS `institucional_translations`;
-CREATE TABLE `institucional_translations` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(120) COLLATE utf8_unicode_ci NOT NULL,
-  `title` varchar(120) COLLATE utf8_unicode_ci NOT NULL,
-  `position` varchar(120) COLLATE utf8_unicode_ci NOT NULL,
-  `description` BLOB,
-  `body` BLOB,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-/*
-equipe ordenada
- */
-DROP TABLE IF EXISTS `institucional_equipe`;
-CREATE TABLE `institucional_equipe` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `order` int(10) unsigned NOT NULL,
-  `status` tinyint(1) unsigned NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-/*
-download de logos com manuais
-one2many resources
- */
-DROP TABLE IF EXISTS `institucional_aplicacao_logos`;
-CREATE TABLE `institucional_aplicacao_logos` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `resource_id` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-/*
-log de mensagens da ouvidoria
- */
-DROP TABLE IF EXISTS `institucional_ouvidoria`;
-CREATE TABLE `institucional_ouvidoria` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `place_id` int(10) unsigned NOT NULL,
-  `name` varchar(120) COLLATE utf8_unicode_ci NOT NULL,
-  `email` varchar(120) COLLATE utf8_unicode_ci NOT NULL,
-  `subject` varchar(120) COLLATE utf8_unicode_ci NOT NULL,
-  `message` varchar(120) COLLATE utf8_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-/*
-cadastro de leis de incentivo
- */
-DROP TABLE IF EXISTS `institucional_leis_de_incentivo`;
-CREATE TABLE `institucional_leis_de_incentivo` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-/*
-institucional_leis_de_incentivo many2many institucional_editais
- */
-DROP TABLE IF EXISTS `institucional_leis_editais`;
-CREATE TABLE `institucional_leis_editais` (
-  `lei_id` int(10) unsigned NOT NULL,
-  `edital_id` int(10) unsigned NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-/*
-editais
- */
-DROP TABLE IF EXISTS `institucional_editais`;
-CREATE TABLE `institucional_editais` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `status` tinyint(1) unsigned NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-/*
-consultas publicas devem ter itens ordenados
- */
-DROP TABLE IF EXISTS `institucional_consultas_publicas_itens`;
-CREATE TABLE `institucional_consultas_publicas` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `consulta_id` int(10) unsigned NOT NULL,
-  `tipo` varchar(60) COLLATE utf8_unicode_ci NOT NULL,
-  `order` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-/*
-consultas publicas
- */
-DROP TABLE IF EXISTS `institucional_consultas_publicas`;
-CREATE TABLE `institucional_consultas_publicas` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `status` tinyint(1) unsigned NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-/*
-SEM TRADUCAO
- */
-DROP TABLE IF EXISTS `institucional_parcerias`;
-CREATE TABLE `institucional_parcerias` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `place_id` int(10) unsigned NOT NULL,
-  `type_id` int(10) unsigned NOT NULL,
-  `title` varchar(120) COLLATE utf8_unicode_ci NOT NULL,
-  `url` varchar(120) COLLATE utf8_unicode_ci NOT NULL,
-  `status` tinyint(1) unsigned NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-/*
-SEM TRADUCAO
- */
-DROP TABLE IF EXISTS `institucional_clipping`;
-CREATE TABLE `institucional_clipping` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `title` varchar(120) COLLATE utf8_unicode_ci NOT NULL,
-  `source` varchar(120) COLLATE utf8_unicode_ci NOT NULL,
-  `author` varchar(120) COLLATE utf8_unicode_ci NOT NULL,
-  `url` varchar(120) COLLATE utf8_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-/*
-banners do site
-one2many resources
-SEM TRADUCAO
- */
-DROP TABLE IF EXISTS `institucional_ad_banners`;
-CREATE TABLE `institucional_ad_banners` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `spot_id` int(10) unsigned NOT NULL,
-  `resource_id` int(10) unsigned NOT NULL,
-  `title` varchar(120) COLLATE utf8_unicode_ci NOT NULL,
-  `url` varchar(120) COLLATE utf8_unicode_ci NOT NULL,
-  `status` tinyint(1) unsigned NOT NULL,
-  `expires` datetime NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-DROP TABLE IF EXISTS `institucional_ad_banner_spots`;
-CREATE TABLE `institucional_ad_banner_spots` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(120) COLLATE utf8_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-INSERT INTO institucional_ad_banner_spots (name) VALUES
-("destaque_home_01"),
-("destaque_home_02"),
-("destaque_home_03"),
-("destaque_home_04"),
-("destaque_cabecalho_01"),
-("destaque_cabecalho_02"),
-("destaque_lateral_01"),
-("destaque_lateral_02"),
-("destaque_lateral_03"),
-("destaque_lateral_04"),
-("destaque_rodape_01"),
-("destaque_rodape_02");
---END INSTITUCIONAL CULTURA.RJ

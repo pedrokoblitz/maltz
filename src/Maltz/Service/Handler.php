@@ -4,7 +4,7 @@ namespace Maltz\Service;
 
 use Maltz\Mvc\Result;
 use Maltz\Mvc\Record;
-use Maltz\Sys\Model\User;
+use Maltz\Package\Sys\Model\User;
 
 class Handler
 {
@@ -135,10 +135,10 @@ class Handler
     public function setEntity($name)
     {
         $avaiable = array(
-            'content' => 'Maltz\Content\Model\Content',
-            'resource' => 'Maltz\Content\Model\Resource',
-            'collection' => 'Maltz\Content\Model\Collection',
-            'term' => 'Maltz\Content\Model\Term',
+            'content' => 'Maltz\Package\Content\Model\Content',
+            'resource' => 'Maltz\Package\Content\Model\Resource',
+            'collection' => 'Maltz\Package\Content\Model\Collection',
+            'term' => 'Maltz\Package\Content\Model\Term',
         );
         return new $avaiable[$name]($this->app->db);
     }

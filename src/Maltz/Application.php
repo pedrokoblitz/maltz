@@ -10,7 +10,7 @@ use Maltz\Service\Nonce;
 use Maltz\Service\SessionDataStore;
 use Maltz\Service\Handler;
 use Maltz\Service\Pagination;
-use Maltz\Sys\Model\Config;
+use Maltz\Package\Sys\Model\Config;
 use Maltz\Sys\Service\Postman;
 use Maltz\Sys\Service\Doorman;
 
@@ -154,17 +154,17 @@ class Application implements Config
         );
 
         $controllers = array(
-            'Maltz\Packages\Sys\Ctrl\Sys',
-            'Maltz\Packages\Calendar\Ctrl\Upload',
-            'Maltz\Packages\Content\Ctrl\Content',
-            'Maltz\Packages\Calendar\Ctrl\Calendar',
-            'Maltz\Packages\GeoLocation\Ctrl\GeoLocation',
-            'Maltz\Packages\Store\Ctrl\Store',
-            'Maltz\Packages\Project\Ctrl\Project',
-            'Maltz\Packages\SiteBuilding\Ctrl\SiteBuilding',
-            'Maltz\Packages\Radar\Ctrl\Radar',
-            'Maltz\Packages\Secult\Ctrl\Secult',
-            'Maltz\Packages\Portfolio\Ctrl\Portfolio',
+            'Maltz\Package\Sys\Ctrl\Sys',
+            'Maltz\Package\Calendar\Ctrl\Upload',
+            'Maltz\Package\Content\Ctrl\Content',
+            'Maltz\Package\Calendar\Ctrl\Calendar',
+            'Maltz\Package\GeoLocation\Ctrl\GeoLocation',
+            'Maltz\Package\Store\Ctrl\Store',
+            'Maltz\Package\Project\Ctrl\Project',
+            'Maltz\Package\SiteBuilding\Ctrl\SiteBuilding',
+            'Maltz\Package\Radar\Ctrl\Radar',
+            'Maltz\Package\Secult\Ctrl\Secult',
+            'Maltz\Package\Portfolio\Ctrl\Portfolio',
         );
 
         foreach ($controllers as $controller) {

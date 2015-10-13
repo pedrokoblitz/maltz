@@ -5,7 +5,7 @@ namespace Test\Model;
 use Test\ModelTestCase;
 use Maltz\Mvc\Record;
 use Maltz\Mvc\Result;
-use Maltz\Sys\Model\User;
+use Maltz\Package\Sys\Model\User;
 
 class UserTest extends ModelTestCase
 {
@@ -24,7 +24,7 @@ class UserTest extends ModelTestCase
 
     public function testInsert()
     {
-        $faker = \Faker\Factory::create();
+        $faker = \Faker\Factory::create('pt_BR');
         $record = new Record(
             array(
                 'name' => 'admin',
@@ -36,7 +36,7 @@ class UserTest extends ModelTestCase
 
     public function testUpdate()
     {
-        $faker = \Faker\Factory::create();
+        $faker = \Faker\Factory::create('pt_BR');
         $record = new Record(
             array(
                 'name' => 'admin',
@@ -48,13 +48,13 @@ class UserTest extends ModelTestCase
 
     public function testSignUp()
     {
-        $faker = \Faker\Factory::create();
+        $faker = \Faker\Factory::create('pt_BR');
         $record = new Record(
             array(
                 'name' => 'admin',
             )
         );
-        $result = User::query($this->db, 'signUp');
+        $result = User::query($this->db, 'signUp', $record);
         $this->runResultInsertTests($result);
     }
 

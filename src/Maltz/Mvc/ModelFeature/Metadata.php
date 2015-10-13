@@ -12,8 +12,8 @@ trait Metadata
         $value = $record->get('value');
         $order = $record->get('order');
         
-        if (!is_string($item_name) || !(int) $item_id || !is_string($key) || !is_string($value) || !(int) $order) {
-            throw new \Exception("Error Processing Request", 1);
+        if (!is_string($item_name) || !is_int($item_id) || !is_string($key) || !is_string($value) || !is_int($order)) {
+            throw new \Exception("Invalid input type", 1);
         }
 
         $sql = "INSERT INTO metadata (item_name, item_id, key, value) VALUES (:item_name, :item_id, :key, :value)";
@@ -29,8 +29,8 @@ trait Metadata
         $value = $record->get('value');
         $order = $record->get('order');
         
-        if (!is_string($item_name) || !(int) $item_id || !is_string($key) || !is_string($value) || !(int) $order) {
-            throw new \Exception("Error Processing Request", 1);
+        if (!is_string($item_name) || !is_int($item_id) || !is_string($key) || !is_string($value) || !is_int($order)) {
+            throw new \Exception("Invalid input type", 1);
         }
 
         $sql = "UPDATE metadata SET value=:value, order=:order WHERE item_name=:item_name AND item_id=:item_id AND key=:key";
@@ -44,8 +44,8 @@ trait Metadata
         $item_id = $record->get('item_id');
         $key = $record->get('key');
 
-        if (!is_string($item_name) || !(int) $item_id || !is_string($key)) {
-            throw new \Exception("Error Processing Request", 1);
+        if (!is_string($item_name) || !is_int($item_id) || !is_string($key)) {
+            throw new \Exception("Invalid input type", 1);
         }
 
         $sql = "DELETE FROM metadata WHERE item_name=:item_name AND item_id=:item_id AND key=:key";
@@ -55,8 +55,8 @@ trait Metadata
 
     public function getMeta($item_name, $item_id, $key)
     {
-        if (!is_string($item_name) || !(int) $item_id || !is_string($key)) {
-            throw new \Exception("Error Processing Request", 1);
+        if (!is_string($item_name) || !is_int($item_id) || !is_string($key)) {
+            throw new \Exception("Invalid input type", 1);
         }
 
         $sql = "SELECT id, item_name, item_id, key, value FROM metadata WHERE item_name=:item_name AND item_id=:item_id AND key=:key";
@@ -66,8 +66,8 @@ trait Metadata
 
     public function getAllMeta($item_name, $item_id)
     {
-        if (!is_string($item_name) || !(int) $item_id) {
-            throw new \Exception("Error Processing Request", 1);
+        if (!is_string($item_name) || !is_int($item_id)) {
+            throw new \Exception("Invalid input type", 1);
         }
 
         $sql = "SELECT id, item_name, item_id, key, value FROM metadata";

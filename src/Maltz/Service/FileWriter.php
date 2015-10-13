@@ -12,7 +12,7 @@ trait FileWriter
     public function write($contents)
     {
         if (!isset($this->file)) {
-            throw new \Exception("Error Processing Request", 1);
+            throw new \Exception("File property not set", 1);
         }
 
         $fh = fopen($this->file, 'w');
@@ -23,7 +23,7 @@ trait FileWriter
     public function append($contents)
     {
         if (!isset($this->file)) {
-            throw new \Exception("Error Processing Request", 1);
+            throw new \Exception("File property not set", 1);
         }
         
         $fh = fopen($this->file, 'a');
@@ -34,7 +34,7 @@ trait FileWriter
     public function prepend($contents)
     {
         if (!isset($this->file)) {
-            throw new \Exception("Error Processing Request", 1);
+            throw new \Exception("File property not set", 1);
         }
         
         $fh = fopen($this->file, 'wr');

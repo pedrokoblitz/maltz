@@ -5,7 +5,7 @@ namespace Test\Model;
 use Test\ModelTestCase;
 use Maltz\Mvc\Record;
 use Maltz\Mvc\Result;
-use Maltz\Sys\Model\Config;
+use Maltz\Package\Sys\Model\Config;
 
 class ConfigTest extends ModelTestCase
 {
@@ -45,13 +45,15 @@ class ConfigTest extends ModelTestCase
 
     public function testSetRefresh()
     {
-        $result = Config::query($this->db, 'setRefresh');
+        $key = '';
+        $result = Config::query($this->db, 'setRefresh', $key);
         $this->runResultUpdateTests($result);
     }
 
     public function testRefresh()
     {
-        $result = Config::query($this->db, 'refresh');
+        $key = '';
+        $result = Config::query($this->db, 'refresh', $key);
         $this->runResultUpdateTests($result);
     }
 }
