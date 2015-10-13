@@ -20,7 +20,7 @@ class TicketTest extends ModelTestCase
     {
         $record = new Record(
             array(
-                '' => '',
+                'problem_url' => 'http://google.com',
             )
         );
         $result = Ticket::query($this->db, 'insert', $record);
