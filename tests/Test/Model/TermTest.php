@@ -5,6 +5,7 @@ namespace Test\Model;
 use Test\ModelTestCase;
 use Maltz\Mvc\Record;
 use Maltz\Mvc\Result;
+<<<<<<< HEAD
 use Maltz\Content\Model\Term;
 
 class TermTest extends ModelTestCase
@@ -53,4 +54,11 @@ class TermTest extends ModelTestCase
         $type = '';
         $result = Term::query($this->db, 'findByType', $type);
     }
+=======
+use Maltz\Sys\Model\User;
+
+class TermTest extends ModelTestCase
+{
+
+>>>>>>> 581057e42a9309b414205b42da284398c82a35a0
 }

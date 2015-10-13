@@ -5,6 +5,7 @@ namespace Test\Model;
 use Test\ModelTestCase;
 use Maltz\Mvc\Record;
 use Maltz\Mvc\Result;
+<<<<<<< HEAD
 use Maltz\Content\Model\Content;
 
 class ContentTest extends ModelTestCase
@@ -66,4 +67,11 @@ class ContentTest extends ModelTestCase
         $id = 1;
         $result = Content::query($this->db, 'publish', $id);
     }
+=======
+use Maltz\Sys\Model\User;
+
+class ContentTest extends ModelTestCase
+{
+
+>>>>>>> 581057e42a9309b414205b42da284398c82a35a0
 }

@@ -5,6 +5,7 @@ namespace Test\Model;
 use Test\ModelTestCase;
 use Maltz\Mvc\Record;
 use Maltz\Mvc\Result;
+<<<<<<< HEAD
 use Maltz\SiteBuilding\Model\Area;
 
 class AreaTest extends ModelTestCase
@@ -62,4 +63,11 @@ class AreaTest extends ModelTestCase
     {
         $result = Area::query($this->db, 'getBlock');
     }
+=======
+use Maltz\Sys\Model\User;
+
+class AreaTest extends ModelTestCase
+{
+
+>>>>>>> 581057e42a9309b414205b42da284398c82a35a0
 }

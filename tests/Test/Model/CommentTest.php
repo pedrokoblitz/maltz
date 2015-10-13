@@ -5,6 +5,7 @@ namespace Test\Model;
 use Test\ModelTestCase;
 use Maltz\Mvc\Record;
 use Maltz\Mvc\Result;
+<<<<<<< HEAD
 use Maltz\Interaction\Model\Comment;
 
 class CommentTest extends ModelTestCase
@@ -45,4 +46,11 @@ class CommentTest extends ModelTestCase
     {
         $result = Comment::query($this->db, 'setAsSpam');
     }
+=======
+use Maltz\Sys\Model\User;
+
+class CommentTest extends ModelTestCase
+{
+
+>>>>>>> 581057e42a9309b414205b42da284398c82a35a0
 }

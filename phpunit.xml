@@ -1,0 +1,98 @@
+<phpunit bootstrap="vendor/autoload.php">
+  <testsuites>
+    <testsuite name="library">
+      <file>tests/Test/Library/CollectionTest.php</file>
+      <file>tests/Test/Library/CookieJarTest.php</file>
+      <file>tests/Test/Library/CookieTest.php</file>
+      <file>tests/Test/Library/FilesTest.php</file>
+      <file>tests/Test/Library/SessionDataStoreTest.php</file>
+      <file>tests/Test/Library/SessionTest.php</file>
+    </testsuite>
+    <testsuite name="service">
+      <file>tests/Test/Library/HashTest.php</file>
+      <file>tests/Test/Library/NonceTest.php</file>
+      <file>tests/Test/Library/PaginationTest.php</file>
+      <file>tests/Test/Library/CorreiosTest.php</file>
+      <file>tests/Test/Library/CurlResponseTest.php</file>
+      <file>tests/Test/Library/CurlTest.php</file>
+      <file>tests/Test/Library/FileReaderTest.php</file>
+      <file>tests/Test/Library/FileWriterTest.php</file>
+    </testsuite>
+    <testsuite name="app">
+      <file>tests/Test/Model/FrontEndDataViewTest.php</file>
+      <file>tests/Test/Ctrl/FrontEndTest.php</file>
+    </testsuite>
+    <testsuite name="content">
+      <file>tests/Test/Model/CollectionTest.php</file>
+      <file>tests/Test/Model/ContentTest.php</file>
+      <file>tests/Test/Model/TermTest.php</file>
+      <file>tests/Test/Ctrl/ContentTest.php</file>
+    </testsuite>
+    <testsuite name="sitebuilding">
+      <file>tests/Test/Model/AreaTest.php</file>
+      <file>tests/Test/Model/BlockTest.php</file>
+    </testsuite>
+    <testsuite name="sys">
+      <file>tests/Test/Model/ConfigTest.php</file>
+      <file>tests/Test/Model/LogTest.php</file>
+      <file>tests/Test/Model/RoleTest.php</file>
+      <file>tests/Test/Model/TypeTest.php</file>
+      <file>tests/Test/Model/TokenTest.php</file>
+      <file>tests/Test/Model/UserTest.php</file>
+      <file>tests/Test/Ctrl/AssetTest.php</file>
+      <file>tests/Test/Ctrl/AuthenticationTest.php</file>
+      <file>tests/Test/Ctrl/SysTest.php</file>
+      <file>tests/Test/Service/DoormanTest.php</file>
+      <file>tests/Test/Service/PostmanTest.php</file>
+    </testsuite>
+    <testsuite name="upload">
+      <file>tests/Test/Ctrl/UploadTest.php</file>
+    </testsuite>
+    <testsuite name="interaction">
+      <file>tests/Test/Model/CommentTest.php</file>
+      <file>tests/Test/Ctrl/InteractionTest.php</file>
+    </testsuite>
+    <testsuite name="geolocation">
+      <file>tests/Test/Model/CoordinateTest.php</file>
+      <file>tests/Test/Model/PlaceTest.php</file>
+      <file>tests/Test/Model/AddressTest.php</file>
+      <file>tests/Test/Ctrl/GeoLocationTest.php</file>
+      <file>tests/Test/Service/LocationConverterTest.php</file>
+    </testsuite>
+    <testsuite name="portfolio">
+      <file>tests/Test/Model/PortfolioSiteDataViewTest.php</file>
+      <file>tests/Test/Ctrl/PortfolioSiteTest.php</file>
+    </testsuite>
+    <testsuite name="radar">
+      <file>tests/Test/Model/RadarSiteDataViewTest.php</file>
+      <file>tests/Test/Model/EstateTest.php</file>
+      <file>tests/Test/Ctrl/RealEstateTest.php</file>
+    </testsuite>
+    <testsuite name="secult">
+      <file>tests/Test/Model/SecultSiteDataViewTest.php</file>
+      <file>tests/Test/Ctrl/SecultSiteTest.php</file>
+    </testsuite>
+    <testsuite name="store">
+      <file>tests/Test/Model/CartTest.php</file>
+      <file>tests/Test/Model/OrderTest.php</file>
+      <file>tests/Test/Model/OrderItemTest.php</file>
+      <file>tests/Test/Model/PaymentTest.php</file>
+      <file>tests/Test/Model/ProductTest.php</file>
+      <file>tests/Test/Model/ShipmentTest.php</file>
+      <file>tests/Test/Model/StoreTest.php</file>
+      <file>tests/Test/Ctrl/StoreTest.php</file>
+      <file>tests/Test/Service/CartServiceTest.php</file>
+    </testsuite>
+    <testsuite name="project">
+      <file>tests/Test/Model/ProjectTest.php</file>
+      <file>tests/Test/Model/TicketTest.php</file>
+      <file>tests/Test/Model/InvoiceTest.php</file>
+      <file>tests/Test/Model/TimeTrackingTest.php</file>
+      <file>tests/Test/Ctrl/ProjectManagementTest.php</file>
+    </testsuite>
+    <testsuite name="calendar">
+      <file>tests/Test/Model/EventTest.php</file>
+      <file>tests/Test/Ctrl/CalendarTest.php</file>
+    </testsuite>
+  </testsuites>
+</phpunit>

@@ -5,6 +5,7 @@ namespace Test\Model;
 use Test\ModelTestCase;
 use Maltz\Mvc\Record;
 use Maltz\Mvc\Result;
+<<<<<<< HEAD
 use Maltz\SiteBuilding\Model\Block;
 
 class BlockTest extends ModelTestCase
@@ -52,4 +53,11 @@ class BlockTest extends ModelTestCase
         $id = 1;
         $result = Block::query($this->db, 'show', $id);
     }
+=======
+use Maltz\Sys\Model\User;
+
+class BlockTest extends ModelTestCase
+{
+
+>>>>>>> 581057e42a9309b414205b42da284398c82a35a0
 }
