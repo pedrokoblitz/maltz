@@ -2,8 +2,19 @@
 
 namespace Maltz\Mvc\ModelFeature;
 
+/**
+ * @author Pedro Koblitz
+ * @package Maltz
+ * @subpackage Http
+ */
+
 trait Activity
 {
+    /**
+     * /
+     * @param  [type] $id [description]
+     * @return [type]     [description]
+     */
     public function delete($id)
     {
         if (!is_int($id)) {
@@ -12,6 +23,11 @@ trait Activity
         return $this->setActivity($id, 0);
     }
 
+    /**
+     * /
+     * @param  [type] $id [description]
+     * @return [type]     [description]
+     */
     public function deactivate($id)
     {
         if (!is_int($id)) {
@@ -20,6 +36,11 @@ trait Activity
         return $this->setActivity($id, 1);
     }
 
+    /**
+     * /
+     * @param  [type] $id [description]
+     * @return [type]     [description]
+     */
     public function activate($id)
     {
         if (!is_int($id)) {
@@ -28,6 +49,11 @@ trait Activity
         return $this->setActivity($id, 2);
     }
 
+    /**
+     * /
+     * @param  [type] $id [description]
+     * @return [type]     [description]
+     */
     public function promote($id)
     {
         if (!is_int($id)) {
@@ -39,6 +65,11 @@ trait Activity
         return $this->setActivity($id, $activity);
     }
 
+    /**
+     * /
+     * @param  [type] $id [description]
+     * @return [type]     [description]
+     */
     public function demote($id)
     {
         if (!is_int($id)) {
@@ -52,6 +83,11 @@ trait Activity
         }
     }
 
+    /**
+     * /
+     * @param [type] $id       [description]
+     * @param [type] $activity [description]
+     */
     public function setActivity($id, $activity)
     {
         if (!is_int($id) || !is_int($activity)) {
@@ -61,6 +97,11 @@ trait Activity
         return $this->db->run($sql, array('id' => $id, 'activity' => $activity));
     }
 
+    /**
+     * /
+     * @param  [type] $id [description]
+     * @return [type]     [description]
+     */
     public function getActivity($id)
     {
         if (!is_int($id)) {

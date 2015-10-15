@@ -3,13 +3,26 @@ namespace Maltz\Mvc;
 
 use Maltz\Utils\Pagination;
 
+/**
+ * @author Pedro Koblitz
+ * @package Maltz
+ * @subpackage Http
+ */
+
 abstract class Model
 {
     protected $db;
     protected $table;
     protected $rules;
 
-    public function __construct($db, $slug, $table, $rules)
+    /**
+     * /
+     * @param DB     $db    [description]
+     * @param [type] $slug  [description]
+     * @param [type] $table [description]
+     * @param array  $rules [description]
+     */
+    public function __construct(DB $db, $slug, $table, array $rules)
     {
         $this->db = $db;
         $this->table = $table;
@@ -17,6 +30,11 @@ abstract class Model
         $this->rules = $rules;
     }
 
+    /**
+     * /
+     * @param  Record $record [description]
+     * @return [type]         [description]
+     */
     public function save(Record $record)
     {
         if (method_exists($this, 'processRecord')) {
@@ -40,6 +58,10 @@ abstract class Model
         return new Result(array('success' => false, 'message' => 'Invalid record.'));
     }
 
+    /**
+     * /
+     * @return [type] [description]
+     */
     public static function query()
     {
         $args = func_get_args();

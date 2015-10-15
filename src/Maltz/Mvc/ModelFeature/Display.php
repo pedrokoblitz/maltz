@@ -2,8 +2,18 @@
 
 namespace Maltz\Mvc\ModelFeature;
 
+/**
+ * @author Pedro Koblitz
+ * @package Maltz
+ * @subpackage Http
+ */
+
 trait Display
 {
+    /**
+     * /
+     * @return [type] [description]
+     */
     public function display()
     {
         $sql = "SELECT t1.id, t1.parent_id, t2.slug, t2.title, t2.subtitle, t2.excerpt, t2.description, t2.body, t3.name AS type
@@ -17,6 +27,11 @@ trait Display
         return $result;
     }
 
+    /**
+     * /
+     * @param  [type] $type [description]
+     * @return [type]       [description]
+     */
     public function displayByType($type)
     {
         if (!is_string($type)) {

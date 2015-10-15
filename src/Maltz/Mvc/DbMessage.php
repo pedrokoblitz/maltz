@@ -2,6 +2,12 @@
 
 namespace Maltz\Mvc;
 
+/**
+ * @author Pedro Koblitz
+ * @package Maltz
+ * @subpackage Http
+ */
+
 class DbMessage
 {
     const SELECTED = 'Records have been selected.';

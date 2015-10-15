@@ -7,11 +7,22 @@ use Maltz\Sys\Config;
 use Maltz\SiteBuilding\Area;
 use Maltz\Content\Term;
 
+/**
+ * @author Pedro Koblitz
+ * @package Maltz
+ * @subpackage Http
+ */
+
 abstract class Binder
 {
     protected $db;
     protected $config;
 
+    /**
+     * /
+     * @param DB    $db      [description]
+     * @param array $options [description]
+     */
     public function __construct(DB $db, array $options = array())
     {
         $this->db = $db;
@@ -23,11 +34,21 @@ abstract class Binder
         $this->config = $config;
     }
 
+    /**
+     * /
+     * @param  [type] $id [description]
+     * @return [type]     [description]
+     */
     protected function getUser($id)
     {
         $result = User::query($this->db, 'show', $id);
     }
 
+    /**
+     * /
+     * @param  [type] $id [description]
+     * @return [type]     [description]
+     */
     protected function showArea($id)
     {
         $result = Area::query($this->db, 'show', $id);
@@ -38,6 +59,11 @@ abstract class Binder
         }
     }
 
+    /**
+     * /
+     * @param  [type] $id [description]
+     * @return [type]     [description]
+     */
     protected function showMenu($id)
     {
         $result = Term::query($this->db, 'getItems', $id);
@@ -48,11 +74,19 @@ abstract class Binder
         }
     }
 
+    /**
+     * /
+     * @return [type] [description]
+     */
     protected function generateTagCloud()
     {
         $result = Term::query($this->db, 'generateCloud');
     }
 
+    /**
+     * /
+     * @return [type] [description]
+     */
     protected function getSiteParts()
     {
         $this->getUser();
@@ -60,16 +94,31 @@ abstract class Binder
         $this->showMenu();
     }
     
+    /**
+     * /
+     * @param  [type] $user_id [description]
+     * @return [type]          [description]
+     */
     public function viewProfile($user_id)
     {
         $result = User::query($app->db, 'show', $user_id);
     }
 
+    /**
+     * /
+     * @param  Record $record [description]
+     * @return [type]         [description]
+     */
     public function saveProfile(Record $record)
     {
         $result = User::query($app->db, 'save', $record);
     }
 
+    /**
+     * /
+     * @param  Record $record [description]
+     * @return [type]         [description]
+     */
     public function comment(Record $record)
     {
         $result = CommentFacade::query($app->db, 'create', $record);

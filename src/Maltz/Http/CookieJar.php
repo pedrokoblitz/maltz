@@ -2,14 +2,28 @@
 
 namespace Maltz\Http;
 
+/**
+ * @author Pedro Koblitz
+ * @package Maltz
+ * @subpackage Http
+ */
+
 class CookieJar extends Collection
 {
 
+    /**
+     * /
+     */
     public function __construct()
     {
         $this->items = $_COOKIE;
     }
 
+    /**
+     * /
+     * @param [type] $id     [description]
+     * @param array  $cookie [description]
+     */
     public function set($id, array $cookie)
     {
         if (!is_string($id)) {
@@ -29,12 +43,22 @@ class CookieJar extends Collection
         parent::set($id, $cookie);
     }
 
+    /**
+     * /
+     * @param  [type]  $id [description]
+     * @return boolean     [description]
+     */
     public function has($id)
     {
         $newId = str_replace('.', '_', $id);
         return parent::has($newId);
     }
 
+    /**
+     * /
+     * @param  [type] $id [description]
+     * @return [type]     [description]
+     */
     public function remove($id)
     {
         if (!is_string($id)) {
@@ -46,6 +70,11 @@ class CookieJar extends Collection
         parent::remove($newId);
     }
 
+    /**
+     * /
+     * @param  [type] $id [description]
+     * @return [type]     [description]
+     */
     public function get($id)
     {
         if (!is_string($id)) {

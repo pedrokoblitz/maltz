@@ -10,14 +10,15 @@ namespace Maltz\Http;
  * {@link http://www.example.com Example hyperlink inline link} links to
  * a website. The inline
  *
- * @package package name
+ * @package Maltz
+ * @subpackage Http
  * @author  Pedro Koblitz
  */
 class Collection
 {
 
     /**
-     * @var
+     * @var array store collection items
      */
     protected $items = array();
 
@@ -25,8 +26,8 @@ class Collection
      * Sort model array
      *
      * @access public
-     * @param  type [ $varname] description
-     * @return type description
+     * @param  \Closure [$sorter] function to sort the items
+     * @return void
      */
     public function sort(\Closure $sorter)
     {
@@ -37,8 +38,8 @@ class Collection
      * add groups of models
      *
      * @access public
-     * @param  type [ $varname] description
-     * @return type description
+     * @param  array [$items] items to map into the collection
+     * @return void
      */
     public function map(array $items)
     {
@@ -49,8 +50,9 @@ class Collection
      * Adds model from array and sets key based on model id
      *
      * @access public
-     * @param  type [ $varname] description
-     * @return type description
+     * @param  scalar [$id] key to store the item
+     * @param  mixed [$item] item to insert in collection
+     * @return void
      */
     public function set($id, $item)
     {
@@ -65,11 +67,27 @@ class Collection
         $this->items[$id] = $item;
     }
 
+    /**
+     * Checks in key is already set
+     *
+     * @access public
+     * @param scalar $key Key to check in collection array
+     */
     public function has($key)
     {
+        if (!is_scalar($key)) {
+            throw new \InvalidArgumentException('$id must be scalar');
+        }
+
         return isset($this->items[$key]);
     }
 
+    /**
+     * Check if item is valid. Should be overriden in child classes.
+     * 
+     * @access public
+     * @param mixed $item Item to be checked.
+     */
     protected function isValidItem($item)
     {
         return true;
@@ -79,8 +97,9 @@ class Collection
      * Gets model from array based on id/key
      *
      * @access public
-     * @param  type [ $varname] description
-     * @return type description
+     * @param  scalar [$id] Key for returning item
+     * @throws InvalidArgumentExecption input check
+     * @return mixed description
      */
     public function get($id)
     {
@@ -99,8 +118,9 @@ class Collection
      * Remove model from array based on id/key
      *
      * @access public
-     * @param  type [ $varname] description
-     * @return type description
+     * @param  scalar [$id] Key to remove from collection
+     * @throws InvalidArgumentException type check
+     * @return void
      */
     public function remove($id)
     {
@@ -113,6 +133,12 @@ class Collection
         }
     }
 
+    /**
+     * Clears all items
+     * 
+     * @access public
+     * @return void
+     */
     public function clear()
     {
         $this->items = array();

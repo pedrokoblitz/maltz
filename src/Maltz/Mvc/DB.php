@@ -2,6 +2,12 @@
 
 namespace Maltz\Mvc;
 
+/**
+ * @author Pedro Koblitz
+ * @package Maltz
+ * @subpackage Http
+ */
+
 class DB extends \PDO
 {
 
@@ -12,9 +18,12 @@ class DB extends \PDO
     private $errorCallbackFunction;
     private $errorMsgFormat;
 
-    /*
-     *
-    */
+    /**
+     * /
+     * @param [type] $dsn    [description]
+     * @param string $user   [description]
+     * @param string $passwd [description]
+     */
     public function __construct($dsn, $user = "", $passwd = "")
     {
         $options = array(
@@ -38,6 +47,11 @@ class DB extends \PDO
         $this->settings['return.value'] = new Result(array('success' => false));
     }
 
+    /**
+     * /
+     * @param  [type] $bind [description]
+     * @return [type]       [description]
+     */
     private function cleanup($bind)
     {
         if (!is_array($bind)) {
@@ -57,6 +71,13 @@ class DB extends \PDO
         return $bind;
     }
 
+    /**
+     * /
+     * @param  [type] $sql      [description]
+     * @param  string $bind     [description]
+     * @param  array  $settings [description]
+     * @return [type]           [description]
+     */
     public function run($sql, $bind = "", array $settings = array())
     {
         //var_dump($sql);

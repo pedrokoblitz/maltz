@@ -12,6 +12,11 @@ class View extends \Slim\View
     protected $styles = array();
     protected $meta = array();
 
+    /**
+     * /
+     * @param [type] $layout [description]
+     * @param array  $data   [description]
+     */
     public function setLayout($layout = null, array $data = array())
     {
         if (!is_string($layout)) {
@@ -21,11 +26,20 @@ class View extends \Slim\View
         $this->layoutData = $data;
     }
 
+    /**
+     * /
+     * @param array $data [description]
+     */
     public function setLayoutData(array $data = array())
     {
         $this->layoutData = $data;
     }
 
+    /**
+     * /
+     * @param [type] $name    [description]
+     * @param [type] $content [description]
+     */
     public function setMetaProperty($name, $content)
     {
         if (!is_string($name) || !is_string($content)) {
@@ -34,6 +48,10 @@ class View extends \Slim\View
         $this->meta[$name] = $content;
     }
 
+    /**
+     * /
+     * @param [type] $charset [description]
+     */
     public function setCharset($charset)
     {
         if (!is_string($charset)) {
@@ -42,11 +60,21 @@ class View extends \Slim\View
         $this->charset = $charset;
     }
 
+    /**
+     * /
+     * @param bool $meta [description]
+     */
     public function setHttpEquivMeta(bool $meta)
     {
         $this->httpEquivMeta = $meta;
     }
 
+    /**
+     * /
+     * @param  [type] $name  [description]
+     * @param  [type] $style [description]
+     * @return [type]        [description]
+     */
     public function enqueueStyle($name, $style)
     {
         if (!is_string($name) || !is_string($style)) {
@@ -55,6 +83,12 @@ class View extends \Slim\View
         $this->styles[$name] = $style;
     }
 
+    /**
+     * /
+     * @param  [type] $name   [description]
+     * @param  [type] $script [description]
+     * @return [type]         [description]
+     */
     public function enqueueScript($name, $script)
     {
         if (!is_string($name) || !is_string($script)) {
@@ -63,6 +97,10 @@ class View extends \Slim\View
         $this->scripts[$name] = $script;
     }
 
+    /**
+     * /
+     * @return [type] [description]
+     */
     public function renderPageMeta()
     {
         $string = '';
@@ -72,11 +110,19 @@ class View extends \Slim\View
         return $string;
     }
 
+    /**
+     * /
+     * @return [type] [description]
+     */
     public function renderPageTitle()
     {
         return 'teste';
     }
 
+    /**
+     * /
+     * @return [type] [description]
+     */
     public function renderStyles()
     {
         $string = '';
@@ -86,6 +132,10 @@ class View extends \Slim\View
         return $string;
     }
 
+    /**
+     * /
+     * @return [type] [description]
+     */
     public function renderScripts()
     {
         $string = '';
@@ -95,6 +145,10 @@ class View extends \Slim\View
         return $string;
     }
 
+    /**
+     * /
+     * @return [type] [description]
+     */
     public function renderPageHeader()
     {
         $data = array(
@@ -106,6 +160,10 @@ class View extends \Slim\View
         return $this->partial('html.head', $data);
     }
 
+    /**
+     * /
+     * @return [type] [description]
+     */
     public function renderPageFooter()
     {
         $data = array(
@@ -114,6 +172,12 @@ class View extends \Slim\View
         $this->partial('html.footer', $data);
     }
 
+    /**
+     * /
+     * @param  [type] $template [description]
+     * @param  array  $data     [description]
+     * @return [type]           [description]
+     */
     public function partial($template, $data = array())
     {
         $templatePath = $this->getTemplatesDirectory() . '/partials/' . ltrim($template, '/') . self::VIEW_FILE_EXTENSION;
@@ -128,6 +192,11 @@ class View extends \Slim\View
         return $html;
     }
 
+    /**
+     * /
+     * @param  [type] $content [description]
+     * @return [type]          [description]
+     */
     private function renderLayout($content)
     {
         if (isset($this->layout) && $this->layout !== null) {
@@ -147,6 +216,11 @@ class View extends \Slim\View
         return $content;
     }
 
+    /**
+     * /
+     * @param  [type] $template [description]
+     * @return [type]           [description]
+     */
     public function render($template)
     {
         $separator = isset($this->layout) ? '/' . $this->layout . '/' : '/';

@@ -2,10 +2,20 @@
 
 namespace Maltz\Mvc\ModelFeature;
 
+/**
+ * @author Pedro Koblitz
+ * @package Maltz
+ * @subpackage Http
+ */
+
 trait Tree
 {
     protected $elements;
 
+    /**
+     * /
+     * @return [type] [description]
+     */
     public function displayTree()
     {
         if (!method_exists($this, 'display')) {
@@ -20,6 +30,11 @@ trait Tree
         return $result;
     }
 
+    /**
+     * /
+     * @param  array  $items [description]
+     * @return [type]        [description]
+     */
     public function generateTree(array $items)
     {
         $this->elements = array();
@@ -29,6 +44,11 @@ trait Tree
         return $this->buildTree();
     }
 
+    /**
+     * /
+     * @param  integer $parent_id [description]
+     * @return [type]             [description]
+     */
     public function buildTree($parent_id = 0)
     {
         $branch = array();
@@ -45,6 +65,11 @@ trait Tree
         return $branch;
     }
 
+    /**
+     * /
+     * @param [type]  $child_id  [description]
+     * @param integer $parent_id [description]
+     */
     public function setParent($child_id, $parent_id = 0)
     {
         if (!is_int($parent_id) || !is_int($child_id)) {
@@ -56,6 +81,11 @@ trait Tree
         return $result;
     }
 
+    /**
+     * /
+     * @param  [type] $child_id [description]
+     * @return [type]           [description]
+     */
     public function getParent($child_id)
     {
         if (!is_int($child_id)) {
@@ -67,6 +97,11 @@ trait Tree
         return $result;
     }
 
+    /**
+     * /
+     * @param  [type] $parent_id [description]
+     * @return [type]            [description]
+     */
     public function getChildren($parent_id)
     {
         if (!is_int($parent_id)) {
@@ -78,6 +113,11 @@ trait Tree
         return $result;
     }
 
+    /**
+     * /
+     * @param [type] $parent_id [description]
+     * @param [type] $child_id  [description]
+     */
     public function addChild($parent_id, $child_id)
     {
         if (!is_int($parent_id) || !is_int($child_id)) {
@@ -89,6 +129,11 @@ trait Tree
         return $result;
     }
 
+    /**
+     * /
+     * @param  [type] $child_id [description]
+     * @return [type]           [description]
+     */
     public function removeChild($child_id)
     {
         if (!is_int($child_id)) {

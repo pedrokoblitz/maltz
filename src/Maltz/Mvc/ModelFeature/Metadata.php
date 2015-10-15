@@ -2,8 +2,18 @@
 
 namespace Maltz\Mvc\ModelFeature;
 
+/**
+ * @author Pedro Koblitz
+ * @package Maltz
+ * @subpackage Http
+ */
+
 trait Metadata
 {
+    /**
+     * /
+     * @param Record $record [description]
+     */
     public function addMeta(Record $record)
     {
         $item_name = $record->get('item_name');
@@ -21,6 +31,11 @@ trait Metadata
         return $result;
     }
 
+    /**
+     * /
+     * @param  Record $record [description]
+     * @return [type]         [description]
+     */
     public function updateMeta(Record $record)
     {
         $item_name = $record->get('item_name');
@@ -38,6 +53,11 @@ trait Metadata
         return $result;
     }
 
+    /**
+     * /
+     * @param  Record $record [description]
+     * @return [type]         [description]
+     */
     public function removeMeta(Record $record)
     {
         $item_name = $record->get('item_name');
@@ -53,6 +73,13 @@ trait Metadata
         return $result;
     }
 
+    /**
+     * /
+     * @param  [type] $item_name [description]
+     * @param  [type] $item_id   [description]
+     * @param  [type] $key       [description]
+     * @return [type]            [description]
+     */
     public function getMeta($item_name, $item_id, $key)
     {
         if (!is_string($item_name) || !is_int($item_id) || !is_string($key)) {
@@ -64,6 +91,12 @@ trait Metadata
         return $result;
     }
 
+    /**
+     * /
+     * @param  [type] $item_name [description]
+     * @param  [type] $item_id   [description]
+     * @return [type]            [description]
+     */
     public function getAllMeta($item_name, $item_id)
     {
         if (!is_string($item_name) || !is_int($item_id)) {

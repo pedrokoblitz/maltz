@@ -25,7 +25,14 @@ class AddressTest extends ModelTestCase
         $faker = \Faker\Factory::create('pt_BR');
         $record = new Record(
             array(
-                '' => '',
+                'street' => 'Rua Real Grandeza',
+                'number' => '62',
+                'address_line' => '203',
+                'district' => 'Botafogo',
+                'city' => $faker->city,
+                'province' => 'RJ',
+                'country' => $faker->country,
+                'zipcode' => $faker->zipcode,
             )
         );
         $result = Address::query($this->db, 'insert', $record);

@@ -2,8 +2,18 @@
 
 namespace Maltz\Http;
 
+/**
+ * @author Pedro Koblitz
+ * @package Maltz
+ * @subpackage Http
+ */
+
 class Files extends Collection
 {
+    /**
+     * [$path description]
+     * @var [type]
+     */
     protected $path;
 
     public function __construct(array $files, $path)
@@ -13,6 +23,11 @@ class Files extends Collection
         $this->map($files);
     }
 
+    /**
+     * /
+     * @param  [type] $files [description]
+     * @return [type]        [description]
+     */
     protected function arrangeFilesArray($files)
     {
         foreach ($files as $key => $all) {
@@ -23,6 +38,10 @@ class Files extends Collection
         return $arrangedFiles;
     }
 
+    /**
+     * /
+     * @return [type] [description]
+     */
     public function getUploadedFiles()
     {
         $destination = array();
@@ -32,6 +51,10 @@ class Files extends Collection
         return $destination;
     }
 
+    /**
+     * /
+     * @return [type] [description]
+     */
     public function uploadSuccesful()
     {
         $val = true;

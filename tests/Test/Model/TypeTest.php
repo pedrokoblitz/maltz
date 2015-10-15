@@ -41,6 +41,7 @@ class TypeTest extends ModelTestCase
 
     public function testUpdate()
     {
+        $faker = \Faker\Factory::create('pt_BR');
         $record = new Record(
             array(
                 '' => '',

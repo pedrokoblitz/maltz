@@ -2,8 +2,18 @@
 
 namespace Maltz\Mvc\ModelFeature;
 
+/**
+ * @author Pedro Koblitz
+ * @package Maltz
+ * @subpackage Http
+ */
+
 trait Attachment
 {
+    /**
+     * /
+     * @param Record $record [description]
+     */
     public function addAttachment(Record $record)
     {
         $id = $record->get('group_id');
@@ -21,6 +31,11 @@ trait Attachment
         return $result;
     }
 
+    /**
+     * /
+     * @param  Record $record [description]
+     * @return [type]         [description]
+     */
     public function removeAttachment(Record $record)
     {
         $id = $record->get('id');
@@ -37,6 +52,11 @@ trait Attachment
         return $result;
     }
 
+    /**
+     * /
+     * @param  Record $record [description]
+     * @return [type]         [description]
+     */
     public function removeAllAttachments(Record $record)
     {
         $id = $record->get('id');
@@ -52,6 +72,12 @@ trait Attachment
         return $result;
     }
 
+    /**
+     * /
+     * @param  [type] $id        [description]
+     * @param  [type] $item_name [description]
+     * @return [type]            [description]
+     */
     public function getAllAttachments($id, $item_name)
     {
         if (!is_int($id) || !is_string($item_name)) {

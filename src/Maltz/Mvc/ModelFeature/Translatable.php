@@ -2,8 +2,19 @@
 
 namespace Maltz\Mvc\ModelFeature;
 
+/**
+ * @author Pedro Koblitz
+ * @package Maltz
+ * @subpackage Http
+ */
+
 trait Translatable
 {
+    /**
+     * /
+     * @param  [type] $item_id [description]
+     * @return [type]          [description]
+     */
     public function getTranslations($item_id)
     {
         if (!is_int($item_id)) {
@@ -15,6 +26,10 @@ trait Translatable
         return $result;
     }
 
+    /**
+     * /
+     * @param Record $record [description]
+     */
     public function addTranslation(Record $record)
     {
         $fields = $record->getFieldsList();
@@ -24,6 +39,11 @@ trait Translatable
         return $result;
     }
 
+    /**
+     * /
+     * @param  [type] $item_id [description]
+     * @return [type]          [description]
+     */
     public function removeTranslation($item_id)
     {
         if (!is_int($item_id)) {
@@ -35,6 +55,11 @@ trait Translatable
         return $result;
     }
 
+    /**
+     * /
+     * @param  [type] $string [description]
+     * @return [type]         [description]
+     */
     public function generateSlug($string)
     {
         if (!is_string($string)) {
@@ -61,6 +86,11 @@ trait Translatable
         return $slug;
     }
 
+    /**
+     * /
+     * @param  [type] $slug [description]
+     * @return [type]       [description]
+     */
     protected function checkSlug($slug)
     {
         if (!is_string($slug)) {
