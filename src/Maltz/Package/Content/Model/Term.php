@@ -16,6 +16,10 @@ class Term extends Model
     use Translatable;
     use Tree;
 
+    /**
+     * /
+     * @param DB $db [description]
+     */
     public function __construct(DB $db)
     {
         $rules = array(
@@ -34,7 +38,11 @@ class Term extends Model
     /*
      * CRUD
      */
-
+    /**
+     * /
+     * @param  Record $record [description]
+     * @return [type]         [description]
+     */
     public function insert(Record $record)
     {
         $sql = "INSERT INTO terms (type_id, parent_id)
@@ -54,6 +62,11 @@ class Term extends Model
         return $result;
     }
 
+    /**
+     * /
+     * @param  Record $record [description]
+     * @return [type]         [description]
+     */
     public function update(Record $record)
     {
         $id = $record->get('id');
@@ -76,6 +89,13 @@ class Term extends Model
         return $result;
     }
 
+    /**
+     * /
+     * @param  string $key   [description]
+     * @param  string $order [description]
+     * @param  string $lang  [description]
+     * @return [type]        [description]
+     */
     public function display($key = 'type', $order = 'asc', $lang = 'pt-br')
     {
         if (!is_string($key) || !is_string($order) || !is_string($lang)) {
@@ -96,6 +116,15 @@ class Term extends Model
         return $result;
     }
 
+    /**
+     * /
+     * @param  integer $page     [description]
+     * @param  integer $per_page [description]
+     * @param  string  $key      [description]
+     * @param  string  $order    [description]
+     * @param  string  $lang     [description]
+     * @return [type]            [description]
+     */
     public function find($page = 1, $per_page = 12, $key = 'type', $order = 'desc', $lang = 'pt-br')
     {
         if (!is_int($page) || !is_int($per_page) || !is_string($key) || !is_string($order) || !is_string($lang)) {
@@ -118,6 +147,16 @@ class Term extends Model
         return $result;
     }
 
+    /**
+     * /
+     * @param  [type]  $type     [description]
+     * @param  integer $page     [description]
+     * @param  integer $per_page [description]
+     * @param  string  $key      [description]
+     * @param  string  $order    [description]
+     * @param  string  $lang     [description]
+     * @return [type]            [description]
+     */
     public function findByType($type, $page = 1, $per_page = 12, $key = 'name', $order = 'asc', $lang = 'pt-br')
     {
         if (!is_string($type) || !is_int($page) || !is_int($per_page) || !is_string($key) || !is_string($order) || !is_string($lang)) {
@@ -141,6 +180,12 @@ class Term extends Model
         return $result;
     }
 
+    /**
+     * /
+     * @param  [type] $id   [description]
+     * @param  string $lang [description]
+     * @return [type]       [description]
+     */
     public function show($id, $lang = 'pt-br')
     {
         if (!is_int($id) || !is_string($lang)) {

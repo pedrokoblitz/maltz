@@ -28,6 +28,11 @@ use Maltz\Utils\Carteiro;
 
 class SecultSite extends Controller
 {
+    /**
+     * /
+     * @param  [type] $app [description]
+     * @return [type]      [description]
+     */
     public function route($app)
     {
         $app->view->setLayout($layout);

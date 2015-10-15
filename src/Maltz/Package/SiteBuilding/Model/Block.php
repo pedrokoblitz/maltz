@@ -58,7 +58,11 @@ class Block extends Model
     /*
      * CRUD
      */
-
+    /**
+     * /
+     * @param  Record $record [description]
+     * @return [type]         [description]
+     */
     public function insert(Record $record)
     {
         $fields = $record->getFieldsList();
@@ -68,7 +72,11 @@ class Block extends Model
         return $result;
     }
 
-
+    /**
+     * /
+     * @param  Record $record [description]
+     * @return [type]         [description]
+     */
     public function update(Record $record)
     {
         $id = $record->get('id');
@@ -81,7 +89,11 @@ class Block extends Model
         return $result;
     }
 
-
+    /**
+     * /
+     * @param  [type] $id [description]
+     * @return [type]     [description]
+     */
     public function delete($id)
     {
         $sql = "DELETE FROM blocks WHERE id=:id";
@@ -89,6 +101,13 @@ class Block extends Model
         return $result;
     }
 
+    /**
+     * /
+     * @param  string $key   [description]
+     * @param  string $order [description]
+     * @param  string $lang  [description]
+     * @return [type]        [description]
+     */
     public function display($key = 'title', $order = 'asc', $lang = 'pt-br')
     {
         $sql = "SELECT t1.id, t1.area_id, t2.title, t2.description 
@@ -103,6 +122,15 @@ class Block extends Model
         return $result;
     }
 
+    /**
+     * /
+     * @param  integer $page     [description]
+     * @param  integer $per_page [description]
+     * @param  string  $key      [description]
+     * @param  string  $order    [description]
+     * @param  string  $lang     [description]
+     * @return [type]            [description]
+     */
     public function find($page = 1, $per_page = 12, $key = 'title', $order = 'asc', $lang = 'pt-br')
     {
         $pagination = Pagination::paginate($page, $per_page);
@@ -120,6 +148,12 @@ class Block extends Model
         return $result;
     }
 
+    /**
+     * /
+     * @param  [type] $id   [description]
+     * @param  string $lang [description]
+     * @return [type]       [description]
+     */
     public function show($id, $lang = 'pt-br')
     {
         $sql = "SELECT t1.id, t1.area_id, t2.title, t2.description 

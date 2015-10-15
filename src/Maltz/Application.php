@@ -14,14 +14,18 @@ use Maltz\Package\Sys\Model\Config;
 use Maltz\Sys\Service\Postman;
 use Maltz\Sys\Service\Doorman;
 
+/**
+ * @author Pedro Koblitz
+ * @package Maltz
+ * @subpackage Http
+ */
+
 class Application implements Config
 {
-
-    /*
-    *
-    * app config
-    *
-    */
+    /**
+     * app config
+     * @return [type] [description]
+     */
     public static function initialize()
     {
         $app = new \Slim\Slim();

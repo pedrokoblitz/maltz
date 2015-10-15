@@ -24,7 +24,13 @@ class Type extends Model
     /*
      * CRUD
      */
-
+    /**
+     * /
+     * @param  string $key   [description]
+     * @param  string $order [description]
+     * @param  string $lang  [description]
+     * @return [type]        [description]
+     */
     public function display($key = 'name', $order = 'asc', $lang = 'pt-br')
     {
         if (!is_string($key) || !is_string($order) || !is_string($lang)) {
@@ -42,6 +48,15 @@ class Type extends Model
         return $result;
     }
 
+    /**
+     * /
+     * @param  integer $page     [description]
+     * @param  integer $per_page [description]
+     * @param  string  $key      [description]
+     * @param  string  $order    [description]
+     * @param  string  $lang     [description]
+     * @return [type]            [description]
+     */
     public function find($page = 1, $per_page = 12, $key = 'name', $order = 'asc', $lang = 'pt-br')
     {
         if (!is_int($page) || !is_int($per_page) || !is_string($key) || !is_string($order) || !is_string($lang)) {
@@ -61,6 +76,12 @@ class Type extends Model
         return $result;
     }
 
+    /**
+     * /
+     * @param  [type] $id   [description]
+     * @param  string $lang [description]
+     * @return [type]       [description]
+     */
     public function show($id, $lang = 'pt-br')
     {
         if (!is_int($id)  || !is_string($lang)) {
@@ -78,6 +99,11 @@ class Type extends Model
         return $result;
     }
 
+    /**
+     * /
+     * @param  Record $record [description]
+     * @return [type]         [description]
+     */
     public function insert(Record $record)
     {
         $sql = "INSERT INTO types (name, item_name)
@@ -92,6 +118,11 @@ class Type extends Model
         return $result;
     }
 
+    /**
+     * /
+     * @param  Record $record [description]
+     * @return [type]         [description]
+     */
     public function update(Record $record)
     {
         $sql = "UPDATE types SET name=:name, item_name=:item_name WHERE id=:id";
@@ -105,6 +136,11 @@ class Type extends Model
 
     }
 
+    /**
+     * /
+     * @param  [type] $id [description]
+     * @return [type]     [description]
+     */
     public function delete($id)
     {
         if (!is_int($id) ) {

@@ -7,11 +7,20 @@ use Maltz\Mvc\Model;
 
 class TimeTracking extends Model
 {
+    /**
+     * /
+     * @param DB $db [description]
+     */
     public function __construct(DB $db)
     {
         parent::__construct($db, 'time_tracking', 'ticket_time_tracking', array('id' => 'int'));
     }
 
+    /**
+     * /
+     * @param  [type] $user_id [description]
+     * @return [type]          [description]
+     */
     protected function getCurrentId($user_id)
     {
         if (!is_int($user_id)) {
@@ -29,6 +38,12 @@ class TimeTracking extends Model
         return $this->db->run($sql, array('user_id' => $user_id));
     }
 
+    /**
+     * /
+     * @param  [type] $ticket_id [description]
+     * @param  [type] $user_id   [description]
+     * @return [type]            [description]
+     */
     public function start($ticket_id, $user_id)
     {
         if (!is_int($ticket_id) || !is_int($user_id) ) {
@@ -43,6 +58,11 @@ class TimeTracking extends Model
         return $this->db->run($sql, array('ticket_id' => $ticket_id));
     }
 
+    /**
+     * /
+     * @param  [type] $user_id [description]
+     * @return [type]          [description]
+     */
     public function stop($user_id)
     {
         if (!is_int($user_id)) {

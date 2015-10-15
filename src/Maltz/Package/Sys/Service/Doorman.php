@@ -23,6 +23,12 @@ class Doorman
     protected $session;
     protected $cookieJar;
 
+    /**
+     * /
+     * @param [type] $db               [description]
+     * @param [type] $sessionDataStore [description]
+     * @param [type] $cookieJar        [description]
+     */
     public function __construct($db, $sessionDataStore, $cookieJar)
     {
         $this->user = new User($db);
@@ -30,6 +36,11 @@ class Doorman
         $this->cookieJar = $cookieJar;
     }
 
+    /**
+     * /
+     * @param  [type] $user_id [description]
+     * @return [type]          [description]
+     */
     public function remember($user_id)
     {
         if (!is_int($user_id)) {
@@ -42,15 +53,11 @@ class Doorman
         $this->cookieJar->set('token.remember', $cookie);
     }
 
-    /*
-    * realiza autenticaction
-    *
-    *
-    * @param $username string
-    * @param $password string
-    *
-    * return string / void
-    */
+    /**
+     * /
+     * @param  Record $credentials [description]
+     * @return [type]              [description]
+     */
     public function login(Record $credentials)
     {
         $login = $this->user->findByUsernameOrEmail($credentials->get('username'));
@@ -66,14 +73,10 @@ class Doorman
         return false;
     }
 
-    /*
-    * encerra sessao
-    *
-    *
-    * @param
-    *
-    * return void
-    */
+    /**
+     * /
+     * @return [type] [description]
+     */
     public function logout()
     {
         $this->sessionDataStore->destroy();
@@ -82,14 +85,10 @@ class Doorman
         }
     }
 
-    /*
-    *
-    * checa se user esta autenticado
-    *
-    * @param
-    *
-    * return bool
-    */
+    /**
+     * /
+     * @return boolean [description]
+     */
     public function isUserAuthenticated()
     {
         $authenticated = false;
@@ -107,13 +106,10 @@ class Doorman
         return $authenticated;
     }
 
-    /*
-     *
-     * checa permissao
-     *
-     * @param
-     *
-     * return bool
+    /**
+     * /
+     * @param  array   $roles [description]
+     * @return boolean        [description]
      */
     public function isUserAllowed(array $roles)
     {
@@ -128,12 +124,9 @@ class Doorman
         return false;
     }
 
-    /*
-     * checa credentials
-     *
-     * @param
-     *
-     * return int
+    /**
+     * /
+     * @return [type] [description]
      */
     private function getRoles()
     {

@@ -4,6 +4,11 @@ namespace Maltz\Package\Calendar\Ctrl;
 
 class Calendar
 {
+    /**
+     * /
+     * @param  [type] $app [description]
+     * @return [type]      [description]
+     */
     public function route($app)
     {
         $app->post('/api/calendar', function() use ($app) {

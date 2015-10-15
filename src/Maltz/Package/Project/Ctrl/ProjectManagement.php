@@ -9,6 +9,11 @@ use Maltz\Package\Project\Model\Invoice;
 
 class ProjectManagement
 {
+    /**
+     * /
+     * @param  [type] $app [description]
+     * @return [type]      [description]
+     */
     public function route($app)
     {
         $app->get('/api/project/:id/devs', function () use ($app) {

@@ -12,6 +12,10 @@ class Role extends Model
 {
     use Activity;
 
+    /**
+     * /
+     * @param DB $db [description]
+     */
     public function __construct(DB $db)
     {
         $rules = array(
@@ -25,7 +29,10 @@ class Role extends Model
     /*
      * CRUD
      */
-
+    /**
+     * /
+     * @return [type] [description]
+     */
     public function display()
     {
         $sql = "SELECT id, name, activity FROM roles";
@@ -33,6 +40,14 @@ class Role extends Model
         return $result;
     }
 
+    /**
+     * /
+     * @param  integer $page     [description]
+     * @param  integer $per_page [description]
+     * @param  string  $key      [description]
+     * @param  string  $order    [description]
+     * @return [type]            [description]
+     */
     public function find($page = 1, $per_page = 12, $key = 'name', $order = 'asc')
     {
         if (!is_int($page) || !is_int($per_page) || !is_string($key) || !is_string($order)) {
@@ -48,6 +63,11 @@ class Role extends Model
         return $result;
     }
 
+    /**
+     * /
+     * @param  [type] $id [description]
+     * @return [type]     [description]
+     */
     public function show($id)
     {
         if (!is_int($id) ) {
@@ -61,6 +81,11 @@ class Role extends Model
         return $result;
     }
 
+    /**
+     * /
+     * @param  Record $record [description]
+     * @return [type]         [description]
+     */
     public function insert(Record $record)
     {
         $sql = "INSERT INTO roles (name, activity)
@@ -69,6 +94,11 @@ class Role extends Model
         return $result;
     }
     
+    /**
+     * /
+     * @param  Record $record [description]
+     * @return [type]         [description]
+     */
     public function update(Record $record)
     {
         $sql = "UPDATE roles SET name=:name, activity=:activity 

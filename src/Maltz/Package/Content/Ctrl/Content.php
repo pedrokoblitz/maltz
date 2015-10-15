@@ -12,6 +12,11 @@ use Maltz\Package\Content\Model\Block;
 
 class Content
 {
+    /**
+     * /
+     * @param  [type] $app [description]
+     * @return [type]      [description]
+     */
     public function route($app)
     {
         /*

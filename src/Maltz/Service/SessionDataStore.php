@@ -7,18 +7,35 @@ use Maltz\Mvc\Record;
 
 class SessionDataStore
 {
+    /**
+     * [$session description]
+     * @var [type]
+     */
     protected $session;
 
+    /**
+     * /
+     * @param Session $session [description]
+     */
     public function __construct(Session $session)
     {
         $this->session = $session;
     }
 
+    /**
+     * /
+     * @param  [type] $key [description]
+     * @return [type]      [description]
+     */
     private function generateKey($key)
     {
         return md5($key . 'salt@NR#KN#hash');
     }
 
+    /**
+     * /
+     * @param [type] $message [description]
+     */
     public function addMessage($message)
     {
         if ($this->session->has('system.messages')) {
@@ -30,23 +47,42 @@ class SessionDataStore
         $this->session->set('system.messages', $messages);
     }
 
+    /**
+     * /
+     * @return [type] [description]
+     */
     public function getMessages()
     {
         return $this->session->get('system.messages');
     }
 
+    /**
+     * /
+     * @param  [type] $key   [description]
+     * @param  [type] $value [description]
+     * @return [type]        [description]
+     */
     public function storeItems($key, $value)
     {
         $hash = $this->generateKey($key);
         $this->session->set($hash, $value);
     }
 
+    /**
+     * /
+     * @param  [type] $hash [description]
+     * @return [type]       [description]
+     */
     public function getItems($hash)
     {
         $hash = $this->generateKey($key);
         return $this->session->get($key);
     }
 
+    /**
+     * /
+     * @param Record $record [description]
+     */
     public function setUserData(Record $record)
     {
         $this->session->set('user.authenticated', true);
@@ -56,6 +92,10 @@ class SessionDataStore
         $this->session->set('user.email', $record->get('email'));
     }
 
+    /**
+     * /
+     * @return [type] [description]
+     */
     public function getUserData()
     {
         $data = array(
@@ -68,16 +108,28 @@ class SessionDataStore
         return $data;
     }
 
+    /**
+     * /
+     * @return boolean [description]
+     */
     public function isUserAuthenticated()
     {
         return $this->session->get('user.authenticated') === true;
     }
 
+    /**
+     * /
+     * @return [type] [description]
+     */
     public function getUserId()
     {
         return $this->session->get('user.id');
     }
 
+    /**
+     * /
+     * @return [type] [description]
+     */
     public function getViewData()
     {
         $data = array(
@@ -87,6 +139,10 @@ class SessionDataStore
         return $data;
     }
 
+    /**
+     * /
+     * @return [type] [description]
+     */
     public function destroy()
     {
         $this->session->end();

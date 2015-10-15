@@ -10,6 +10,10 @@ use Maltz\Service\Pagination;
 
 class Project extends Model
 {
+    /**
+     * /
+     * @param DB $db [description]
+     */
     public function __construct(DB $db)
     {
         $rules = array(
@@ -20,6 +24,11 @@ class Project extends Model
         parent::__construct($db, 'project', 'projects', $rules);
     }
 
+    /**
+     * /
+     * @param  Record $record [description]
+     * @return [type]         [description]
+     */
     public function insert(Record $record)
     {
         $sql = "INSERT INTO projects (title, description, activity) VALUES (:title, :description, :activity)";
@@ -27,6 +36,11 @@ class Project extends Model
         return $result;
     }
 
+    /**
+     * /
+     * @param  Record $record [description]
+     * @return [type]         [description]
+     */
     public function update(Record $record)
     {
         $sql = "UPDATE projects SET title=:title, description=:description, activity=:activity";
@@ -34,6 +48,11 @@ class Project extends Model
         return $result;
     }
 
+    /**
+     * /
+     * @param  [type] $id [description]
+     * @return [type]     [description]
+     */
     public function show($id)
     {
         if (!is_int($id)) {
@@ -45,6 +64,14 @@ class Project extends Model
         return $result;
     }
 
+    /**
+     * /
+     * @param  integer $pg       [description]
+     * @param  integer $per_page [description]
+     * @param  string  $key      [description]
+     * @param  string  $order    [description]
+     * @return [type]            [description]
+     */
     public function find($pg = 1, $per_page = 12, $key = 'title', $order = 'asc')
     {
         if (!is_int($pg) || !is_int($per_page) || !is_string($key) || !is_string($order)) {
@@ -60,6 +87,11 @@ class Project extends Model
         return $result;
     }
 
+    /**
+     * /
+     * @param  [type] $id [description]
+     * @return [type]     [description]
+     */
     public function getDevs($id)
     {
         if (!is_int($id)) {
@@ -75,6 +107,11 @@ class Project extends Model
         return $result;
     }
 
+    /**
+     * /
+     * @param [type] $id      [description]
+     * @param [type] $user_id [description]
+     */
     public function addUser($id, $user_id)
     {
         if (!is_int($id) || !is_int($user_id)) {
@@ -86,6 +123,12 @@ class Project extends Model
         return $result;
     }
 
+    /**
+     * /
+     * @param  [type] $id      [description]
+     * @param  [type] $user_id [description]
+     * @return [type]          [description]
+     */
     public function removeUser($id, $user_id)
     {
         if (!is_int($id) || !is_int($user_id)) {
@@ -97,6 +140,11 @@ class Project extends Model
         return $result;
     }
 
+    /**
+     * /
+     * @param  [type] $id [description]
+     * @return [type]     [description]
+     */
     public function getUsers($id)
     {
         if (!is_int($id)) {
@@ -114,6 +162,11 @@ class Project extends Model
         return $result;
     }
 
+    /**
+     * /
+     * @param  [type] $id [description]
+     * @return [type]     [description]
+     */
     public function getTickets($id)
     {
         if (!is_int($id)) {
@@ -128,6 +181,11 @@ class Project extends Model
         return $result;
     }
 
+    /**
+     * /
+     * @param  [type] $id [description]
+     * @return [type]     [description]
+     */
     public function getInvoices($id)
     {
         if (!is_int($id)) {
@@ -139,6 +197,11 @@ class Project extends Model
         return $result;
     }
 
+    /**
+     * /
+     * @param  [type] $id [description]
+     * @return [type]     [description]
+     */
     public function getBillableHours($id)
     {
         if (!is_int($id)) {
@@ -165,6 +228,11 @@ class Project extends Model
         return $result;
     }
 
+    /**
+     * /
+     * @param  [type] $id [description]
+     * @return [type]     [description]
+     */
     public function createReport($id)
     {
         if (!is_int($id)) {
@@ -190,6 +258,11 @@ class Project extends Model
         return $result;
     }
 
+    /**
+     * /
+     * @param  [type] $id [description]
+     * @return [type]     [description]
+     */
     public function createInvoice($id)
     {
         if (!is_int($id)) {

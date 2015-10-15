@@ -54,6 +54,11 @@ class User extends Model
         parent::__construct($db, 'user', 'users', $rules);
     }
 
+    /**
+     * /
+     * @param  Record $record [description]
+     * @return [type]         [description]
+     */
     protected function processRecord(Record $record)
     {
         $password = $record->get('password');
@@ -68,7 +73,12 @@ class User extends Model
     /*
      * CRUD
      */
-
+    /**
+     * /
+     * @param  string $key   [description]
+     * @param  string $order [description]
+     * @return [type]        [description]
+     */
     public function display($key = 'username', $order = 'asc')
     {
         if (!is_string($key) || !is_string($order)) {
@@ -81,6 +91,14 @@ class User extends Model
         return $result;
     }
 
+    /**
+     * /
+     * @param  integer $page     [description]
+     * @param  integer $per_page [description]
+     * @param  string  $key      [description]
+     * @param  string  $order    [description]
+     * @return [type]            [description]
+     */
     public function find($page = 1, $per_page = 12, $key = 'username', $order = 'asc')
     {
         if (!is_int($page) || !is_int($per_page) || !is_string($key) || !is_string($order)) {
@@ -94,6 +112,11 @@ class User extends Model
         return $result;
     }
 
+    /**
+     * /
+     * @param  [type] $user [description]
+     * @return [type]       [description]
+     */
     public function findByUsernameOrEmail($user)
     {
         if (!is_string($user)) {
@@ -106,6 +129,11 @@ class User extends Model
         return $result;
     }
 
+    /**
+     * /
+     * @param  [type] $id [description]
+     * @return [type]     [description]
+     */
     public function show($id)
     {
         if (!is_int($id) ) {
@@ -119,6 +147,11 @@ class User extends Model
         return $result;
     }
 
+    /**
+     * /
+     * @param  Record $record [description]
+     * @return [type]         [description]
+     */
     public function insert(Record $record)
     {
         $fields = $record->getFieldsList();
@@ -129,6 +162,11 @@ class User extends Model
         return $result;
     }
 
+    /**
+     * /
+     * @param  Record $record [description]
+     * @return [type]         [description]
+     */
     public function update(Record $record)
     {
         $id = $record->get('id');
@@ -144,6 +182,12 @@ class User extends Model
     /*
      * ROLES
      */
+    
+    /**
+     * /
+     * @param  [type] $user [description]
+     * @return [type]       [description]
+     */
     public function getRoles($user)
     {
         $user_id = $this->parseUser($user);
@@ -156,6 +200,11 @@ class User extends Model
         return $result;
     }
 
+    /**
+     * /
+     * @param  [type] $user [description]
+     * @return [type]       [description]
+     */
     protected function parseUser($user)
     {
         if (is_string($user)) {
@@ -170,6 +219,11 @@ class User extends Model
         return $user_id;
     }
 
+    /**
+     * /
+     * @param  [type] $role [description]
+     * @return [type]       [description]
+     */
     protected function parseRole($role)
     {
         if (is_string($role)) {
@@ -183,6 +237,11 @@ class User extends Model
         return $role_id;
     }
 
+    /**
+     * /
+     * @param [type] $user [description]
+     * @param [type] $role [description]
+     */
     public function addRole($user, $role)
     {
         $sql = "INSERT INTO users_roles (user_id, role_id) 
@@ -191,6 +250,12 @@ class User extends Model
         return $result;
     }
 
+    /**
+     * /
+     * @param  [type] $user [description]
+     * @param  [type] $role [description]
+     * @return [type]       [description]
+     */
     public function removeRole($user, $role)
     {
         $sql = "DELETE FROM users_roles 
@@ -204,6 +269,11 @@ class User extends Model
      * REGISTRATION
      */
 
+    /**
+     * /
+     * @param  Record $record [description]
+     * @return [type]         [description]
+     */
     public function signUp(Record $record)
     {
         $res = $this->insert($record);
@@ -212,6 +282,11 @@ class User extends Model
         return $token;
     }
 
+    /**
+     * /
+     * @param  [type] $user_id [description]
+     * @return [type]          [description]
+     */
     public function remember($user_id)
     {
         if (!is_int($user_id)) {
@@ -222,6 +297,11 @@ class User extends Model
         return $token;
     }
 
+    /**
+     * /
+     * @param  [type] $user_id [description]
+     * @return [type]          [description]
+     */
     public function forgot($user_id)
     {
         if (!is_int($user_id)) {
@@ -232,6 +312,12 @@ class User extends Model
         return $token;
     }
 
+    /**
+     * /
+     * @param  [type] $user_token [description]
+     * @param  [type] $type       [description]
+     * @return [type]             [description]
+     */
     public function validate($user_token, $type)
     {
         if (!is_string($user_token) || !is_string($type)) {

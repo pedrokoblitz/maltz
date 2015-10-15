@@ -10,6 +10,10 @@ use Maltz\Service\Pagination;
 
 class Ticket extends Model
 {
+    /**
+     * /
+     * @param DB $db [description]
+     */
     public function __construct(DB $db)
     {
         $rules = array(
@@ -24,6 +28,11 @@ class Ticket extends Model
         parent::__construct($db, 'ticket', 'tickets', $rules);
     }
 
+    /**
+     * /
+     * @param  [type] $id [description]
+     * @return [type]     [description]
+     */
     public function show($id)
     {
         if (!is_int($id)) {
@@ -37,6 +46,11 @@ class Ticket extends Model
         return $result;
     }
 
+    /**
+     * /
+     * @param  Record $record [description]
+     * @return [type]         [description]
+     */
     public function insert(Record $record)
     {
         $sql = "INSERT INTO tickets (dev_id, user_id, hash, priority, description, activity, created, modified) 
@@ -45,6 +59,11 @@ class Ticket extends Model
         return $result;
     }
 
+    /**
+     * /
+     * @param  string $key [description]
+     * @return [type]      [description]
+     */
     public function find($key = 'modified')
     {
         if (!is_string($key) ) {
@@ -58,6 +77,12 @@ class Ticket extends Model
         return $result;
     }
 
+    /**
+     * /
+     * @param  integer $pg       [description]
+     * @param  integer $per_page [description]
+     * @return [type]            [description]
+     */
     public function findAll($pg = 1, $per_page = 20)
     {
         if (!is_int($pg) || !is_int($per_page)) {
@@ -72,6 +97,12 @@ class Ticket extends Model
         return $result;
     }
 
+    /**
+     * /
+     * @param  [type] $id       [description]
+     * @param  [type] $priority [description]
+     * @return [type]           [description]
+     */
     public function changePriority($id, $priority)
     {
         if (!is_int($id) || !is_string($priority)) {
@@ -83,6 +114,11 @@ class Ticket extends Model
         return $result;
     }
 
+    /**
+     * /
+     * @param  [type] $id [description]
+     * @return [type]     [description]
+     */
     public function close($id)
     {
         if (!is_int($id)) {
@@ -94,6 +130,11 @@ class Ticket extends Model
         return $result;
     }
 
+    /**
+     * /
+     * @param  [type] $id [description]
+     * @return [type]     [description]
+     */
     public function getDev($id)
     {
         if (!is_int($id)) {

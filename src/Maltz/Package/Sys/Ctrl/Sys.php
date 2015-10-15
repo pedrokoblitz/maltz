@@ -11,6 +11,11 @@ use Maltz\Package\Sys\Model\Log;
 
 class Sys
 {
+    /**
+     * /
+     * @param  [type] $app [description]
+     * @return [type]      [description]
+     */
     public function route($app)
     {
         /*

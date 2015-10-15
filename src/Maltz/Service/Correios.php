@@ -10,28 +10,25 @@ namespace Maltz\Service;
  * @license   GPL v2
  *
  * @package Maltz
+ * @subpackage Service
  *
  * @version 0.1 alpha
  */
 
 class Correios
 {
-    /*
-    *  calcula preco do frete
-    *
-    *	@param $cod_servico string
-    *	@param $cep_origem string
-    *	@param $cep_destino string
-    *	@param $peso string
-    *	@param $altura string
-    *	@param $largura string
-    *	@param $comprimento string
-    *	@param $value_declarado string
-    *
-    * return string
-    *
-    *
-    */
+    /**
+     * /
+     * @param  [type] $cod_servico     [description]
+     * @param  [type] $cep_origem      [description]
+     * @param  [type] $cep_destino     [description]
+     * @param  [type] $peso            [description]
+     * @param  string $altura          [description]
+     * @param  string $largura         [description]
+     * @param  string $comprimento     [description]
+     * @param  string $value_declarado [description]
+     * @return [type]                  [description]
+     */
     public function getShippingCost(
         $cod_servico,
         $cep_origem,
@@ -58,13 +55,11 @@ class Correios
 
     }
 
-    /*
-    *  Função de search de Endereço pelo CEP
-    * @param $cep string
-    *
-    * return string
-    *
-    */
+    /**
+     * /
+     * @param  [type] $cep [description]
+     * @return [type]      [description]
+     */
     public function searchCep($cep)
     {
         $curl = new Curl();

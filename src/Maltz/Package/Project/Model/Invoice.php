@@ -12,6 +12,10 @@ class Invoice extends Model
 {
     use Activity;
 
+    /**
+     * /
+     * @param DB $db [description]
+     */
     public function __construct(DB $db)
     {
         $rules = array(
@@ -27,6 +31,11 @@ class Invoice extends Model
 
     // CRUD
     
+    /**
+     * /
+     * @param  Record $record [description]
+     * @return [type]         [description]
+     */
     public function insert(Record $record)
     {
         $sql = "INSERT INTO invoices (project_id, hours, rate, total, activity, created) 
@@ -35,10 +44,20 @@ class Invoice extends Model
         return $result;
     }
 
+    /**
+     * /
+     * @param  Record $record [description]
+     * @return [type]         [description]
+     */
     public function update(Record $record) {
         throw new \Exception("Invoices cannot be updated. Delete and create a new one.", 001);
     }
 
+    /**
+     * /
+     * @param  Record $record [description]
+     * @return [type]         [description]
+     */
     public function processRecord(Record $record)
     {
         $total = (int) $record->get('totalhours') * (int) $record->get('rate');
@@ -46,6 +65,11 @@ class Invoice extends Model
         return $record;
     }
 
+    /**
+     * /
+     * @param  [type] $id [description]
+     * @return [type]     [description]
+     */
     public function show($id)
     {
         if (!is_int($id)) {
@@ -60,6 +84,14 @@ class Invoice extends Model
         return $result;
     }
 
+    /**
+     * /
+     * @param  integer $pg       [description]
+     * @param  integer $per_page [description]
+     * @param  string  $key      [description]
+     * @param  string  $order    [description]
+     * @return [type]            [description]
+     */
     public function find($pg = 1, $per_page = 12, $key = 'title', $order = 'asc')
     {
         if (!is_int($pg) || !is_int($per_page) || !is_string($key) || !is_string($order)) {
@@ -76,6 +108,10 @@ class Invoice extends Model
         return $result;
     }
 
+    /**
+     * /
+     * @param [type] $id [description]
+     */
     public function setSent($id)
     {
         if (!is_int($id)) {
@@ -85,6 +121,10 @@ class Invoice extends Model
         $this->setActivity($id, 2);
     }
 
+    /**
+     * /
+     * @param [type] $id [description]
+     */
     public function setContested($id)
     {
         if (!is_int($id)) {
@@ -94,6 +134,10 @@ class Invoice extends Model
         $this->setActivity($id, 3);
     }
 
+    /**
+     * /
+     * @param [type] $id [description]
+     */
     public function setPaid($id)
     {
         if (!is_int($id)) {

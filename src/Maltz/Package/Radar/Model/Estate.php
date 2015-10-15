@@ -8,12 +8,24 @@ use Maltz\Mvc\Record;
 
 class Estate extends Model
 {
+    /**
+     * /
+     * @param DB $db [description]
+     */
     public function __construct(DB $db)
     {
         $rules = array();
         parent::__construct($db, 'estate', 'estates', $rules);
     }
 
+    /**
+     * /
+     * @param  integer $page     [description]
+     * @param  integer $per_page [description]
+     * @param  [type]  $key      [description]
+     * @param  [type]  $order    [description]
+     * @return [type]            [description]
+     */
     public function find($page = 1, $per_page = 12, $key = null, $order = null)
     {
         $sql = "";
@@ -21,6 +33,11 @@ class Estate extends Model
         return $result;
     }
 
+    /**
+     * /
+     * @param  [type] $id [description]
+     * @return [type]     [description]
+     */
     public function show($id)
     {
         $sql = "";
@@ -28,6 +45,11 @@ class Estate extends Model
         return $result;
     }
 
+    /**
+     * /
+     * @param  Record $record [description]
+     * @return [type]         [description]
+     */
     public function insert(Record $record)
     {
         $sql = "";
@@ -35,6 +57,11 @@ class Estate extends Model
         return $result;
     }
 
+    /**
+     * /
+     * @param  Record $record [description]
+     * @return [type]         [description]
+     */
     public function update(Record $record)
     {
         $sql = "";

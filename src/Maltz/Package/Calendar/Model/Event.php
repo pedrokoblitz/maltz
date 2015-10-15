@@ -7,6 +7,10 @@ use Maltz\Mvc\Model;
 
 class Event extends Model
 {
+    /**
+     * /
+     * @param DB $db [description]
+     */
     public function __construct(DB $db)
     {
         $rules = array(
@@ -15,6 +19,11 @@ class Event extends Model
         parent::__construct($db, 'event', 'events', $rules);
     }
 
+    /**
+     * /
+     * @param  Record $record [description]
+     * @return [type]         [description]
+     */
     public function insert(Record $record)
     {
         $sql = "";
@@ -22,6 +31,11 @@ class Event extends Model
         return $result;
     }
 
+    /**
+     * /
+     * @param  Record $record [description]
+     * @return [type]         [description]
+     */
     public function update(Record $record)
     {
         $sql = "";
@@ -29,6 +43,10 @@ class Event extends Model
         return $result;
     }
 
+    /**
+     * /
+     * @return [type] [description]
+     */
     public function display()
     {
         $sql = "";
@@ -36,6 +54,10 @@ class Event extends Model
         return $result;
     }
 
+    /**
+     * /
+     * @return [type] [description]
+     */
     public function find()
     {
         $sql = "";
@@ -43,6 +65,11 @@ class Event extends Model
         return $result;
     }
 
+    /**
+     * /
+     * @param  Record $record [description]
+     * @return [type]         [description]
+     */
     public function findByType(Record $record)
     {
         $sql = "";

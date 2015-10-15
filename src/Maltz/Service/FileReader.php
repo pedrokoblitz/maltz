@@ -2,13 +2,23 @@
 
 namespace Maltz\Service;
 
+
 trait FileReader
 {
+    /**
+     * /
+     * @param [type] $path [description]
+     * @param [type] $name [description]
+     */
     public function setFile($path, $name)
     {
         $this->file = $path . '/' . $name;
     }
 
+    /**
+     * /
+     * @return [type] [description]
+     */
     public function getFile()
     {
         if (isset($this->file)) {
@@ -18,6 +28,10 @@ trait FileReader
         return file_get_contents($this->file);
     }
 
+    /**
+     * /
+     * @return [type] [description]
+     */
     public function readFile()
     {
         if (isset($this->file)) {
@@ -30,12 +44,21 @@ trait FileReader
         return $contents;
     }
 
+    /**
+     * /
+     * @return [type] [description]
+     */
     public function outputFile()
     {
         echo $this->getContents();
         return true;
     }
 
+    /**
+     * /
+     * @param  [type] $pattern [description]
+     * @return [type]          [description]
+     */
     public function searchFile($pattern)
     {
         $contents = $this->getFile();

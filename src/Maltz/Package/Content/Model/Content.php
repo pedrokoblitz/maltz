@@ -37,15 +37,10 @@ class Content extends Model
     use Translatable;
     use Tree;
 
-    /*
-    * construtor
-    *
-    *
-    * @param objeto DB
-    *
-    * return void
-    */
-
+    /**
+     * /
+     * @param DB $db [description]
+     */
     public function __construct(DB $db)
     {
         $rules = array(
@@ -69,7 +64,11 @@ class Content extends Model
     /*
      * CRUD
      */
-
+    /**
+     * /
+     * @param  Record $record [description]
+     * @return [type]         [description]
+     */
     public function insert(Record $record)
     {
         $sql = "INSERT INTO contents (type_id, parent_id, date_pub, created, modified) 
@@ -97,7 +96,11 @@ class Content extends Model
         return $result;
     }
 
-
+    /**
+     * /
+     * @param  Record $record [description]
+     * @return [type]         [description]
+     */
     public function update(Record $record)
     {
         $id = $record->get('id');
@@ -121,6 +124,12 @@ class Content extends Model
         return $result;
     }
 
+    /**
+     * /
+     * @param  [type] $id   [description]
+     * @param  string $lang [description]
+     * @return [type]       [description]
+     */
     public function show($id, $lang = 'pt-br')
     {
         if (!is_int($id) || !is_string($lang)) {
@@ -139,6 +148,15 @@ class Content extends Model
         return $result;
     }
 
+    /**
+     * /
+     * @param  integer $page     [description]
+     * @param  integer $per_page [description]
+     * @param  string  $key      [description]
+     * @param  string  $order    [description]
+     * @param  string  $lang     [description]
+     * @return [type]            [description]
+     */
     public function find($page = 1, $per_page = 12, $key = 'modified', $order = 'asc', $lang = 'pt-br')
     {
         if (!is_int($page) || !is_int($per_page) || !is_string($key) || !is_string($order) || !is_string($lang)) {
@@ -161,6 +179,16 @@ class Content extends Model
         return $result;
     }
 
+    /**
+     * /
+     * @param  [type]  $type     [description]
+     * @param  integer $page     [description]
+     * @param  integer $per_page [description]
+     * @param  string  $key      [description]
+     * @param  string  $order    [description]
+     * @param  string  $lang     [description]
+     * @return [type]            [description]
+     */
     public function findByType($type, $page = 1, $per_page = 12, $key = 'modified', $order = 'asc', $lang = 'pt-br')
     {
         if (!is_string($type) || !is_int($page) || !is_int($per_page) || !is_string($key) || !is_string($order) || !is_string($lang)) {
@@ -184,6 +212,10 @@ class Content extends Model
         return $result;
     }
 
+    /**
+     * /
+     * @param [type] $id [description]
+     */
     public function setAsDraft($id)
     {
         if (!is_int($id)) {
@@ -192,6 +224,10 @@ class Content extends Model
         return $this->setActivity($id, 3);
     }
 
+    /**
+     * /
+     * @param [type] $id [description]
+     */
     public function setAsPending($id)
     {
         if (!is_int($id)) {
@@ -200,6 +236,11 @@ class Content extends Model
         return $this->setActivity($id, 4);
     }
 
+    /**
+     * /
+     * @param  [type] $id [description]
+     * @return [type]     [description]
+     */
     public function publish($id)
     {
         if (!is_int($id)) {

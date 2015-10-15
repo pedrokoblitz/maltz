@@ -57,7 +57,11 @@ class Config extends Model
     /*
      * CRUD
      */
-
+    /**
+     * /
+     * @param  Record $record [description]
+     * @return [type]         [description]
+     */
     public function processRecord(Record $record)
     {
         if (!$record->has('activity')) {
@@ -66,6 +70,11 @@ class Config extends Model
         return $record;
     }
 
+    /**
+     * /
+     * @param  Record $record [description]
+     * @return [type]         [description]
+     */
     public function insert(Record $record)
     {
         $sql = "INSERT INTO config (`key`, value, format, activity, created, modified) VALUES (:key, :value, :activity, NOW(), NOW())";
@@ -73,6 +82,11 @@ class Config extends Model
         return $result;
     }
 
+    /**
+     * /
+     * @param  Record $record [description]
+     * @return [type]         [description]
+     */
     public function update(Record $record)
     {
         $sql = "UPDATE config SET activity=:activity, value=:value, modified=NOW() 
@@ -81,6 +95,10 @@ class Config extends Model
         return $result;
     }
 
+    /**
+     * /
+     * @return [type] [description]
+     */
     public function display()
     {
         $sql = "SELECT id, `key`, value, format, activity, modified, created 
@@ -89,6 +107,14 @@ class Config extends Model
         return $result;
     }
 
+    /**
+     * /
+     * @param  integer $page     [description]
+     * @param  integer $per_page [description]
+     * @param  string  $key      [description]
+     * @param  string  $order    [description]
+     * @return [type]            [description]
+     */
     public function find($page = 1, $per_page = 12, $key = 'key', $order = 'asc')
     {
         if (!is_int($page) || !is_int($per_page) || !is_string($key) || !is_string($order)) {
@@ -104,6 +130,11 @@ class Config extends Model
         return $result;
     }
 
+    /**
+     * /
+     * @param  [type] $id [description]
+     * @return [type]     [description]
+     */
     public function show($id)
     {
         if (!is_int($id) ) {
@@ -121,6 +152,11 @@ class Config extends Model
      * APP SPECIFIC
      */
 
+    /**
+     * /
+     * @param [type] $key   [description]
+     * @param [type] $value [description]
+     */
     public function setValue($key, $value)
     {
         if (!is_string($key) || !is_string($value)) {
@@ -133,6 +169,11 @@ class Config extends Model
         return $result;
     }
 
+    /**
+     * /
+     * @param  [type] $key [description]
+     * @return [type]      [description]
+     */
     public function getValue($key)
     {
         if (!is_string($key)) {
@@ -148,6 +189,10 @@ class Config extends Model
         return $record->get('value');
     }
 
+    /**
+     * /
+     * @param [type] $key [description]
+     */
     public function setRefresh($key)
     {
         if (!is_string($key)) {
@@ -160,6 +205,11 @@ class Config extends Model
         return $result;
     }
 
+    /**
+     * /
+     * @param  [type] $key [description]
+     * @return [type]      [description]
+     */
     public function refresh($key)
     {
         if (!is_string($key)) {

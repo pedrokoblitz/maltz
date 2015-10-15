@@ -57,6 +57,14 @@ class Log extends Model
      * CRUD
      */
 
+    /**
+     * /
+     * @param  integer $page     [description]
+     * @param  integer $per_page [description]
+     * @param  string  $key      [description]
+     * @param  string  $order    [description]
+     * @return [type]            [description]
+     */
     public function find($page = 1, $per_page = 12, $key = 'created', $order = 'desc')
     {
         if (!is_int($page) || !is_int($per_page) || !is_string($key) || !is_string($order)) {
@@ -70,6 +78,11 @@ class Log extends Model
         return $result;
     }
 
+    /**
+     * /
+     * @param  Record $record [description]
+     * @return [type]         [description]
+     */
     public function insert(Record $record)
     {
         $sql = "INSERT INTO log (user_id, group_name, group_id, action, item_name, item_id, nonce, created)
@@ -79,6 +92,17 @@ class Log extends Model
         return $result;
     }
 
+    /**
+     * /
+     * @param  [type] $user_id    [description]
+     * @param  [type] $group_name [description]
+     * @param  [type] $group_id   [description]
+     * @param  [type] $action     [description]
+     * @param  [type] $item_name  [description]
+     * @param  [type] $item_id    [description]
+     * @param  [type] $nonce      [description]
+     * @return [type]             [description]
+     */
     public function log($user_id, $group_name, $group_id, $action, $item_name = null, $item_id = null, $nonce = null)
     {
         if (!is_int($user_id) || !is_string($group_name) || !is_int($group_id) || !is_string($action) || !is_string($nonce)) {

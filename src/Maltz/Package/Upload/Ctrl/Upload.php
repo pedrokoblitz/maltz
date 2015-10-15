@@ -4,6 +4,11 @@ namespace Maltz\Package\Api\Ctrl;
 
 class Upload
 {
+    /**
+     * /
+     * @param  [type] $app [description]
+     * @return [type]      [description]
+     */
     public function route($app)
     {
         /*

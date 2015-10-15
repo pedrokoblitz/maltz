@@ -6,6 +6,11 @@ use Maltz\Mvc\Controller;
 
 class Asset extends Controller
 {
+    /**
+     * /
+     * @param  [type] $app [description]
+     * @return [type]      [description]
+     */
     public function route($app)
     {
         /*
