@@ -1,0 +1,918 @@
+PHPUnit 3.7.28 by Sebastian Bergmann.
+
+Configuration read from /home/pedro/projects/app-projects/maltz/phpunit.xml
+
+FFFFFFFFFFFFFFEEFFFFEEFFFFFFFFFFFFEEEEEEEEEEEEEEEEEEEFFFFFFFFFF  63 / 158 ( 39%)
+FFFFEEEEEEEFFFFFFFF.FFFFFFEEFFFFEEEEEEEEEEFFFFFFF..E.FFFFFFFFFF 126 / 158 ( 79%)
+FFFFFFFFFFFFFEFFFFFFEFE.FFFFFFEE
+
+Time: 3.66 seconds, Memory: 16.25Mb
+
+There were 48 errors:
+
+20) Test\Ctrl\ContentTest::testSaveArea
+Invalid argument supplied for foreach()
+
+/home/pedro/projects/app-projects/maltz/vendor/rmccue/requests/library/Requests.php:684
+/home/pedro/projects/app-projects/maltz/vendor/rmccue/requests/library/Requests/Transport/cURL.php:227
+/home/pedro/projects/app-projects/maltz/vendor/rmccue/requests/library/Requests/Transport/cURL.php:91
+/home/pedro/projects/app-projects/maltz/vendor/rmccue/requests/library/Requests.php:317
+/home/pedro/projects/app-projects/maltz/vendor/rmccue/requests/library/Requests.php:224
+/home/pedro/projects/app-projects/maltz/tests/Test/CtrlTestCase.php:28
+/home/pedro/projects/app-projects/maltz/tests/Test/Ctrl/ContentTest.php:189
+
+21) Test\Ctrl\ContentTest::testFindBlock
+Undefined variable: response
+
+/home/pedro/projects/app-projects/maltz/tests/Test/Ctrl/ContentTest.php:199
+
+22) Test\Ctrl\ContentTest::testDeleteBlock
+Invalid argument supplied for foreach()
+
+/home/pedro/projects/app-projects/maltz/vendor/rmccue/requests/library/Requests.php:684
+/home/pedro/projects/app-projects/maltz/vendor/rmccue/requests/library/Requests/Transport/cURL.php:227
+/home/pedro/projects/app-projects/maltz/vendor/rmccue/requests/library/Requests/Transport/cURL.php:91
+/home/pedro/projects/app-projects/maltz/vendor/rmccue/requests/library/Requests.php:317
+/home/pedro/projects/app-projects/maltz/vendor/rmccue/requests/library/Requests.php:224
+/home/pedro/projects/app-projects/maltz/tests/Test/CtrlTestCase.php:28
+/home/pedro/projects/app-projects/maltz/tests/Test/Ctrl/ContentTest.php:230
+
+23) Test\Ctrl\ContentTest::testBlockSave
+Invalid argument supplied for foreach()
+
+/home/pedro/projects/app-projects/maltz/vendor/rmccue/requests/library/Requests.php:684
+/home/pedro/projects/app-projects/maltz/vendor/rmccue/requests/library/Requests/Transport/cURL.php:227
+/home/pedro/projects/app-projects/maltz/vendor/rmccue/requests/library/Requests/Transport/cURL.php:91
+/home/pedro/projects/app-projects/maltz/vendor/rmccue/requests/library/Requests.php:317
+/home/pedro/projects/app-projects/maltz/vendor/rmccue/requests/library/Requests.php:224
+/home/pedro/projects/app-projects/maltz/tests/Test/CtrlTestCase.php:28
+/home/pedro/projects/app-projects/maltz/tests/Test/Ctrl/ContentTest.php:261
+
+24) Test\Model\ConfigTest::testDisplay
+Argument 4 passed to Maltz\Mvc\Model::__construct() must be of the type array, string given, called in /home/pedro/projects/app-projects/maltz/src/Maltz/Package/Sys/Model/Config.php on line 54 and defined
+
+/home/pedro/projects/app-projects/maltz/src/Maltz/Mvc/Model.php:25
+/home/pedro/projects/app-projects/maltz/src/Maltz/Package/Sys/Model/Config.php:54
+/home/pedro/projects/app-projects/maltz/src/Maltz/Mvc/Model.php:73
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/ConfigTest.php:14
+
+25) Test\Model\ConfigTest::testFind
+Argument 4 passed to Maltz\Mvc\Model::__construct() must be of the type array, string given, called in /home/pedro/projects/app-projects/maltz/src/Maltz/Package/Sys/Model/Config.php on line 54 and defined
+
+/home/pedro/projects/app-projects/maltz/src/Maltz/Mvc/Model.php:25
+/home/pedro/projects/app-projects/maltz/src/Maltz/Package/Sys/Model/Config.php:54
+/home/pedro/projects/app-projects/maltz/src/Maltz/Mvc/Model.php:73
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/ConfigTest.php:20
+
+26) Test\Model\ConfigTest::testShow
+Argument 4 passed to Maltz\Mvc\Model::__construct() must be of the type array, string given, called in /home/pedro/projects/app-projects/maltz/src/Maltz/Package/Sys/Model/Config.php on line 54 and defined
+
+/home/pedro/projects/app-projects/maltz/src/Maltz/Mvc/Model.php:25
+/home/pedro/projects/app-projects/maltz/src/Maltz/Package/Sys/Model/Config.php:54
+/home/pedro/projects/app-projects/maltz/src/Maltz/Mvc/Model.php:73
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/ConfigTest.php:27
+
+27) Test\Model\ConfigTest::testSetValue
+Argument 4 passed to Maltz\Mvc\Model::__construct() must be of the type array, string given, called in /home/pedro/projects/app-projects/maltz/src/Maltz/Package/Sys/Model/Config.php on line 54 and defined
+
+/home/pedro/projects/app-projects/maltz/src/Maltz/Mvc/Model.php:25
+/home/pedro/projects/app-projects/maltz/src/Maltz/Package/Sys/Model/Config.php:54
+/home/pedro/projects/app-projects/maltz/src/Maltz/Mvc/Model.php:73
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/ConfigTest.php:35
+
+28) Test\Model\ConfigTest::testGetValue
+Argument 4 passed to Maltz\Mvc\Model::__construct() must be of the type array, string given, called in /home/pedro/projects/app-projects/maltz/src/Maltz/Package/Sys/Model/Config.php on line 54 and defined
+
+/home/pedro/projects/app-projects/maltz/src/Maltz/Mvc/Model.php:25
+/home/pedro/projects/app-projects/maltz/src/Maltz/Package/Sys/Model/Config.php:54
+/home/pedro/projects/app-projects/maltz/src/Maltz/Mvc/Model.php:73
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/ConfigTest.php:42
+
+29) Test\Model\ConfigTest::testSetRefresh
+Argument 4 passed to Maltz\Mvc\Model::__construct() must be of the type array, string given, called in /home/pedro/projects/app-projects/maltz/src/Maltz/Package/Sys/Model/Config.php on line 54 and defined
+
+/home/pedro/projects/app-projects/maltz/src/Maltz/Mvc/Model.php:25
+/home/pedro/projects/app-projects/maltz/src/Maltz/Package/Sys/Model/Config.php:54
+/home/pedro/projects/app-projects/maltz/src/Maltz/Mvc/Model.php:73
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/ConfigTest.php:49
+
+30) Test\Model\ConfigTest::testRefresh
+Argument 4 passed to Maltz\Mvc\Model::__construct() must be of the type array, string given, called in /home/pedro/projects/app-projects/maltz/src/Maltz/Package/Sys/Model/Config.php on line 54 and defined
+
+/home/pedro/projects/app-projects/maltz/src/Maltz/Mvc/Model.php:25
+/home/pedro/projects/app-projects/maltz/src/Maltz/Package/Sys/Model/Config.php:54
+/home/pedro/projects/app-projects/maltz/src/Maltz/Mvc/Model.php:73
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/ConfigTest.php:56
+
+31) Test\Model\TokenTest::testGenerate
+Undefined variable: user_id
+
+/home/pedro/projects/app-projects/maltz/src/Maltz/Package/Sys/Model/Token.php:20
+/home/pedro/projects/app-projects/maltz/src/Maltz/Mvc/Model.php:75
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/TokenTest.php:15
+
+32) Test\Model\TokenTest::testValidate
+Exception: Invalid Record
+
+/home/pedro/projects/app-projects/maltz/src/Maltz/Package/Sys/Model/Token.php:53
+/home/pedro/projects/app-projects/maltz/src/Maltz/Mvc/Model.php:75
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/TokenTest.php:23
+
+33) Test\Model\UserTest::testSignUp
+Undefined variable: user_id
+
+/home/pedro/projects/app-projects/maltz/src/Maltz/Package/Sys/Model/Token.php:20
+/home/pedro/projects/app-projects/maltz/src/Maltz/Mvc/Model.php:75
+/home/pedro/projects/app-projects/maltz/src/Maltz/Package/Sys/Model/User.php:281
+/home/pedro/projects/app-projects/maltz/src/Maltz/Mvc/Model.php:75
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/UserTest.php:57
+
+34) Test\Model\UserTest::testRemember
+Undefined variable: user_id
+
+/home/pedro/projects/app-projects/maltz/src/Maltz/Package/Sys/Model/Token.php:20
+/home/pedro/projects/app-projects/maltz/src/Maltz/Mvc/Model.php:75
+/home/pedro/projects/app-projects/maltz/src/Maltz/Package/Sys/Model/User.php:296
+/home/pedro/projects/app-projects/maltz/src/Maltz/Mvc/Model.php:75
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/UserTest.php:64
+
+35) Test\Model\UserTest::testForgot
+Undefined variable: user_id
+
+/home/pedro/projects/app-projects/maltz/src/Maltz/Package/Sys/Model/Token.php:20
+/home/pedro/projects/app-projects/maltz/src/Maltz/Mvc/Model.php:75
+/home/pedro/projects/app-projects/maltz/src/Maltz/Package/Sys/Model/User.php:311
+/home/pedro/projects/app-projects/maltz/src/Maltz/Mvc/Model.php:75
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/UserTest.php:70
+
+36) Test\Model\UserTest::testValidate
+Missing argument 2 for Maltz\Package\Sys\Model\User::validate()
+
+/home/pedro/projects/app-projects/maltz/src/Maltz/Package/Sys/Model/User.php:321
+/home/pedro/projects/app-projects/maltz/src/Maltz/Mvc/Model.php:75
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/UserTest.php:76
+
+37) Test\Model\CommentTest::testInsert
+Missing argument 2 for Maltz\Mvc\Model::__construct(), called in /home/pedro/projects/app-projects/maltz/src/Maltz/Mvc/Model.php on line 73 and defined
+
+/home/pedro/projects/app-projects/maltz/src/Maltz/Mvc/Model.php:25
+/home/pedro/projects/app-projects/maltz/src/Maltz/Mvc/Model.php:73
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/CommentTest.php:20
+
+38) Test\Model\CommentTest::testFind
+Missing argument 2 for Maltz\Mvc\Model::__construct(), called in /home/pedro/projects/app-projects/maltz/src/Maltz/Mvc/Model.php on line 73 and defined
+
+/home/pedro/projects/app-projects/maltz/src/Maltz/Mvc/Model.php:25
+/home/pedro/projects/app-projects/maltz/src/Maltz/Mvc/Model.php:73
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/CommentTest.php:26
+
+39) Test\Model\CommentTest::testFindByType
+Missing argument 2 for Maltz\Mvc\Model::__construct(), called in /home/pedro/projects/app-projects/maltz/src/Maltz/Mvc/Model.php on line 73 and defined
+
+/home/pedro/projects/app-projects/maltz/src/Maltz/Mvc/Model.php:25
+/home/pedro/projects/app-projects/maltz/src/Maltz/Mvc/Model.php:73
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/CommentTest.php:31
+
+40) Test\Model\CommentTest::testApprove
+Missing argument 2 for Maltz\Mvc\Model::__construct(), called in /home/pedro/projects/app-projects/maltz/src/Maltz/Mvc/Model.php on line 73 and defined
+
+/home/pedro/projects/app-projects/maltz/src/Maltz/Mvc/Model.php:25
+/home/pedro/projects/app-projects/maltz/src/Maltz/Mvc/Model.php:73
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/CommentTest.php:36
+
+41) Test\Model\CommentTest::testReprove
+Missing argument 2 for Maltz\Mvc\Model::__construct(), called in /home/pedro/projects/app-projects/maltz/src/Maltz/Mvc/Model.php on line 73 and defined
+
+/home/pedro/projects/app-projects/maltz/src/Maltz/Mvc/Model.php:25
+/home/pedro/projects/app-projects/maltz/src/Maltz/Mvc/Model.php:73
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/CommentTest.php:41
+
+42) Test\Model\CommentTest::testSetAsSpam
+Missing argument 2 for Maltz\Mvc\Model::__construct(), called in /home/pedro/projects/app-projects/maltz/src/Maltz/Mvc/Model.php on line 73 and defined
+
+/home/pedro/projects/app-projects/maltz/src/Maltz/Mvc/Model.php:25
+/home/pedro/projects/app-projects/maltz/src/Maltz/Mvc/Model.php:73
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/CommentTest.php:46
+
+43) Test\Model\AddressTest::testInsert
+InvalidArgumentException: Unknown formatter "zipcode"
+
+/home/pedro/projects/app-projects/maltz/vendor/fzaninotto/faker/src/Faker/Generator.php:211
+/home/pedro/projects/app-projects/maltz/vendor/fzaninotto/faker/src/Faker/Generator.php:193
+/home/pedro/projects/app-projects/maltz/vendor/fzaninotto/faker/src/Faker/Generator.php:232
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/AddressTest.php:35
+
+44) Test\Model\ProjectTest::testCreateInvoice
+Exception: Not a valid record.
+
+/home/pedro/projects/app-projects/maltz/src/Maltz/Package/Project/Model/Project.php:274
+/home/pedro/projects/app-projects/maltz/src/Maltz/Mvc/Model.php:75
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/ProjectTest.php:110
+
+45) Test\Model\TicketTest::testGetDev
+Exception: Invalid record
+
+/home/pedro/projects/app-projects/maltz/src/Maltz/Package/Project/Model/Ticket.php:150
+/home/pedro/projects/app-projects/maltz/src/Maltz/Mvc/Model.php:75
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/TicketTest.php:61
+
+46) Test\Model\InvoiceTest::testUpdate
+Exception: Invoices cannot be updated. Delete and create a new one.
+
+/home/pedro/projects/app-projects/maltz/src/Maltz/Package/Project/Model/Invoice.php:53
+/home/pedro/projects/app-projects/maltz/src/Maltz/Mvc/Model.php:75
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/InvoiceTest.php:32
+
+47) Test\Model\TimeTrackingTest::testStart
+Missing argument 2 for Maltz\Package\Project\Model\TimeTracking::start()
+
+/home/pedro/projects/app-projects/maltz/src/Maltz/Package/Project/Model/TimeTracking.php:47
+/home/pedro/projects/app-projects/maltz/src/Maltz/Mvc/Model.php:75
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/TimeTrackingTest.php:22
+
+48) Test\Model\TimeTrackingTest::testStop
+Exception: Nothing to stop.
+
+/home/pedro/projects/app-projects/maltz/src/Maltz/Package/Project/Model/TimeTracking.php:80
+/home/pedro/projects/app-projects/maltz/src/Maltz/Mvc/Model.php:75
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/TimeTrackingTest.php:29
+
+--
+
+
+There were 105 failures:
+
+1) Warning
+No tests found in class "Test\Library\CollectionTest".
+
+
+2) Warning
+No tests found in class "Test\Library\CookieJarTest".
+
+
+3) Warning
+No tests found in class "Test\Library\CookieTest".
+
+
+4) Warning
+No tests found in class "Test\Library\FilesTest".
+
+
+5) Warning
+No tests found in class "Test\Library\SessionDataStoreTest".
+
+
+6) Warning
+No tests found in class "Test\Library\SessionTest".
+
+
+7) Warning
+No tests found in class "Test\Library\HashTest".
+
+
+8) Warning
+No tests found in class "Test\Library\NonceTest".
+
+
+9) Warning
+No tests found in class "Test\Library\PaginationTest".
+
+
+10) Warning
+No tests found in class "Test\Library\CorreiosTest".
+
+
+11) Warning
+No tests found in class "Test\Library\CurlResponseTest".
+
+
+12) Warning
+No tests found in class "Test\Library\CurlTest".
+
+
+13) Warning
+No tests found in class "Test\Library\FileReaderTest".
+
+
+14) Warning
+No tests found in class "Test\Library\FileWriterTest".
+
+
+15) Test\Model\CollectionTest::testDisplay
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:32
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/CollectionTest.php:48
+
+16) Test\Model\CollectionTest::testFind
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:32
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/CollectionTest.php:54
+
+17) Test\Model\CollectionTest::testFindByType
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:32
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/CollectionTest.php:61
+
+18) Test\Model\CollectionTest::testShow
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:32
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/CollectionTest.php:68
+
+19) Test\Model\ContentTest::testShow
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:32
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/ContentTest.php:61
+
+20) Test\Model\ContentTest::testFind
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:32
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/ContentTest.php:67
+
+21) Test\Model\ContentTest::testFindByType
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:32
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/ContentTest.php:74
+
+22) Test\Model\ContentTest::testSetAsDraft
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:48
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/ContentTest.php:81
+
+23) Test\Model\ContentTest::testSetAsPending
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:48
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/ContentTest.php:88
+
+24) Test\Model\ContentTest::testPublish
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:48
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/ContentTest.php:95
+
+25) Test\Model\TermTest::testInsert
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:41
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/TermTest.php:26
+
+26) Test\Model\TermTest::testUpdate
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:48
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/TermTest.php:44
+
+27) Test\Model\TermTest::testShow
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:32
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/TermTest.php:51
+
+28) Test\Model\TermTest::testFind
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:32
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/TermTest.php:57
+
+29) Test\Model\TermTest::testDisplay
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:32
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/TermTest.php:63
+
+30) Test\Model\TermTest::testFindByType
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:32
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/TermTest.php:70
+
+31) Test\Model\AreaTest::testInsert
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:41
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/AreaTest.php:22
+
+32) Test\Model\AreaTest::testUpdate
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:48
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/AreaTest.php:36
+
+33) Test\Model\AreaTest::testDisplay
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:32
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/AreaTest.php:42
+
+34) Test\Model\AreaTest::testFind
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:32
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/AreaTest.php:48
+
+35) Test\Model\AreaTest::testShow
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:32
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/AreaTest.php:55
+
+36) Test\Model\AreaTest::testAddBlock
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:48
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/AreaTest.php:63
+
+37) Test\Model\AreaTest::testRemoveBlock
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:48
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/AreaTest.php:70
+
+38) Test\Model\AreaTest::testGetBlocks
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:32
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/AreaTest.php:77
+
+39) Test\Model\BlockTest::testInsert
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:41
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/BlockTest.php:22
+
+40) Test\Model\BlockTest::testUpdate
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:48
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/BlockTest.php:36
+
+41) Test\Model\BlockTest::testDelete
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:48
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/BlockTest.php:43
+
+42) Test\Model\BlockTest::testDisplay
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:32
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/BlockTest.php:49
+
+43) Test\Model\BlockTest::testFind
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:32
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/BlockTest.php:55
+
+44) Test\Model\BlockTest::testShow
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:32
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/BlockTest.php:62
+
+45) Test\Model\LogTest::testFind
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:32
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/LogTest.php:15
+
+46) Test\Model\LogTest::testInsert
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:41
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/LogTest.php:27
+
+47) Test\Model\LogTest::testLog
+Failed asserting that null is an instance of class "\Maltz\Mvc\Result".
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:21
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:41
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/LogTest.php:40
+
+48) Test\Model\RoleTest::testDisplay
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:32
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/RoleTest.php:15
+
+49) Test\Model\RoleTest::testFind
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:32
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/RoleTest.php:21
+
+50) Test\Model\RoleTest::testShow
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:32
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/RoleTest.php:28
+
+51) Test\Model\RoleTest::testInsert
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:41
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/RoleTest.php:40
+
+52) Test\Model\RoleTest::testUpdate
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:48
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/RoleTest.php:53
+
+53) Test\Model\TypeTest::testDisplay
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:32
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/TypeTest.php:15
+
+54) Test\Model\TypeTest::testFind
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:32
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/TypeTest.php:21
+
+55) Test\Model\TypeTest::testShow
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:32
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/TypeTest.php:28
+
+56) Test\Model\TypeTest::testInsert
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:41
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/TypeTest.php:39
+
+57) Test\Model\TypeTest::testUpdate
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:48
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/TypeTest.php:51
+
+58) Test\Model\TypeTest::testDelete
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:48
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/TypeTest.php:58
+
+59) Test\Model\UserTest::testFind
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:32
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/UserTest.php:15
+
+60) Test\Model\UserTest::testShow
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:32
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/UserTest.php:22
+
+61) Test\Model\UserTest::testInsert
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:41
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/UserTest.php:34
+
+62) Test\Model\UserTest::testUpdate
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:48
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/UserTest.php:46
+
+63) Test\Model\CoordinateTest::testFind
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:32
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/CoordinateTest.php:15
+
+64) Test\Model\CoordinateTest::testShow
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:32
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/CoordinateTest.php:22
+
+65) Test\Model\CoordinateTest::testInsert
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:41
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/CoordinateTest.php:34
+
+66) Test\Model\PlaceTest::testFind
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:32
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/PlaceTest.php:15
+
+67) Test\Model\PlaceTest::testShow
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:32
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/PlaceTest.php:22
+
+68) Test\Model\PlaceTest::testInsert
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:41
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/PlaceTest.php:34
+
+69) Test\Model\PlaceTest::testUpdate
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:48
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/PlaceTest.php:46
+
+70) Test\Model\EstateTest::testFind
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:32
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/EstateTest.php:15
+
+71) Test\Model\EstateTest::testShow
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:32
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/EstateTest.php:22
+
+72) Test\Model\EstateTest::testInsert
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:41
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/EstateTest.php:34
+
+73) Test\Model\EstateTest::testUpdate
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:48
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/EstateTest.php:46
+
+74) Warning
+No tests found in class "Test\Model\CartTest".
+
+
+75) Warning
+No tests found in class "Test\Model\OrderTest".
+
+
+76) Warning
+No tests found in class "Test\Model\OrderItemTest".
+
+
+77) Warning
+No tests found in class "Test\Model\PaymentTest".
+
+
+78) Warning
+No tests found in class "Test\Model\ProductTest".
+
+
+79) Warning
+No tests found in class "Test\Model\ShipmentTest".
+
+
+80) Warning
+No tests found in class "Test\Model\StoreTest".
+
+
+81) Test\Model\ProjectTest::testInsert
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:41
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/ProjectTest.php:21
+
+82) Test\Model\ProjectTest::testUpdate
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:48
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/ProjectTest.php:33
+
+83) Test\Model\ProjectTest::testShow
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:32
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/ProjectTest.php:40
+
+84) Test\Model\ProjectTest::testFind
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:32
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/ProjectTest.php:46
+
+85) Test\Model\ProjectTest::testGetDevs
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:32
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/ProjectTest.php:53
+
+86) Test\Model\ProjectTest::testAddUser
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:48
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/ProjectTest.php:61
+
+87) Test\Model\ProjectTest::testRemoveUser
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:48
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/ProjectTest.php:69
+
+88) Test\Model\ProjectTest::testGetUsers
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:32
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/ProjectTest.php:76
+
+89) Test\Model\ProjectTest::testGetTickets
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:32
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/ProjectTest.php:83
+
+90) Test\Model\ProjectTest::testGetInvoices
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:32
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/ProjectTest.php:90
+
+91) Test\Model\ProjectTest::testGetBillableHours
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:32
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/ProjectTest.php:97
+
+92) Test\Model\ProjectTest::testCreateReport
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:32
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/ProjectTest.php:104
+
+93) Test\Model\TicketTest::testShow
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:32
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/TicketTest.php:16
+
+94) Test\Model\TicketTest::testInsert
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:41
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/TicketTest.php:28
+
+95) Test\Model\TicketTest::testFind
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:32
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/TicketTest.php:34
+
+96) Test\Model\TicketTest::testFindAll
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:32
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/TicketTest.php:40
+
+97) Test\Model\TicketTest::testChangePriority
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:48
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/TicketTest.php:48
+
+98) Test\Model\TicketTest::testClose
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:48
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/TicketTest.php:55
+
+99) Test\Model\InvoiceTest::testInsert
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:41
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/InvoiceTest.php:21
+
+100) Test\Model\InvoiceTest::testShow
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:32
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/InvoiceTest.php:51
+
+101) Test\Model\InvoiceTest::testFind
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:32
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/InvoiceTest.php:57
+
+102) Test\Model\InvoiceTest::testSetSent
+Failed asserting that null is an instance of class "\Maltz\Mvc\Result".
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:21
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:48
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/InvoiceTest.php:64
+
+103) Test\Model\InvoiceTest::testSetContested
+Failed asserting that null is an instance of class "\Maltz\Mvc\Result".
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:21
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:48
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/InvoiceTest.php:71
+
+104) Test\Model\InvoiceTest::testSetPaid
+Failed asserting that null is an instance of class "\Maltz\Mvc\Result".
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:21
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:48
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/InvoiceTest.php:78
+
+105) Test\Model\TimeTrackingTest::testGetCurrentId
+Failed asserting that false is true.
+
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:26
+/home/pedro/projects/app-projects/maltz/tests/Test/ModelTestCase.php:32
+/home/pedro/projects/app-projects/maltz/tests/Test/Model/TimeTrackingTest.php:16
+
+FAILURES!
+Tests: 158, Assertions: 404, Failures: 105, Errors: 48.
